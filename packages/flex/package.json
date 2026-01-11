@@ -1,6 +1,6 @@
 {
   "name": "@kreatiware/flex",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Sistema de reglas CSS Flex y Grid utilities",
   "main": "dist/index.css",
   "style": "dist/index.css",
