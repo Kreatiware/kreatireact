@@ -1,22 +1,30 @@
 :root {
-  /* Colors - Primary */
-  --kreati-primary-50: #eff6ff;
-  --kreati-primary-100: #dbeafe;
-  --kreati-primary-200: #bfdbfe;
-  --kreati-primary-300: #93c5fd;
-  --kreati-primary-400: #60a5fa;
-  --kreati-primary-500: #3b82f6;
-  --kreati-primary-600: #2563eb;
-  --kreati-primary-700: #1d4ed8;
-  --kreati-primary-800: #1e40af;
-  --kreati-primary-900: #1e3a8a;
+  /* Colors - Primary (tu paleta) */
+  --kreati-primary-50: #deeff7;
+  --kreati-primary-100: #b3d9ed;
+  --kreati-primary-200: #80c2e3;
+  --kreati-primary-300: #4dabd9;
+  --kreati-primary-400: #2694cf;
+  --kreati-primary-500: #0f78a5;
+  --kreati-primary-600: #0d6b94;
+  --kreati-primary-700: #0b5e83;
+  --kreati-primary-800: #095172;
+  --kreati-primary-900: #074461;
+
+  /* Colors - Secondary */
+  --kreati-secondary-50: #fffef9;
+  --kreati-secondary-100: #fff7d7;
+  --kreati-secondary-200: #fff0b5;
+  --kreati-secondary-300: #ffe993;
+  --kreati-secondary-400: #ffe271;
+  --kreati-secondary-500: #ffdb4f;
 
   /* Colors - Gray */
   --kreati-gray-50: #f9fafb;
   --kreati-gray-100: #f3f4f6;
   --kreati-gray-200: #e5e7eb;
   --kreati-gray-300: #d1d5db;
-  --kreati-gray-400: #9ca3af;
+  --kreati-gray-400: #b1b1b1;
   --kreati-gray-500: #6b7280;
   --kreati-gray-600: #4b5563;
   --kreati-gray-700: #374151;
@@ -26,17 +34,21 @@
   /* Colors - Semantic */
   --kreati-white: #ffffff;
   --kreati-black: #000000;
+  --kreati-background: #deeff7;
   --kreati-success: #10b981;
   --kreati-warning: #f59e0b;
   --kreati-error: #ef4444;
 
   /* Typography */
-  --kreati-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --kreati-font-family: 'Helvetica', sans-serif;
   --kreati-font-size-xs: 12px;
   --kreati-font-size-sm: 14px;
   --kreati-font-size-base: 16px;
   --kreati-font-size-lg: 18px;
   --kreati-font-size-xl: 20px;
+  --kreati-font-weight-normal: 400;
+  --kreati-font-weight-bold: 700;
+  --kreati-line-height: 1.6;
 
   /* Spacing */
   --kreati-space-1: 4px;
@@ -57,4 +69,7 @@
   --kreati-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --kreati-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
   --kreati-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+
+  /* Animations */
+  --kreati-transition: all 0.2s ease-in-out;
 }

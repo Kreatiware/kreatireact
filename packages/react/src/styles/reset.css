@@ -1,13 +1,39 @@
-/* Kreati Reset - Minimal CSS Reset */
+/* Kreati Reset - Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+body {
+  font-family: var(--kreati-font-family);
+  font-weight: var(--kreati-font-weight-normal);
+  color: #333;
+  line-height: var(--kreati-line-height);
+  background-color: var(--kreati-background);
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6, p, span, label {
+  font-family: var(--kreati-font-family);
+}
+
+/* Componentes Kreati */
 .kreati-button,
 .kreati-input,
 .kreati-textarea,
 .kreati-select {
   font-family: var(--kreati-font-family);
+}
+
+/* Animaciones */
+@keyframes kreati-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.kreati-spin {
+  animation: kreati-spin 1s linear infinite;
 }
