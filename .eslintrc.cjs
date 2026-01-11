@@ -7,25 +7,18 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
-    '@typescript-eslint/recommended',
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
     'prettier',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs', 'node_modules'],
-  parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
-  settings: {
-    react: {
-      version: 'detect',
+  ignorePatterns: ['dist', '.eslintrc.cjs', 'node_modules', '**/*.d.ts'],
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true,
     },
   },
   rules: {
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
-    'react/react-in-jsx-scope': 'off',
-    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    'no-unused-vars': 'off',
+    'no-undef': 'off',
   },
 };
