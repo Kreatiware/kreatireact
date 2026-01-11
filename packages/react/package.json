@@ -1,0 +1,46 @@
+{
+  "name": "@kreati/react",
+  "version": "0.1.0",
+  "description": "Componentes React modernos y tipados",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "clean": "rimraf dist"
+  },
+  "keywords": [
+    "react",
+    "components",
+    "ui",
+    "typescript",
+    "kreati"
+  ],
+  "author": "Brian - Kreatiware",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
+    "@vitejs/plugin-react": "^4.2.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rimraf": "^5.0.5",
+    "vite": "^5.1.0",
+    "vite-plugin-dts": "^3.7.3",
+    "vitest": "^1.2.2"
+  },
+
+  "publishConfig": {
+    "access": "public"
+  }
+}

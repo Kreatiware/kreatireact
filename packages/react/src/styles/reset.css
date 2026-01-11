@@ -1,0 +1,13 @@
+/* Kreati Reset - Minimal CSS Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.kreati-button,
+.kreati-input,
+.kreati-textarea,
+.kreati-select {
+  font-family: var(--kreati-font-family);
+}

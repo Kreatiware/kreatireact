@@ -1,0 +1,38 @@
+{
+  "name": "@kreati/flex",
+  "version": "0.1.0",
+  "description": "Sistema de reglas CSS Flex y Grid utilities",
+  "main": "dist/index.css",
+  "style": "dist/index.css",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "postcss src/index.css -o dist/index.css",
+    "dev": "postcss src/index.css -o dist/index.css --watch",
+    "test": "echo \"No tests for CSS utilities\"",
+    "clean": "rimraf dist"
+  },
+  "keywords": [
+    "css",
+    "flex",
+    "grid",
+    "utilities",
+    "responsive",
+    "kreati"
+  ],
+  "author": "Brian - Kreatiware",
+  "license": "MIT",
+  "devDependencies": {
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.35",
+    "postcss-cli": "^11.0.0",
+    "postcss-import": "^16.0.1",
+    "postcss-nesting": "^12.0.2",
+    "rimraf": "^5.0.5"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
