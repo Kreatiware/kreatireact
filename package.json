@@ -1,0 +1,38 @@
+{
+  "name": "kreati-ecosystem",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ecosistema completo de herramientas frontend: React components, Icons y CSS Flex utilities",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "dev": "npm run dev --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "eslint packages/**/*.{ts,tsx} apps/**/*.{ts,tsx}",
+    "format": "prettier --write packages/**/*.{ts,tsx,json} apps/**/*.{ts,tsx,json}",
+    "clean": "npm run clean --workspaces",
+    "storybook": "npm run storybook --workspace=apps/storybook",
+    "build-storybook": "npm run build-storybook --workspace=apps/storybook",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "npm run build && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}

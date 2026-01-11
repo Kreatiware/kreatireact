@@ -1,0 +1,40 @@
+{
+  "name": "@kreati/icons",
+  "version": "0.1.0",
+  "description": "Librería de iconos vectoriales SVG optimizados",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "svg"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "test": "vitest",
+    "clean": "rimraf dist"
+  },
+  "keywords": [
+    "icons",
+    "svg",
+    "react",
+    "typescript",
+    "kreati"
+  ],
+  "author": "Brian - Kreatiware",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.55",
+    "rimraf": "^5.0.5",
+    "vite": "^5.1.0",
+    "vite-plugin-dts": "^3.7.3",
+    "vitest": "^1.2.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

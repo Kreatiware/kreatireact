@@ -1,0 +1,60 @@
+:root {
+  /* Colors - Primary */
+  --kreati-primary-50: #eff6ff;
+  --kreati-primary-100: #dbeafe;
+  --kreati-primary-200: #bfdbfe;
+  --kreati-primary-300: #93c5fd;
+  --kreati-primary-400: #60a5fa;
+  --kreati-primary-500: #3b82f6;
+  --kreati-primary-600: #2563eb;
+  --kreati-primary-700: #1d4ed8;
+  --kreati-primary-800: #1e40af;
+  --kreati-primary-900: #1e3a8a;
+
+  /* Colors - Gray */
+  --kreati-gray-50: #f9fafb;
+  --kreati-gray-100: #f3f4f6;
+  --kreati-gray-200: #e5e7eb;
+  --kreati-gray-300: #d1d5db;
+  --kreati-gray-400: #9ca3af;
+  --kreati-gray-500: #6b7280;
+  --kreati-gray-600: #4b5563;
+  --kreati-gray-700: #374151;
+  --kreati-gray-800: #1f2937;
+  --kreati-gray-900: #111827;
+
+  /* Colors - Semantic */
+  --kreati-white: #ffffff;
+  --kreati-black: #000000;
+  --kreati-success: #10b981;
+  --kreati-warning: #f59e0b;
+  --kreati-error: #ef4444;
+
+  /* Typography */
+  --kreati-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --kreati-font-size-xs: 12px;
+  --kreati-font-size-sm: 14px;
+  --kreati-font-size-base: 16px;
+  --kreati-font-size-lg: 18px;
+  --kreati-font-size-xl: 20px;
+
+  /* Spacing */
+  --kreati-space-1: 4px;
+  --kreati-space-2: 8px;
+  --kreati-space-3: 12px;
+  --kreati-space-4: 16px;
+  --kreati-space-5: 20px;
+  --kreati-space-6: 24px;
+  --kreati-space-8: 32px;
+
+  /* Border Radius */
+  --kreati-radius-sm: 4px;
+  --kreati-radius-md: 6px;
+  --kreati-radius-lg: 8px;
+  --kreati-radius-xl: 12px;
+
+  /* Shadows */
+  --kreati-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --kreati-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --kreati-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}

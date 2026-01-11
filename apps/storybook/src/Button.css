@@ -1,0 +1,88 @@
+:root {
+  --kreati-primary-50: #eff6ff;
+  --kreati-primary-500: #3b82f6;
+  --kreati-primary-600: #2563eb;
+  --kreati-gray-100: #f3f4f6;
+  --kreati-gray-200: #e5e7eb;
+  --kreati-gray-900: #111827;
+  --kreati-white: #ffffff;
+  --kreati-space-2: 8px;
+  --kreati-space-3: 12px;
+  --kreati-space-4: 16px;
+  --kreati-space-5: 20px;
+  --kreati-font-size-sm: 14px;
+  --kreati-font-size-base: 16px;
+  --kreati-font-size-lg: 18px;
+  --kreati-radius-md: 6px;
+}
+
+.kreati-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--kreati-radius-md);
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  outline: none;
+  position: relative;
+}
+
+.kreati-button:focus-visible {
+  outline: 2px solid var(--kreati-primary-500);
+  outline-offset: 2px;
+}
+
+.kreati-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.kreati-button--sm {
+  padding: var(--kreati-space-2) var(--kreati-space-3);
+  font-size: var(--kreati-font-size-sm);
+  line-height: 1.25;
+}
+
+.kreati-button--md {
+  padding: var(--kreati-space-2) var(--kreati-space-4);
+  font-size: var(--kreati-font-size-base);
+  line-height: 1.5;
+}
+
+.kreati-button--lg {
+  padding: var(--kreati-space-3) var(--kreati-space-5);
+  font-size: var(--kreati-font-size-lg);
+  line-height: 1.5;
+}
+
+.kreati-button--primary {
+  background-color: var(--kreati-primary-500);
+  color: var(--kreati-white);
+}
+
+.kreati-button--primary:hover:not(:disabled) {
+  background-color: var(--kreati-primary-600);
+}
+
+.kreati-button--secondary {
+  background-color: var(--kreati-gray-100);
+  color: var(--kreati-gray-900);
+}
+
+.kreati-button--secondary:hover:not(:disabled) {
+  background-color: var(--kreati-gray-200);
+}
+
+.kreati-button--outline {
+  background-color: transparent;
+  color: var(--kreati-primary-500);
+  border: 1px solid var(--kreati-primary-500);
+}
+
+.kreati-button--outline:hover:not(:disabled) {
+  background-color: var(--kreati-primary-50);
+}
