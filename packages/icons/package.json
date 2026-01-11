@@ -1,5 +1,5 @@
 {
-  "name": "@kreati/icons",
+  "name": "@kreatiware/icons",
   "version": "0.1.0",
   "description": "Librería de iconos vectoriales SVG optimizados",
   "main": "dist/index.js",
@@ -35,6 +35,7 @@
     "vitest": "^1.2.2"
   },
   "publishConfig": {
-    "access": "public"
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
   }
 }

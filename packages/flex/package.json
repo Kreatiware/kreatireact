@@ -1,5 +1,5 @@
 {
-  "name": "@kreati/flex",
+  "name": "@kreatiware/flex",
   "version": "0.1.0",
   "description": "Sistema de reglas CSS Flex y Grid utilities",
   "main": "dist/index.css",
@@ -33,6 +33,7 @@
     "rimraf": "^5.0.5"
   },
   "publishConfig": {
-    "access": "public"
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
   }
 }

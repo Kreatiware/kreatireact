@@ -1,5 +1,5 @@
 {
-  "name": "@kreati/react",
+  "name": "@kreatiware/react",
   "version": "0.1.0",
   "description": "Componentes React modernos y tipados",
   "main": "dist/index.js",
@@ -41,6 +41,7 @@
   },
 
   "publishConfig": {
-    "access": "public"
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
   }
 }
