@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './NavigationBar.css';
 import { MenuItem, NavigationRouter } from '../types/navigation';
+import { KreatiIcon, ChevronDown } from '@kreatiware/icons';
 
 /**
  * Props for the NavigationBar component
@@ -77,6 +78,9 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
   transparent = true,
   className = '',
 }) => {
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+
   const baseClass = 'kreati-navbar';
   const classes = [
     baseClass,
@@ -85,6 +89,22 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
   ]
     .filter(Boolean)
     .join(' ');
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      const isOutside = Object.values(dropdownRefs.current).every(
+        (ref) => ref && !ref.contains(target)
+      );
+      if (isOutside) {
+        setOpenDropdown(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   /**
    * Handle navigation item click
@@ -95,27 +115,45 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
       return;
     }
 
+    // Toggle dropdown if item has subitems
+    if (item.items && item.items.length > 0) {
+      event.preventDefault();
+      const itemId = item.id || item.label;
+      setOpenDropdown(openDropdown === itemId ? null : itemId);
+      return;
+    }
+
     if (item.onClick) {
       event.preventDefault();
       item.onClick(item);
+      setOpenDropdown(null);
       return;
     }
 
     if (useRouter && router && item.href) {
       event.preventDefault();
       router.push(item.href);
+      setOpenDropdown(null);
       return;
     }
+
+    // Close dropdown on navigation
+    setOpenDropdown(null);
   };
 
   /**
    * Render navigation item
    */
   const renderNavItem = (item: MenuItem, index: number) => {
+    const itemId = item.id || item.label;
+    const hasDropdown = item.items && item.items.length > 0;
+    const isOpen = openDropdown === itemId;
+
     const itemClasses = [
       'kreati-navbar__link',
       item.active && 'kreati-navbar__link--active',
       item.disabled && 'kreati-navbar__link--disabled',
+      hasDropdown && 'kreati-navbar__link--has-dropdown',
       item.className,
     ]
       .filter(Boolean)
@@ -125,39 +163,93 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
       <>
         {item.icon && <span className="kreati-navbar__link-icon">{item.icon}</span>}
         <span className="kreati-navbar__link-text">{item.label}</span>
-        {item.items && item.items.length > 0 && (
-          <span className="kreati-navbar__link-arrow">▼</span>
+        {hasDropdown && (
+          <span className={`kreati-navbar__link-arrow ${isOpen ? 'kreati-navbar__link-arrow--open' : ''}`}>
+            <KreatiIcon size={18}>
+              <ChevronDown />
+            </KreatiIcon>
+          </span>
         )}
       </>
     );
 
-    if (item.href && !item.onClick && !useRouter) {
-      return (
-        <a
-          key={item.id || index}
-          href={item.href}
-          target={item.target}
-          className={itemClasses}
-          onClick={(e) => handleItemClick(item, e)}
-          {...item.data}
-        >
-          {content}
-        </a>
-      );
-    }
-
-    return (
+    const linkElement = item.href && !item.onClick && !useRouter && !hasDropdown ? (
+      <a
+        key={item.id || index}
+        href={item.href}
+        target={item.target}
+        className={itemClasses}
+        onClick={(e) => handleItemClick(item, e)}
+        aria-haspopup={hasDropdown ? 'true' : undefined}
+        aria-expanded={hasDropdown ? isOpen : undefined}
+        {...item.data}
+      >
+        {content}
+      </a>
+    ) : (
       <button
         key={item.id || index}
         type="button"
         className={itemClasses}
         onClick={(e) => handleItemClick(item, e)}
         disabled={item.disabled}
+        aria-haspopup={hasDropdown ? 'true' : undefined}
+        aria-expanded={hasDropdown ? isOpen : undefined}
         {...item.data}
       >
         {content}
       </button>
     );
+
+    // Wrap with dropdown container if has subitems
+    if (hasDropdown) {
+      return (
+        <div
+          key={item.id || index}
+          className="kreati-navbar__dropdown-wrapper"
+          ref={(el) => (dropdownRefs.current[itemId] = el)}
+        >
+          {linkElement}
+          {isOpen && (
+            <div className="kreati-navbar__dropdown">
+              {item.items!.map((subItem, subIndex) => (
+                <a
+                  key={subItem.id || subIndex}
+                  href={subItem.href || '#'}
+                  className={`kreati-navbar__dropdown-item ${
+                    subItem.active ? 'kreati-navbar__dropdown-item--active' : ''
+                  } ${
+                    subItem.disabled ? 'kreati-navbar__dropdown-item--disabled' : ''
+                  }`}
+                  onClick={(e) => {
+                    if (subItem.disabled) {
+                      e.preventDefault();
+                      return;
+                    }
+                    if (subItem.onClick) {
+                      e.preventDefault();
+                      subItem.onClick(subItem);
+                      setOpenDropdown(null);
+                    } else if (useRouter && router && subItem.href) {
+                      e.preventDefault();
+                      router.push(subItem.href);
+                      setOpenDropdown(null);
+                    } else {
+                      setOpenDropdown(null);
+                    }
+                  }}
+                >
+                  {subItem.icon && <span className="kreati-navbar__dropdown-item-icon">{subItem.icon}</span>}
+                  <span>{subItem.label}</span>
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    return linkElement;
   };
 
   return (
