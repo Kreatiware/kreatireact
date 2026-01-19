@@ -10,3 +10,5 @@ export type { MenuItem, NavigationRouter, BaseNavigationProps } from './types/na
 // Styles
 import './styles/variables.css';
 import './styles/reset.css';
+import './components/Button.css';
+import './components/NavigationBar.css';
