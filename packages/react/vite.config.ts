@@ -18,11 +18,12 @@ export default defineConfig({
       fileName: format => `index.${format === 'es' ? 'esm' : format}.js`,
     },
     rollupOptions: {
-      external: ['react', 'react-dom'],
+      external: ['react', 'react-dom', '@kreatiware/icons'],
       output: {
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
+          '@kreatiware/icons': 'KreatiIcons',
         },
       },
     },

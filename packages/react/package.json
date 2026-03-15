@@ -26,7 +26,8 @@
   "license": "MIT",
   "peerDependencies": {
     "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react-dom": ">=18.0.0",
+    "@kreatiware/icons": ">=0.3.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.55",

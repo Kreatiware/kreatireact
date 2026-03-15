@@ -46,6 +46,7 @@ export const Default: Story = {
  * All available badge variants.
  */
 export const Variants: Story = {
+  args: { children: 'Badge' },
   render: () => (
     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
       <Badge variant="primary">Primary</Badge>
@@ -62,6 +63,7 @@ export const Variants: Story = {
  * Badge sizes comparison.
  */
 export const Sizes: Story = {
+  args: { children: 'Badge' },
   render: () => (
     <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
       <Badge size="sm">Small</Badge>
@@ -75,6 +77,7 @@ export const Sizes: Story = {
  * Badges with emoji icons for visual emphasis.
  */
 export const WithEmoji: Story = {
+  args: { children: 'Badge' },
   render: () => (
     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
       <Badge variant="primary">🚀 Nuevo</Badge>

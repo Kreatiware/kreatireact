@@ -9,7 +9,7 @@
     "src"
   ],
   "scripts": {
-    "build": "postcss src/index.css -o dist/index.css",
+    "build": "node -e \"require('fs').mkdirSync('dist',{recursive:true})\" && postcss src/index.css -o dist/index.css",
     "dev": "postcss src/index.css -o dist/index.css --watch",
     "test": "echo \"No tests for CSS utilities\"",
     "clean": "rimraf dist"
