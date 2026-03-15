@@ -15,8 +15,7 @@ build/
 .env.test.local
 .env.production.local
 
-# NPM config (contains tokens)
-.npmrc
+
 
 # Logs
 npm-debug.log*
