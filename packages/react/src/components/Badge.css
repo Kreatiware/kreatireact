@@ -1,0 +1,65 @@
+/* Badge Base Styles */
+.kreati-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kreati-space-1);
+  font-family: var(--kreati-font-family);
+  font-weight: 500;
+  border-radius: 9999px;
+  white-space: nowrap;
+  transition: var(--kreati-transition);
+}
+
+/* Sizes */
+.kreati-badge--sm {
+  padding: 2px var(--kreati-space-2);
+  font-size: var(--kreati-font-size-xs);
+}
+
+.kreati-badge--md {
+  padding: var(--kreati-space-1) var(--kreati-space-3);
+  font-size: var(--kreati-font-size-sm);
+}
+
+.kreati-badge--lg {
+  padding: var(--kreati-space-2) var(--kreati-space-4);
+  font-size: var(--kreati-font-size-base);
+}
+
+/* Variants */
+.kreati-badge--primary {
+  background-color: var(--kreati-primary-50);
+  color: var(--kreati-primary-700);
+}
+
+.kreati-badge--secondary {
+  background-color: var(--kreati-secondary-100);
+  color: var(--kreati-gray-800);
+}
+
+.kreati-badge--success {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.kreati-badge--warning {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.kreati-badge--error {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.kreati-badge--outline {
+  background-color: transparent;
+  color: var(--kreati-gray-700);
+  border: 1px solid var(--kreati-gray-300);
+}
+
+/* Icon */
+.kreati-badge__icon {
+  display: inline-flex;
+  align-items: center;
+}

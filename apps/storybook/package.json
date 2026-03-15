@@ -1,6 +1,6 @@
 {
   "name": "@kreati/storybook",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "storybook": "storybook dev -p 6006",

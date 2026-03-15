@@ -1,0 +1,187 @@
+/* HeroSection Base Styles */
+.kreati-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-family: var(--kreati-font-family);
+  background-color: var(--kreati-white);
+  overflow: hidden;
+}
+
+/* Sizes */
+.kreati-hero--sm { min-height: 40vh; padding: var(--kreati-space-8) var(--kreati-space-6); }
+.kreati-hero--md { min-height: 60vh; padding: var(--kreati-space-8) var(--kreati-space-6); }
+.kreati-hero--lg { min-height: 80vh; padding: var(--kreati-space-8) var(--kreati-space-6); }
+.kreati-hero--fullscreen { min-height: 100vh; padding: var(--kreati-space-8) var(--kreati-space-6); }
+
+/* Container */
+.kreati-hero__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Content */
+.kreati-hero__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.kreati-hero__badge {
+  margin-bottom: var(--kreati-space-4);
+}
+
+.kreati-hero__title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: var(--kreati-font-weight-bold);
+  color: var(--kreati-gray-900);
+  line-height: 1.1;
+  margin: 0 0 var(--kreati-space-4) 0;
+}
+
+.kreati-hero__subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--kreati-gray-500);
+  line-height: var(--kreati-line-height);
+  margin: 0 0 var(--kreati-space-6) 0;
+  max-width: 600px;
+}
+
+.kreati-hero__actions {
+  display: flex;
+  gap: var(--kreati-space-3);
+  flex-wrap: wrap;
+}
+
+.kreati-hero__media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kreati-hero__media img,
+.kreati-hero__media video {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--kreati-radius-lg);
+}
+
+/* Alignment */
+.kreati-hero--center .kreati-hero__content {
+  align-items: center;
+  text-align: center;
+}
+
+.kreati-hero--center .kreati-hero__subtitle {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.kreati-hero--center .kreati-hero__actions {
+  justify-content: center;
+}
+
+.kreati-hero--right .kreati-hero__content {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.kreati-hero--right .kreati-hero__subtitle {
+  margin-left: auto;
+}
+
+.kreati-hero--right .kreati-hero__actions {
+  justify-content: flex-end;
+}
+
+/* Layout: Split */
+.kreati-hero--split .kreati-hero__container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--kreati-space-8);
+  align-items: center;
+}
+
+.kreati-hero--split.kreati-hero--reverse .kreati-hero__container {
+  direction: rtl;
+}
+
+.kreati-hero--split.kreati-hero--reverse .kreati-hero__content,
+.kreati-hero--split.kreati-hero--reverse .kreati-hero__media {
+  direction: ltr;
+}
+
+/* Background: Gradient */
+.kreati-hero--bg-gradient {
+  background: linear-gradient(135deg, var(--kreati-primary-50) 0%, var(--kreati-white) 50%, var(--kreati-secondary-100) 100%);
+}
+
+/* Background: Image */
+.kreati-hero--bg-image {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.kreati-hero--bg-image.kreati-hero--overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 0;
+}
+
+.kreati-hero--bg-image .kreati-hero__container {
+  position: relative;
+  z-index: 1;
+}
+
+.kreati-hero--bg-image .kreati-hero__title,
+.kreati-hero--overlay .kreati-hero__title {
+  color: var(--kreati-white);
+}
+
+.kreati-hero--bg-image .kreati-hero__subtitle,
+.kreati-hero--overlay .kreati-hero__subtitle {
+  color: var(--kreati-gray-200);
+}
+
+/* Glassmorphism */
+.kreati-hero--glass .kreati-hero__content {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--kreati-radius-xl);
+  padding: var(--kreati-space-8);
+}
+
+.kreati-hero--bg-gradient.kreati-hero--glass .kreati-hero__content {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.kreati-hero--bg-image.kreati-hero--glass .kreati-hero__content {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .kreati-hero--split .kreati-hero__container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .kreati-hero--split .kreati-hero__content {
+    align-items: center;
+  }
+
+  .kreati-hero--split .kreati-hero__actions {
+    justify-content: center;
+  }
+
+  .kreati-hero--split.kreati-hero--reverse .kreati-hero__container {
+    direction: ltr;
+  }
+}

@@ -8,7 +8,8 @@
     "apps/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces",
+    "build": "npm run build --workspace=packages/react --workspace=packages/icons --workspace=packages/flex",
+    "build:all": "npm run build --workspaces",
     "dev": "npm run dev --workspaces",
     "test": "npm run test --workspaces --if-present",
     "lint": "eslint packages/**/*.{js,jsx} --ext .js,.jsx || echo \"TypeScript linting skipped\" && exit 0",

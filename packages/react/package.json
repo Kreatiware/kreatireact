@@ -1,6 +1,6 @@
 {
   "name": "@kreatiware/react",
-  "version": "0.2.0",
+  "version": "0.4.0",
   "description": "Componentes React modernos y tipados",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -39,7 +39,6 @@
     "vite-plugin-dts": "^3.7.3",
     "vitest": "^1.2.2"
   },
-
   "publishConfig": {
     "registry": "https://npm.pkg.github.com",
     "access": "restricted"

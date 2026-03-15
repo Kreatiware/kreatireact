@@ -1,5 +1,17 @@
 # @kreatiware/icons
 
+## 0.3.0
+
+### Minor Changes
+
+- Add chevron
+- Add MenuItem interface and enhance NavigationBar
+  - Implement universal MenuItem interface for reusable navigation
+  - Add NavigationBar component with MenuItem support
+  - Include icons, submenus, router integration, and state management
+  - Add comprehensive JSDoc documentation
+  - Update all packages to 0.2.0
+
 ## 0.2.0
 
 ### Minor Changes

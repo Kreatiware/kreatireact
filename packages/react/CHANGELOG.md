@@ -1,5 +1,31 @@
 # @kreatiware/react
 
+## 0.4.0
+
+### Minor Changes
+
+- Add Badge component with 6 variants (primary, secondary, success, warning, error, outline), 3 sizes and icon support
+- Add HeroSection component with:
+  - Layout modes: single (centered) and split (content + media)
+  - Background options: solid, gradient, image with overlay
+  - Glassmorphism effect on content container
+  - Responsive design with mobile collapse
+  - Size variants: sm, md, lg, fullscreen
+  - Alignment: left, center, right
+- Add Storybook stories for Badge and HeroSection
+
+## 0.3.0
+
+### Minor Changes
+
+- Add chevron
+- Add MenuItem interface and enhance NavigationBar
+  - Implement universal MenuItem interface for reusable navigation
+  - Add NavigationBar component with MenuItem support
+  - Include icons, submenus, router integration, and state management
+  - Add comprehensive JSDoc documentation
+  - Update all packages to 0.2.0
+
 ## 0.2.0
 
 ### Minor Changes
