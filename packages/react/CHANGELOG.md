@@ -1,5 +1,16 @@
 # @kreatiware/react
 
+## 0.5.0
+
+### Minor Changes
+
+- be25053: add badge and herosection
+
+### Patch Changes
+
+- Updated dependencies [be25053]
+  - @kreatiware/icons@0.3.1
+
 ## 0.4.0
 
 ### Minor Changes
