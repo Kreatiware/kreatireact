@@ -1,5 +1,11 @@
 # @kreatiware/flex
 
+## 0.3.1
+
+### Patch Changes
+
+- be25053: add badge and herosection
+
 ## 0.3.0
 
 ### Minor Changes
