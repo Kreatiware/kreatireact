@@ -50,6 +50,7 @@ export const Default: Story = {
 };
 
 export const AllPositions: Story = {
+  args: { value: '5', children: <DemoBox /> },
   render: () => {
     const positions = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'] as const;
     return (
@@ -68,6 +69,7 @@ export const AllPositions: Story = {
 };
 
 export const AllSeverities: Story = {
+  args: { value: '3', children: <DemoBox /> },
   render: () => {
     const severities = ['primary', 'secondary', 'success', 'info', 'warning', 'help', 'danger'] as const;
     return (
@@ -86,6 +88,7 @@ export const AllSeverities: Story = {
 };
 
 export const EmptyDot: Story = {
+  args: { children: <DemoBox /> },
   render: () => (
     <div style={{ display: 'flex', gap: 24 }}>
       <Badge severity="danger">
@@ -102,6 +105,7 @@ export const EmptyDot: Story = {
 };
 
 export const OnButton: Story = {
+  args: { children: <DemoBox /> },
   render: () => (
     <div style={{ display: 'flex', gap: 24 }}>
       <Badge value="5" severity="danger">
