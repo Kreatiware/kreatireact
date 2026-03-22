@@ -1,6 +1,6 @@
 {
   "name": "@kreatiware/react",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "description": "Componentes React modernos y tipados",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
