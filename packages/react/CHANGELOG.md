@@ -1,5 +1,11 @@
 # @kreatiware/react
 
+## 0.7.0
+
+### Minor Changes
+
+- 712c3f4: feat: add dynamicsvg, fix on colores hero section
+
 ## 0.6.2
 
 ### Patch Changes
