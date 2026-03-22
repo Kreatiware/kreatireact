@@ -1,5 +1,11 @@
 # @kreatiware/react
 
+## 0.6.2
+
+### Patch Changes
+
+- a9145da: fix: hero section, add background colors and glass color
+
 ## 0.6.1
 
 ### Patch Changes
