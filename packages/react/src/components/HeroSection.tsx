@@ -25,12 +25,22 @@ export interface HeroSectionProps {
   background?: 'solid' | 'gradient' | 'image';
   /** Background image URL (when background is 'image') */
   backgroundImage?: string;
+  /** Custom solid background color (overrides default) */
+  backgroundColor?: string;
+  /** Gradient start color (overrides theme default) */
+  gradientFrom?: string;
+  /** Gradient end color (overrides theme default) */
+  gradientTo?: string;
   /** Dark overlay on background image for text readability */
   overlay?: boolean;
   /** Height of the hero section */
   size?: 'sm' | 'md' | 'lg' | 'fullscreen';
   /** Glassmorphism effect on the content container */
   glass?: boolean;
+  /** Custom glass panel background color */
+  glassColor?: string;
+  /** Custom glass panel opacity (0-1) */
+  glassOpacity?: number;
   /** HTML id attribute for anchor links */
   id?: string;
   /** Additional CSS class names */
@@ -76,9 +86,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   reverse = false,
   background = 'solid',
   backgroundImage,
+  backgroundColor,
+  gradientFrom,
+  gradientTo,
   overlay = false,
   size = 'lg',
   glass = false,
+  glassColor,
+  glassOpacity,
   id,
   className = '',
 }) => {
@@ -97,10 +112,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     .filter(Boolean)
     .join(' ');
 
-  const sectionStyle: React.CSSProperties =
-    background === 'image' && backgroundImage
-      ? { backgroundImage: `url(${backgroundImage})` }
-      : {};
+  const sectionStyle: React.CSSProperties = {
+    ...(background === 'image' && backgroundImage && { backgroundImage: `url(${backgroundImage})` }),
+    ...(backgroundColor && { '--kreati-hero-bg': backgroundColor } as React.CSSProperties),
+    ...(gradientFrom && { '--kreati-hero-gradient-from': gradientFrom } as React.CSSProperties),
+    ...(gradientTo && { '--kreati-hero-gradient-to': gradientTo } as React.CSSProperties),
+    ...(glassColor && { '--kreati-hero-glass-color': glassColor } as React.CSSProperties),
+    ...(glassOpacity !== undefined && { '--kreati-hero-glass-opacity': glassOpacity } as React.CSSProperties),
+  };
 
   return (
     <section className={classes} id={id} style={sectionStyle}>

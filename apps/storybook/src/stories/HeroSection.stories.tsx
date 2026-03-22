@@ -41,6 +41,21 @@ const meta = {
     reverse: {
       control: 'boolean',
     },
+    backgroundColor: {
+      control: 'color',
+    },
+    gradientFrom: {
+      control: 'color',
+    },
+    gradientTo: {
+      control: 'color',
+    },
+    glassColor: {
+      control: 'color',
+    },
+    glassOpacity: {
+      control: { type: 'range', min: 0, max: 1, step: 0.05 },
+    },
   },
 } satisfies Meta<typeof HeroSection>;
 
@@ -247,7 +262,7 @@ export const SplitFullReversed: Story = {
 };
 
 /**
- * Split Full with dark background.
+ * Split Full with dark background using backgroundColor prop.
  */
 export const SplitFullDarkBg: Story = {
   args: {
@@ -257,29 +272,11 @@ export const SplitFullDarkBg: Story = {
     align: 'left',
     size: 'lg',
     background: 'solid',
-    className: 'kreati-hero--custom-dark',
+    backgroundColor: '#111827',
     badge: <Chip variant="outline">🌙 Dark</Chip>,
     media: fullMediaPlaceholder('linear-gradient(135deg, #7c3aed, #a855f7)', '🎨 Media'),
     actions: <Button label="Comenzar" severity="primary" />,
   },
-  decorators: [
-    (Story) => (
-      <>
-        <style>{`
-          .kreati-hero--custom-dark {
-            background-color: #111827 !important;
-          }
-          .kreati-hero--custom-dark .kreati-hero__title {
-            color: #f9fafb;
-          }
-          .kreati-hero--custom-dark .kreati-hero__subtitle {
-            color: #9ca3af;
-          }
-        `}</style>
-        <Story />
-      </>
-    ),
-  ],
 };
 
 /**
@@ -301,7 +298,41 @@ export const SplitFullGlassGradient: Story = {
 };
 
 /**
- * Split Full with glass on dark background.
+ * Custom gradient colors using gradientFrom/gradientTo props.
+ */
+export const CustomGradient: Story = {
+  args: {
+    title: 'Gradiente personalizado',
+    subtitle: 'Usa gradientFrom y gradientTo para definir colores custom.',
+    background: 'gradient',
+    gradientFrom: '#7c3aed',
+    gradientTo: '#06b6d4',
+    size: 'lg',
+    badge: <Chip variant="primary">🎨 Custom</Chip>,
+    actions: <Button label="Explorar" severity="primary" />,
+  },
+};
+
+/**
+ * Custom background color with glass and custom glass settings.
+ */
+export const CustomBgWithGlass: Story = {
+  args: {
+    title: 'Fondo custom con glass',
+    subtitle: 'backgroundColor + glassColor + glassOpacity para control total.',
+    background: 'solid',
+    backgroundColor: '#1e1b4b',
+    glass: true,
+    glassColor: '#818cf8',
+    glassOpacity: 0.15,
+    size: 'lg',
+    badge: <Chip variant="outline">💎 Custom Glass</Chip>,
+    actions: <Button label="Comenzar" severity="primary" />,
+  },
+};
+
+/**
+ * Split Full with glass on dark background using props.
  */
 export const SplitFullGlassDark: Story = {
   args: {
@@ -311,38 +342,18 @@ export const SplitFullGlassDark: Story = {
     align: 'left',
     size: 'lg',
     background: 'solid',
+    backgroundColor: '#111827',
     glass: true,
-    className: 'kreati-hero--custom-dark',
+    glassColor: '#ffffff',
+    glassOpacity: 0.08,
     badge: <Chip variant="outline">🌙 Glass Dark</Chip>,
     media: fullMediaPlaceholder('linear-gradient(135deg, #06b6d4, #3b82f6)', '💎 Media'),
     actions: <Button label="Ver más" severity="primary" />,
   },
-  decorators: [
-    (Story) => (
-      <>
-        <style>{`
-          .kreati-hero--custom-dark {
-            background-color: #111827 !important;
-          }
-          .kreati-hero--custom-dark .kreati-hero__title {
-            color: #f9fafb;
-          }
-          .kreati-hero--custom-dark .kreati-hero__subtitle {
-            color: #9ca3af;
-          }
-          .kreati-hero--custom-dark.kreati-hero--glass .kreati-hero__content {
-            background: rgba(255, 255, 255, 0.08) !important;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-          }
-        `}</style>
-        <Story />
-      </>
-    ),
-  ],
 };
 
 /**
- * Split Full with glass on warm colored background.
+ * Split Full with glass on warm colored background using props.
  */
 export const SplitFullGlassWarm: Story = {
   args: {
@@ -352,32 +363,18 @@ export const SplitFullGlassWarm: Story = {
     align: 'left',
     size: 'lg',
     background: 'solid',
+    backgroundColor: '#fef3c7',
     glass: true,
-    className: 'kreati-hero--custom-warm',
+    glassColor: '#ffffff',
+    glassOpacity: 0.4,
     badge: <Chip variant="secondary">🌅 Warm</Chip>,
     media: fullMediaPlaceholder('linear-gradient(135deg, #dc2626, #f97316)', '☀️ Media'),
     actions: <Button label="Descubrir" severity="primary" />,
   },
-  decorators: [
-    (Story) => (
-      <>
-        <style>{`
-          .kreati-hero--custom-warm {
-            background-color: #fef3c7 !important;
-          }
-          .kreati-hero--custom-warm.kreati-hero--glass .kreati-hero__content {
-            background: rgba(255, 255, 255, 0.4) !important;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-          }
-        `}</style>
-        <Story />
-      </>
-    ),
-  ],
 };
 
 /**
- * Split Full with glass on blue/purple background.
+ * Split Full with glass on blue/purple background using props.
  */
 export const SplitFullGlassCool: Story = {
   args: {
@@ -386,9 +383,12 @@ export const SplitFullGlassCool: Story = {
     layout: 'split-full',
     align: 'left',
     size: 'lg',
-    background: 'solid',
+    background: 'gradient',
+    gradientFrom: '#4f46e5',
+    gradientTo: '#7c3aed',
     glass: true,
-    className: 'kreati-hero--custom-cool',
+    glassColor: '#ffffff',
+    glassOpacity: 0.1,
     badge: <Chip variant="primary">❄️ Cool</Chip>,
     media: fullMediaPlaceholder('linear-gradient(135deg, #10b981, #059669)', '🌊 Media'),
     actions: (
@@ -398,26 +398,4 @@ export const SplitFullGlassCool: Story = {
       </>
     ),
   },
-  decorators: [
-    (Story) => (
-      <>
-        <style>{`
-          .kreati-hero--custom-cool {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
-          }
-          .kreati-hero--custom-cool .kreati-hero__title {
-            color: #f9fafb;
-          }
-          .kreati-hero--custom-cool .kreati-hero__subtitle {
-            color: #c4b5fd;
-          }
-          .kreati-hero--custom-cool.kreati-hero--glass .kreati-hero__content {
-            background: rgba(255, 255, 255, 0.1) !important;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-          }
-        `}</style>
-        <Story />
-      </>
-    ),
-  ],
 };
