@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { HeroSection } from '../../../../packages/react/src/components/HeroSection';
-import { Badge } from '../../../../packages/react/src/components/Badge';
+import { Chip } from '../../../../packages/react/src/components/Chip';
 import { Button } from '../../../../packages/react/src/components/Button';
 
 const meta = {
@@ -22,7 +22,7 @@ const meta = {
     },
     layout: {
       control: 'select',
-      options: ['single', 'split'],
+      options: ['single', 'split', 'split-full'],
     },
     background: {
       control: 'select',
@@ -56,11 +56,11 @@ export const Default: Story = {
     subtitle: 'Componentes React modernos, tipados y listos para producción.',
     background: 'gradient',
     size: 'lg',
-    badge: <Badge variant="primary">🚀 Nuevo</Badge>,
+    badge: <Chip variant="primary">🚀 Nuevo</Chip>,
     actions: (
       <>
-        <Button variant="primary">Comenzar</Button>
-        <Button variant="outline">Ver demo</Button>
+        <Button label="Comenzar" severity="primary" />
+        <Button label="Ver demo" severity="primary" buttonType="outlined" />
       </>
     ),
   },
@@ -77,7 +77,7 @@ export const SplitLayout: Story = {
     align: 'left',
     background: 'gradient',
     size: 'md',
-    badge: <Badge variant="success">✅ Disponible</Badge>,
+    badge: <Chip variant="success">✅ Disponible</Chip>,
     media: (
       <div style={{
         width: '100%',
@@ -93,7 +93,7 @@ export const SplitLayout: Story = {
         Media Placeholder
       </div>
     ),
-    actions: <Button variant="primary">Explorar</Button>,
+    actions: <Button label="Explorar" severity="primary" />,
   },
 };
 
@@ -122,8 +122,8 @@ export const BackgroundImage: Story = {
     size: 'lg',
     actions: (
       <>
-        <Button variant="primary">Descubrir</Button>
-        <Button variant="outline">Más info</Button>
+        <Button label="Descubrir" severity="primary" />
+        <Button label="Más info" severity="primary" buttonType="outlined" />
       </>
     ),
   },
@@ -139,8 +139,8 @@ export const GlassOnGradient: Story = {
     background: 'gradient',
     glass: true,
     size: 'lg',
-    badge: <Badge variant="outline">✨ Glass</Badge>,
-    actions: <Button variant="primary">Comenzar</Button>,
+    badge: <Chip variant="outline">✨ Glass</Chip>,
+    actions: <Button label="Comenzar" severity="primary" />,
   },
 };
 
@@ -156,11 +156,11 @@ export const GlassOnImage: Story = {
     overlay: true,
     glass: true,
     size: 'lg',
-    badge: <Badge variant="primary">🚀 Premium</Badge>,
+    badge: <Chip variant="primary">🚀 Premium</Chip>,
     actions: (
       <>
-        <Button variant="primary">Empezar</Button>
-        <Button variant="outline">Demo</Button>
+        <Button label="Empezar" severity="primary" />
+        <Button label="Demo" severity="primary" buttonType="outlined" />
       </>
     ),
   },
@@ -188,7 +188,236 @@ export const LeftAligned: Story = {
     align: 'left',
     background: 'gradient',
     size: 'md',
-    badge: <Badge variant="secondary">📝 Blog</Badge>,
-    actions: <Button variant="primary">Leer más</Button>,
+    badge: <Chip variant="secondary">📝 Blog</Chip>,
+    actions: <Button label="Leer más" severity="primary" />,
   },
+};
+
+// --- Split Full Stories ---
+
+const fullMediaPlaceholder = (bg: string, label: string) => (
+  <div style={{
+    width: '100%',
+    height: '100%',
+    minHeight: '60vh',
+    background: bg,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 600,
+  }}>
+    {label}
+  </div>
+);
+
+/**
+ * Split Full layout — content and media each take a full half of the viewport.
+ */
+export const SplitFull: Story = {
+  args: {
+    title: 'Ocupa todo el espacio',
+    subtitle: 'El contenido y la media se dividen en dos mitades completas del viewport.',
+    layout: 'split-full',
+    align: 'left',
+    size: 'lg',
+    background: 'solid',
+    badge: <Chip variant="primary">🖥️ Full</Chip>,
+    media: fullMediaPlaceholder('linear-gradient(135deg, #0f78a5, #06b6d4)', '📷 Media'),
+    actions: (
+      <>
+        <Button label="Explorar" severity="primary" />
+        <Button label="Demo" severity="primary" buttonType="outlined" />
+      </>
+    ),
+  },
+};
+
+/**
+ * Split Full reversed — media on the left, content on the right.
+ */
+export const SplitFullReversed: Story = {
+  args: {
+    ...SplitFull.args,
+    reverse: true,
+    title: 'Media a la izquierda',
+    subtitle: 'Usa reverse para invertir el orden en split-full.',
+  },
+};
+
+/**
+ * Split Full with dark background.
+ */
+export const SplitFullDarkBg: Story = {
+  args: {
+    title: 'Fondo oscuro',
+    subtitle: 'Split full sobre un fondo oscuro para contraste dramático.',
+    layout: 'split-full',
+    align: 'left',
+    size: 'lg',
+    background: 'solid',
+    className: 'kreati-hero--custom-dark',
+    badge: <Chip variant="outline">🌙 Dark</Chip>,
+    media: fullMediaPlaceholder('linear-gradient(135deg, #7c3aed, #a855f7)', '🎨 Media'),
+    actions: <Button label="Comenzar" severity="primary" />,
+  },
+  decorators: [
+    (Story) => (
+      <>
+        <style>{`
+          .kreati-hero--custom-dark {
+            background-color: #111827 !important;
+          }
+          .kreati-hero--custom-dark .kreati-hero__title {
+            color: #f9fafb;
+          }
+          .kreati-hero--custom-dark .kreati-hero__subtitle {
+            color: #9ca3af;
+          }
+        `}</style>
+        <Story />
+      </>
+    ),
+  ],
+};
+
+/**
+ * Split Full with glass on gradient background.
+ */
+export const SplitFullGlassGradient: Story = {
+  args: {
+    title: 'Glass sobre gradiente',
+    subtitle: 'Glassmorphism en layout split-full con fondo gradiente.',
+    layout: 'split-full',
+    align: 'left',
+    size: 'lg',
+    background: 'gradient',
+    glass: true,
+    badge: <Chip variant="primary">✨ Glass</Chip>,
+    media: fullMediaPlaceholder('linear-gradient(135deg, #f59e0b, #ef4444)', '🔥 Media'),
+    actions: <Button label="Explorar" severity="primary" />,
+  },
+};
+
+/**
+ * Split Full with glass on dark background.
+ */
+export const SplitFullGlassDark: Story = {
+  args: {
+    title: 'Glass sobre fondo oscuro',
+    subtitle: 'Efecto glass con contraste sobre fondo oscuro.',
+    layout: 'split-full',
+    align: 'left',
+    size: 'lg',
+    background: 'solid',
+    glass: true,
+    className: 'kreati-hero--custom-dark',
+    badge: <Chip variant="outline">🌙 Glass Dark</Chip>,
+    media: fullMediaPlaceholder('linear-gradient(135deg, #06b6d4, #3b82f6)', '💎 Media'),
+    actions: <Button label="Ver más" severity="primary" />,
+  },
+  decorators: [
+    (Story) => (
+      <>
+        <style>{`
+          .kreati-hero--custom-dark {
+            background-color: #111827 !important;
+          }
+          .kreati-hero--custom-dark .kreati-hero__title {
+            color: #f9fafb;
+          }
+          .kreati-hero--custom-dark .kreati-hero__subtitle {
+            color: #9ca3af;
+          }
+          .kreati-hero--custom-dark.kreati-hero--glass .kreati-hero__content {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+          }
+        `}</style>
+        <Story />
+      </>
+    ),
+  ],
+};
+
+/**
+ * Split Full with glass on warm colored background.
+ */
+export const SplitFullGlassWarm: Story = {
+  args: {
+    title: 'Glass sobre fondo cálido',
+    subtitle: 'Glassmorphism sobre un fondo de color cálido.',
+    layout: 'split-full',
+    align: 'left',
+    size: 'lg',
+    background: 'solid',
+    glass: true,
+    className: 'kreati-hero--custom-warm',
+    badge: <Chip variant="secondary">🌅 Warm</Chip>,
+    media: fullMediaPlaceholder('linear-gradient(135deg, #dc2626, #f97316)', '☀️ Media'),
+    actions: <Button label="Descubrir" severity="primary" />,
+  },
+  decorators: [
+    (Story) => (
+      <>
+        <style>{`
+          .kreati-hero--custom-warm {
+            background-color: #fef3c7 !important;
+          }
+          .kreati-hero--custom-warm.kreati-hero--glass .kreati-hero__content {
+            background: rgba(255, 255, 255, 0.4) !important;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+          }
+        `}</style>
+        <Story />
+      </>
+    ),
+  ],
+};
+
+/**
+ * Split Full with glass on blue/purple background.
+ */
+export const SplitFullGlassCool: Story = {
+  args: {
+    title: 'Glass sobre fondo frío',
+    subtitle: 'Glassmorphism sobre un fondo azul/púrpura vibrante.',
+    layout: 'split-full',
+    align: 'left',
+    size: 'lg',
+    background: 'solid',
+    glass: true,
+    className: 'kreati-hero--custom-cool',
+    badge: <Chip variant="primary">❄️ Cool</Chip>,
+    media: fullMediaPlaceholder('linear-gradient(135deg, #10b981, #059669)', '🌊 Media'),
+    actions: (
+      <>
+        <Button label="Explorar" severity="primary" />
+        <Button label="Demo" severity="primary" buttonType="outlined" />
+      </>
+    ),
+  },
+  decorators: [
+    (Story) => (
+      <>
+        <style>{`
+          .kreati-hero--custom-cool {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
+          }
+          .kreati-hero--custom-cool .kreati-hero__title {
+            color: #f9fafb;
+          }
+          .kreati-hero--custom-cool .kreati-hero__subtitle {
+            color: #c4b5fd;
+          }
+          .kreati-hero--custom-cool.kreati-hero--glass .kreati-hero__content {
+            background: rgba(255, 255, 255, 0.1) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+          }
+        `}</style>
+        <Story />
+      </>
+    ),
+  ],
 };

@@ -39,6 +39,56 @@
   --kreati-warning: #f59e0b;
   --kreati-error: #ef4444;
 
+  /* Severity Colors (used by Button, etc.) */
+  --kreati-severity-primary: #0f78a5;
+  --kreati-severity-primary-hover: #0d6b94;
+  --kreati-severity-primary-active: #0b5e83;
+  --kreati-severity-primary-text: #ffffff;
+  --kreati-severity-primary-light: #deeff7;
+  --kreati-severity-primary-light-hover: #cce5f0;
+
+  --kreati-severity-secondary: #6b7280;
+  --kreati-severity-secondary-hover: #4b5563;
+  --kreati-severity-secondary-active: #374151;
+  --kreati-severity-secondary-text: #ffffff;
+  --kreati-severity-secondary-light: #f3f4f6;
+  --kreati-severity-secondary-light-hover: #e5e7eb;
+
+  --kreati-severity-success: #10b981;
+  --kreati-severity-success-hover: #059669;
+  --kreati-severity-success-active: #047857;
+  --kreati-severity-success-text: #ffffff;
+  --kreati-severity-success-light: #d1fae5;
+  --kreati-severity-success-light-hover: #a7f3d0;
+
+  --kreati-severity-info: #3b82f6;
+  --kreati-severity-info-hover: #2563eb;
+  --kreati-severity-info-active: #1d4ed8;
+  --kreati-severity-info-text: #ffffff;
+  --kreati-severity-info-light: #dbeafe;
+  --kreati-severity-info-light-hover: #bfdbfe;
+
+  --kreati-severity-warning: #f59e0b;
+  --kreati-severity-warning-hover: #d97706;
+  --kreati-severity-warning-active: #b45309;
+  --kreati-severity-warning-text: #ffffff;
+  --kreati-severity-warning-light: #fef3c7;
+  --kreati-severity-warning-light-hover: #fde68a;
+
+  --kreati-severity-help: #a855f7;
+  --kreati-severity-help-hover: #9333ea;
+  --kreati-severity-help-active: #7e22ce;
+  --kreati-severity-help-text: #ffffff;
+  --kreati-severity-help-light: #f3e8ff;
+  --kreati-severity-help-light-hover: #e9d5ff;
+
+  --kreati-severity-danger: #ef4444;
+  --kreati-severity-danger-hover: #dc2626;
+  --kreati-severity-danger-active: #b91c1c;
+  --kreati-severity-danger-text: #ffffff;
+  --kreati-severity-danger-light: #fee2e2;
+  --kreati-severity-danger-light-hover: #fecaca;
+
   /* Typography */
   --kreati-font-family: 'Helvetica', sans-serif;
   --kreati-font-size-xs: 12px;
