@@ -154,7 +154,7 @@
 
 /* Glassmorphism */
 .kreati-hero--glass .kreati-hero__content {
-  background: color-mix(in srgb, var(--kreati-hero-glass-color, #fff) calc(var(--kreati-hero-glass-opacity, 0.15) * 100%), transparent);
+  background: var(--kreati-hero-glass-bg, rgba(255, 255, 255, 0.15));
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.25);
@@ -162,12 +162,7 @@
   padding: var(--kreati-space-8);
 }
 
-.kreati-hero--bg-gradient.kreati-hero--glass .kreati-hero__content {
-  background: color-mix(in srgb, var(--kreati-hero-glass-color, #fff) calc(var(--kreati-hero-glass-opacity, 0.3) * 100%), transparent);
-}
-
 .kreati-hero--bg-image.kreati-hero--glass .kreati-hero__content {
-  background: color-mix(in srgb, var(--kreati-hero-glass-color, #000) calc(var(--kreati-hero-glass-opacity, 0.2) * 100%), transparent);
   border-color: rgba(255, 255, 255, 0.15);
 }
 
@@ -220,7 +215,7 @@
 
 /* Glassmorphism on split-full */
 .kreati-hero--split-full.kreati-hero--glass .kreati-hero__content {
-  background: color-mix(in srgb, var(--kreati-hero-glass-color, #fff) calc(var(--kreati-hero-glass-opacity, 0.15) * 100%), transparent);
+  background: var(--kreati-hero-glass-bg, rgba(255, 255, 255, 0.15));
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: none;

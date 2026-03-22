@@ -324,10 +324,47 @@ export const CustomBgWithGlass: Story = {
     backgroundColor: '#1e1b4b',
     glass: true,
     glassColor: '#818cf8',
-    glassOpacity: 0.15,
+    glassOpacity: 0.25,
     size: 'lg',
     badge: <Chip variant="outline">💎 Custom Glass</Chip>,
     actions: <Button label="Comenzar" severity="primary" />,
+  },
+};
+
+/**
+ * Glass opacity test — high opacity red glass to verify glassColor and glassOpacity work correctly.
+ */
+export const GlassOpacityTest: Story = {
+  args: {
+    title: 'Test de Glass Opacity',
+    subtitle: 'Glass rojo con opacidad alta (0.6) para verificar que glassColor y glassOpacity funcionan en todos los layouts.',
+    background: 'gradient',
+    glass: true,
+    glassColor: '#ff0000',
+    glassOpacity: 0.6,
+    size: 'md',
+    badge: <Chip variant="error">🔴 Test</Chip>,
+    actions: <Button label="Verificar" severity="danger" />,
+  },
+};
+
+/**
+ * Glass opacity test on split-full layout.
+ */
+export const GlassOpacityTestSplitFull: Story = {
+  args: {
+    title: 'Test Glass en Split Full',
+    subtitle: 'Mismo test de glass rojo pero en layout split-full.',
+    layout: 'split-full',
+    align: 'left',
+    background: 'gradient',
+    glass: true,
+    glassColor: '#ff0000',
+    glassOpacity: 0.6,
+    size: 'md',
+    badge: <Chip variant="error">🔴 Split Full</Chip>,
+    media: fullMediaPlaceholder('linear-gradient(135deg, #0f78a5, #06b6d4)', '📷 Media'),
+    actions: <Button label="Verificar" severity="danger" />,
   },
 };
 

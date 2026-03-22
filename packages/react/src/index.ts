@@ -9,6 +9,8 @@ export { NavigationBar } from './components/NavigationBar';
 export type { NavigationBarProps } from './components/NavigationBar';
 export { HeroSection } from './components/HeroSection';
 export type { HeroSectionProps } from './components/HeroSection';
+export { DynamicSvg } from './components/DynamicSvg';
+export type { DynamicSvgProps, SvgElementOverride, SvgElementStyle, SvgAnimation } from './components/DynamicSvg';
 
 // Types
 export type { MenuItem, NavigationRouter, BaseNavigationProps } from './types/navigation';
@@ -21,3 +23,4 @@ import './components/Badge.css';
 import './components/Chip.css';
 import './components/NavigationBar.css';
 import './components/HeroSection.css';
+import './components/DynamicSvg.css';
