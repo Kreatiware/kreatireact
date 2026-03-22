@@ -28,6 +28,7 @@ export const Default: Story = {
 };
 
 export const Variants: Story = {
+  args: { children: 'Chip' },
   render: () => (
     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
       <Chip variant="primary">Primary</Chip>
@@ -41,6 +42,7 @@ export const Variants: Story = {
 };
 
 export const Sizes: Story = {
+  args: { children: 'Chip' },
   render: () => (
     <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
       <Chip size="sm">Small</Chip>
@@ -51,6 +53,7 @@ export const Sizes: Story = {
 };
 
 export const WithEmoji: Story = {
+  args: { children: 'Chip' },
   render: () => (
     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
       <Chip variant="primary">🚀 Nuevo</Chip>
