@@ -1,0 +1,16 @@
+/* DynamicSvg */
+.kreati-dsvg-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.kreati-dsvg-wrapper > svg {
+  display: block;
+}
+
+.kreati-dsvg-loading,
+.kreati-dsvg-error {
+  display: inline-block;
+}

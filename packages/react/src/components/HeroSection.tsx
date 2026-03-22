@@ -112,13 +112,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     .filter(Boolean)
     .join(' ');
 
+  // Convert hex color + opacity to rgba for glass background
+  const getGlassBg = (): string | undefined => {
+    if (!glass) return undefined;
+    const hex = glassColor || (background === 'image' ? '#000000' : '#ffffff');
+    const opacity = glassOpacity ?? (background === 'gradient' ? 0.3 : background === 'image' ? 0.2 : 0.15);
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  };
+
   const sectionStyle: React.CSSProperties = {
     ...(background === 'image' && backgroundImage && { backgroundImage: `url(${backgroundImage})` }),
     ...(backgroundColor && { '--kreati-hero-bg': backgroundColor } as React.CSSProperties),
     ...(gradientFrom && { '--kreati-hero-gradient-from': gradientFrom } as React.CSSProperties),
     ...(gradientTo && { '--kreati-hero-gradient-to': gradientTo } as React.CSSProperties),
-    ...(glassColor && { '--kreati-hero-glass-color': glassColor } as React.CSSProperties),
-    ...(glassOpacity !== undefined && { '--kreati-hero-glass-opacity': glassOpacity } as React.CSSProperties),
+    ...(glass && { '--kreati-hero-glass-bg': getGlassBg() } as React.CSSProperties),
   };
 
   return (
