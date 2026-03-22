@@ -1,73 +1,357 @@
-/* Button Base Styles */
-.kreati-button {
+/* ============================================
+   Button Base
+   ============================================ */
+.k-button {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: none;
-  border-radius: var(--kreati-radius-md);
-  font-family: inherit;
+  gap: 8px;
+  border: 2px solid transparent;
+  border-radius: var(--kreati-radius-sm);
+  font-family: var(--kreati-font-family);
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  text-decoration: none;
+  transition: var(--kreati-transition);
   outline: none;
-  position: relative;
-
-  &:focus-visible {
-    outline: 2px solid var(--kreati-primary-500);
-    outline-offset: 2px;
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  box-sizing: border-box;
 }
 
-/* Sizes */
-.kreati-button--sm {
-  padding: var(--kreati-space-2) var(--kreati-space-3);
-  font-size: var(--kreati-font-size-sm);
-  line-height: 1.25;
+/* ============================================
+   Sizes (fixed heights)
+   ============================================ */
+.k-button--xs { height: 28px; padding: 0 10px; font-size: 12px; gap: 4px; }
+.k-button--sm { height: 32px; padding: 0 14px; font-size: 13px; gap: 6px; }
+.k-button--md { height: 40px; padding: 0 18px; font-size: 14px; }
+.k-button--lg { height: 48px; padding: 0 22px; font-size: 16px; }
+.k-button--xl { height: 56px; padding: 0 28px; font-size: 18px; gap: 10px; }
+
+/* ============================================
+   Slim (reduces height)
+   ============================================ */
+.k-button--slim.k-button--xs { height: 22px; }
+.k-button--slim.k-button--sm { height: 26px; }
+.k-button--slim.k-button--md { height: 32px; }
+.k-button--slim.k-button--lg { height: 38px; }
+.k-button--slim.k-button--xl { height: 44px; }
+
+/* ============================================
+   Icon Only (square, or circle if rounded)
+   ============================================ */
+.k-button--icon-only.k-button--xs { width: 28px; padding: 0; }
+.k-button--icon-only.k-button--sm { width: 32px; padding: 0; }
+.k-button--icon-only.k-button--md { width: 40px; padding: 0; }
+.k-button--icon-only.k-button--lg { width: 48px; padding: 0; }
+.k-button--icon-only.k-button--xl { width: 56px; padding: 0; }
+
+.k-button--icon-only.k-button--slim.k-button--xs { width: 22px; height: 22px; }
+.k-button--icon-only.k-button--slim.k-button--sm { width: 26px; height: 26px; }
+.k-button--icon-only.k-button--slim.k-button--md { width: 32px; height: 32px; }
+.k-button--icon-only.k-button--slim.k-button--lg { width: 38px; height: 38px; }
+.k-button--icon-only.k-button--slim.k-button--xl { width: 44px; height: 44px; }
+
+/* ============================================
+   Rounded
+   ============================================ */
+.k-button--rounded { border-radius: 9999px; }
+
+/* ============================================
+   Raised
+   ============================================ */
+.k-button--raised { box-shadow: var(--kreati-shadow-md); }
+.k-button--raised:hover:not(:disabled) { box-shadow: var(--kreati-shadow-lg); }
+.k-button--raised:active:not(:disabled) { box-shadow: var(--kreati-shadow-sm); }
+
+/* ============================================
+   Disabled
+   ============================================ */
+.k-button--disabled,
+.k-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
-.kreati-button--md {
-  padding: var(--kreati-space-2) var(--kreati-space-4);
-  font-size: var(--kreati-font-size-base);
-  line-height: 1.5;
+/* ============================================
+   Icon slots
+   ============================================ */
+.k-button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 0;
 }
 
-.kreati-button--lg {
-  padding: var(--kreati-space-3) var(--kreati-space-5);
-  font-size: var(--kreati-font-size-lg);
-  line-height: 1.5;
+.k-button__label {
+  line-height: 1;
 }
 
-/* Variants */
-.kreati-button--primary {
-  background-color: var(--kreati-primary-500);
-  color: var(--kreati-white);
-
-  &:hover:not(:disabled) {
-    background-color: var(--kreati-primary-600);
-  }
+/* ============================================
+   FILLED type — per severity
+   ============================================ */
+.k-button--filled.k-button--primary {
+  background-color: var(--kreati-severity-primary);
+  color: var(--kreati-severity-primary-text);
+}
+.k-button--filled.k-button--primary:hover:not(:disabled) {
+  background-color: var(--kreati-severity-primary-hover);
+}
+.k-button--filled.k-button--primary:active:not(:disabled) {
+  background-color: var(--kreati-severity-primary-active);
+}
+.k-button--filled.k-button--primary:focus-visible {
+  outline: 2px solid var(--kreati-severity-primary);
+  outline-offset: 2px;
 }
 
-.kreati-button--secondary {
-  background-color: var(--kreati-gray-100);
-  color: var(--kreati-gray-900);
-
-  &:hover:not(:disabled) {
-    background-color: var(--kreati-gray-200);
-  }
+.k-button--filled.k-button--secondary {
+  background-color: var(--kreati-severity-secondary);
+  color: var(--kreati-severity-secondary-text);
+}
+.k-button--filled.k-button--secondary:hover:not(:disabled) {
+  background-color: var(--kreati-severity-secondary-hover);
+}
+.k-button--filled.k-button--secondary:active:not(:disabled) {
+  background-color: var(--kreati-severity-secondary-active);
+}
+.k-button--filled.k-button--secondary:focus-visible {
+  outline: 2px solid var(--kreati-severity-secondary);
+  outline-offset: 2px;
 }
 
-.kreati-button--outline {
+.k-button--filled.k-button--success {
+  background-color: var(--kreati-severity-success);
+  color: var(--kreati-severity-success-text);
+}
+.k-button--filled.k-button--success:hover:not(:disabled) {
+  background-color: var(--kreati-severity-success-hover);
+}
+.k-button--filled.k-button--success:active:not(:disabled) {
+  background-color: var(--kreati-severity-success-active);
+}
+.k-button--filled.k-button--success:focus-visible {
+  outline: 2px solid var(--kreati-severity-success);
+  outline-offset: 2px;
+}
+
+.k-button--filled.k-button--info {
+  background-color: var(--kreati-severity-info);
+  color: var(--kreati-severity-info-text);
+}
+.k-button--filled.k-button--info:hover:not(:disabled) {
+  background-color: var(--kreati-severity-info-hover);
+}
+.k-button--filled.k-button--info:active:not(:disabled) {
+  background-color: var(--kreati-severity-info-active);
+}
+.k-button--filled.k-button--info:focus-visible {
+  outline: 2px solid var(--kreati-severity-info);
+  outline-offset: 2px;
+}
+
+.k-button--filled.k-button--warning {
+  background-color: var(--kreati-severity-warning);
+  color: var(--kreati-severity-warning-text);
+}
+.k-button--filled.k-button--warning:hover:not(:disabled) {
+  background-color: var(--kreati-severity-warning-hover);
+}
+.k-button--filled.k-button--warning:active:not(:disabled) {
+  background-color: var(--kreati-severity-warning-active);
+}
+.k-button--filled.k-button--warning:focus-visible {
+  outline: 2px solid var(--kreati-severity-warning);
+  outline-offset: 2px;
+}
+
+.k-button--filled.k-button--help {
+  background-color: var(--kreati-severity-help);
+  color: var(--kreati-severity-help-text);
+}
+.k-button--filled.k-button--help:hover:not(:disabled) {
+  background-color: var(--kreati-severity-help-hover);
+}
+.k-button--filled.k-button--help:active:not(:disabled) {
+  background-color: var(--kreati-severity-help-active);
+}
+.k-button--filled.k-button--help:focus-visible {
+  outline: 2px solid var(--kreati-severity-help);
+  outline-offset: 2px;
+}
+
+.k-button--filled.k-button--danger {
+  background-color: var(--kreati-severity-danger);
+  color: var(--kreati-severity-danger-text);
+}
+.k-button--filled.k-button--danger:hover:not(:disabled) {
+  background-color: var(--kreati-severity-danger-hover);
+}
+.k-button--filled.k-button--danger:active:not(:disabled) {
+  background-color: var(--kreati-severity-danger-active);
+}
+.k-button--filled.k-button--danger:focus-visible {
+  outline: 2px solid var(--kreati-severity-danger);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   OUTLINED type — per severity
+   ============================================ */
+.k-button--outlined { background-color: transparent; }
+
+.k-button--outlined.k-button--primary {
+  border-color: var(--kreati-severity-primary);
+  color: var(--kreati-severity-primary);
+}
+.k-button--outlined.k-button--primary:hover:not(:disabled) {
+  background-color: var(--kreati-severity-primary-light);
+}
+.k-button--outlined.k-button--primary:active:not(:disabled) {
+  background-color: var(--kreati-severity-primary-light-hover);
+}
+
+.k-button--outlined.k-button--secondary {
+  border-color: var(--kreati-severity-secondary);
+  color: var(--kreati-severity-secondary);
+}
+.k-button--outlined.k-button--secondary:hover:not(:disabled) {
+  background-color: var(--kreati-severity-secondary-light);
+}
+.k-button--outlined.k-button--secondary:active:not(:disabled) {
+  background-color: var(--kreati-severity-secondary-light-hover);
+}
+
+.k-button--outlined.k-button--success {
+  border-color: var(--kreati-severity-success);
+  color: var(--kreati-severity-success);
+}
+.k-button--outlined.k-button--success:hover:not(:disabled) {
+  background-color: var(--kreati-severity-success-light);
+}
+.k-button--outlined.k-button--success:active:not(:disabled) {
+  background-color: var(--kreati-severity-success-light-hover);
+}
+
+.k-button--outlined.k-button--info {
+  border-color: var(--kreati-severity-info);
+  color: var(--kreati-severity-info);
+}
+.k-button--outlined.k-button--info:hover:not(:disabled) {
+  background-color: var(--kreati-severity-info-light);
+}
+.k-button--outlined.k-button--info:active:not(:disabled) {
+  background-color: var(--kreati-severity-info-light-hover);
+}
+
+.k-button--outlined.k-button--warning {
+  border-color: var(--kreati-severity-warning);
+  color: var(--kreati-severity-warning);
+}
+.k-button--outlined.k-button--warning:hover:not(:disabled) {
+  background-color: var(--kreati-severity-warning-light);
+}
+.k-button--outlined.k-button--warning:active:not(:disabled) {
+  background-color: var(--kreati-severity-warning-light-hover);
+}
+
+.k-button--outlined.k-button--help {
+  border-color: var(--kreati-severity-help);
+  color: var(--kreati-severity-help);
+}
+.k-button--outlined.k-button--help:hover:not(:disabled) {
+  background-color: var(--kreati-severity-help-light);
+}
+.k-button--outlined.k-button--help:active:not(:disabled) {
+  background-color: var(--kreati-severity-help-light-hover);
+}
+
+.k-button--outlined.k-button--danger {
+  border-color: var(--kreati-severity-danger);
+  color: var(--kreati-severity-danger);
+}
+.k-button--outlined.k-button--danger:hover:not(:disabled) {
+  background-color: var(--kreati-severity-danger-light);
+}
+.k-button--outlined.k-button--danger:active:not(:disabled) {
+  background-color: var(--kreati-severity-danger-light-hover);
+}
+
+.k-button--outlined:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* ============================================
+   TEXT type — per severity
+   ============================================ */
+.k-button--text {
   background-color: transparent;
-  color: var(--kreati-primary-500);
-  border: 1px solid var(--kreati-primary-500);
-
-  &:hover:not(:disabled) {
-    background-color: var(--kreati-primary-50);
-  }
+  border-color: transparent;
 }
+
+.k-button--text.k-button--primary { color: var(--kreati-severity-primary); }
+.k-button--text.k-button--primary:hover:not(:disabled) { background-color: var(--kreati-severity-primary-light); }
+.k-button--text.k-button--primary:active:not(:disabled) { background-color: var(--kreati-severity-primary-light-hover); }
+
+.k-button--text.k-button--secondary { color: var(--kreati-severity-secondary); }
+.k-button--text.k-button--secondary:hover:not(:disabled) { background-color: var(--kreati-severity-secondary-light); }
+.k-button--text.k-button--secondary:active:not(:disabled) { background-color: var(--kreati-severity-secondary-light-hover); }
+
+.k-button--text.k-button--success { color: var(--kreati-severity-success); }
+.k-button--text.k-button--success:hover:not(:disabled) { background-color: var(--kreati-severity-success-light); }
+.k-button--text.k-button--success:active:not(:disabled) { background-color: var(--kreati-severity-success-light-hover); }
+
+.k-button--text.k-button--info { color: var(--kreati-severity-info); }
+.k-button--text.k-button--info:hover:not(:disabled) { background-color: var(--kreati-severity-info-light); }
+.k-button--text.k-button--info:active:not(:disabled) { background-color: var(--kreati-severity-info-light-hover); }
+
+.k-button--text.k-button--warning { color: var(--kreati-severity-warning); }
+.k-button--text.k-button--warning:hover:not(:disabled) { background-color: var(--kreati-severity-warning-light); }
+.k-button--text.k-button--warning:active:not(:disabled) { background-color: var(--kreati-severity-warning-light-hover); }
+
+.k-button--text.k-button--help { color: var(--kreati-severity-help); }
+.k-button--text.k-button--help:hover:not(:disabled) { background-color: var(--kreati-severity-help-light); }
+.k-button--text.k-button--help:active:not(:disabled) { background-color: var(--kreati-severity-help-light-hover); }
+
+.k-button--text.k-button--danger { color: var(--kreati-severity-danger); }
+.k-button--text.k-button--danger:hover:not(:disabled) { background-color: var(--kreati-severity-danger-light); }
+.k-button--text.k-button--danger:active:not(:disabled) { background-color: var(--kreati-severity-danger-light-hover); }
+
+.k-button--text:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* ============================================
+   Badge overlay (inside button)
+   ============================================ */
+.k-button__badge {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  background-color: var(--kreati-severity-danger);
+  color: var(--kreati-white);
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.k-button__badge--n   { top: -8px;  left: 50%; transform: translateX(-50%); }
+.k-button__badge--ne  { top: -8px;  right: -8px; }
+.k-button__badge--e   { top: 50%;   right: -8px; transform: translateY(-50%); }
+.k-button__badge--se  { bottom: -8px; right: -8px; }
+.k-button__badge--s   { bottom: -8px; left: 50%; transform: translateX(-50%); }
+.k-button__badge--sw  { bottom: -8px; left: -8px; }
+.k-button__badge--w   { top: 50%;   left: -8px; transform: translateY(-50%); }
+.k-button__badge--nw  { top: -8px;  left: -8px; }

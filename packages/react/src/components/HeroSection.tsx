@@ -17,8 +17,8 @@ export interface HeroSectionProps {
   media?: React.ReactNode;
   /** Content alignment */
   align?: 'left' | 'center' | 'right';
-  /** Layout mode: single (content only) or split (content + media) */
-  layout?: 'single' | 'split';
+  /** Layout mode: single (content only), split (content + media), or split-full (full-width halves) */
+  layout?: 'single' | 'split' | 'split-full';
   /** Reverse content/media order in split layout */
   reverse?: boolean;
   /** Background style */
@@ -86,7 +86,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const classes = [
     baseClass,
     `${baseClass}--${align}`,
-    `${baseClass}--${layout}`,
+    `${baseClass}--${layout.replace('-', '-')}`,
     `${baseClass}--${size}`,
     `${baseClass}--bg-${background}`,
     reverse && `${baseClass}--reverse`,
@@ -111,7 +111,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           {subtitle && <p className="kreati-hero__subtitle">{subtitle}</p>}
           {actions && <div className="kreati-hero__actions">{actions}</div>}
         </div>
-        {layout === 'split' && media && (
+        {(layout === 'split' || layout === 'split-full') && media && (
           <div className="kreati-hero__media">{media}</div>
         )}
       </div>

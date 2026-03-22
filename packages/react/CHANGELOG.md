@@ -1,5 +1,11 @@
 # @kreatiware/react
 
+## 0.6.0
+
+### Minor Changes
+
+- feat: add button, chip, badge, herosection full split
+
 ## 0.5.0
 
 ### Minor Changes

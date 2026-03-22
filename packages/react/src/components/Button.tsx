@@ -1,53 +1,80 @@
 import React from 'react';
 import './Button.css';
 
-/**
- * Props for the Button component
- */
+export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type ButtonType = 'filled' | 'outlined' | 'text';
+export type ButtonSeverity = 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+export type ButtonBadgePosition = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw';
+
 export interface ButtonProps {
-  /** Button content */
-  children: React.ReactNode;
-  /** Visual style variant of the button */
-  variant?: 'primary' | 'secondary' | 'outline';
-  /** Size of the button */
-  size?: 'sm' | 'md' | 'lg';
-  /** Whether the button is disabled */
+  /** Button label text */
+  label?: string;
+  /** Left icon (JSX element) */
+  iconLeft?: React.ReactNode;
+  /** Right icon (JSX element) */
+  iconRight?: React.ReactNode;
+  /** Button size */
+  size?: ButtonSize;
+  /** Button type style */
+  buttonType?: ButtonType;
+  /** Color severity */
+  severity?: ButtonSeverity;
+  /** Disabled state (keeps color, applies 40% opacity) */
   disabled?: boolean;
-  /** Click handler function */
-  onClick?: () => void;
+  /** Raised shadow effect */
+  raised?: boolean;
+  /** Extra rounded borders (pill shape / circle for icon-only) */
+  rounded?: boolean;
+  /** Slim mode — reduces vertical padding for a thinner button */
+  slim?: boolean;
+  /** Badge content */
+  badge?: React.ReactNode;
+  /** Badge position using cardinal directions */
+  badgePosition?: ButtonBadgePosition;
+  /** Click handler */
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  /** HTML button type attribute */
+  type?: 'button' | 'submit' | 'reset';
+  /** Custom width (e.g. '100%', '200px', 'auto') */
+  width?: string;
   /** Additional CSS class names */
   className?: string;
+  /** Render custom content directly inside the button (template slot) */
+  children?: React.ReactNode;
 }
 
-/**
- * Button component with multiple variants and sizes
- * 
- * @description A versatile button component that supports different visual styles,
- * sizes, and states. Built with accessibility in mind and includes hover/focus effects.
- * 
- * @example
- * ```tsx
- * <Button variant="primary" size="md" onClick={() => console.log('clicked')}>
- *   Click me
- * </Button>
- * ```
- * 
- * @param props - Button component props
- * @returns JSX.Element
- */
 export const Button: React.FC<ButtonProps> = ({
-  children,
-  variant = 'primary',
+  label,
+  iconLeft,
+  iconRight,
   size = 'md',
+  buttonType = 'filled',
+  severity = 'primary',
   disabled = false,
+  raised = false,
+  rounded = false,
+  slim = false,
+  badge,
+  badgePosition = 'ne',
   onClick,
+  type = 'button',
+  width,
   className = '',
+  children,
 }) => {
-  const baseClass = 'kreati-button';
+  const isIconOnly = !label && !children && (iconLeft || iconRight);
+  const base = 'k-button';
+
   const classes = [
-    baseClass,
-    `${baseClass}--${variant}`,
-    `${baseClass}--${size}`,
+    base,
+    `${base}--${size}`,
+    `${base}--${buttonType}`,
+    `${base}--${severity}`,
+    isIconOnly && `${base}--icon-only`,
+    raised && `${base}--raised`,
+    rounded && `${base}--rounded`,
+    slim && `${base}--slim`,
+    disabled && `${base}--disabled`,
     className,
   ]
     .filter(Boolean)
@@ -58,9 +85,23 @@ export const Button: React.FC<ButtonProps> = ({
       className={classes}
       disabled={disabled}
       onClick={onClick}
-      type="button"
+      type={type}
+      style={width ? { width } : undefined}
     >
-      {children}
+      {children ? (
+        children
+      ) : (
+        <>
+          {iconLeft && <span className={`${base}__icon ${base}__icon--left`}>{iconLeft}</span>}
+          {label && <span className={`${base}__label`}>{label}</span>}
+          {iconRight && <span className={`${base}__icon ${base}__icon--right`}>{iconRight}</span>}
+        </>
+      )}
+      {badge != null && (
+        <span className={`${base}__badge ${base}__badge--${badgePosition}`}>
+          {badge}
+        </span>
+      )}
     </button>
   );
 };

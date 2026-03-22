@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Badge } from '../../../../packages/react/src/components/Badge';
+import { Button } from '../../../../packages/react/src/components/Button';
+import { Check } from '../../../../packages/icons/src/icons';
 
 const meta = {
   title: 'Components/Badge',
@@ -8,83 +10,118 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'A small pill-shaped component for labels, tags and status indicators. Supports multiple color variants, sizes and optional icons.',
+        component:
+          'A small circular badge that can be positioned on any component using 8 cardinal directions (N, NE, E, SE, S, SW, W, NW).',
       },
     },
   },
   tags: ['autodocs'],
   argTypes: {
-    variant: {
-      control: 'select',
-      options: ['primary', 'secondary', 'success', 'warning', 'error', 'outline'],
-    },
-    size: {
-      control: 'select',
-      options: ['sm', 'md', 'lg'],
-    },
-    children: {
-      control: 'text',
-    },
+    position: { control: 'select', options: ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'] },
+    severity: { control: 'select', options: ['primary', 'secondary', 'success', 'info', 'warning', 'help', 'danger'] },
   },
 } satisfies Meta<typeof Badge>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/**
- * Default badge with primary variant.
- */
+const DemoBox = ({ children }: { children?: React.ReactNode }) => (
+  <div style={{
+    width: 48,
+    height: 48,
+    borderRadius: 8,
+    background: '#e5e7eb',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 20,
+  }}>
+    {children || '📦'}
+  </div>
+);
+
 export const Default: Story = {
   args: {
-    children: 'Badge',
-    variant: 'primary',
-    size: 'md',
+    value: '3',
+    position: 'ne',
+    severity: 'danger',
+    children: <DemoBox />,
   },
 };
 
-/**
- * All available badge variants.
- */
-export const Variants: Story = {
-  args: { children: 'Badge' },
+export const AllPositions: Story = {
+  render: () => {
+    const positions = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'] as const;
+    return (
+      <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+        {positions.map((pos) => (
+          <div key={pos} style={{ textAlign: 'center' }}>
+            <Badge value="5" position={pos} severity="danger">
+              <DemoBox />
+            </Badge>
+            <div style={{ marginTop: 12, fontSize: 12, color: '#6b7280', fontFamily: 'monospace' }}>{pos}</div>
+          </div>
+        ))}
+      </div>
+    );
+  },
+};
+
+export const AllSeverities: Story = {
+  render: () => {
+    const severities = ['primary', 'secondary', 'success', 'info', 'warning', 'help', 'danger'] as const;
+    return (
+      <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+        {severities.map((s) => (
+          <div key={s} style={{ textAlign: 'center' }}>
+            <Badge value="3" severity={s}>
+              <DemoBox />
+            </Badge>
+            <div style={{ marginTop: 12, fontSize: 12, color: '#6b7280', fontFamily: 'monospace' }}>{s}</div>
+          </div>
+        ))}
+      </div>
+    );
+  },
+};
+
+export const EmptyDot: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-      <Badge variant="primary">Primary</Badge>
-      <Badge variant="secondary">Secondary</Badge>
-      <Badge variant="success">Success</Badge>
-      <Badge variant="warning">Warning</Badge>
-      <Badge variant="error">Error</Badge>
-      <Badge variant="outline">Outline</Badge>
+    <div style={{ display: 'flex', gap: 24 }}>
+      <Badge severity="danger">
+        <DemoBox />
+      </Badge>
+      <Badge severity="success" position="nw">
+        <DemoBox />
+      </Badge>
+      <Badge severity="info" position="sw">
+        <DemoBox />
+      </Badge>
     </div>
   ),
 };
 
-/**
- * Badge sizes comparison.
- */
-export const Sizes: Story = {
-  args: { children: 'Badge' },
+export const OnButton: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-      <Badge size="sm">Small</Badge>
-      <Badge size="md">Medium</Badge>
-      <Badge size="lg">Large</Badge>
+    <div style={{ display: 'flex', gap: 24 }}>
+      <Badge value="5" severity="danger">
+        <Button label="Inbox" severity="primary" />
+      </Badge>
+      <Badge value="!" severity="warning">
+        <Button iconLeft={<Check size={18} />} severity="info" />
+      </Badge>
+      <Badge severity="success">
+        <Button iconLeft={<Check size={18} />} severity="secondary" rounded />
+      </Badge>
     </div>
   ),
 };
 
-/**
- * Badges with emoji icons for visual emphasis.
- */
-export const WithEmoji: Story = {
-  args: { children: 'Badge' },
-  render: () => (
-    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-      <Badge variant="primary">🚀 Nuevo</Badge>
-      <Badge variant="success">✅ Activo</Badge>
-      <Badge variant="warning">⚠️ Pendiente</Badge>
-      <Badge variant="error">🔴 Error</Badge>
-      <Badge variant="outline">v1.0.0</Badge>
-    </div>
-  ),
+export const WithIcon: Story = {
+  args: {
+    value: <Check size={10} />,
+    position: 'ne',
+    severity: 'success',
+    children: <DemoBox />,
+  },
 };
