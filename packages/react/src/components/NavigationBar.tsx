@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import './NavigationBar.css';
 import { MenuItem, NavigationRouter } from '../types/navigation';
-import { KreatiIcon, ChevronDown } from '@kreatiware/icons';
+import { KreatiIcon, ChevronDown, Menu, Times } from '@kreatiware/icons';
 
 /**
  * Props for the NavigationBar component
@@ -19,6 +19,8 @@ export interface NavigationBarProps {
   useRouter?: boolean;
   /** Whether the navigation bar should have a transparent background with blur effect */
   transparent?: boolean;
+  /** Breakpoint (px) at which mobile mode activates */
+  mobileBreakpoint?: number;
   /** Additional CSS class names */
   className?: string;
 }
@@ -76,9 +78,12 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
   router,
   useRouter = false,
   transparent = true,
+  mobileBreakpoint = 768,
   className = '',
 }) => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   const baseClass = 'kreati-navbar';
@@ -89,6 +94,27 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
   ]
     .filter(Boolean)
     .join(' ');
+
+  // Detect mobile viewport
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${mobileBreakpoint}px)`);
+    const onChange = (e: MediaQueryListEvent | MediaQueryList) => {
+      setIsMobile(e.matches);
+      if (!e.matches) {
+        setMobileOpen(false);
+        setOpenDropdown(null);
+      }
+    };
+    onChange(mq);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, [mobileBreakpoint]);
+
+  // Lock body scroll when drawer is open
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -104,6 +130,11 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const closeMobile = useCallback(() => {
+    setMobileOpen(false);
+    setOpenDropdown(null);
   }, []);
 
   /**
@@ -139,6 +170,7 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
 
     // Close dropdown on navigation
     setOpenDropdown(null);
+    if (isMobile) closeMobile();
   };
 
   /**
@@ -236,6 +268,7 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
                       setOpenDropdown(null);
                     } else {
                       setOpenDropdown(null);
+                      if (isMobile) closeMobile();
                     }
                   }}
                 >
@@ -252,28 +285,81 @@ export const NavigationBar: React.FC<NavigationBarProps> = ({
     return linkElement;
   };
 
+  const allItems = [...leftItems, ...rightItems];
+
   return (
     <nav className={classes}>
       <div className="kreati-navbar__container">
-        {/* Left Items */}
-        <div className="kreati-navbar__section kreati-navbar__section--left">
-          {leftItems.map((item, index) => renderNavItem(item, index))}
-        </div>
+        {/* Desktop layout */}
+        {!isMobile && (
+          <>
+            <div className="kreati-navbar__section kreati-navbar__section--left">
+              {leftItems.map((item, index) => renderNavItem(item, index))}
+            </div>
 
-        {/* Logo Center */}
-        <div className="kreati-navbar__logo">
-          {typeof logo === 'string' ? (
-            <span className="kreati-navbar__logo-text">{logo}</span>
-          ) : (
-            logo
-          )}
-        </div>
+            <div className="kreati-navbar__logo">
+              {typeof logo === 'string' ? (
+                <span className="kreati-navbar__logo-text">{logo}</span>
+              ) : (
+                logo
+              )}
+            </div>
 
-        {/* Right Items */}
-        <div className="kreati-navbar__section kreati-navbar__section--right">
-          {rightItems.map((item, index) => renderNavItem(item, index))}
-        </div>
+            <div className="kreati-navbar__section kreati-navbar__section--right">
+              {rightItems.map((item, index) => renderNavItem(item, index))}
+            </div>
+          </>
+        )}
+
+        {/* Mobile layout */}
+        {isMobile && (
+          <>
+            <span className="kreati-navbar__spacer" aria-hidden="true" />
+
+            <div className="kreati-navbar__logo">
+              {typeof logo === 'string' ? (
+                <span className="kreati-navbar__logo-text">{logo}</span>
+              ) : (
+                logo
+              )}
+            </div>
+
+            <button
+              type="button"
+              className="kreati-navbar__hamburger"
+              onClick={() => setMobileOpen(true)}
+              aria-label="Open menu"
+            >
+              <KreatiIcon size={24}><Menu /></KreatiIcon>
+            </button>
+          </>
+        )}
       </div>
+
+      {/* Mobile Drawer */}
+      {isMobile && (
+        <>
+          <div
+            className={`kreati-navbar__overlay ${mobileOpen ? 'kreati-navbar__overlay--visible' : ''}`}
+            onClick={closeMobile}
+          />
+          <div className={`kreati-navbar__drawer ${mobileOpen ? 'kreati-navbar__drawer--open' : ''}`}>
+            <div className="kreati-navbar__drawer-header">
+              <button
+                type="button"
+                className="kreati-navbar__drawer-close"
+                onClick={closeMobile}
+                aria-label="Close menu"
+              >
+                <KreatiIcon size={20}><Times /></KreatiIcon>
+              </button>
+            </div>
+            <div className="kreati-navbar__drawer-items">
+              {allItems.map((item, index) => renderNavItem(item, index))}
+            </div>
+          </div>
+        </>
+      )}
     </nav>
   );
 };
