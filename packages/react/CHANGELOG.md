@@ -1,5 +1,11 @@
 # @kreatiware/react
 
+## 1.1.0
+
+### Minor Changes
+
+- 4b63357: feat, add actiosn to dynamic svg, fix opactiy drawer nav bar
+
 ## 1.0.0
 
 ### Minor Changes
