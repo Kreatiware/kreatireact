@@ -13,6 +13,8 @@ export {
   ArrowRight,
   // UI
   Check,
+  Menu,
+  Times,
 } from './icons';
 
 export type { IconProps } from './icons';

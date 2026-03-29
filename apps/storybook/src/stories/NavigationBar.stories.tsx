@@ -22,6 +22,10 @@ const meta = {
       control: 'boolean',
       description: 'Whether the navbar has a transparent background with blur effect',
     },
+    mobileBreakpoint: {
+      control: { type: 'number', min: 320, max: 1200, step: 10 },
+      description: 'Breakpoint (px) at which mobile mode activates',
+    },
     useRouter: {
       control: 'boolean',
       description: 'Whether to use router for navigation instead of href',

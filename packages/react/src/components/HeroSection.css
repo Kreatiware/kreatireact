@@ -225,42 +225,87 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .kreati-hero--split .kreati-hero__container {
-    grid-template-columns: 1fr;
+  /* Reduced sizes & padding */
+  .kreati-hero--sm { min-height: 30vh; padding: var(--kreati-space-6) var(--kreati-space-4); }
+  .kreati-hero--md { min-height: 40vh; padding: var(--kreati-space-6) var(--kreati-space-4); }
+  .kreati-hero--lg { min-height: 50vh; padding: var(--kreati-space-6) var(--kreati-space-4); }
+  .kreati-hero--fullscreen { min-height: 100svh; padding: var(--kreati-space-6) var(--kreati-space-4); }
+
+  /* Force center alignment on mobile for all modes */
+  .kreati-hero .kreati-hero__content {
+    align-items: center;
     text-align: center;
   }
 
-  .kreati-hero--split .kreati-hero__content {
-    align-items: center;
+  .kreati-hero .kreati-hero__subtitle {
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .kreati-hero--split .kreati-hero__actions {
+  .kreati-hero .kreati-hero__actions {
     justify-content: center;
+  }
+
+  /* Split → single column, content always first */
+  .kreati-hero--split .kreati-hero__container {
+    grid-template-columns: 1fr;
+    gap: var(--kreati-space-6);
+  }
+
+  .kreati-hero--split .kreati-hero__content {
+    order: 1;
+  }
+
+  .kreati-hero--split .kreati-hero__media {
+    order: 2;
   }
 
   .kreati-hero--split.kreati-hero--reverse .kreati-hero__container {
     direction: ltr;
   }
 
+  /* Split-full → stacked, content on top */
+  .kreati-hero--split-full {
+    padding: 0;
+  }
+
   .kreati-hero--split-full .kreati-hero__container {
     grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
   }
 
   .kreati-hero--split-full .kreati-hero__content {
-    align-items: center;
-    text-align: center;
-    padding: var(--kreati-space-8) var(--kreati-space-6);
-  }
-
-  .kreati-hero--split-full .kreati-hero__actions {
-    justify-content: center;
+    order: 1;
+    padding: var(--kreati-space-6) var(--kreati-space-4);
   }
 
   .kreati-hero--split-full .kreati-hero__media {
-    min-height: 300px;
+    order: 2;
+    min-height: 35vh;
   }
 
   .kreati-hero--split-full.kreati-hero--reverse .kreati-hero__container {
     direction: ltr;
+  }
+
+  /* Glass padding adjustment */
+  .kreati-hero--glass .kreati-hero__content {
+    padding: var(--kreati-space-6);
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .kreati-hero__title {
+    font-size: clamp(1.5rem, 7vw, 2rem);
+  }
+
+  .kreati-hero__actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .kreati-hero__actions > * {
+    width: 100%;
   }
 }
