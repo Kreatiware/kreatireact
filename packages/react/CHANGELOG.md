@@ -1,5 +1,18 @@
 # @kreatiware/react
 
+## 1.0.0
+
+### Minor Changes
+
+- 2744920: Add mobile responsive support: NavigationBar hamburger menu with glass drawer, HeroSection responsive layouts for split and split-full modes
+
+### Patch Changes
+
+- 2744920: add times and hamburguer icons, add mobile support
+- Updated dependencies [2744920]
+- Updated dependencies [2744920]
+  - @kreatiware/icons@0.4.0
+
 ## 0.7.0
 
 ### Minor Changes
