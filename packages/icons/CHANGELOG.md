@@ -1,5 +1,12 @@
 # @kreatiware/icons
 
+## 0.4.0
+
+### Minor Changes
+
+- 2744920: Add Menu (hamburger) and Times (close) icon components
+- 2744920: add times and hamburguer icons, add mobile support
+
 ## 0.3.1
 
 ### Patch Changes
