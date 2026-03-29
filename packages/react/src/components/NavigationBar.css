@@ -294,13 +294,7 @@
 }
 
 /* Drawer inherits navbar mode */
-.kreati-navbar--transparent .kreati-navbar__drawer {
-  background-color: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-left: 1px solid rgba(255, 255, 255, 0.4);
-}
-
+.kreati-navbar--transparent .kreati-navbar__drawer,
 .kreati-navbar--solid .kreati-navbar__drawer {
   background-color: var(--kreati-white);
   border-left: 1px solid var(--kreati-gray-200);
