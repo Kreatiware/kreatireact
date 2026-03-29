@@ -1,5 +1,11 @@
 # @kreatiware/react
 
+## 1.2.0
+
+### Minor Changes
+
+- 826d7a7: feat hero section, add multiple gradient support and angle
+
 ## 1.1.0
 
 ### Minor Changes
