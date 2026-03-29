@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useId, useMemo } from 'react';
+import React, { useEffect, useState, useId, useMemo, useRef, useCallback } from 'react';
 import './DynamicSvg.css';
 
 /** SVG presentational attributes that can be applied to elements */
@@ -36,12 +36,26 @@ export interface SvgAnimation {
   delay?: string;
 }
 
+/** Event listeners for SVG elements */
+export interface SvgElementListeners {
+  onClick?: (e: Event) => void;
+  onMouseEnter?: (e: Event) => void;
+  onMouseLeave?: (e: Event) => void;
+  onMouseMove?: (e: Event) => void;
+  onMouseDown?: (e: Event) => void;
+  onMouseUp?: (e: Event) => void;
+}
+
 /** Override config for a specific element targeted by id or class */
 export interface SvgElementOverride extends SvgElementStyle {
   /** CSS class name to add to the element */
   className?: string;
   /** Animation config */
   animation?: SvgAnimation;
+  /** DOM event listeners attached to the targeted element(s) */
+  listeners?: SvgElementListeners;
+  /** Cursor style — e.g. 'pointer' */
+  cursor?: string;
 }
 
 export interface DynamicSvgProps {
@@ -74,7 +88,15 @@ export interface DynamicSvgProps {
    * @example
    * ```tsx
    * overrides={{
-   *   hull: { fill: '#095172', strokeWidth: 2 },
+   *   hull: {
+   *     fill: '#095172',
+   *     strokeWidth: 2,
+   *     cursor: 'pointer',
+   *     listeners: {
+   *       onClick: (e) => console.log('hull clicked', e),
+   *       onMouseEnter: (e) => console.log('hull hover'),
+   *     },
+   *   },
    *   '.accent': { fill: '#ffdb4f', opacity: 0.8 },
    * }}
    * ```
@@ -88,6 +110,14 @@ export interface DynamicSvgProps {
   onLoad?: () => void;
   /** Called on fetch/parse error */
   onError?: (error: Error) => void;
+  /** Click handler on the entire SVG wrapper */
+  onClick?: (e: React.MouseEvent) => void;
+  /** Mouse enter handler on the entire SVG wrapper */
+  onMouseEnter?: (e: React.MouseEvent) => void;
+  /** Mouse leave handler on the entire SVG wrapper */
+  onMouseLeave?: (e: React.MouseEvent) => void;
+  /** Mouse move handler on the entire SVG wrapper */
+  onMouseMove?: (e: React.MouseEvent) => void;
 }
 
 /** Attributes that map directly from override keys to SVG attributes */
@@ -107,7 +137,17 @@ const STYLE_ATTR_MAP: Record<string, string> = {
   visibility: 'visibility',
 };
 
-const RESERVED_KEYS = new Set(['className', 'animation']);
+const RESERVED_KEYS = new Set(['className', 'animation', 'listeners', 'cursor']);
+
+/** Listener key to DOM event name */
+const LISTENER_MAP: Record<string, string> = {
+  onClick: 'click',
+  onMouseEnter: 'mouseenter',
+  onMouseLeave: 'mouseleave',
+  onMouseMove: 'mousemove',
+  onMouseDown: 'mousedown',
+  onMouseUp: 'mouseup',
+};
 
 /**
  * Apply style overrides to a single SVG element
@@ -123,6 +163,9 @@ function applyStylesToElement(el: Element, styles: SvgElementOverride) {
   if (styles.className) {
     const existing = el.getAttribute('class') || '';
     el.setAttribute('class', `${existing} ${styles.className}`.trim());
+  }
+  if (styles.cursor) {
+    (el as HTMLElement).style.cursor = styles.cursor;
   }
 }
 
@@ -169,7 +212,6 @@ function buildAnimationCSS(
     if (!config.animation) continue;
     const { animation } = config;
 
-    // Build CSS selector
     const isClass = selector.startsWith('.');
     const cssSelector = isClass
       ? `.kreati-dsvg--${instanceId} .${selector.slice(1)}`
@@ -208,12 +250,12 @@ function buildAnimationCSS(
 }
 
 /**
- * DynamicSvg — Loads an SVG and allows dynamic styling of its internal elements
+ * DynamicSvg — Loads an SVG and allows dynamic styling and event handling of its internal elements
  *
  * @description Fetches an SVG from a local asset (src) or external URL (url),
  * parses it, and renders it inline with support for per-element style overrides
- * targeted by id or class, global style defaults, CSS animations, and full
- * accessibility support.
+ * and event listeners targeted by id or class, global style defaults, CSS
+ * animations, and full accessibility support.
  *
  * @example
  * ```tsx
@@ -223,8 +265,16 @@ function buildAnimationCSS(
  *   src={boatSvg}
  *   width={400}
  *   fill="#333"
+ *   onClick={(e) => console.log('SVG clicked')}
  *   overrides={{
- *     hull: { fill: '#095172', strokeWidth: 2 },
+ *     hull: {
+ *       fill: '#095172',
+ *       cursor: 'pointer',
+ *       listeners: {
+ *         onClick: () => console.log('hull clicked!'),
+ *         onMouseEnter: () => console.log('hull hover'),
+ *       },
+ *     },
  *     '.accent': { fill: '#ffdb4f', opacity: 0.8 },
  *     sail: {
  *       fill: '#0f78a5',
@@ -255,10 +305,16 @@ export const DynamicSvg: React.FC<DynamicSvgProps> = ({
   ariaLabel,
   onLoad,
   onError,
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+  onMouseMove,
 }) => {
   const [svgContent, setSvgContent] = useState<string | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState(false);
+  const wrapperRef = useRef<HTMLSpanElement>(null);
+  const cleanupRef = useRef<(() => void) | null>(null);
   const reactId = useId();
   const instanceId = reactId.replace(/:/g, '');
 
@@ -287,7 +343,7 @@ export const DynamicSvg: React.FC<DynamicSvgProps> = ({
       .finally(() => setLoading(false));
   }, [src, url]);
 
-  // Process SVG and generate animation CSS
+  // Process SVG HTML and animation CSS
   const processed = useMemo(() => {
     if (!svgContent) return null;
 
@@ -297,11 +353,10 @@ export const DynamicSvg: React.FC<DynamicSvgProps> = ({
 
     if (!svg) return null;
 
-    // Track which elements have specific overrides
     const overriddenIds = new Set<string>();
     const overriddenClasses = new Set<string>();
 
-    // Apply per-element overrides
+    // Apply per-element style overrides (not listeners — those go in the effect)
     for (const [selector, config] of Object.entries(overrides)) {
       if (selector.startsWith('.')) {
         const cls = selector.slice(1);
@@ -315,7 +370,7 @@ export const DynamicSvg: React.FC<DynamicSvgProps> = ({
       }
     }
 
-    // Apply global styles to non-overridden elements
+    // Apply global styles
     const globals: SvgElementStyle = {};
     if (fill) globals.fill = fill;
     if (stroke) globals.stroke = stroke;
@@ -326,11 +381,10 @@ export const DynamicSvg: React.FC<DynamicSvgProps> = ({
       applyGlobalStyles(svg, globals, overriddenIds, overriddenClasses);
     }
 
-    // Apply root SVG attributes
+    // Root SVG attributes
     if (width) svg.setAttribute('width', String(width));
     if (height) svg.setAttribute('height', String(height));
 
-    // Add instance class for scoped animations
     const existingClass = svg.getAttribute('class') || '';
     svg.setAttribute(
       'class',
@@ -339,9 +393,9 @@ export const DynamicSvg: React.FC<DynamicSvgProps> = ({
 
     // Accessibility
     if (svgTitle) {
-      let titleEl = svg.querySelector('title');
+      let titleEl = svg.querySelector('title') as SVGTitleElement | null;
       if (!titleEl) {
-        titleEl = doc.createElementNS('http://www.w3.org/2000/svg', 'title');
+        titleEl = doc.createElementNS('http://www.w3.org/2000/svg', 'title') as SVGTitleElement;
         svg.prepend(titleEl);
       }
       titleEl.textContent = svgTitle;
@@ -355,7 +409,6 @@ export const DynamicSvg: React.FC<DynamicSvgProps> = ({
       svg.setAttribute('aria-hidden', 'true');
     }
 
-    // Build animation CSS
     const animCSS = buildAnimationCSS(instanceId, overrides);
 
     return {
@@ -363,6 +416,56 @@ export const DynamicSvg: React.FC<DynamicSvgProps> = ({
       animCSS,
     };
   }, [svgContent, overrides, fill, stroke, strokeWidth, opacity, width, height, className, instanceId, svgTitle, ariaLabel]);
+
+  // Attach per-element listeners after DOM is rendered
+  const attachListeners = useCallback(() => {
+    // Cleanup previous listeners
+    if (cleanupRef.current) {
+      cleanupRef.current();
+      cleanupRef.current = null;
+    }
+
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+
+    const removers: (() => void)[] = [];
+
+    for (const [selector, config] of Object.entries(overrides)) {
+      if (!config.listeners) continue;
+
+      const isClass = selector.startsWith('.');
+      const elements = isClass
+        ? wrapper.querySelectorAll(`.${selector.slice(1)}`)
+        : wrapper.querySelectorAll(`[id="${selector}"]`);
+
+      elements.forEach((el) => {
+        for (const [listenerKey, handler] of Object.entries(config.listeners!)) {
+          const eventName = LISTENER_MAP[listenerKey];
+          if (!eventName || !handler) continue;
+          el.addEventListener(eventName, handler);
+          removers.push(() => el.removeEventListener(eventName, handler));
+        }
+      });
+    }
+
+    cleanupRef.current = () => removers.forEach((fn) => fn());
+  }, [overrides]);
+
+  // Inject HTML and attach listeners when processed changes
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper || !processed) return;
+
+    wrapper.innerHTML = processed.html;
+    attachListeners();
+
+    return () => {
+      if (cleanupRef.current) {
+        cleanupRef.current();
+        cleanupRef.current = null;
+      }
+    };
+  }, [processed, attachListeners]);
 
   if (loading) {
     return <span className="kreati-dsvg-loading" />;
@@ -378,9 +481,13 @@ export const DynamicSvg: React.FC<DynamicSvgProps> = ({
     <>
       {processed.animCSS && <style>{processed.animCSS}</style>}
       <span
+        ref={wrapperRef}
         className="kreati-dsvg-wrapper"
         style={style}
-        dangerouslySetInnerHTML={{ __html: processed.html }}
+        onClick={onClick}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        onMouseMove={onMouseMove}
       />
     </>
   );
