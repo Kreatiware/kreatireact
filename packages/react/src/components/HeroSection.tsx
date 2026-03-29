@@ -31,6 +31,31 @@ export interface HeroSectionProps {
   gradientFrom?: string;
   /** Gradient end color (overrides theme default) */
   gradientTo?: string;
+  /** Gradient angle in degrees (default: 135) */
+  gradientAngle?: number;
+  /**
+   * Custom gradient color stops for full control.
+   * Overrides gradientFrom/gradientTo when provided.
+   *
+   * @example
+   * ```tsx
+   * // Three color gradient
+   * gradientStops={[
+   *   { color: '#deeff7', position: '0%' },
+   *   { color: '#ffffff', position: '40%' },
+   *   { color: '#fff7d7', position: '100%' },
+   * ]}
+   *
+   * // Sharp division at 50%
+   * gradientStops={[
+   *   { color: '#0f78a5', position: '0%' },
+   *   { color: '#0f78a5', position: '50%' },
+   *   { color: '#ffffff', position: '50%' },
+   *   { color: '#ffffff', position: '100%' },
+   * ]}
+   * ```
+   */
+  gradientStops?: { color: string; position: string }[];
   /** Dark overlay on background image for text readability */
   overlay?: boolean;
   /** Height of the hero section */
@@ -89,6 +114,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   backgroundColor,
   gradientFrom,
   gradientTo,
+  gradientAngle,
+  gradientStops,
   overlay = false,
   size = 'lg',
   glass = false,
@@ -123,11 +150,26 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     return `rgba(${r}, ${g}, ${b}, ${opacity})`;
   };
 
+  const buildGradientStyle = (): React.CSSProperties => {
+    const angle = gradientAngle ?? 135;
+
+    if (gradientStops && gradientStops.length >= 2) {
+      const stops = gradientStops.map((s) => `${s.color} ${s.position}`).join(', ');
+      return { background: `linear-gradient(${angle}deg, ${stops})` };
+    }
+
+    // Fallback: use CSS variables for gradientFrom/gradientTo (handled by CSS default)
+    return {
+      ...(gradientFrom && { '--kreati-hero-gradient-from': gradientFrom } as React.CSSProperties),
+      ...(gradientTo && { '--kreati-hero-gradient-to': gradientTo } as React.CSSProperties),
+      ...(gradientAngle != null && { '--kreati-hero-gradient-angle': `${angle}deg` } as React.CSSProperties),
+    };
+  };
+
   const sectionStyle: React.CSSProperties = {
     ...(background === 'image' && backgroundImage && { backgroundImage: `url(${backgroundImage})` }),
     ...(backgroundColor && { '--kreati-hero-bg': backgroundColor } as React.CSSProperties),
-    ...(gradientFrom && { '--kreati-hero-gradient-from': gradientFrom } as React.CSSProperties),
-    ...(gradientTo && { '--kreati-hero-gradient-to': gradientTo } as React.CSSProperties),
+    ...(background === 'gradient' && buildGradientStyle()),
     ...(glass && { '--kreati-hero-glass-bg': getGlassBg() } as React.CSSProperties),
   };
 

@@ -115,7 +115,7 @@
 /* Background: Gradient */
 .kreati-hero--bg-gradient {
   background: linear-gradient(
-    135deg,
+    var(--kreati-hero-gradient-angle, 135deg),
     var(--kreati-hero-gradient-from, var(--kreati-primary-50)) 0%,
     var(--kreati-white) 50%,
     var(--kreati-hero-gradient-to, var(--kreati-secondary-100)) 100%
