@@ -1,35 +1,61 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import './Chip.css';
 
 export interface ChipProps {
+  /** Chip content */
   children: React.ReactNode;
+  /** Visual variant */
   variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'outline';
+  /** Chip size */
   size?: 'sm' | 'md' | 'lg';
+  /** Leading icon */
   icon?: React.ReactNode;
+  /** Additional CSS class names */
   className?: string;
 }
 
-export const Chip: React.FC<ChipProps> = ({
-  children,
-  variant = 'primary',
-  size = 'md',
-  icon,
-  className = '',
-}) => {
-  const baseClass = 'kreati-chip';
-  const classes = [
-    baseClass,
-    `${baseClass}--${variant}`,
-    `${baseClass}--${size}`,
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
+/**
+ * Chip component for displaying compact labels, tags, or status indicators.
+ *
+ * @description A small inline element with rounded pill shape, supporting
+ * multiple color variants and optional leading icon. Useful for tags,
+ * categories, filters, and status badges.
+ *
+ * @example
+ * ```tsx
+ * <Chip variant="primary">React</Chip>
+ * <Chip variant="success" icon={<Check size={12} />}>Active</Chip>
+ * <Chip variant="outline" size="sm">Draft</Chip>
+ * ```
+ */
+export const Chip = forwardRef<HTMLSpanElement, ChipProps>(
+  (
+    {
+      children,
+      variant = 'primary',
+      size = 'md',
+      icon,
+      className = '',
+    },
+    ref,
+  ) => {
+    const baseClass = 'kreati-chip';
+    const classes = [
+      baseClass,
+      `${baseClass}--${variant}`,
+      `${baseClass}--${size}`,
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
-  return (
-    <span className={classes}>
-      {icon && <span className="kreati-chip__icon">{icon}</span>}
-      {children}
-    </span>
-  );
-};
+    return (
+      <span ref={ref} className={classes} role="status">
+        {icon && <span className="kreati-chip__icon" aria-hidden="true">{icon}</span>}
+        {children}
+      </span>
+    );
+  },
+);
+
+Chip.displayName = 'Chip';

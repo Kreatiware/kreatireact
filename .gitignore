@@ -45,3 +45,7 @@ Thumbs.db
 
 # Storybook
 storybook-static/
+
+#Q
+Q/
+.amazonq/

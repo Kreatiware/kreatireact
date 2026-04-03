@@ -7,7 +7,7 @@ import {
   ChevronDown,
   ArrowRight,
   Check,
-  Menu,
+  Hamburger,
   Times,
   KreatiIcon,
 } from '../../../../packages/icons/src';
@@ -20,7 +20,7 @@ const AllIcons: Record<string, React.FC<IconProps>> = {
   ChevronDown,
   ArrowRight,
   Check,
-  Menu,
+  Hamburger,
   Times,
 };
 

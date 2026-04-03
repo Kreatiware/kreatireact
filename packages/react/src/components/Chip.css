@@ -4,24 +4,24 @@
   align-items: center;
   gap: var(--kreati-space-1);
   font-family: var(--kreati-font-family);
-  font-weight: 500;
-  border-radius: 9999px;
+  font-weight: var(--kreati-font-weight-medium);
+  border-radius: var(--kreati-radius-full);
   white-space: nowrap;
   transition: var(--kreati-transition);
 }
 
 /* Sizes */
-.kreati-chip--sm { padding: 2px var(--kreati-space-2); font-size: var(--kreati-font-size-xs); }
-.kreati-chip--md { padding: var(--kreati-space-1) var(--kreati-space-3); font-size: var(--kreati-font-size-sm); }
-.kreati-chip--lg { padding: var(--kreati-space-2) var(--kreati-space-4); font-size: var(--kreati-font-size-base); }
+.kreati-chip--sm { padding: var(--kreati-chip-padding-sm); font-size: var(--kreati-font-size-xxs); }
+.kreati-chip--md { padding: var(--kreati-chip-padding-md); font-size: var(--kreati-font-size-sm); }
+.kreati-chip--lg { padding: var(--kreati-chip-padding-lg); font-size: var(--kreati-font-size-base); }
 
 /* Variants */
-.kreati-chip--primary { background-color: var(--kreati-primary-50); color: var(--kreati-primary-700); }
-.kreati-chip--secondary { background-color: var(--kreati-secondary-100); color: var(--kreati-gray-800); }
-.kreati-chip--success { background-color: #d1fae5; color: #065f46; }
-.kreati-chip--warning { background-color: #fef3c7; color: #92400e; }
-.kreati-chip--error { background-color: #fee2e2; color: #991b1b; }
-.kreati-chip--outline { background-color: transparent; color: var(--kreati-gray-700); border: 1px solid var(--kreati-gray-300); }
+.kreati-chip--primary   { background-color: var(--kreati-primary-50);      color: var(--kreati-primary-700); }
+.kreati-chip--secondary { background-color: var(--kreati-secondary-100);   color: var(--kreati-gray-800); }
+.kreati-chip--success   { background-color: var(--kreati-severity-success-light);  color: var(--kreati-severity-success-active); }
+.kreati-chip--warning   { background-color: var(--kreati-severity-warning-light);  color: var(--kreati-severity-warning-active); }
+.kreati-chip--error     { background-color: var(--kreati-severity-danger-light);   color: var(--kreati-severity-danger-active); }
+.kreati-chip--outline   { background-color: transparent; color: var(--kreati-gray-700); border: 1px solid var(--kreati-gray-300); }
 
 /* Icon */
 .kreati-chip__icon { display: inline-flex; align-items: center; }

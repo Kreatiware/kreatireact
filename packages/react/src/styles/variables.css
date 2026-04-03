@@ -1,5 +1,5 @@
 :root {
-  /* Colors - Primary (tu paleta) */
+  /* ─── Colors — Primary ──────────────────────────────────────────────── */
   --kreati-primary-50: #deeff7;
   --kreati-primary-100: #b3d9ed;
   --kreati-primary-200: #80c2e3;
@@ -11,7 +11,7 @@
   --kreati-primary-800: #095172;
   --kreati-primary-900: #074461;
 
-  /* Colors - Secondary */
+  /* ─── Colors — Secondary ────────────────────────────────────────────── */
   --kreati-secondary-50: #fffef9;
   --kreati-secondary-100: #fff7d7;
   --kreati-secondary-200: #fff0b5;
@@ -19,7 +19,7 @@
   --kreati-secondary-400: #ffe271;
   --kreati-secondary-500: #ffdb4f;
 
-  /* Colors - Gray */
+  /* ─── Colors — Gray ─────────────────────────────────────────────────── */
   --kreati-gray-50: #f9fafb;
   --kreati-gray-100: #f3f4f6;
   --kreati-gray-200: #e5e7eb;
@@ -31,7 +31,7 @@
   --kreati-gray-800: #1f2937;
   --kreati-gray-900: #111827;
 
-  /* Colors - Semantic */
+  /* ─── Colors — Semantic ─────────────────────────────────────────────── */
   --kreati-white: #ffffff;
   --kreati-black: #000000;
   --kreati-background: #deeff7;
@@ -39,7 +39,17 @@
   --kreati-warning: #f59e0b;
   --kreati-error: #ef4444;
 
-  /* Severity Colors (used by Button, etc.) */
+  /* ─── Colors — Overlay / Alpha ──────────────────────────────────────── */
+  --kreati-overlay-light: rgba(255, 255, 255, 0.1);
+  --kreati-overlay-medium: rgba(255, 255, 255, 0.15);
+  --kreati-overlay-dark: rgba(0, 0, 0, 0.4);
+  --kreati-overlay-heavy: rgba(0, 0, 0, 0.5);
+  --kreati-primary-alpha-6: rgba(15, 120, 165, 0.06);
+  --kreati-primary-alpha-8: rgba(15, 120, 165, 0.08);
+  --kreati-black-alpha-5: rgba(0, 0, 0, 0.05);
+  --kreati-black-alpha-12: rgba(0, 0, 0, 0.12);
+
+  /* ─── Severity Colors ───────────────────────────────────────────────── */
   --kreati-severity-primary: #0f78a5;
   --kreati-severity-primary-hover: #0d6b94;
   --kreati-severity-primary-active: #0b5e83;
@@ -89,18 +99,47 @@
   --kreati-severity-danger-light: #fee2e2;
   --kreati-severity-danger-light-hover: #fecaca;
 
-  /* Typography */
-  --kreati-font-family: 'Helvetica', sans-serif;
-  --kreati-font-size-xs: 12px;
+  /* ─── Typography — Font Family ──────────────────────────────────────── */
+  --kreati-font-family: 'Raleway', 'Roboto', 'Helvetica', sans-serif;
+
+  /* ─── Typography — Font Sizes (8-step scale) ────────────────────────── */
+  --kreati-font-size-xxs: 12px;
+  --kreati-font-size-xs: 13px;
   --kreati-font-size-sm: 14px;
   --kreati-font-size-base: 16px;
-  --kreati-font-size-lg: 18px;
-  --kreati-font-size-xl: 20px;
-  --kreati-font-weight-normal: 400;
-  --kreati-font-weight-bold: 700;
-  --kreati-line-height: 1.6;
+  --kreati-font-size-md: 18px;
+  --kreati-font-size-lg: 20px;
+  --kreati-font-size-xl: 22px;
+  --kreati-font-size-xxl: 24px;
 
-  /* Spacing */
+  /* ─── Typography — Line Heights (per size) ──────────────────────────── */
+  --kreati-line-height-xxs: 1.12;
+  --kreati-line-height-xs: 1.2;
+  --kreati-line-height-sm: 1.3;
+  --kreati-line-height-base: 1.5;
+  --kreati-line-height-md: 1.55;
+  --kreati-line-height-lg: 1.6;
+  --kreati-line-height-xl: 1.6;
+  --kreati-line-height-xxl: 1.65;
+
+  /* ─── Typography — Font Weights ─────────────────────────────────────── */
+  --kreati-font-weight-light: 300;
+  --kreati-font-weight-regular: 400;
+  --kreati-font-weight-medium: 500;
+  --kreati-font-weight-semibold: 600;
+  --kreati-font-weight-bold: 700;
+  --kreati-font-weight-extrabold: 800;
+
+  /* ─── Typography — Letter Spacing ───────────────────────────────────── */
+  --kreati-tracking-tighter: -0.05em;
+  --kreati-tracking-tight: -0.025em;
+  --kreati-tracking-normal: 0;
+  --kreati-tracking-wide: 0.025em;
+  --kreati-tracking-wider: 0.05em;
+  --kreati-tracking-widest: 0.1em;
+
+  /* ─── Spacing ───────────────────────────────────────────────────────── */
+  --kreati-space-0: 0;
   --kreati-space-1: 4px;
   --kreati-space-2: 8px;
   --kreati-space-3: 12px;
@@ -108,18 +147,98 @@
   --kreati-space-5: 20px;
   --kreati-space-6: 24px;
   --kreati-space-8: 32px;
+  --kreati-space-10: 40px;
+  --kreati-space-12: 48px;
+  --kreati-space-16: 64px;
 
-  /* Border Radius */
+  /* ─── Layout — Max Widths ───────────────────────────────────────────── */
+  --kreati-max-width-sm: 640px;
+  --kreati-max-width-md: 768px;
+  --kreati-max-width-lg: 1024px;
+  --kreati-max-width-xl: 1200px;
+  --kreati-max-width-prose: 600px;
+
+  /* ─── Layout — Breakpoints (reference, used in media queries) ───────── */
+  --kreati-breakpoint-sm: 640px;
+  --kreati-breakpoint-md: 768px;
+  --kreati-breakpoint-lg: 1024px;
+  --kreati-breakpoint-xl: 1280px;
+
+  /* ─── Border Radius ─────────────────────────────────────────────────── */
+  --kreati-radius-none: 0;
   --kreati-radius-sm: 4px;
   --kreati-radius-md: 6px;
   --kreati-radius-lg: 8px;
   --kreati-radius-xl: 12px;
+  --kreati-radius-full: 9999px;
 
-  /* Shadows */
+  /* ─── Shadows ───────────────────────────────────────────────────────── */
+  --kreati-shadow-none: none;
   --kreati-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --kreati-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
   --kreati-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --kreati-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  --kreati-shadow-drawer: -4px 0 24px rgba(0, 0, 0, 0.12);
 
-  /* Animations */
+  /* ─── Z-Index ───────────────────────────────────────────────────────── */
+  --kreati-z-dropdown: 1000;
+  --kreati-z-sticky: 1001;
+  --kreati-z-overlay: 1002;
+  --kreati-z-modal: 1003;
+  --kreati-z-tooltip: 1004;
+
+  /* ─── Animations ────────────────────────────────────────────────────── */
   --kreati-transition: all 0.2s ease-in-out;
+  --kreati-transition-fast: all 0.15s ease-in-out;
+  --kreati-transition-slow: all 0.3s ease;
+
+  /* ─── Component Tokens — Badge / Dot ────────────────────────────────── */
+  --kreati-badge-size: 18px;
+  --kreati-badge-size-empty: 10px;
+  --kreati-badge-font-size: 11px;
+  --kreati-badge-offset: -6px;
+  --kreati-badge-padding: 0 5px;
+
+  /* ─── Component Tokens — Button Sizes ───────────────────────────────── */
+  --kreati-btn-height-xs: 28px;
+  --kreati-btn-height-sm: 32px;
+  --kreati-btn-height-md: 40px;
+  --kreati-btn-height-lg: 48px;
+  --kreati-btn-height-xl: 56px;
+  --kreati-btn-padding-xs: 0 10px;
+  --kreati-btn-padding-sm: 0 14px;
+  --kreati-btn-padding-md: 0 18px;
+  --kreati-btn-padding-lg: 0 22px;
+  --kreati-btn-padding-xl: 0 28px;
+  --kreati-btn-gap-xs: 4px;
+  --kreati-btn-gap-sm: 6px;
+  --kreati-btn-gap-md: 8px;
+  --kreati-btn-gap-lg: 8px;
+  --kreati-btn-gap-xl: 10px;
+  --kreati-btn-slim-xs: 22px;
+  --kreati-btn-slim-sm: 26px;
+  --kreati-btn-slim-md: 32px;
+  --kreati-btn-slim-lg: 38px;
+  --kreati-btn-slim-xl: 44px;
+  --kreati-btn-badge-size: 18px;
+  --kreati-btn-badge-font-size: 11px;
+  --kreati-btn-badge-offset: -8px;
+  --kreati-btn-badge-padding: 0 5px;
+
+  /* ─── Component Tokens — NavigationBar ──────────────────────────────── */
+  --kreati-navbar-dropdown-min-width: 200px;
+  --kreati-navbar-drawer-width: 280px;
+  --kreati-navbar-drawer-max-width: 80vw;
+  --kreati-navbar-hamburger-size: 32px;
+
+  /* ─── Component Tokens — Chip ───────────────────────────────────────── */
+  --kreati-chip-padding-sm: 2px var(--kreati-space-2);
+  --kreati-chip-padding-md: var(--kreati-space-1) var(--kreati-space-3);
+  --kreati-chip-padding-lg: var(--kreati-space-2) var(--kreati-space-4);
+
+  /* ─── Component Tokens — Hero ───────────────────────────────────────── */
+  --kreati-hero-bg: var(--kreati-white);
+  --kreati-hero-gradient-angle: 135deg;
+  --kreati-hero-gradient-from: var(--kreati-primary-50);
+  --kreati-hero-gradient-to: var(--kreati-secondary-100);
 }
