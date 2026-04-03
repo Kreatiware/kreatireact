@@ -13,8 +13,10 @@ export {
   ArrowRight,
   // UI
   Check,
-  Menu,
+  Hamburger,
   Times,
+  // Deprecated aliases
+  Menu,
 } from './icons';
 
 export type { IconProps } from './icons';

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useId, useMemo, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useId, useMemo, useRef, useCallback, forwardRef, useImperativeHandle } from 'react';
 import './DynamicSvg.css';
 
 /** SVG presentational attributes that can be applied to elements */
@@ -289,31 +289,36 @@ function buildAnimationCSS(
  * />
  * ```
  */
-export const DynamicSvg: React.FC<DynamicSvgProps> = ({
-  src,
-  url,
-  width,
-  height,
-  className = '',
-  style,
-  fill,
-  stroke,
-  strokeWidth,
-  opacity,
-  overrides = {},
-  title: svgTitle,
-  ariaLabel,
-  onLoad,
-  onError,
-  onClick,
-  onMouseEnter,
-  onMouseLeave,
-  onMouseMove,
-}) => {
+export const DynamicSvg = forwardRef<HTMLSpanElement, DynamicSvgProps>(
+  (
+    {
+      src,
+      url,
+      width,
+      height,
+      className = '',
+      style,
+      fill,
+      stroke,
+      strokeWidth,
+      opacity,
+      overrides = {},
+      title: svgTitle,
+      ariaLabel,
+      onLoad,
+      onError,
+      onClick,
+      onMouseEnter,
+      onMouseLeave,
+      onMouseMove,
+    },
+    ref,
+  ) => {
   const [svgContent, setSvgContent] = useState<string | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState(false);
   const wrapperRef = useRef<HTMLSpanElement>(null);
+  useImperativeHandle(ref, () => wrapperRef.current as HTMLSpanElement);
   const cleanupRef = useRef<(() => void) | null>(null);
   const reactId = useId();
   const instanceId = reactId.replace(/:/g, '');
@@ -491,4 +496,7 @@ export const DynamicSvg: React.FC<DynamicSvgProps> = ({
       />
     </>
   );
-};
+  },
+);
+
+DynamicSvg.displayName = 'DynamicSvg';

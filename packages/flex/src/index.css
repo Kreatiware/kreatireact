@@ -102,3 +102,56 @@
   .k-lg\:justify-between { justify-content: space-between; }
   .k-lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
+
+/* ─── Typography — Font Sizes ─────────────────────────────────────────── */
+.k-text-xxs  { font-size: var(--kreati-font-size-xxs); line-height: var(--kreati-line-height-xxs); }
+.k-text-xs   { font-size: var(--kreati-font-size-xs);  line-height: var(--kreati-line-height-xs); }
+.k-text-sm   { font-size: var(--kreati-font-size-sm);  line-height: var(--kreati-line-height-sm); }
+.k-text-base { font-size: var(--kreati-font-size-base); line-height: var(--kreati-line-height-base); }
+.k-text-md   { font-size: var(--kreati-font-size-md);  line-height: var(--kreati-line-height-md); }
+.k-text-lg   { font-size: var(--kreati-font-size-lg);  line-height: var(--kreati-line-height-lg); }
+.k-text-xl   { font-size: var(--kreati-font-size-xl);  line-height: var(--kreati-line-height-xl); }
+.k-text-xxl  { font-size: var(--kreati-font-size-xxl); line-height: var(--kreati-line-height-xxl); }
+
+/* ─── Typography — Font Weights ───────────────────────────────────────── */
+.k-font-light     { font-weight: var(--kreati-font-weight-light); }
+.k-font-regular   { font-weight: var(--kreati-font-weight-regular); }
+.k-font-medium    { font-weight: var(--kreati-font-weight-medium); }
+.k-font-semibold  { font-weight: var(--kreati-font-weight-semibold); }
+.k-font-bold      { font-weight: var(--kreati-font-weight-bold); }
+.k-font-extrabold { font-weight: var(--kreati-font-weight-extrabold); }
+
+/* ─── Typography — Font Style ─────────────────────────────────────────── */
+.k-italic     { font-style: italic; }
+.k-not-italic { font-style: normal; }
+
+/* ─── Typography — Text Decoration ────────────────────────────────────── */
+.k-underline    { text-decoration: underline; }
+.k-overline     { text-decoration: overline; }
+.k-line-through { text-decoration: line-through; }
+.k-no-underline { text-decoration: none; }
+
+/* ─── Typography — Text Transform ─────────────────────────────────────── */
+.k-uppercase  { text-transform: uppercase; }
+.k-lowercase  { text-transform: lowercase; }
+.k-capitalize { text-transform: capitalize; }
+.k-normal-case { text-transform: none; }
+
+/* ─── Typography — Letter Spacing ─────────────────────────────────────── */
+.k-tracking-tighter { letter-spacing: var(--kreati-tracking-tighter); }
+.k-tracking-tight   { letter-spacing: var(--kreati-tracking-tight); }
+.k-tracking-normal  { letter-spacing: var(--kreati-tracking-normal); }
+.k-tracking-wide    { letter-spacing: var(--kreati-tracking-wide); }
+.k-tracking-wider   { letter-spacing: var(--kreati-tracking-wider); }
+.k-tracking-widest  { letter-spacing: var(--kreati-tracking-widest); }
+
+/* ─── Typography — Text Alignment ─────────────────────────────────────── */
+.k-text-left    { text-align: left; }
+.k-text-center  { text-align: center; }
+.k-text-right   { text-align: right; }
+.k-text-justify { text-align: justify; }
+
+/* ─── Typography — Whitespace & Overflow ──────────────────────────────── */
+.k-truncate    { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.k-break-words { overflow-wrap: break-word; }
+.k-whitespace-nowrap { white-space: nowrap; }

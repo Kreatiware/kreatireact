@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import './Button.css';
 
-export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-export type ButtonType = 'filled' | 'outlined' | 'text';
-export type ButtonSeverity = 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
-export type ButtonBadgePosition = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw';
+export interface ButtonSize {
+  value: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+}
 
 export interface ButtonProps {
   /** Button label text */
@@ -14,11 +13,11 @@ export interface ButtonProps {
   /** Right icon (JSX element) */
   iconRight?: React.ReactNode;
   /** Button size */
-  size?: ButtonSize;
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   /** Button type style */
-  buttonType?: ButtonType;
+  buttonType?: 'filled' | 'outlined' | 'text';
   /** Color severity */
-  severity?: ButtonSeverity;
+  severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
   /** Disabled state (keeps color, applies 40% opacity) */
   disabled?: boolean;
   /** Raised shadow effect */
@@ -30,78 +29,106 @@ export interface ButtonProps {
   /** Badge content */
   badge?: React.ReactNode;
   /** Badge position using cardinal directions */
-  badgePosition?: ButtonBadgePosition;
+  badgePosition?: 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw';
   /** Click handler */
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   /** HTML button type attribute */
   type?: 'button' | 'submit' | 'reset';
   /** Custom width (e.g. '100%', '200px', 'auto') */
   width?: string;
+  /** Accessible label for icon-only buttons */
+  ariaLabel?: string;
   /** Additional CSS class names */
   className?: string;
   /** Render custom content directly inside the button (template slot) */
   children?: React.ReactNode;
 }
 
-export const Button: React.FC<ButtonProps> = ({
-  label,
-  iconLeft,
-  iconRight,
-  size = 'md',
-  buttonType = 'filled',
-  severity = 'primary',
-  disabled = false,
-  raised = false,
-  rounded = false,
-  slim = false,
-  badge,
-  badgePosition = 'ne',
-  onClick,
-  type = 'button',
-  width,
-  className = '',
-  children,
-}) => {
-  const isIconOnly = !label && !children && (iconLeft || iconRight);
-  const base = 'k-button';
+/**
+ * Button component with multiple variants, sizes, and severity levels.
+ *
+ * @description A versatile button supporting filled, outlined, and text styles
+ * with 7 severity colors. Includes icon slots, badge overlay, slim mode,
+ * raised shadow, and pill/circle shapes. Fully accessible with ARIA support
+ * and keyboard navigation.
+ *
+ * @example
+ * ```tsx
+ * <Button label="Save" severity="primary" iconRight={<Check size={16} />} />
+ * <Button label="Delete" severity="danger" buttonType="outlined" />
+ * <Button iconLeft={<Menu size={18} />} ariaLabel="Open menu" rounded />
+ * ```
+ */
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      label,
+      iconLeft,
+      iconRight,
+      size = 'md',
+      buttonType = 'filled',
+      severity = 'primary',
+      disabled = false,
+      raised = false,
+      rounded = false,
+      slim = false,
+      badge,
+      badgePosition = 'ne',
+      onClick,
+      type = 'button',
+      width,
+      ariaLabel,
+      className = '',
+      children,
+    },
+    ref,
+  ) => {
+    const isIconOnly = !label && !children && (iconLeft || iconRight);
+    const base = 'k-button';
 
-  const classes = [
-    base,
-    `${base}--${size}`,
-    `${base}--${buttonType}`,
-    `${base}--${severity}`,
-    isIconOnly && `${base}--icon-only`,
-    raised && `${base}--raised`,
-    rounded && `${base}--rounded`,
-    slim && `${base}--slim`,
-    disabled && `${base}--disabled`,
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
+    const classes = [
+      base,
+      `${base}--${size}`,
+      `${base}--${buttonType}`,
+      `${base}--${severity}`,
+      isIconOnly && `${base}--icon-only`,
+      raised && `${base}--raised`,
+      rounded && `${base}--rounded`,
+      slim && `${base}--slim`,
+      disabled && `${base}--disabled`,
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
-  return (
-    <button
-      className={classes}
-      disabled={disabled}
-      onClick={onClick}
-      type={type}
-      style={width ? { width } : undefined}
-    >
-      {children ? (
-        children
-      ) : (
-        <>
-          {iconLeft && <span className={`${base}__icon ${base}__icon--left`}>{iconLeft}</span>}
-          {label && <span className={`${base}__label`}>{label}</span>}
-          {iconRight && <span className={`${base}__icon ${base}__icon--right`}>{iconRight}</span>}
-        </>
-      )}
-      {badge != null && (
-        <span className={`${base}__badge ${base}__badge--${badgePosition}`}>
-          {badge}
-        </span>
-      )}
-    </button>
-  );
-};
+    return (
+      <button
+        ref={ref}
+        className={classes}
+        disabled={disabled}
+        onClick={onClick}
+        type={type}
+        style={width ? { width } : undefined}
+        aria-label={isIconOnly ? ariaLabel : undefined}
+        aria-disabled={disabled || undefined}
+      >
+        {children ? (
+          children
+        ) : (
+          <>
+            {iconLeft && <span className={`${base}__icon ${base}__icon--left`}>{iconLeft}</span>}
+            {label && <span className={`${base}__label`}>{label}</span>}
+            {iconRight && <span className={`${base}__icon ${base}__icon--right`}>{iconRight}</span>}
+          </>
+        )}
+        {badge != null && (
+          <span className={`${base}__badge ${base}__badge--${badgePosition}`}>
+            {badge}
+          </span>
+        )}
+      </button>
+    );
+  },
+);
+
+Button.displayName = 'Button';

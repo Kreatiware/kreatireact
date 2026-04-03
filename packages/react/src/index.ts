@@ -1,8 +1,8 @@
 // Components
 export { Button } from './components/Button';
-export type { ButtonProps, ButtonSize, ButtonType, ButtonSeverity, ButtonBadgePosition } from './components/Button';
+export type { ButtonProps } from './components/Button';
 export { Badge } from './components/Badge';
-export type { BadgeProps, BadgePosition } from './components/Badge';
+export type { BadgeProps } from './components/Badge';
 export { Chip } from './components/Chip';
 export type { ChipProps } from './components/Chip';
 export { NavigationBar } from './components/NavigationBar';
