@@ -1,5 +1,16 @@
 # @kreatiware/react
 
+## 2.0.0
+
+### Minor Changes
+
+- 2d64ede: chore: add aria , forward ref, iso requirements, update q rules
+
+### Patch Changes
+
+- Updated dependencies [2d64ede]
+  - @kreatiware/icons@0.5.0
+
 ## 1.2.0
 
 ### Minor Changes

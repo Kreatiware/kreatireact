@@ -1,5 +1,11 @@
 # @kreatiware/flex
 
+## 0.4.0
+
+### Minor Changes
+
+- 2d64ede: chore: add aria , forward ref, iso requirements, update q rules
+
 ## 0.3.1
 
 ### Patch Changes
