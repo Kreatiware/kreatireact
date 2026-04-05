@@ -2,6 +2,10 @@
 export { KreatiIcon } from './icons';
 export type { KreatiIconProps } from './icons';
 
+// Icon Resolver
+export { Icon } from './IconResolver';
+export type { IconResolverProps } from './IconResolver';
+
 // Icons
 export {
   // Chevrons
@@ -15,6 +19,9 @@ export {
   Check,
   Hamburger,
   Times,
+  Search,
+  Minus,
+  CalendarIcon,
   // Deprecated aliases
   Menu,
 } from './icons';

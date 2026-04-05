@@ -1,0 +1,211 @@
+/* ============================================
+   Radio — Wrapper
+   ============================================ */
+.k-radio {
+  display: inline-flex;
+  flex-direction: column;
+  font-family: var(--kreati-font-family);
+}
+
+.k-radio--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.k-radio--readonly {
+  pointer-events: none;
+}
+
+/* ============================================
+   Control (label + circle inline)
+   ============================================ */
+.k-radio__control {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kreati-radio-gap);
+  cursor: pointer;
+  user-select: none;
+}
+
+.k-radio--left .k-radio__control {
+  flex-direction: row-reverse;
+}
+
+.k-radio--disabled .k-radio__control {
+  cursor: not-allowed;
+}
+
+/* ============================================
+   Native input (hidden)
+   ============================================ */
+.k-radio__native {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* ============================================
+   Custom circle
+   ============================================ */
+.k-radio__circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 2px solid var(--kreati-radio-border-color);
+  border-radius: var(--kreati-radius-full);
+  background-color: transparent;
+  color: transparent;
+  transition: var(--kreati-transition-fast);
+  box-sizing: border-box;
+}
+
+/* Sizes */
+.k-radio__circle--xs { width: var(--kreati-radio-size-xs); height: var(--kreati-radio-size-xs); }
+.k-radio__circle--sm { width: var(--kreati-radio-size-sm); height: var(--kreati-radio-size-sm); }
+.k-radio__circle--md { width: var(--kreati-radio-size-md); height: var(--kreati-radio-size-md); }
+.k-radio__circle--lg { width: var(--kreati-radio-size-lg); height: var(--kreati-radio-size-lg); }
+.k-radio__circle--xl { width: var(--kreati-radio-size-xl); height: var(--kreati-radio-size-xl); }
+
+/* Checked */
+.k-radio__circle--active {
+  border-color: var(--kreati-radio-checked-bg);
+  border-width: 3px;
+  background-color: transparent;
+  color: var(--kreati-radio-checked-bg);
+}
+
+/* Custom unchecked template */
+.k-radio__circle--has-unchecked {
+  color: var(--kreati-gray-400);
+}
+
+/* Hover */
+.k-radio__control:hover .k-radio__circle:not(.k-radio__circle--disabled):not(.k-radio__circle--active):not(.k-radio__circle--success):not(.k-radio__circle--error-active) {
+  border-color: var(--kreati-gray-400);
+}
+
+.k-radio__control:hover .k-radio__circle--active:not(.k-radio__circle--disabled) {
+  border-color: var(--kreati-severity-primary-hover);
+  color: var(--kreati-severity-primary-hover);
+}
+
+/* Focus */
+.k-radio__native:focus-visible + .k-radio__circle {
+  outline: 2px solid var(--kreati-severity-primary);
+  outline-offset: 2px;
+}
+
+/* Success */
+.k-radio__circle--success {
+  border-color: var(--kreati-severity-success);
+  border-width: 3px;
+  background-color: transparent;
+  color: var(--kreati-severity-success);
+}
+
+.k-radio__control:hover .k-radio__circle--success:not(.k-radio__circle--disabled) {
+  border-color: var(--kreati-severity-success-hover);
+  color: var(--kreati-severity-success-hover);
+}
+
+/* Error — unchecked */
+.k-radio__circle--error {
+  border-color: var(--kreati-severity-danger);
+}
+
+/* Error — checked */
+.k-radio__circle--error-active {
+  border-color: var(--kreati-severity-danger);
+  border-width: 3px;
+  background-color: transparent;
+  color: var(--kreati-severity-danger);
+}
+
+.k-radio__control:hover .k-radio__circle--error-active:not(.k-radio__circle--disabled) {
+  border-color: var(--kreati-severity-danger-hover);
+  color: var(--kreati-severity-danger-hover);
+}
+
+/* Disabled */
+.k-radio__circle--disabled {
+  cursor: not-allowed;
+}
+
+/* ============================================
+   Label
+   ============================================ */
+.k-radio__label {
+  color: var(--kreati-gray-700);
+  font-weight: var(--kreati-font-weight-regular);
+  line-height: 1.3;
+}
+
+.k-radio__label--xs { font-size: var(--kreati-font-size-xxs); }
+.k-radio__label--sm { font-size: var(--kreati-font-size-xs); }
+.k-radio__label--md { font-size: var(--kreati-font-size-sm); }
+.k-radio__label--lg { font-size: var(--kreati-font-size-base); }
+.k-radio__label--xl { font-size: var(--kreati-font-size-md); }
+
+.k-radio__required {
+  color: var(--kreati-severity-danger);
+  font-weight: var(--kreati-font-weight-bold);
+  margin-left: 2px;
+}
+
+/* ============================================
+   Helper / Error text
+   ============================================ */
+.k-radio__error {
+  color: var(--kreati-severity-danger);
+  font-weight: var(--kreati-font-weight-medium);
+  font-size: var(--kreati-font-size-xs);
+  margin-top: var(--kreati-field-helper-gap);
+}
+
+.k-radio__helper {
+  color: var(--kreati-gray-500);
+  font-size: var(--kreati-font-size-xs);
+  margin-top: var(--kreati-field-helper-gap);
+}
+
+.k-radio__helper--primary   { color: var(--kreati-severity-primary); }
+.k-radio__helper--secondary { color: var(--kreati-severity-secondary); }
+.k-radio__helper--success   { color: var(--kreati-severity-success); }
+.k-radio__helper--info      { color: var(--kreati-severity-info); }
+.k-radio__helper--warning   { color: var(--kreati-severity-warning); }
+.k-radio__helper--help      { color: var(--kreati-severity-help); }
+.k-radio__helper--danger    { color: var(--kreati-severity-danger); }
+
+/* ============================================
+   RadioGroup
+   ============================================ */
+.k-radio-group {
+  display: inline-flex;
+  flex-direction: column;
+  font-family: var(--kreati-font-family);
+}
+
+.k-radio-group--full-width {
+  display: flex;
+  width: 100%;
+}
+
+.k-radio-group__options {
+  display: flex;
+  gap: var(--kreati-space-3);
+}
+
+.k-radio-group__options--vertical {
+  flex-direction: column;
+}
+
+.k-radio-group__options--horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+}

@@ -1,0 +1,13 @@
+/* ============================================
+   Global utility classes
+   ============================================ */
+
+/* Continuous spin animation */
+.k-spin {
+  animation: k-spin-rotate 1s linear infinite;
+}
+
+@keyframes k-spin-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

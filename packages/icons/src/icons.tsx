@@ -298,3 +298,85 @@ export const Times: React.FC<IconProps> = ({
     <path d="M12,13.55c1.27,1.36,2.52,2.69,3.72,3.96,1.33,1.41,2.5,2.65,3.63,3.86l.26.3c.16.19.38.3.62.3.29,0,.54-.13.78-.42.21-.25.17-.25.26-.39.17-.35.03-.07.17-.43.16-.38.25-.66.29-.86.05-.33.02-.62-.11-.86-.08-.17-.21-.33-.37-.51-.92-.95-1.95-1.68-2.88-2.65-.18-.19-.39-.4-.62-.63-.59-.59-2.9-3.12-3.01-3.39.28-.45,4.61-4.64,6.45-6.47.16-.18.29-.35.38-.52.13-.25.16-.53.11-.85-.05-.21-.05-.17-.21-.56-.11-.31-.03-.17-.24-.6-.06-.13-.03-.16-.24-.4-.23-.26-.48-.4-.75-.4-.23,0-.43.08-.6.24l-.02.03-.29.32c-1.21,1.29-2.43,2.59-3.62,3.85-1.19,1.26-2.44,2.59-3.71,3.95-1.27-1.36-2.52-2.69-3.71-3.95-1.19-1.26-2.41-2.56-3.62-3.85l-.29-.32-.02-.03c-.17-.16-.37-.24-.6-.24-.27,0-.52.14-.75.4-.21.24-.18.27-.24.4-.21.43-.13.29-.24.6-.16.39-.16.35-.21.56-.05.32-.02.6.11.85.09.17.22.34.38.52,1.84,1.83,6.17,6.02,6.45,6.47-.11.27-2.42,2.8-3.01,3.39-.23.23-.44.44-.62.63-.93.97-1.96,1.7-2.88,2.65-.16.18-.29.34-.37.51-.13.24-.16.53-.11.86.04.2.13.48.29.86.14.36,0,.08.17.43.09.14.05.14.26.39.24.29.49.42.78.42.24,0,.46-.11.62-.3l.26-.3c1.13-1.21,2.3-2.45,3.63-3.86,1.2-1.27,2.45-2.6,3.72-3.96Z"/>
   </svg>
 );
+
+/**
+ * Search (magnifying glass) icon
+ *
+ * @description Magnifying glass with circular lens and angled handle.
+ * Fill-based path with slightly widened lines and rounded ends
+ * matching the designer's icon style.
+ *
+ * @author ai — Pending designer review
+ */
+export const Search: React.FC<IconProps> = ({
+  size = 24,
+  color = 'currentColor',
+  className = '',
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={color}
+    className={className}
+    aria-hidden="true"
+  >
+    <path d="M10.5,3C6.36,3,3,6.36,3,10.5S6.36,18,10.5,18c1.71,0,3.29-.58,4.56-1.55l4.74,4.74c.2.2.45.3.7.3s.51-.1.7-.3c.39-.39.39-1.02,0-1.41l-4.74-4.74c.97-1.27,1.55-2.85,1.55-4.56C18,6.36,14.64,3,10.5,3ZM10.5,15.5c-2.76,0-5-2.24-5-5s2.24-5,5-5,5,2.24,5,5-2.24,5-5,5Z"/>
+  </svg>
+);
+
+/**
+ * Minus icon (horizontal bar)
+ *
+ * @description Single horizontal bar used for indeterminate checkbox state
+ * and decrement actions. Fill-based with rounded ends matching the
+ * designer's icon style.
+ *
+ * @author ai — Pending designer review
+ */
+export const Minus: React.FC<IconProps> = ({
+  size = 24,
+  color = 'currentColor',
+  className = '',
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={color}
+    className={className}
+    aria-hidden="true"
+  >
+    <rect x="3" y="10.63" width="18" height="2.74" rx=".57" ry=".57" />
+  </svg>
+);
+
+/**
+ * Calendar icon
+ *
+ * @description Calendar page with grid dots. Fill-based with rounded
+ * corners matching the designer's icon style.
+ *
+ * @author ai — Pending designer review
+ */
+export const CalendarIcon: React.FC<IconProps> = ({
+  size = 24,
+  color = 'currentColor',
+  className = '',
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={color}
+    className={className}
+    aria-hidden="true"
+  >
+    <path d="M19,4H18V3a1,1,0,0,0-2,0V4H8V3A1,1,0,0,0,6,3V4H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V7A3,3,0,0,0,19,4ZM20,19a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V10H20ZM20,8H4V7A1,1,0,0,1,5,6H19a1,1,0,0,1,1,1Z" />
+    <rect x="7" y="12" width="2.5" height="2.5" rx=".4" />
+    <rect x="10.75" y="12" width="2.5" height="2.5" rx=".4" />
+    <rect x="14.5" y="12" width="2.5" height="2.5" rx=".4" />
+    <rect x="7" y="16" width="2.5" height="2.5" rx=".4" />
+    <rect x="10.75" y="16" width="2.5" height="2.5" rx=".4" />
+  </svg>
+);

@@ -1,0 +1,185 @@
+/* ============================================
+   ScrollBar — Wrapper
+   ============================================ */
+.k-scrollbar--custom {
+  position: relative;
+  box-sizing: border-box;
+}
+
+.k-scrollbar--custom.k-scrollbar--clip {
+  overflow: hidden;
+}
+
+/* ============================================
+   Content — hides native scrollbar
+   ============================================ */
+.k-scrollbar__content {
+  width: 100%;
+  max-height: inherit;
+  overflow: hidden;
+  box-sizing: border-box;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.k-scrollbar__content::-webkit-scrollbar {
+  display: none;
+}
+
+.k-scrollbar__content--vertical {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.k-scrollbar__content--horizontal {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.k-scrollbar__content--both {
+  overflow: auto;
+}
+
+/* ============================================
+   Native variant — browser default
+   ============================================ */
+.k-scrollbar--native.k-scrollbar--vertical {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.k-scrollbar--native.k-scrollbar--horizontal {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.k-scrollbar--native.k-scrollbar--both {
+  overflow: auto;
+}
+
+/* ============================================
+   Track
+   ============================================ */
+.k-scrollbar__track {
+  position: absolute;
+  z-index: 1;
+  transition: opacity var(--kreati-transition-fast);
+  user-select: none;
+  overflow: visible;
+}
+
+.k-scrollbar__track--v {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.k-scrollbar__track--h {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* ============================================
+   Thumb
+   ============================================ */
+.k-scrollbar__thumb {
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: filter var(--kreati-transition-fast);
+}
+
+.k-scrollbar__thumb:hover {
+  filter: brightness(0.85);
+}
+
+.k-scrollbar__thumb:active {
+  filter: brightness(0.75);
+}
+
+.k-scrollbar__thumb:not(.k-scrollbar__thumb--custom) {
+  align-self: stretch;
+}
+
+.k-scrollbar__thumb--custom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  z-index: 2;
+  background: none;
+  box-sizing: content-box;
+}
+
+.k-scrollbar__track--v .k-scrollbar__thumb--custom {
+  width: auto;
+  min-width: max-content;
+}
+
+.k-scrollbar__track--h .k-scrollbar__thumb--custom {
+  height: auto;
+  min-height: max-content;
+}
+
+/* ============================================
+   Track template — custom content behind thumb
+   ============================================ */
+.k-scrollbar__track-template {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+/* ============================================
+   Dragging state — disable transitions
+   ============================================ */
+.k-scrollbar--dragging .k-scrollbar__thumb {
+  transition: none;
+}
+
+.k-scrollbar--dragging .k-scrollbar__track {
+  opacity: 1 !important;
+}
+
+/* ============================================
+   Arrow buttons
+   ============================================ */
+.k-scrollbar__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  color: var(--kreati-gray-500);
+  cursor: pointer;
+  padding: 0;
+  line-height: 0;
+}
+
+.k-scrollbar__arrow:hover {
+  color: var(--kreati-gray-700);
+}
+
+/* ============================================
+   Thumb zone — constrains thumb between arrows
+   ============================================ */
+.k-scrollbar__thumb-zone {
+  flex: 1;
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  flex-direction: inherit;
+  align-items: center;
+  min-height: 0;
+  min-width: 0;
+}

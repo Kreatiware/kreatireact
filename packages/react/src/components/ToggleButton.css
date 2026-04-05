@@ -1,0 +1,125 @@
+/* ============================================
+   ToggleButton
+   ============================================ */
+.k-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--kreati-space-1);
+  border: 2px solid var(--kreati-toggle-off-border);
+  border-radius: var(--kreati-radius-sm);
+  background-color: var(--kreati-toggle-off-bg);
+  color: var(--kreati-toggle-off-color);
+  font-family: var(--kreati-font-family);
+  font-weight: var(--kreati-font-weight-medium);
+  cursor: pointer;
+  transition: var(--kreati-transition-fast);
+  outline: none;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+/* Sizes */
+.k-toggle-btn--xs { height: var(--kreati-btn-height-xs); padding: var(--kreati-btn-padding-xs); font-size: var(--kreati-font-size-xxs); }
+.k-toggle-btn--sm { height: var(--kreati-btn-height-sm); padding: var(--kreati-btn-padding-sm); font-size: var(--kreati-font-size-xs); }
+.k-toggle-btn--md { height: var(--kreati-btn-height-md); padding: var(--kreati-btn-padding-md); font-size: var(--kreati-font-size-sm); }
+.k-toggle-btn--lg { height: var(--kreati-btn-height-lg); padding: var(--kreati-btn-padding-lg); font-size: var(--kreati-font-size-base); }
+.k-toggle-btn--xl { height: var(--kreati-btn-height-xl); padding: var(--kreati-btn-padding-xl); font-size: var(--kreati-font-size-md); }
+
+/* Hover */
+.k-toggle-btn:hover:not(:disabled):not(.k-toggle-btn--active) {
+  border-color: var(--kreati-gray-400);
+  background-color: var(--kreati-gray-50);
+}
+
+/* Active */
+.k-toggle-btn--active {
+  background-color: var(--kreati-toggle-on-bg);
+  border-color: var(--kreati-toggle-on-border);
+  color: var(--kreati-toggle-on-color);
+}
+
+.k-toggle-btn--active:hover:not(:disabled) {
+  background-color: var(--kreati-severity-primary-hover);
+  border-color: var(--kreati-severity-primary-hover);
+}
+
+/* Focus */
+.k-toggle-btn:focus-visible {
+  outline: 2px solid var(--kreati-severity-primary);
+  outline-offset: 2px;
+}
+
+/* Disabled */
+.k-toggle-btn--disabled,
+.k-toggle-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Icon */
+.k-toggle-btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+/* ============================================
+   ToggleButtonGroup — Horizontal
+   ============================================ */
+.k-toggle-group {
+  display: inline-flex;
+}
+
+.k-toggle-group--horizontal {
+  flex-direction: row;
+}
+
+.k-toggle-group--horizontal > .k-toggle-btn {
+  border-radius: 0;
+  margin-left: -2px;
+}
+
+.k-toggle-group--horizontal > .k-toggle-btn:first-child {
+  border-radius: var(--kreati-radius-sm) 0 0 var(--kreati-radius-sm);
+  margin-left: 0;
+}
+
+.k-toggle-group--horizontal > .k-toggle-btn:last-child {
+  border-radius: 0 var(--kreati-radius-sm) var(--kreati-radius-sm) 0;
+}
+
+.k-toggle-group--horizontal > .k-toggle-btn:only-child {
+  border-radius: var(--kreati-radius-sm);
+}
+
+/* Active z-index to show border on top */
+.k-toggle-group > .k-toggle-btn--active {
+  z-index: 1;
+}
+
+/* ============================================
+   ToggleButtonGroup — Vertical
+   ============================================ */
+.k-toggle-group--vertical {
+  flex-direction: column;
+}
+
+.k-toggle-group--vertical > .k-toggle-btn {
+  border-radius: 0;
+  margin-top: -2px;
+}
+
+.k-toggle-group--vertical > .k-toggle-btn:first-child {
+  border-radius: var(--kreati-radius-sm) var(--kreati-radius-sm) 0 0;
+  margin-top: 0;
+}
+
+.k-toggle-group--vertical > .k-toggle-btn:last-child {
+  border-radius: 0 0 var(--kreati-radius-sm) var(--kreati-radius-sm);
+}
+
+.k-toggle-group--vertical > .k-toggle-btn:only-child {
+  border-radius: var(--kreati-radius-sm);
+}

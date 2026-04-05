@@ -1,0 +1,124 @@
+/* ============================================
+   List — Container
+   ============================================ */
+.k-list {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--kreati-font-family);
+  outline: none;
+  overflow-y: auto;
+  margin: 0;
+  padding: var(--kreati-space-1) 0;
+}
+
+/* ============================================
+   List — Filter
+   ============================================ */
+.k-list__filter {
+  padding: var(--kreati-space-2) var(--kreati-space-3);
+  border-bottom: 1px solid var(--kreati-list-separator-color);
+}
+
+/* ============================================
+   List — Group
+   ============================================ */
+.k-list__group-label {
+  padding: var(--kreati-list-group-padding);
+  font-size: var(--kreati-font-size-xxs);
+  font-weight: var(--kreati-font-weight-semibold);
+  color: var(--kreati-list-group-color);
+  text-transform: uppercase;
+  letter-spacing: var(--kreati-tracking-wide);
+  user-select: none;
+}
+
+.k-list__separator {
+  height: 1px;
+  background-color: var(--kreati-list-separator-color);
+  margin: var(--kreati-space-1) 0;
+  border: none;
+}
+
+/* ============================================
+   List — Item
+   ============================================ */
+.k-list__item {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-2);
+  padding: var(--kreati-list-item-padding);
+  border: none;
+  background: none;
+  font-family: var(--kreati-font-family);
+  font-size: var(--kreati-font-size-sm);
+  color: var(--kreati-gray-800);
+  cursor: pointer;
+  transition: var(--kreati-transition-fast);
+  text-align: left;
+  width: 100%;
+  outline: none;
+}
+
+.k-list__item:hover:not(.k-list__item--disabled) {
+  background-color: var(--kreati-list-item-hover-bg);
+}
+
+.k-list__item--focused:not(.k-list__item--disabled) {
+  background-color: var(--kreati-list-item-hover-bg);
+}
+
+.k-list__item--selected {
+  background-color: var(--kreati-list-item-active-bg);
+  color: var(--kreati-list-item-active-color);
+  font-weight: var(--kreati-font-weight-semibold);
+}
+
+.k-list__item--selected:hover {
+  background-color: var(--kreati-severity-primary-light-hover);
+}
+
+.k-list__item--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.k-list__item:focus-visible {
+  outline: 2px solid var(--kreati-severity-primary);
+  outline-offset: -2px;
+}
+
+/* ============================================
+   List — Item content
+   ============================================ */
+.k-list__item-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.k-list__item-command {
+  flex-shrink: 0;
+  font-size: var(--kreati-font-size-xxs);
+  color: var(--kreati-list-command-color);
+  font-family: var(--kreati-font-family);
+}
+
+/* ============================================
+   List — Empty
+   ============================================ */
+.k-list__empty {
+  padding: var(--kreati-space-4) var(--kreati-space-3);
+  text-align: center;
+  color: var(--kreati-gray-400);
+  font-size: var(--kreati-font-size-sm);
+}
+
+/* ============================================
+   List — Sizes
+   ============================================ */
+.k-list--xs .k-list__item { padding: var(--kreati-space-1) var(--kreati-space-2); font-size: var(--kreati-font-size-xxs); }
+.k-list--sm .k-list__item { padding: var(--kreati-space-1) var(--kreati-space-3); font-size: var(--kreati-font-size-xs); }
+.k-list--lg .k-list__item { padding: var(--kreati-space-3) var(--kreati-space-3); font-size: var(--kreati-font-size-base); }
+.k-list--xl .k-list__item { padding: var(--kreati-space-3) var(--kreati-space-4); font-size: var(--kreati-font-size-md); }

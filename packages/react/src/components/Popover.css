@@ -1,0 +1,40 @@
+/* ============================================
+   Popover — Wrapper (minimal, no layout impact)
+   ============================================ */
+.k-popover {
+  display: inline-flex;
+}
+
+.k-popover__trigger {
+  display: inline-flex;
+  width: 100%;
+  cursor: pointer;
+}
+
+/* ============================================
+   Panel — hidden off-screen until positioned
+   ============================================ */
+.k-popover__panel {
+  background: var(--kreati-popover-bg);
+  border: 1px solid var(--kreati-popover-border);
+  border-radius: var(--kreati-popover-radius);
+  box-shadow: var(--kreati-popover-shadow);
+  z-index: var(--kreati-z-dropdown);
+  box-sizing: border-box;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ============================================
+   Panel — visible after positioning
+   ============================================ */
+.k-popover__panel--visible {
+  opacity: 1;
+  pointer-events: auto;
+  animation: k-popover-enter 0.2s ease forwards;
+}
+
+@keyframes k-popover-enter {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}

@@ -1,0 +1,484 @@
+/* ============================================
+   Select — Wrapper
+   ============================================ */
+.k-select {
+  display: inline-flex;
+  flex-direction: column;
+  font-family: var(--kreati-font-family);
+  min-width: 200px;
+}
+
+.k-select--full-width {
+  display: flex;
+  width: 100%;
+}
+
+/* ============================================
+   Container (positions dropdown)
+   ============================================ */
+.k-select__container {
+  position: relative;
+  width: 100%;
+}
+
+/* ============================================
+   Trigger (fieldset for floating, div for stacked)
+   ============================================ */
+.k-select__trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border: 2px solid var(--kreati-gray-300);
+  border-radius: var(--kreati-radius-sm);
+  background-color: transparent;
+  font-family: var(--kreati-font-family);
+  transition: var(--kreati-transition);
+  box-sizing: border-box;
+  cursor: pointer;
+  outline: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.k-select__trigger--full-width {
+  width: 100%;
+}
+
+/* ============================================
+   Trigger sizes
+   ============================================ */
+.k-select__trigger--xs { height: var(--kreati-input-height-xs); }
+.k-select__trigger--sm { height: var(--kreati-input-height-sm); }
+.k-select__trigger--md { height: var(--kreati-input-height-md); }
+.k-select__trigger--lg { height: var(--kreati-input-height-lg); }
+.k-select__trigger--xl { height: var(--kreati-input-height-xl); }
+
+/* ============================================
+   Trigger inner
+   ============================================ */
+.k-select__trigger-inner {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.k-select__trigger--xs .k-select__trigger-inner { padding: var(--kreati-input-padding-xs); }
+.k-select__trigger--sm .k-select__trigger-inner { padding: var(--kreati-input-padding-sm); }
+.k-select__trigger--md .k-select__trigger-inner { padding: var(--kreati-input-padding-md); }
+.k-select__trigger--lg .k-select__trigger-inner { padding: var(--kreati-input-padding-lg); }
+.k-select__trigger--xl .k-select__trigger-inner { padding: var(--kreati-input-padding-xl); }
+
+/* Stacked variant uses trigger directly as flex container */
+.k-select--stacked .k-select__trigger--xs { padding: var(--kreati-input-padding-xs); }
+.k-select--stacked .k-select__trigger--sm { padding: var(--kreati-input-padding-sm); }
+.k-select--stacked .k-select__trigger--md { padding: var(--kreati-input-padding-md); }
+.k-select--stacked .k-select__trigger--lg { padding: var(--kreati-input-padding-lg); }
+.k-select--stacked .k-select__trigger--xl { padding: var(--kreati-input-padding-xl); }
+
+/* Font sizes per size */
+.k-select__trigger--xs { font-size: var(--kreati-font-size-xxs); }
+.k-select__trigger--sm { font-size: var(--kreati-font-size-xs); }
+.k-select__trigger--md { font-size: var(--kreati-font-size-sm); }
+.k-select__trigger--lg { font-size: var(--kreati-font-size-base); }
+.k-select__trigger--xl { font-size: var(--kreati-font-size-md); }
+
+/* ============================================
+   Floating — Legend
+   ============================================ */
+.k-select__legend {
+  margin-left: var(--kreati-space-2);
+  padding: 0;
+  width: 0;
+  overflow: hidden;
+  transition: width 0.2s ease-in-out;
+  font-size: 0.01px;
+  line-height: 0;
+  max-height: 3px;
+}
+
+.k-select__legend-text {
+  padding: 0 var(--kreati-space-1);
+  visibility: hidden;
+  display: inline;
+  line-height: 0;
+}
+
+/* Expand legend when has value or open */
+.k-select__trigger:has(.k-select__floating-label--active) > .k-select__legend {
+  width: auto;
+}
+
+.k-select__trigger--open > .k-select__legend {
+  width: auto;
+}
+
+/* ============================================
+   Floating — Label
+   ============================================ */
+.k-select__floating-label {
+  position: absolute;
+  left: var(--kreati-space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--kreati-gray-400);
+  font-family: var(--kreati-font-family);
+  font-weight: var(--kreati-font-weight-regular);
+  pointer-events: none;
+  transition: var(--kreati-transition);
+  transform-origin: left top;
+  padding: 0 var(--kreati-space-1);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.k-select__trigger--has-icon-left .k-select__floating-label:not(.k-select__floating-label--active) {
+  left: calc(var(--kreati-space-3) + 24px + var(--kreati-input-icon-gap));
+}
+
+.k-select__floating-label--active {
+  top: 0;
+  left: var(--kreati-space-2);
+  padding-left: 2px;
+  transform: translateY(-55%) scale(0.75);
+  color: var(--kreati-severity-primary);
+  font-weight: var(--kreati-font-weight-medium);
+  z-index: 1;
+}
+
+.k-select__floating-required {
+  color: var(--kreati-severity-danger);
+  font-weight: var(--kreati-font-weight-bold);
+  font-size: 1.3em;
+  margin-left: 2px;
+  vertical-align: middle;
+}
+
+/* Floating label sizes */
+.k-select__trigger--xs .k-select__floating-label { font-size: var(--kreati-font-size-xxs); }
+.k-select__trigger--sm .k-select__floating-label { font-size: var(--kreati-font-size-xs); }
+.k-select__trigger--md .k-select__floating-label { font-size: var(--kreati-font-size-sm); }
+.k-select__trigger--lg .k-select__floating-label { font-size: var(--kreati-font-size-base); }
+.k-select__trigger--xl .k-select__floating-label { font-size: var(--kreati-font-size-md); }
+
+/* Legend text sizes */
+.k-select__trigger--xs .k-select__legend-text { font-size: calc(var(--kreati-font-size-xxs) * 0.75); }
+.k-select__trigger--sm .k-select__legend-text { font-size: calc(var(--kreati-font-size-xs) * 0.75); }
+.k-select__trigger--md .k-select__legend-text { font-size: calc(var(--kreati-font-size-sm) * 0.75); }
+.k-select__trigger--lg .k-select__legend-text { font-size: calc(var(--kreati-font-size-base) * 0.75); }
+.k-select__trigger--xl .k-select__legend-text { font-size: calc(var(--kreati-font-size-md) * 0.75); }
+
+/* ============================================
+   Value display
+   ============================================ */
+.k-select__value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--kreati-gray-900);
+}
+
+.k-select__value--placeholder {
+  color: var(--kreati-gray-400);
+}
+
+/* ============================================
+   Editable/filterable input
+   ============================================ */
+.k-select__input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--kreati-gray-900);
+  font-family: var(--kreati-font-family);
+  font-weight: var(--kreati-font-weight-regular);
+  font-size: inherit;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  cursor: inherit;
+}
+
+.k-select__input::placeholder {
+  color: var(--kreati-gray-400);
+}
+
+/* ============================================
+   Icons
+   ============================================ */
+.k-select__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--kreati-gray-400);
+  transition: var(--kreati-transition);
+  line-height: 0;
+}
+
+.k-select__icon--left {
+  margin-right: var(--kreati-input-icon-gap);
+}
+
+/* ============================================
+   Chevron
+   ============================================ */
+.k-select__chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--kreati-gray-400);
+  margin-left: var(--kreati-space-2);
+  transition: transform var(--kreati-transition-fast);
+  line-height: 0;
+}
+
+.k-select__chevron--open {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   Clear button
+   ============================================ */
+.k-select__clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  color: var(--kreati-gray-400);
+  cursor: pointer;
+  padding: 0;
+  margin-left: var(--kreati-space-1);
+  line-height: 0;
+  transition: color var(--kreati-transition-fast);
+}
+
+.k-select__clear:hover {
+  color: var(--kreati-gray-700);
+}
+
+/* ============================================
+   Hover
+   ============================================ */
+.k-select__trigger:hover:not(:focus):not(.k-select__trigger--disabled):not(.k-select__trigger--readonly):not(.k-select__trigger--error):not(.k-select__trigger--success):not(.k-select__trigger--open) {
+  border-color: var(--kreati-gray-400);
+}
+
+/* ============================================
+   Focus / Open
+   ============================================ */
+.k-select__trigger:focus:not(.k-select__trigger--disabled):not(.k-select__trigger--readonly),
+.k-select__trigger--open:not(.k-select__trigger--disabled):not(.k-select__trigger--readonly) {
+  border-color: var(--kreati-severity-primary);
+  border-width: 3px;
+}
+
+.k-select__trigger:focus:not(.k-select__trigger--disabled) .k-select__icon,
+.k-select__trigger--open:not(.k-select__trigger--disabled) .k-select__icon {
+  color: var(--kreati-severity-primary);
+}
+
+.k-select__trigger:focus:not(.k-select__trigger--disabled) .k-select__chevron,
+.k-select__trigger--open:not(.k-select__trigger--disabled) .k-select__chevron {
+  color: var(--kreati-severity-primary);
+}
+
+/* ============================================
+   Error
+   ============================================ */
+.k-select__trigger--error { border-color: var(--kreati-severity-danger); }
+.k-select__trigger--error .k-select__icon { color: var(--kreati-severity-danger); }
+.k-select__trigger--error .k-select__chevron { color: var(--kreati-severity-danger); }
+
+.k-select__trigger--error:focus,
+.k-select__trigger--error.k-select__trigger--open {
+  border-color: var(--kreati-severity-danger);
+  border-width: 3px;
+}
+
+.k-select__trigger--error .k-select__floating-label--active {
+  color: var(--kreati-severity-danger);
+}
+
+/* ============================================
+   Success
+   ============================================ */
+.k-select__trigger--success { border-color: var(--kreati-severity-success); }
+.k-select__trigger--success .k-select__icon { color: var(--kreati-severity-success); }
+.k-select__trigger--success .k-select__chevron { color: var(--kreati-severity-success); }
+
+.k-select__trigger--success:focus,
+.k-select__trigger--success.k-select__trigger--open {
+  border-color: var(--kreati-severity-success);
+  border-width: 3px;
+}
+
+.k-select__trigger--success .k-select__floating-label--active {
+  color: var(--kreati-severity-success);
+}
+
+/* ============================================
+   Disabled / Readonly
+   ============================================ */
+.k-select__trigger--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.k-select__trigger--readonly {
+  background-color: var(--kreati-gray-50);
+  cursor: default;
+}
+
+/* ============================================
+   Dropdown panel
+   ============================================ */
+.k-select__dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--kreati-white);
+  border: 1px solid var(--kreati-gray-200);
+  border-radius: var(--kreati-radius-sm);
+  box-shadow: var(--kreati-shadow-lg);
+  z-index: var(--kreati-z-dropdown);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================
+   Filter bar (inside dropdown header)
+   ============================================ */
+.k-select__filter {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-2);
+  padding: var(--kreati-space-2) var(--kreati-space-3);
+  border-bottom: 1px solid var(--kreati-gray-200);
+  flex-shrink: 0;
+}
+
+.k-select__filter-icon {
+  flex-shrink: 0;
+  color: var(--kreati-gray-400);
+}
+
+.k-select__filter-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--kreati-gray-900);
+  font-family: var(--kreati-font-family);
+  font-size: var(--kreati-font-size-sm);
+  padding: var(--kreati-space-1) 0;
+  min-width: 0;
+}
+
+.k-select__filter-input::placeholder {
+  color: var(--kreati-gray-400);
+}
+
+/* ============================================
+   Options list (scrollable area)
+   ============================================ */
+.k-select__options {
+  max-height: var(--kreati-select-dropdown-max-height);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.k-select__options--virtual {
+  overflow-y: auto;
+  max-height: var(--kreati-select-dropdown-max-height);
+}
+
+/* ============================================
+   Option
+   ============================================ */
+.k-select__option {
+  padding: var(--kreati-select-option-padding);
+  cursor: pointer;
+  transition: background-color var(--kreati-transition-fast);
+  color: var(--kreati-gray-900);
+  display: flex;
+  align-items: center;
+}
+
+.k-select__container--xs .k-select__option { font-size: var(--kreati-font-size-xxs); padding: var(--kreati-space-1) var(--kreati-space-2); }
+.k-select__container--sm .k-select__option { font-size: var(--kreati-font-size-xs); padding: var(--kreati-space-1) var(--kreati-space-3); }
+.k-select__container--md .k-select__option { font-size: var(--kreati-font-size-sm); }
+.k-select__container--lg .k-select__option { font-size: var(--kreati-font-size-base); padding: var(--kreati-space-3) var(--kreati-space-3); }
+.k-select__container--xl .k-select__option { font-size: var(--kreati-font-size-md); padding: var(--kreati-space-3) var(--kreati-space-4); }
+
+.k-select__option--focused {
+  background-color: var(--kreati-select-option-hover-bg);
+}
+
+.k-select__option--selected {
+  background-color: var(--kreati-select-option-active-bg);
+  color: var(--kreati-select-option-active-color);
+  font-weight: var(--kreati-font-weight-medium);
+}
+
+.k-select__option--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   Group header
+   ============================================ */
+.k-select__group-header {
+  padding: var(--kreati-select-group-padding);
+  font-size: var(--kreati-font-size-xxs);
+  font-weight: var(--kreati-font-weight-semibold);
+  color: var(--kreati-select-group-color);
+  text-transform: uppercase;
+  letter-spacing: var(--kreati-tracking-wider);
+  user-select: none;
+}
+
+/* ============================================
+   Empty message
+   ============================================ */
+.k-select__empty {
+  padding: var(--kreati-select-option-padding);
+  color: var(--kreati-select-empty-color);
+  font-style: italic;
+  text-align: center;
+}
+
+/* ============================================
+   Helper / Error text
+   ============================================ */
+.k-select__error {
+  color: var(--kreati-severity-danger);
+  font-weight: var(--kreati-font-weight-medium);
+  font-size: var(--kreati-font-size-xs);
+  margin-top: var(--kreati-field-helper-gap);
+  padding-left: var(--kreati-space-2);
+}
+
+.k-select__helper {
+  color: var(--kreati-gray-500);
+  font-size: var(--kreati-font-size-xs);
+  margin-top: var(--kreati-field-helper-gap);
+  padding-left: var(--kreati-space-2);
+}
+
+.k-select__helper--primary   { color: var(--kreati-severity-primary); }
+.k-select__helper--secondary { color: var(--kreati-severity-secondary); }
+.k-select__helper--success   { color: var(--kreati-severity-success); }
+.k-select__helper--info      { color: var(--kreati-severity-info); }
+.k-select__helper--warning   { color: var(--kreati-severity-warning); }
+.k-select__helper--help      { color: var(--kreati-severity-help); }
+.k-select__helper--danger    { color: var(--kreati-severity-danger); }

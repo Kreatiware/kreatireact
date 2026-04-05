@@ -39,7 +39,7 @@ export const Chip = forwardRef<HTMLSpanElement, ChipProps>(
     },
     ref,
   ) => {
-    const baseClass = 'kreati-chip';
+    const baseClass = 'k-chip';
     const classes = [
       baseClass,
       `${baseClass}--${variant}`,
@@ -51,7 +51,7 @@ export const Chip = forwardRef<HTMLSpanElement, ChipProps>(
 
     return (
       <span ref={ref} className={classes} role="status">
-        {icon && <span className="kreati-chip__icon" aria-hidden="true">{icon}</span>}
+        {icon && <span className="k-chip__icon" aria-hidden="true">{icon}</span>}
         {children}
       </span>
     );

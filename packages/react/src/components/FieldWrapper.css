@@ -1,0 +1,112 @@
+/* ============================================
+   FieldWrapper Base
+   ============================================ */
+.k-field {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--kreati-field-label-gap);
+  font-family: var(--kreati-font-family);
+}
+
+.k-field--full-width {
+  display: flex;
+  width: 100%;
+}
+
+/* ============================================
+   Label
+   ============================================ */
+.k-field__label {
+  color: var(--kreati-gray-700);
+  font-weight: var(--kreati-font-weight-medium);
+  transition: var(--kreati-transition);
+  padding-left: var(--kreati-space-2);
+}
+
+.k-field__required {
+  color: var(--kreati-severity-danger);
+  font-weight: var(--kreati-font-weight-bold);
+  font-size: 1.5em;
+  margin-left: var(--kreati-space-1);
+  line-height: 1;
+  vertical-align: middle;
+}
+
+/* ============================================
+   Content
+   ============================================ */
+.k-field__content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================
+   Error text (between content and helper)
+   ============================================ */
+.k-field__error {
+  color: var(--kreati-severity-danger);
+  font-weight: var(--kreati-font-weight-medium);
+  transition: var(--kreati-transition);
+  margin-top: var(--kreati-field-helper-gap);
+  padding-left: var(--kreati-space-2);
+}
+
+/* ============================================
+   Helper text (always below error if both exist)
+   ============================================ */
+.k-field__helper {
+  color: var(--kreati-gray-500);
+  transition: var(--kreati-transition);
+  margin-top: var(--kreati-field-helper-gap);
+  padding-left: var(--kreati-space-2);
+}
+
+/* ============================================
+   Helper — Severity colors
+   ============================================ */
+.k-field__helper--primary   { color: var(--kreati-severity-primary); }
+.k-field__helper--secondary { color: var(--kreati-severity-secondary); }
+.k-field__helper--success   { color: var(--kreati-severity-success); }
+.k-field__helper--info      { color: var(--kreati-severity-info); }
+.k-field__helper--warning   { color: var(--kreati-severity-warning); }
+.k-field__helper--help      { color: var(--kreati-severity-help); }
+.k-field__helper--danger    { color: var(--kreati-severity-danger); }
+
+/* ============================================
+   Sizes — label, error & helper font
+   ============================================ */
+.k-field--xs .k-field__label  { font-size: var(--kreati-font-size-xxs); }
+.k-field--xs .k-field__error  { font-size: var(--kreati-font-size-xxs); }
+.k-field--xs .k-field__helper { font-size: var(--kreati-font-size-xxs); }
+
+.k-field--sm .k-field__label  { font-size: var(--kreati-font-size-xs); }
+.k-field--sm .k-field__error  { font-size: var(--kreati-font-size-xxs); }
+.k-field--sm .k-field__helper { font-size: var(--kreati-font-size-xxs); }
+
+.k-field--md .k-field__label  { font-size: var(--kreati-font-size-sm); }
+.k-field--md .k-field__error  { font-size: var(--kreati-font-size-xs); }
+.k-field--md .k-field__helper { font-size: var(--kreati-font-size-xs); }
+
+.k-field--lg .k-field__label  { font-size: var(--kreati-font-size-base); }
+.k-field--lg .k-field__error  { font-size: var(--kreati-font-size-sm); }
+.k-field--lg .k-field__helper { font-size: var(--kreati-font-size-sm); }
+
+.k-field--xl .k-field__label  { font-size: var(--kreati-font-size-md); }
+.k-field--xl .k-field__error  { font-size: var(--kreati-font-size-sm); }
+.k-field--xl .k-field__helper { font-size: var(--kreati-font-size-sm); }
+
+/* ============================================
+   States
+   ============================================ */
+.k-field--error .k-field__label {
+  color: var(--kreati-severity-danger);
+}
+
+.k-field--success .k-field__helper {
+  color: var(--kreati-severity-success);
+}
+
+.k-field--disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}

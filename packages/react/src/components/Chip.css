@@ -1,5 +1,7 @@
-/* Chip Base Styles */
-.kreati-chip {
+/* ============================================
+   Chip Base
+   ============================================ */
+.k-chip {
   display: inline-flex;
   align-items: center;
   gap: var(--kreati-space-1);
@@ -10,18 +12,24 @@
   transition: var(--kreati-transition);
 }
 
-/* Sizes */
-.kreati-chip--sm { padding: var(--kreati-chip-padding-sm); font-size: var(--kreati-font-size-xxs); }
-.kreati-chip--md { padding: var(--kreati-chip-padding-md); font-size: var(--kreati-font-size-sm); }
-.kreati-chip--lg { padding: var(--kreati-chip-padding-lg); font-size: var(--kreati-font-size-base); }
+/* ============================================
+   Sizes
+   ============================================ */
+.k-chip--sm { padding: var(--kreati-chip-padding-sm); font-size: var(--kreati-font-size-xxs); }
+.k-chip--md { padding: var(--kreati-chip-padding-md); font-size: var(--kreati-font-size-sm); }
+.k-chip--lg { padding: var(--kreati-chip-padding-lg); font-size: var(--kreati-font-size-base); }
 
-/* Variants */
-.kreati-chip--primary   { background-color: var(--kreati-primary-50);      color: var(--kreati-primary-700); }
-.kreati-chip--secondary { background-color: var(--kreati-secondary-100);   color: var(--kreati-gray-800); }
-.kreati-chip--success   { background-color: var(--kreati-severity-success-light);  color: var(--kreati-severity-success-active); }
-.kreati-chip--warning   { background-color: var(--kreati-severity-warning-light);  color: var(--kreati-severity-warning-active); }
-.kreati-chip--error     { background-color: var(--kreati-severity-danger-light);   color: var(--kreati-severity-danger-active); }
-.kreati-chip--outline   { background-color: transparent; color: var(--kreati-gray-700); border: 1px solid var(--kreati-gray-300); }
+/* ============================================
+   Variants
+   ============================================ */
+.k-chip--primary   { background-color: var(--kreati-primary-50);      color: var(--kreati-primary-700); }
+.k-chip--secondary { background-color: var(--kreati-secondary-100);   color: var(--kreati-gray-800); }
+.k-chip--success   { background-color: var(--kreati-severity-success-light);  color: var(--kreati-severity-success-active); }
+.k-chip--warning   { background-color: var(--kreati-severity-warning-light);  color: var(--kreati-severity-warning-active); }
+.k-chip--error     { background-color: var(--kreati-severity-danger-light);   color: var(--kreati-severity-danger-active); }
+.k-chip--outline   { background-color: transparent; color: var(--kreati-gray-700); border: 1px solid var(--kreati-gray-300); }
 
-/* Icon */
-.kreati-chip__icon { display: inline-flex; align-items: center; }
+/* ============================================
+   Icon
+   ============================================ */
+.k-chip__icon { display: inline-flex; align-items: center; }
