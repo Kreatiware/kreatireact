@@ -1,5 +1,16 @@
 # @kreatiware/react
 
+## 3.0.0
+
+### Minor Changes
+
+- f297831: feat: add forms components
+
+### Patch Changes
+
+- Updated dependencies [f297831]
+  - @kreatiware/icons@0.6.0
+
 ## 2.0.0
 
 ### Minor Changes
