@@ -1,5 +1,11 @@
 # @kreatiware/icons
 
+## 0.7.0
+
+### Minor Changes
+
+- dbc0161: feat(icons+react): add overlay components and system (tooltip, dialog, drawer)
+
 ## 0.6.0
 
 ### Minor Changes
