@@ -157,7 +157,7 @@
   background: var(--kreati-hero-glass-bg, var(--kreati-overlay-medium));
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid var(--kreati-overlay-strong);
   border-radius: var(--kreati-radius-xl);
   padding: var(--kreati-space-8);
 }

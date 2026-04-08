@@ -270,90 +270,18 @@
   justify-self: start;
 }
 
-/* Overlay */
-.kreati-navbar__overlay {
-  position: fixed;
-  inset: 0;
-  background-color: var(--kreati-overlay-dark);
-  z-index: var(--kreati-z-sticky);
-  opacity: 0;
-  visibility: hidden;
-  transition: var(--kreati-transition-slow);
-}
-
-.kreati-navbar__overlay--visible {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Drawer */
-.kreati-navbar__drawer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: var(--kreati-navbar-drawer-width);
-  max-width: var(--kreati-navbar-drawer-max-width);
-  height: 100vh;
-  height: 100dvh;
-  z-index: var(--kreati-z-overlay);
-  transform: translateX(100%);
-  transition: var(--kreati-transition-slow);
-  display: flex;
-  flex-direction: column;
-  font-family: var(--kreati-font-family);
-  box-shadow: var(--kreati-shadow-drawer);
-}
-
-.kreati-navbar--transparent .kreati-navbar__drawer,
-.kreati-navbar--solid .kreati-navbar__drawer {
-  background-color: var(--kreati-white);
-  border-left: 1px solid var(--kreati-gray-200);
-}
-
-.kreati-navbar__drawer--open {
-  transform: translateX(0);
-}
-
-.kreati-navbar__drawer-header {
-  display: flex;
-  justify-content: flex-end;
-  padding: var(--kreati-space-4) var(--kreati-space-4) var(--kreati-space-0);
-}
-
-.kreati-navbar__drawer-close {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: var(--kreati-space-2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--kreati-gray-700);
-  border-radius: var(--kreati-radius-sm);
-  transition: var(--kreati-transition);
-}
-
-.kreati-navbar__drawer-close:hover,
-.kreati-navbar__drawer-close:active {
-  background-color: var(--kreati-black-alpha-5);
-  color: var(--kreati-primary-500);
-}
-
-.kreati-navbar__drawer-close:focus-visible {
-  outline: 2px solid var(--kreati-primary-500);
-  outline-offset: 2px;
-}
-
+/* ============================================
+   Drawer nav items (rendered inside Drawer component)
+   ============================================ */
 .kreati-navbar__drawer-items {
   display: flex;
   flex-direction: column;
-  padding: var(--kreati-space-6) var(--kreati-space-4);
+  padding: var(--kreati-space-2) 0;
   gap: var(--kreati-space-1);
   overflow-y: auto;
   flex: 1;
 }
 
-/* Drawer nav items */
 .kreati-navbar__drawer-items .kreati-navbar__link {
   width: 100%;
   padding: var(--kreati-space-3) var(--kreati-space-4);

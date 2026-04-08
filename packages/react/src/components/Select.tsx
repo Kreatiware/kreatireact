@@ -1,8 +1,11 @@
 import React, { forwardRef, useId, useRef, useState, useCallback, useEffect, useMemo, useImperativeHandle } from 'react';
+import { createPortal } from 'react-dom';
 import { SelectDropdown } from './SelectDropdown';
 import type { SelectOption, SelectGroup } from './SelectDropdown';
 import { FieldWrapper } from './FieldWrapper';
 import { useKreatiLocale } from '../locale';
+import { useOverlayPosition } from './useOverlayPosition';
+import { useLayerZIndex } from './LayerContext';
 import { CHEVRON_DOWN_PATH, TIMES_PATH } from './iconPaths';
 import './Select.css';
 
@@ -145,6 +148,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     const wrapperRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const triggerRef = useRef<HTMLDivElement>(null);
+    const panelRef = useRef<HTMLDivElement>(null);
     useImperativeHandle(ref, () => wrapperRef.current as HTMLDivElement);
 
     const isControlled = controlledValue !== undefined;
@@ -156,6 +160,13 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     const [editableText, setEditableText] = useState('');
     const [focusedIndex, setFocusedIndex] = useState(-1);
     const [userNavigated, setUserNavigated] = useState(false);
+
+    const { coords: overlayCoords, positioned: overlayPositioned } = useOverlayPosition(
+      triggerRef as React.RefObject<HTMLElement>,
+      panelRef as React.RefObject<HTMLElement>,
+      open,
+    );
+    const { child: childZ } = useLayerZIndex();
 
     const locale = useKreatiLocale();
     const hasError = !!error;
@@ -317,7 +328,9 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     useEffect(() => {
       if (!open) return;
       const onClickOutside = (e: MouseEvent) => {
-        if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) closeDropdown();
+        if (wrapperRef.current?.contains(e.target as Node)) return;
+        if (panelRef.current?.contains(e.target as Node)) return;
+        closeDropdown();
       };
       document.addEventListener('mousedown', onClickOutside);
       return () => document.removeEventListener('mousedown', onClickOutside);
@@ -453,24 +466,31 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       </div>
     );
 
-    const dropdownPanel = open ? (
-      <SelectDropdown
-        options={filteredOptions}
-        groups={groups}
-        value={selectedValue}
-        filterable={filterable}
-        filterPlaceholder={filterPlaceholder || locale.select.filterPlaceholder}
-        focusedIndex={focusedIndex}
-        virtualScroll={virtualScroll}
-        optionTemplate={optionTemplate}
-        groupTemplate={groupTemplate}
-        emptyMessage={emptyMessage || locale.select.emptyMessage}
-        onSelect={selectOption}
-        onMouseEnterOption={setFocusedIndex}
-        onFilterChange={handleFilterChange}
-        onKeyDown={handleKeyDown}
-        dropdownId={dropdownId}
-      />
+    const dropdownPanel = open ? createPortal(
+      <div
+        ref={panelRef}
+        className={`${base}__dropdown-portal ${overlayPositioned ? `${base}__dropdown-portal--visible` : ''}`}
+        style={{ position: 'fixed', top: overlayCoords.top, left: overlayCoords.left, minWidth: overlayCoords.minWidth, zIndex: childZ }}
+      >
+        <SelectDropdown
+          options={filteredOptions}
+          groups={groups}
+          value={selectedValue}
+          filterable={filterable}
+          filterPlaceholder={filterPlaceholder || locale.select.filterPlaceholder}
+          focusedIndex={focusedIndex}
+          virtualScroll={virtualScroll}
+          optionTemplate={optionTemplate}
+          groupTemplate={groupTemplate}
+          emptyMessage={emptyMessage || locale.select.emptyMessage}
+          onSelect={selectOption}
+          onMouseEnterOption={setFocusedIndex}
+          onFilterChange={handleFilterChange}
+          onKeyDown={handleKeyDown}
+          dropdownId={dropdownId}
+        />
+      </div>,
+      document.body,
     ) : null;
 
     /* -- Floating variant -- */
@@ -479,8 +499,8 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
         <div ref={wrapperRef} className={wrapperClasses}>
           <div className={`${base}__container ${base}__container--${size}`}>
             {triggerEl}
-            {dropdownPanel}
           </div>
+          {dropdownPanel}
           {hasError && errorMessage && (
             <span className={`${base}__error`} id={errorId} role="alert">{errorMessage}</span>
           )}
@@ -500,11 +520,10 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       );
     }
 
-    /* -- Stacked variant: trigger + dropdown inside container -- */
+    /* -- Stacked variant -- */
     const containerEl = (
       <div className={`${base}__container ${base}__container--${size}`}>
         {triggerEl}
-        {dropdownPanel}
       </div>
     );
 
@@ -512,6 +531,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       return (
         <div ref={wrapperRef} className={wrapperClasses}>
           {containerEl}
+          {dropdownPanel}
           {name && <input type="hidden" name={name} value={selectedValue ?? ''} />}
         </div>
       );
@@ -533,6 +553,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
         >
           {containerEl}
         </FieldWrapper>
+        {dropdownPanel}
         {name && <input type="hidden" name={name} value={selectedValue ?? ''} />}
       </div>
     );

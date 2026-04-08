@@ -11,6 +11,8 @@ import {
   Search,
   Minus,
   CalendarIcon,
+  Maximize,
+  Restore,
 } from './icons';
 import type { IconProps } from './icons';
 
@@ -27,6 +29,8 @@ const ICON_MAP: Record<string, React.FC<IconProps>> = {
   search: Search,
   minus: Minus,
   calendar: CalendarIcon,
+  maximize: Maximize,
+  restore: Restore,
 };
 
 export interface IconResolverProps extends IconProps {

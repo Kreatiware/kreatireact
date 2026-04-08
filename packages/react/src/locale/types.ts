@@ -44,10 +44,27 @@ export interface KreatiLocale {
     rangeMin: string;
     rangeMax: string;
   };
-  /** General / shared */
+  /** List component */
+  list: {
+    filterPlaceholder: string;
+    emptyMessage: string;
+  };
+  /** Dialog / Popover confirm */
+  dialog: {
+    accept: string;
+    reject: string;
+    close: string;
+    confirmation: string;
+    maximize: string;
+    restore: string;
+  };
+  /** Shared ARIA labels */
   common: {
     loading: string;
     close: string;
     search: string;
+    filterOptions: string;
+    increment: string;
+    decrement: string;
   };
 }

@@ -64,3 +64,15 @@ export const WithEmoji: Story = {
     </div>
   ),
 };
+
+export const Raised: Story = {
+  name: 'Raised',
+  render: () => (
+    <div style={{ display: 'flex', gap: 12, padding: 16 }}>
+      <Chip variant="primary" raised>Raised</Chip>
+      <Chip variant="success" raised>Active</Chip>
+      <Chip variant="outline" raised>v2.0</Chip>
+      <Chip variant="primary">Normal</Chip>
+    </div>
+  ),
+};

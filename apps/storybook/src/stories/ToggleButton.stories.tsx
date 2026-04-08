@@ -178,3 +178,14 @@ export const Disabled: Story = {
     </div>
   ),
 };
+
+export const Raised: Story = {
+  name: 'Raised',
+  render: () => (
+    <div style={{ display: 'flex', gap: 16, padding: 16 }}>
+      <ToggleButton label="Normal" active />
+      <ToggleButton label="Raised" active raised />
+      <ToggleButton label="Raised off" raised />
+    </div>
+  ),
+};

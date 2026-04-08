@@ -380,3 +380,53 @@ export const CalendarIcon: React.FC<IconProps> = ({
     <rect x="10.75" y="16" width="2.5" height="2.5" rx=".4" />
   </svg>
 );
+
+/**
+ * Maximize icon (expand to full size)
+ *
+ * @description Single square outline representing a maximized window.
+ * Fill-based path matching the designer's icon style.
+ *
+ * @author ai — Pending designer review
+ */
+export const Maximize: React.FC<IconProps> = ({
+  size = 24,
+  color = 'currentColor',
+  className = '',
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={color}
+    className={className}
+    aria-hidden="true"
+  >
+    <path d="M4,4h16v16H4V4Zm2,2v12h12V6H6Z" />
+  </svg>
+);
+
+/**
+ * Restore icon (restore from maximized)
+ *
+ * @description Two overlapping squares representing a restored window.
+ * Fill-based path matching the designer's icon style.
+ *
+ * @author ai — Pending designer review
+ */
+export const Restore: React.FC<IconProps> = ({
+  size = 24,
+  color = 'currentColor',
+  className = '',
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={color}
+    className={className}
+    aria-hidden="true"
+  >
+    <path d="M8,2h12v12h-4v4H4V6h4V2Zm2,4h8V4H10v2ZM6,8v8h8v-2H10V8H6Z" />
+  </svg>
+);

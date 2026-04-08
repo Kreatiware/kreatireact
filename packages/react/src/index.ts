@@ -22,7 +22,7 @@ export type { TextareaProps } from './components/Textarea';
 export { ScrollBar } from './components/ScrollBar';
 export type { ScrollBarProps } from './components/ScrollBar';
 export { Tooltip } from './components/Tooltip';
-export type { TooltipProps } from './components/Tooltip';
+export type { TooltipProps, TooltipPosition, TooltipEvent } from './components/Tooltip';
 export { Popover } from './components/Popover';
 export type { PopoverProps, PopoverPosition } from './components/Popover';
 export { Calendar } from './components/Calendar';
@@ -33,6 +33,14 @@ export type { ListProps, ListItem } from './components/List';
 
 export { Slider } from './components/Slider';
 export type { SliderProps, SliderMark } from './components/Slider';
+
+export { useOverlayPosition } from './components/useOverlayPosition';
+export { useLayerZIndex } from './components/LayerContext';
+
+export { Dialog } from './components/Dialog';
+export type { DialogProps, DialogPosition } from './components/Dialog';
+export { Drawer } from './components/Drawer';
+export type { DrawerProps, DrawerPosition } from './components/Drawer';
 export { Select } from './components/Select';
 export type { SelectProps, SelectOption, SelectGroup } from './components/Select';
 export { MultiSelect } from './components/MultiSelect';
@@ -79,6 +87,8 @@ import './components/Popover.css';
 import './components/Calendar.css';
 import './components/List.css';
 import './components/Slider.css';
+import './components/Dialog.css';
+import './components/Drawer.css';
 import './components/Select.css';
 import './components/MultiSelect.css';
 import './components/Checkbox.css';

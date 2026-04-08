@@ -1,4 +1,6 @@
 import React, { forwardRef } from 'react';
+import { Tooltip } from './Tooltip';
+import type { TooltipPosition } from './Tooltip';
 import './Button.css';
 
 export interface ButtonSize {
@@ -38,6 +40,10 @@ export interface ButtonProps {
   width?: string;
   /** Accessible label for icon-only buttons */
   ariaLabel?: string;
+  /** Tooltip text displayed on hover/focus */
+  tooltip?: string;
+  /** Tooltip position relative to the button */
+  tooltipPosition?: TooltipPosition;
   /** Additional CSS class names */
   className?: string;
   /** Render custom content directly inside the button (template slot) */
@@ -49,14 +55,14 @@ export interface ButtonProps {
  *
  * @description A versatile button supporting filled, outlined, and text styles
  * with 7 severity colors. Includes icon slots, badge overlay, slim mode,
- * raised shadow, and pill/circle shapes. Fully accessible with ARIA support
- * and keyboard navigation.
+ * raised shadow, pill/circle shapes, and optional tooltip. Fully accessible
+ * with ARIA support and keyboard navigation.
  *
  * @example
  * ```tsx
  * <Button label="Save" severity="primary" iconRight={<Check size={16} />} />
- * <Button label="Delete" severity="danger" buttonType="outlined" />
- * <Button iconLeft={<Menu size={18} />} ariaLabel="Open menu" rounded />
+ * <Button label="Delete" severity="danger" buttonType="outlined" tooltip="Remove this item" />
+ * <Button iconLeft={<Menu size={18} />} ariaLabel="Open menu" rounded tooltip="Menu" />
  * ```
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -78,6 +84,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       type = 'button',
       width,
       ariaLabel,
+      tooltip,
+      tooltipPosition = 'top',
       className = '',
       children,
     },
@@ -101,7 +109,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       .filter(Boolean)
       .join(' ');
 
-    return (
+    const buttonEl = (
       <button
         ref={ref}
         className={classes}
@@ -128,6 +136,16 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         )}
       </button>
     );
+
+    if (tooltip) {
+      return (
+        <Tooltip content={tooltip} position={tooltipPosition}>
+          {buttonEl}
+        </Tooltip>
+      );
+    }
+
+    return buttonEl;
   },
 );
 

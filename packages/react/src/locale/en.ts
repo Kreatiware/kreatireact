@@ -41,9 +41,24 @@ export const en: KreatiLocale = {
     loading: 'Loading...',
     close: 'Close',
     search: 'Search',
+    filterOptions: 'Filter options',
+    increment: 'Increment',
+    decrement: 'Decrement',
   },
   slider: {
     rangeMin: 'minimum',
     rangeMax: 'maximum',
+  },
+  list: {
+    filterPlaceholder: 'Search...',
+    emptyMessage: 'No results',
+  },
+  dialog: {
+    accept: 'Accept',
+    reject: 'Cancel',
+    close: 'Close',
+    confirmation: 'Confirmation',
+    maximize: 'Maximize',
+    restore: 'Restore',
   },
 };

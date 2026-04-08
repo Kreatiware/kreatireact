@@ -7,11 +7,10 @@
 }
 
 /* ============================================
-   Tooltip Bubble
+   Tooltip Bubble (portal-based, fixed position)
    ============================================ */
 .k-tooltip__bubble {
-  position: absolute;
-  z-index: var(--kreati-z-tooltip);
+  position: fixed;
   background-color: var(--kreati-tooltip-bg);
   color: var(--kreati-tooltip-color);
   padding: var(--kreati-tooltip-padding);
@@ -21,43 +20,17 @@
   font-weight: var(--kreati-font-weight-medium);
   line-height: var(--kreati-line-height-sm);
   max-width: var(--kreati-tooltip-max-width);
-  white-space: nowrap;
+  width: max-content;
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.15s ease, visibility 0.15s ease;
+  transition: opacity var(--kreati-tooltip-transition-duration) ease,
+              visibility var(--kreati-tooltip-transition-duration) ease;
 }
 
 .k-tooltip__bubble--visible {
   opacity: 1;
   visibility: visible;
-}
-
-/* ============================================
-   Positions
-   ============================================ */
-.k-tooltip__bubble--top {
-  bottom: calc(100% + var(--kreati-tooltip-offset));
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.k-tooltip__bubble--bottom {
-  top: calc(100% + var(--kreati-tooltip-offset));
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.k-tooltip__bubble--left {
-  right: calc(100% + var(--kreati-tooltip-offset));
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.k-tooltip__bubble--right {
-  left: calc(100% + var(--kreati-tooltip-offset));
-  top: 50%;
-  transform: translateY(-50%);
 }
 
 /* ============================================

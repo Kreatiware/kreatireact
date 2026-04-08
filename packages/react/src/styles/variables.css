@@ -42,6 +42,7 @@
   /* ─── Colors — Overlay / Alpha ──────────────────────────────────────── */
   --kreati-overlay-light: rgba(255, 255, 255, 0.1);
   --kreati-overlay-medium: rgba(255, 255, 255, 0.15);
+  --kreati-overlay-strong: rgba(255, 255, 255, 0.25);
   --kreati-overlay-dark: rgba(0, 0, 0, 0.4);
   --kreati-overlay-heavy: rgba(0, 0, 0, 0.5);
   --kreati-primary-alpha-6: rgba(15, 120, 165, 0.06);
@@ -180,6 +181,19 @@
   --kreati-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
   --kreati-shadow-drawer: -4px 0 24px rgba(0, 0, 0, 0.12);
 
+  /* Drawer */
+  --kreati-drawer-width-xs: 240px;
+  --kreati-drawer-width-sm: 320px;
+  --kreati-drawer-width-md: 400px;
+  --kreati-drawer-width-lg: 560px;
+  --kreati-drawer-width-xl: 720px;
+  --kreati-drawer-height-xs: 160px;
+  --kreati-drawer-height-sm: 240px;
+  --kreati-drawer-height-md: 320px;
+  --kreati-drawer-height-lg: 440px;
+  --kreati-drawer-height-xl: 560px;
+  --kreati-drawer-transition-duration: 0.25s;
+
   /* ─── Z-Index ───────────────────────────────────────────────────────── */
   --kreati-z-dropdown: 1000;
   --kreati-z-sticky: 1001;
@@ -245,6 +259,7 @@
   --kreati-tooltip-max-width: 200px;
   --kreati-tooltip-offset: 6px;
   --kreati-tooltip-arrow-size: 5px;
+  --kreati-tooltip-transition-duration: 0.15s;
 
   /* ─── Component Tokens — ScrollArea ──────────────────────────────────── */
   --kreati-scroll-size-sm: 6px;

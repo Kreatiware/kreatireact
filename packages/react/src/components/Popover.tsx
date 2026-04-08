@@ -1,12 +1,33 @@
 import React, { forwardRef, useRef, useState, useCallback, useEffect, useImperativeHandle } from 'react';
 import { createPortal } from 'react-dom';
+import { useKreatiLocale } from '../locale';
+import { Button } from './Button';
+import { useLayerZIndex } from './LayerContext';
 import './Popover.css';
 
 export type PopoverPosition = 'top' | 'bottom' | 'left' | 'right';
 
 export interface PopoverProps {
+  /** Popover variant — default shows content as-is, confirm shows message + accept/reject buttons */
+  variant?: 'default' | 'confirm';
   /** Content rendered inside the popover panel */
-  content: React.ReactNode;
+  content?: React.ReactNode;
+  /** Message text for confirm variant */
+  message?: React.ReactNode;
+  /** Icon displayed before the message in confirm variant */
+  icon?: React.ReactNode;
+  /** Accept button label — overrides locale default */
+  acceptLabel?: string;
+  /** Reject button label — overrides locale default */
+  rejectLabel?: string;
+  /** Accept button severity */
+  acceptSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  /** Reject button severity */
+  rejectSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  /** Fires when accept is clicked (confirm variant) */
+  onAccept?: () => void;
+  /** Fires when reject is clicked (confirm variant) */
+  onReject?: () => void;
   /** Preferred position relative to the trigger */
   position?: PopoverPosition;
   /** Distance in px between trigger and panel */
@@ -52,7 +73,16 @@ export interface PopoverProps {
 export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
   (
     {
+      variant = 'default',
       content,
+      message,
+      icon,
+      acceptLabel: acceptLabelProp,
+      rejectLabel: rejectLabelProp,
+      acceptSeverity = 'primary',
+      rejectSeverity = 'secondary',
+      onAccept,
+      onReject,
       position = 'bottom',
       offset = 4,
       portal = true,
@@ -71,6 +101,9 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
     const wrapperRef = useRef<HTMLDivElement>(null);
     const panelRef = useRef<HTMLDivElement>(null);
     useImperativeHandle(ref, () => wrapperRef.current as HTMLDivElement);
+
+    const kreatiLocale = useKreatiLocale();
+    const { child: childZ } = useLayerZIndex();
 
     const isControlled = controlledOpen !== undefined;
     const [internalOpen, setInternalOpen] = useState(false);
@@ -161,15 +194,28 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
 
     const base = 'k-popover';
 
+    const resolvedContent = variant === 'confirm' && !content ? (
+      <div className={`${base}__confirm`}>
+        <div className={`${base}__confirm-body`}>
+          {icon && <span className={`${base}__confirm-icon`} aria-hidden="true">{icon}</span>}
+          <span className={`${base}__confirm-message`}>{message}</span>
+        </div>
+        <div className={`${base}__confirm-actions`}>
+          <Button label={rejectLabelProp || kreatiLocale.dialog.reject} buttonType="text" severity={rejectSeverity} size="sm" onClick={() => { onReject?.(); close(); }} />
+          <Button label={acceptLabelProp || kreatiLocale.dialog.accept} severity={acceptSeverity} size="sm" onClick={() => { onAccept?.(); close(); }} />
+        </div>
+      </div>
+    ) : content;
+
     const panelEl = isOpen ? (
       <div
         ref={panelRef}
         className={[`${base}__panel`, positioned && `${base}__panel--visible`, panelClassName].filter(Boolean).join(' ')}
-        style={{ position: 'fixed', top: coords.top, left: coords.left, minWidth: coords.minWidth }}
+        style={{ position: 'fixed', top: coords.top, left: coords.left, minWidth: coords.minWidth, zIndex: childZ }}
         role="dialog"
         aria-modal="false"
       >
-        {content}
+        {resolvedContent}
       </div>
     ) : null;
 

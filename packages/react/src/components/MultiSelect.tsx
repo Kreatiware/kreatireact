@@ -1,7 +1,10 @@
 import React, { forwardRef, useId, useRef, useState, useCallback, useEffect, useMemo, useImperativeHandle } from 'react';
+import { createPortal } from 'react-dom';
 import type { SelectOption, SelectGroup } from './SelectDropdown';
 import { FieldWrapper } from './FieldWrapper';
 import { useKreatiLocale } from '../locale';
+import { useOverlayPosition } from './useOverlayPosition';
+import { useLayerZIndex } from './LayerContext';
 import { CHEVRON_DOWN_PATH, TIMES_PATH, CHECK_PATH, MINUS_PATH, SEARCH_PATH } from './iconPaths';
 import './MultiSelect.css';
 
@@ -128,6 +131,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
     const dropdownId = `${selectId}-listbox`;
     const wrapperRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLDivElement>(null);
+    const panelRef = useRef<HTMLDivElement>(null);
     useImperativeHandle(ref, () => wrapperRef.current as HTMLDivElement);
 
     const isControlled = controlledValue !== undefined;
@@ -137,6 +141,13 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
     const [open, setOpen] = useState(false);
     const [filter, setFilter] = useState('');
     const [focusedIndex, setFocusedIndex] = useState(-1);
+
+    const { coords: overlayCoords, positioned: overlayPositioned } = useOverlayPosition(
+      triggerRef as React.RefObject<HTMLElement>,
+      panelRef as React.RefObject<HTMLElement>,
+      open,
+    );
+    const { child: childZ } = useLayerZIndex();
 
     const locale = useKreatiLocale();
     const hasError = !!error;
@@ -215,7 +226,11 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
 
     useEffect(() => {
       if (!open) return;
-      const handler = (e: MouseEvent) => { if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) closeDropdown(); };
+      const handler = (e: MouseEvent) => {
+        if (wrapperRef.current?.contains(e.target as Node)) return;
+        if (panelRef.current?.contains(e.target as Node)) return;
+        closeDropdown();
+      };
       document.addEventListener('mousedown', handler);
       return () => document.removeEventListener('mousedown', handler);
     }, [open, closeDropdown]);
@@ -275,12 +290,17 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
       return items;
     }, [filteredOptions, groups]);
 
-    const dropdownPanel = open ? (
+    const dropdownPanel = open ? createPortal(
+      <div
+        ref={panelRef}
+        className={`${base}__dropdown-portal ${overlayPositioned ? `${base}__dropdown-portal--visible` : ''}`}
+        style={{ position: 'fixed', top: overlayCoords.top, left: overlayCoords.left, minWidth: overlayCoords.minWidth, zIndex: childZ }}
+      >
       <div className={`${base}__dropdown`} role="listbox" aria-multiselectable="true" id={dropdownId}>
         {filterable && (
           <div className={`${base}__filter`}>
             <svg className={`${base}__filter-icon`} width={14} height={14} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={SEARCH_PATH} /></svg>
-            <input className={`${base}__filter-input`} type="text" value={filter} onChange={(e) => handleFilterChange(e.target.value)} onKeyDown={handleKeyDown} placeholder={filterPlaceholder || locale.multiSelect.filterPlaceholder} aria-label="Filter options" autoComplete="off" autoFocus />
+            <input className={`${base}__filter-input`} type="text" value={filter} onChange={(e) => handleFilterChange(e.target.value)} onKeyDown={handleKeyDown} placeholder={filterPlaceholder || locale.multiSelect.filterPlaceholder} aria-label={locale.common.filterOptions} autoComplete="off" autoFocus />
           </div>
         )}
         <div className={`${base}__options`}>
@@ -319,6 +339,8 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
           })}
         </div>
       </div>
+    </div>,
+    document.body,
     ) : null;
 
     const triggerInner = (
@@ -342,13 +364,14 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
       </div>
     );
 
-    const containerEl = <div className={`${base}__container ${base}__container--${size}`}>{triggerEl}{dropdownPanel}</div>;
+    const containerEl = <div className={`${base}__container ${base}__container--${size}`}>{triggerEl}</div>;
     const hiddenInputs = name ? selected.map((v) => <input key={v} type="hidden" name={name} value={v} />) : null;
 
     if (isFloating) {
       return (
         <div ref={wrapperRef} className={wrapperClasses}>
           {containerEl}
+          {dropdownPanel}
           {hasError && errorMessage && <span className={`${base}__error`} id={errorId} role="alert">{errorMessage}</span>}
           {helperText && <span className={[`${base}__helper`, helperSeverity && `${base}__helper--${helperSeverity}`].filter(Boolean).join(' ')} id={helperId}>{helperText}</span>}
           {hiddenInputs}
@@ -356,13 +379,14 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
       );
     }
 
-    if (!hasWrapper) return <div ref={wrapperRef} className={wrapperClasses}>{containerEl}{hiddenInputs}</div>;
+    if (!hasWrapper) return <div ref={wrapperRef} className={wrapperClasses}>{containerEl}{dropdownPanel}{hiddenInputs}</div>;
 
     return (
       <div ref={wrapperRef} className={wrapperClasses}>
         <FieldWrapper label={label} htmlFor={selectId} required={required} helperText={helperText} error={errorMessage} success={success} helperSeverity={helperSeverity} size={size} disabled={disabled} fullWidth={fullWidth}>
           {containerEl}
         </FieldWrapper>
+        {dropdownPanel}
         {hiddenInputs}
       </div>
     );

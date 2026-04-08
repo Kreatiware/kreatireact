@@ -2,41 +2,43 @@
 
 > Herramientas frontend modernas para desarrolladores React
 
-## 📦 Paquetes
+## Paquetes
 
-### [@kreati/react](./packages/react)
-Componentes React modernos y tipados con sistema de temas integrado.
-
-```bash
-npm install @kreati/react
-```
-
-### [@kreati/icons](./packages/icons)
-Librería de iconos vectoriales SVG optimizados con componentes React.
+### [@kreatiware/react](./packages/react)
+22 componentes React modernos y tipados con sistema de temas integrado.
 
 ```bash
-npm install @kreati/icons
+npm install @kreatiware/react
 ```
 
-### [@kreati/flex](./packages/flex)
-Sistema de utilities CSS para Flexbox y Grid con diseño responsive.
+### [@kreatiware/icons](./packages/icons)
+Libreria de iconos vectoriales SVG optimizados con componentes React.
 
 ```bash
-npm install @kreati/flex
+npm install @kreatiware/icons
 ```
 
-## 🚀 Inicio Rápido
+### [@kreatiware/flex](./packages/flex)
+Sistema de utilities CSS para Flexbox y Grid con diseno responsive.
+
+```bash
+npm install @kreatiware/flex
+```
+
+## Inicio Rapido
 
 ```jsx
-import { Button } from '@kreati/react';
-import { ArrowRight } from '@kreati/icons';
-import '@kreati/flex/dist/index.css';
+import { Button, Input, Calendar } from '@kreatiware/react';
+import { ArrowRight } from '@kreatiware/icons';
+import '@kreatiware/flex/dist/index.css';
 
 function App() {
   return (
-    <div className="k-flex k-items-center k-gap-4">
+    <div className="k-flex k-flex-col k-gap-4">
+      <Input label="Name" size="md" />
+      <Calendar label="Date" showButtonBar />
       <Button variant="primary">
-        Comenzar
+        Submit
         <ArrowRight size={16} />
       </Button>
     </div>
@@ -44,7 +46,7 @@ function App() {
 }
 ```
 
-## 🛠️ Desarrollo
+## Desarrollo
 
 ```bash
 # Instalar dependencias
@@ -56,6 +58,9 @@ npm run dev
 # Build todos los paquetes
 npm run build
 
+# Storybook
+npm run storybook
+
 # Tests
 npm run test
 
@@ -63,14 +68,14 @@ npm run test
 npm run lint
 ```
 
-## 📋 Roadmap
+## Roadmap
 
-- [x] **Etapa 1**: Configuración inicial y Button component
-- [ ] **Etapa 2**: Componentes de formulario
-- [ ] **Etapa 3**: Sistema de temas avanzado
-- [ ] **Etapa 4**: Distribución npm
+- [x] **Etapa 1**: Configuracion inicial, Button, NavigationBar, Badge, Chip, Tooltip, HeroSection, DynamicSvg, ScrollBar
+- [x] **Etapa 2**: Componentes de formulario (Input, InputMask, Textarea, Select, MultiSelect, Checkbox, Radio, Switch, ToggleButton, Calendar, Slider, List)
+- [ ] **Etapa 3**: Sistema de temas avanzado, componentes de layout (Dialog, Tabs, Accordion, Table)
+- [ ] **Etapa 4**: Distribucion npm publico
 - [ ] **Etapa 5**: Productos premium
 
-## 📄 Licencia
+## Licencia
 
-MIT © Brian - Kreatiware
+MIT - Brian - Kreatiware

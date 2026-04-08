@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Popover } from '../../../../packages/react/src/components/Popover';
 import { Button } from '../../../../packages/react/src/components/Button';
+import { KreatiProvider } from '../../../../packages/react/src/locale';
+import { es } from '../../../../packages/react/src/locale/es';
 
 const meta = {
   title: 'Components/Popover',
@@ -126,5 +128,72 @@ export const Offset: Story = {
         <Button label="24px" size="sm" buttonType="outlined" />
       </Popover>
     </div>
+  ),
+};
+
+export const ConfirmVariant: Story = {
+  name: 'Confirm variant',
+  render: () => {
+    const Demo = () => {
+      const [result, setResult] = useState('');
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}>
+          <Popover
+            variant="confirm"
+            message="Are you sure you want to delete this?"
+            icon={<svg width={20} height={20} viewBox="0 0 24 24" fill="#f59e0b"><circle cx={12} cy={12} r={10} opacity={0.15} /><text x={12} y={17} textAnchor="middle" fontSize={14} fill="#f59e0b" fontWeight="bold">?</text></svg>}
+            onAccept={() => setResult('Accepted')}
+            onReject={() => setResult('Rejected')}
+          >
+            <Button label="Delete" severity="danger" size="sm" />
+          </Popover>
+          {result && <span style={{ fontSize: 11, color: '#6b7280', fontFamily: 'monospace' }}>{result}</span>}
+        </div>
+      );
+    };
+    return <Demo />;
+  },
+};
+
+export const ConfirmSpanish: Story = {
+  name: 'Confirm — Spanish locale',
+  render: () => {
+    const Demo = () => {
+      const [result, setResult] = useState('');
+      return (
+        <KreatiProvider locale={es}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}>
+            <Popover
+              variant="confirm"
+              message="Esta seguro de eliminar este elemento?"
+              onAccept={() => setResult('Aceptado')}
+              onReject={() => setResult('Cancelado')}
+            >
+              <Button label="Eliminar" severity="danger" size="sm" />
+            </Popover>
+            {result && <span style={{ fontSize: 11, color: '#6b7280', fontFamily: 'monospace' }}>{result}</span>}
+          </div>
+        </KreatiProvider>
+      );
+    };
+    return <Demo />;
+  },
+};
+
+export const ConfirmCustomLabels: Story = {
+  name: 'Confirm — Custom labels',
+  render: () => (
+    <Popover
+      variant="confirm"
+      message="Save changes before closing?"
+      acceptLabel="Save"
+      rejectLabel="Discard"
+      acceptSeverity="success"
+      rejectSeverity="danger"
+      onAccept={() => {}}
+      onReject={() => {}}
+    >
+      <Button label="Close editor" size="sm" buttonType="outlined" />
+    </Popover>
   ),
 };

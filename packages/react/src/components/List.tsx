@@ -1,5 +1,6 @@
 import React, { forwardRef, useId, useRef, useState, useCallback, useImperativeHandle, useMemo } from 'react';
 import { Input } from './Input';
+import { useKreatiLocale } from '../locale';
 import './List.css';
 
 /** Single item in a List */
@@ -86,8 +87,8 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
       onSelect,
       multiple = false,
       filterable = false,
-      filterPlaceholder = 'Search...',
-      emptyMessage = 'No results',
+      filterPlaceholder,
+      emptyMessage,
       groupTemplate,
       size = 'md',
       maxHeight,
@@ -98,6 +99,10 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
     const containerRef = useRef<HTMLDivElement>(null);
     const listId = useId();
     useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
+
+    const kreatiLocale = useKreatiLocale();
+    const resolvedFilterPlaceholder = filterPlaceholder ?? kreatiLocale.list.filterPlaceholder;
+    const resolvedEmptyMessage = emptyMessage ?? kreatiLocale.list.emptyMessage;
 
     const [filter, setFilter] = useState('');
     const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -240,7 +245,7 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
 
     const renderContent = () => {
       if (filtered.length === 0) {
-        return <div className={`${base}__empty`}>{emptyMessage}</div>;
+        return <div className={`${base}__empty`}>{resolvedEmptyMessage}</div>;
       }
 
       const entries = Array.from(groups.entries());
@@ -273,7 +278,7 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
           <div className={`${base}__filter`}>
             <Input
               size={size}
-              placeholder={filterPlaceholder}
+              placeholder={resolvedFilterPlaceholder}
               value={filter}
               onChange={(e) => { setFilter(e.target.value); setFocusedIndex(-1); }}
               fullWidth

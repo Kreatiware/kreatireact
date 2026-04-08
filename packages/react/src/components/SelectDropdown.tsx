@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback, useMemo } from 'react';
+import { useKreatiLocale } from '../locale';
 
 export interface SelectOption {
   /** Unique value */
@@ -68,6 +69,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
   const listRef = useRef<HTMLDivElement>(null);
   const filterRef = useRef<HTMLInputElement>(null);
   const [filter, setFilter] = useState('');
+  const kreatiLocale = useKreatiLocale();
   const base = 'k-select';
 
   useEffect(() => {
@@ -129,7 +131,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
         onChange={handleFilterChange}
         onKeyDown={onKeyDown}
         placeholder={filterPlaceholder}
-        aria-label="Filter options"
+        aria-label={kreatiLocale.common.filterOptions}
         autoComplete="off"
       />
     </div>

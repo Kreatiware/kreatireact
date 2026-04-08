@@ -1,6 +1,7 @@
 import React, { forwardRef, useId, useRef, useCallback, useImperativeHandle } from 'react';
 import { FieldWrapper } from './FieldWrapper';
 import { Tooltip } from './Tooltip';
+import { useKreatiLocale } from '../locale';
 import './Input.css';
 
 export interface InputProps {
@@ -145,6 +146,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const innerRef = useRef<HTMLInputElement>(null);
     useImperativeHandle(ref, () => innerRef.current as HTMLInputElement);
 
+    const kreatiLocale = useKreatiLocale();
     const hasError = !!error;
     const errorMessage = typeof error === 'boolean' ? undefined : error;
     const isFloating = variant === 'floating';
@@ -212,7 +214,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           className={`${base}__stepper`}
           onClick={() => handleStepper(1)}
           tabIndex={-1}
-          aria-label="Increment"
+          aria-label={kreatiLocale.common.increment}
           disabled={disabled}
         >
           <svg width={10} height={10} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -224,7 +226,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           className={`${base}__stepper`}
           onClick={() => handleStepper(-1)}
           tabIndex={-1}
-          aria-label="Decrement"
+          aria-label={kreatiLocale.common.decrement}
           disabled={disabled}
         >
           <svg width={10} height={10} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

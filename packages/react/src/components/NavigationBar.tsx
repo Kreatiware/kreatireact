@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback, forwardRef } from 'react';
 import './NavigationBar.css';
 import { MenuItem, NavigationRouter } from '../types/navigation';
-import { KreatiIcon, ChevronDown, Hamburger, Times } from '@kreatiware/icons';
+import { CHEVRON_DOWN_PATH, HAMBURGER_RECTS } from './iconPaths';
+import { Drawer } from './Drawer';
 
 /**
  * Props for the NavigationBar component
@@ -96,11 +97,6 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
     }, [mobileBreakpoint]);
 
     useEffect(() => {
-      document.body.style.overflow = mobileOpen ? 'hidden' : '';
-      return () => { document.body.style.overflow = ''; };
-    }, [mobileOpen]);
-
-    useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
         const target = event.target as Node;
         const isOutside = Object.values(dropdownRefs.current).every(
@@ -193,9 +189,9 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
           <span className="kreati-navbar__link-text">{item.label}</span>
           {hasDropdown && (
             <span className={`kreati-navbar__link-arrow ${isOpen ? 'kreati-navbar__link-arrow--open' : ''}`} aria-hidden="true">
-              <KreatiIcon size={18}>
-                <ChevronDown />
-              </KreatiIcon>
+              <svg width={18} height={18} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d={CHEVRON_DOWN_PATH} />
+              </svg>
             </span>
           )}
         </>
@@ -331,40 +327,26 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
                 aria-label="Open menu"
                 aria-expanded={mobileOpen}
               >
-                <KreatiIcon size={24}><Hamburger /></KreatiIcon>
+                <svg width={24} height={24} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  {HAMBURGER_RECTS.map((r, i) => <rect key={i} x={r.x} y={r.y} width={r.width} height={r.height} rx=".57" ry=".57" />)}
+                </svg>
               </button>
             </>
           )}
         </div>
 
         {isMobile && (
-          <>
-            <div
-              className={`kreati-navbar__overlay ${mobileOpen ? 'kreati-navbar__overlay--visible' : ''}`}
-              onClick={closeMobile}
-              aria-hidden="true"
-            />
-            <div
-              className={`kreati-navbar__drawer ${mobileOpen ? 'kreati-navbar__drawer--open' : ''}`}
-              role="dialog"
-              aria-modal="true"
-              aria-label="Navigation menu"
-            >
-              <div className="kreati-navbar__drawer-header">
-                <button
-                  type="button"
-                  className="kreati-navbar__drawer-close"
-                  onClick={closeMobile}
-                  aria-label="Close menu"
-                >
-                  <KreatiIcon size={20}><Times /></KreatiIcon>
-                </button>
-              </div>
-              <div className="kreati-navbar__drawer-items">
-                {allItems.map((item, index) => renderNavItem(item, index))}
-              </div>
+          <Drawer
+            visible={mobileOpen}
+            onHide={closeMobile}
+            position="right"
+            size="sm"
+            closable
+          >
+            <div className="kreati-navbar__drawer-items">
+              {allItems.map((item, index) => renderNavItem(item, index))}
             </div>
-          </>
+          </Drawer>
         )}
       </nav>
     );

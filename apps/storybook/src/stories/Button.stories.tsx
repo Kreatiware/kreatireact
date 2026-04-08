@@ -230,3 +230,24 @@ export const FullShowcase: Story = {
     );
   },
 };
+
+export const WithTooltip: Story = {
+  name: 'With tooltip',
+  render: () => (
+    <div style={{ display: 'flex', gap: 16, padding: 40 }}>
+      <Button label="Save" tooltip="Save changes" />
+      <Button label="Delete" severity="danger" tooltip="Remove this item" tooltipPosition="bottom" />
+      <Button iconLeft={<Check size={16} />} severity="success" ariaLabel="Confirm" tooltip="Confirm action" />
+    </div>
+  ),
+};
+
+export const TooltipDisabledButton: Story = {
+  name: 'Tooltip on disabled button',
+  render: () => (
+    <div style={{ display: 'flex', gap: 16, padding: 40 }}>
+      <Button label="Enabled" tooltip="This works" />
+      <Button label="Disabled" disabled tooltip="Action not available right now" />
+    </div>
+  ),
+};

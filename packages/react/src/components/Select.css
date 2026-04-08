@@ -338,18 +338,30 @@
 }
 
 /* ============================================
-   Dropdown panel
+   Dropdown panel (rendered via portal)
    ============================================ */
-.k-select__dropdown {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
+.k-select__dropdown-portal {
   background: var(--kreati-white);
   border: 1px solid var(--kreati-gray-200);
   border-radius: var(--kreati-radius-sm);
   box-shadow: var(--kreati-shadow-lg);
-  z-index: var(--kreati-z-dropdown);
+  box-sizing: border-box;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.k-select__dropdown-portal--visible {
+  opacity: 1;
+  pointer-events: auto;
+  animation: k-select-enter 0.15s ease forwards;
+}
+
+@keyframes k-select-enter {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.k-select__dropdown {
   display: flex;
   flex-direction: column;
 }

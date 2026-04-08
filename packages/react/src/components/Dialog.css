@@ -1,0 +1,201 @@
+/* ============================================
+   Dialog — Overlay
+   ============================================ */
+.k-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: var(--kreati-overlay-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: k-dialog-overlay-in 0.2s ease;
+}
+
+.k-dialog-overlay--top { align-items: flex-start; padding-top: var(--kreati-space-10); }
+.k-dialog-overlay--bottom { align-items: flex-end; padding-bottom: var(--kreati-space-10); }
+.k-dialog-overlay--left { justify-content: flex-start; padding-left: var(--kreati-space-10); }
+.k-dialog-overlay--right { justify-content: flex-end; padding-right: var(--kreati-space-10); }
+.k-dialog-overlay--top-left { align-items: flex-start; justify-content: flex-start; padding: var(--kreati-space-10); }
+.k-dialog-overlay--top-right { align-items: flex-start; justify-content: flex-end; padding: var(--kreati-space-10); }
+.k-dialog-overlay--bottom-left { align-items: flex-end; justify-content: flex-start; padding: var(--kreati-space-10); }
+.k-dialog-overlay--bottom-right { align-items: flex-end; justify-content: flex-end; padding: var(--kreati-space-10); }
+
+@keyframes k-dialog-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ============================================
+   Dialog — Container
+   ============================================ */
+.k-dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--kreati-white);
+  border-radius: var(--kreati-radius-lg);
+  box-shadow: var(--kreati-shadow-xl);
+  font-family: var(--kreati-font-family);
+  max-height: calc(100vh - var(--kreati-space-16));
+  animation: k-dialog-in 0.25s ease;
+  outline: none;
+}
+
+@keyframes k-dialog-in {
+  from { opacity: 0; transform: scale(0.95) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ============================================
+   Sizes
+   ============================================ */
+.k-dialog--xs { width: 320px; }
+.k-dialog--sm { width: 440px; }
+.k-dialog--md { width: 560px; }
+.k-dialog--lg { width: 720px; }
+.k-dialog--xl { width: 900px; }
+
+.k-dialog--full-screen {
+  width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+  border-radius: 0;
+}
+
+/* ============================================
+   Header
+   ============================================ */
+.k-dialog__header {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-2);
+  padding: var(--kreati-space-4) var(--kreati-space-5);
+  border-bottom: 1px solid var(--kreati-gray-200);
+  flex-shrink: 0;
+}
+
+.k-dialog__header-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-2);
+}
+
+.k-dialog__title {
+  font-size: var(--kreati-font-size-md);
+  font-weight: var(--kreati-font-weight-semibold);
+  color: var(--kreati-gray-900);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.k-dialog__header-icon {
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.k-dialog__header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-1);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   Body
+   ============================================ */
+.k-dialog__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--kreati-space-5);
+  font-size: var(--kreati-font-size-sm);
+  color: var(--kreati-gray-700);
+  line-height: var(--kreati-line-height-base);
+}
+
+.k-dialog--no-header .k-dialog__body { padding-top: var(--kreati-space-6); }
+.k-dialog--no-footer .k-dialog__body { padding-bottom: var(--kreati-space-6); }
+
+/* ============================================
+   Footer
+   ============================================ */
+.k-dialog__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--kreati-space-2);
+  padding: var(--kreati-space-3) var(--kreati-space-5);
+  border-top: 1px solid var(--kreati-gray-200);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   Confirm variant
+   ============================================ */
+.k-dialog__confirm-body {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--kreati-space-3);
+}
+
+.k-dialog__confirm-icon {
+  flex-shrink: 0;
+  line-height: 0;
+  margin-top: var(--kreati-space-1);
+}
+
+.k-dialog__confirm-message {
+  flex: 1;
+  font-size: var(--kreati-font-size-sm);
+  color: var(--kreati-gray-700);
+  line-height: var(--kreati-line-height-base);
+}
+
+/* ============================================
+   Maximized
+   ============================================ */
+.k-dialog--maximized {
+  width: calc(100vw - var(--kreati-space-8));
+  height: calc(100vh - var(--kreati-space-8));
+  max-height: calc(100vh - var(--kreati-space-8));
+  border-radius: var(--kreati-radius-lg);
+}
+
+/* ============================================
+   Non-modal (no overlay)
+   ============================================ */
+.k-dialog--non-modal {
+  position: fixed;
+  box-shadow: var(--kreati-shadow-xl);
+}
+
+.k-dialog--non-modal.k-dialog--pos-center { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+.k-dialog--non-modal.k-dialog--pos-top { top: var(--kreati-space-10); left: 50%; transform: translateX(-50%); }
+.k-dialog--non-modal.k-dialog--pos-bottom { bottom: var(--kreati-space-10); left: 50%; transform: translateX(-50%); }
+.k-dialog--non-modal.k-dialog--pos-left { top: 50%; left: var(--kreati-space-10); transform: translateY(-50%); }
+.k-dialog--non-modal.k-dialog--pos-right { top: 50%; right: var(--kreati-space-10); transform: translateY(-50%); }
+.k-dialog--non-modal.k-dialog--pos-top-left { top: var(--kreati-space-10); left: var(--kreati-space-10); }
+.k-dialog--non-modal.k-dialog--pos-top-right { top: var(--kreati-space-10); right: var(--kreati-space-10); }
+.k-dialog--non-modal.k-dialog--pos-bottom-left { bottom: var(--kreati-space-10); left: var(--kreati-space-10); }
+.k-dialog--non-modal.k-dialog--pos-bottom-right { bottom: var(--kreati-space-10); right: var(--kreati-space-10); }
+
+/* ============================================
+   Responsive — fullscreen on small screens
+   ============================================ */
+@media (max-width: 640px) {
+  .k-dialog--responsive {
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .k-dialog-overlay--responsive {
+    padding: 0;
+    align-items: stretch;
+    justify-content: stretch;
+  }
+}

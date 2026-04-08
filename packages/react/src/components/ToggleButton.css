@@ -57,6 +57,11 @@
   cursor: not-allowed;
 }
 
+/* Raised */
+.k-toggle-btn--raised { box-shadow: var(--kreati-shadow-md); }
+.k-toggle-btn--raised:hover:not(:disabled) { box-shadow: var(--kreati-shadow-lg); }
+.k-toggle-btn--raised:active:not(:disabled) { box-shadow: var(--kreati-shadow-sm); }
+
 /* Icon */
 .k-toggle-btn__icon {
   display: inline-flex;

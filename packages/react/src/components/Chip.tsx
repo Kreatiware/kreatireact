@@ -10,6 +10,8 @@ export interface ChipProps {
   size?: 'sm' | 'md' | 'lg';
   /** Leading icon */
   icon?: React.ReactNode;
+  /** Raised shadow effect */
+  raised?: boolean;
   /** Additional CSS class names */
   className?: string;
 }
@@ -35,6 +37,7 @@ export const Chip = forwardRef<HTMLSpanElement, ChipProps>(
       variant = 'primary',
       size = 'md',
       icon,
+      raised = false,
       className = '',
     },
     ref,
@@ -44,6 +47,7 @@ export const Chip = forwardRef<HTMLSpanElement, ChipProps>(
       baseClass,
       `${baseClass}--${variant}`,
       `${baseClass}--${size}`,
+      raised && `${baseClass}--raised`,
       className,
     ]
       .filter(Boolean)

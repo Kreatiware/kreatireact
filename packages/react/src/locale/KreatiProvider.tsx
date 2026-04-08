@@ -38,6 +38,9 @@ export const KreatiProvider: React.FC<KreatiProviderProps> = ({ locale, children
       select: { ...en.select, ...locale.select },
       multiSelect: { ...en.multiSelect, ...locale.multiSelect },
       calendar: { ...en.calendar, ...locale.calendar },
+      slider: { ...en.slider, ...locale.slider },
+      list: { ...en.list, ...locale.list },
+      dialog: { ...en.dialog, ...locale.dialog },
       common: { ...en.common, ...locale.common },
     };
   }, [locale]);

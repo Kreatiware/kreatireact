@@ -19,7 +19,6 @@
   border: 1px solid var(--kreati-popover-border);
   border-radius: var(--kreati-popover-radius);
   box-shadow: var(--kreati-popover-shadow);
-  z-index: var(--kreati-z-dropdown);
   box-sizing: border-box;
   opacity: 0;
   pointer-events: none;
@@ -37,4 +36,39 @@
 @keyframes k-popover-enter {
   from { opacity: 0; transform: scale(0.97); }
   to { opacity: 1; transform: scale(1); }
+}
+
+/* ============================================
+   Confirm variant
+   ============================================ */
+.k-popover__confirm {
+  padding: var(--kreati-space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--kreati-space-3);
+  max-width: 300px;
+}
+
+.k-popover__confirm-body {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--kreati-space-2);
+}
+
+.k-popover__confirm-icon {
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.k-popover__confirm-message {
+  font-family: var(--kreati-font-family);
+  font-size: var(--kreati-font-size-sm);
+  color: var(--kreati-gray-700);
+  line-height: var(--kreati-line-height-sm);
+}
+
+.k-popover__confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--kreati-space-2);
 }

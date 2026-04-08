@@ -22,6 +22,8 @@ export {
   Search,
   Minus,
   CalendarIcon,
+  Maximize,
+  Restore,
   // Deprecated aliases
   Menu,
 } from './icons';

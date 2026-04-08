@@ -16,6 +16,8 @@ export interface ToggleButtonProps {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   /** Disabled state */
   disabled?: boolean;
+  /** Raised shadow effect */
+  raised?: boolean;
   /** Click handler */
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   /** Additional CSS class names */
@@ -45,6 +47,7 @@ export const ToggleButton = forwardRef<HTMLButtonElement, ToggleButtonProps>(
       iconRight,
       size = 'md',
       disabled = false,
+      raised = false,
       onClick,
       className = '',
     },
@@ -55,6 +58,7 @@ export const ToggleButton = forwardRef<HTMLButtonElement, ToggleButtonProps>(
       base,
       `${base}--${size}`,
       active && `${base}--active`,
+      raised && `${base}--raised`,
       disabled && `${base}--disabled`,
       className,
     ].filter(Boolean).join(' ');
