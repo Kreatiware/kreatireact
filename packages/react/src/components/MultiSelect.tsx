@@ -83,6 +83,8 @@ export interface MultiSelectProps {
   name?: string;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
   /** Fires when dropdown opens */
   onOpen?: () => void;
   /** Fires when dropdown closes */
@@ -122,7 +124,8 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
       checkedTemplate, uncheckedTemplate, filterPlaceholder, emptyMessage,
       helperText, error, success = false, helperSeverity,
       disabled = false, readOnly = false, required = false, fullWidth = false,
-      name, className = '', onOpen, onClose, onBlur,
+      name, className = '',
+      style, onOpen, onClose, onBlur,
     },
     ref,
   ) => {
@@ -130,7 +133,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
     const selectId = name || autoId;
     const dropdownId = `${selectId}-listbox`;
     const wrapperRef = useRef<HTMLDivElement>(null);
-    const triggerRef = useRef<HTMLDivElement>(null);
+    const triggerRef = useRef<HTMLElement>(null);
     const panelRef = useRef<HTMLDivElement>(null);
     useImperativeHandle(ref, () => wrapperRef.current as HTMLDivElement);
 
@@ -359,7 +362,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
         {hasLabel && <label className={`${base}__floating-label ${hasValue || open ? `${base}__floating-label--active` : ''}`}>{label}{required && <span className={`${base}__floating-required`} aria-hidden="true">*</span>}</label>}
       </fieldset>
     ) : (
-      <div ref={triggerRef} className={triggerClasses} onClick={handleTriggerClick} onKeyDown={handleKeyDown} tabIndex={disabled ? -1 : 0} role="combobox" aria-expanded={open} aria-haspopup="listbox" aria-owns={dropdownId} aria-controls={dropdownId} aria-disabled={disabled || undefined} aria-required={required || undefined} aria-invalid={hasError || undefined} aria-describedby={describedBy}>
+      <div ref={triggerRef as React.Ref<HTMLDivElement>} className={triggerClasses} onClick={handleTriggerClick} onKeyDown={handleKeyDown} tabIndex={disabled ? -1 : 0} role="combobox" aria-expanded={open} aria-haspopup="listbox" aria-owns={dropdownId} aria-controls={dropdownId} aria-disabled={disabled || undefined} aria-required={required || undefined} aria-invalid={hasError || undefined} aria-describedby={describedBy}>
         {triggerInner}
       </div>
     );
@@ -369,7 +372,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
 
     if (isFloating) {
       return (
-        <div ref={wrapperRef} className={wrapperClasses}>
+        <div ref={wrapperRef} className={wrapperClasses} style={style}>
           {containerEl}
           {dropdownPanel}
           {hasError && errorMessage && <span className={`${base}__error`} id={errorId} role="alert">{errorMessage}</span>}

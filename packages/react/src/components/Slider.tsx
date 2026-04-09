@@ -95,6 +95,8 @@ export interface SliderProps {
   onBlur?: () => void;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
 }
 
 /**
@@ -126,6 +128,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
       disabled = false, readOnly = false, required = false, fullWidth = false,
       maxWidth, minWidth, width, height,
       name, onBlur, className = '',
+      style,
     },
     ref,
   ) => {
@@ -416,6 +419,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
 
     return (
       <FieldWrapper
+        style={style}
         label={label}
         htmlFor={sliderId}
         required={required}

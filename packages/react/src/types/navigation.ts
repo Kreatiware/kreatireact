@@ -1,31 +1,40 @@
 import React from 'react';
 
 /**
- * Base menu item interface for all navigation components
+ * Base menu item interface for all menu and navigation components.
+ * Used by NavigationBar, ContextMenu, MenuBar, SideMenu, Breadcrumb, etc.
  */
 export interface MenuItem {
   /** Unique identifier for the menu item */
-  id?: string;
+  key: string;
   /** Display text for the menu item */
-  label: string;
-  /** URL for navigation - if not provided, will use onClick */
-  href?: string;
-  /** Icon component to display alongside the label */
+  label?: string;
+  /** Icon as string name or JSX element */
   icon?: React.ReactNode;
-  /** Submenu items for dropdown/nested navigation */
+  /** URL for navigation */
+  url?: string;
+  /** Link target — '_blank' opens in new tab */
+  target?: '_blank' | '_self';
+  /** Nested submenu items */
   items?: MenuItem[];
-  /** Custom click handler - used when href is not provided */
-  onClick?: (item: MenuItem) => void;
-  /** Whether the item is currently active/selected */
-  active?: boolean;
+  /** Whether this submenu is expanded (controlled) */
+  expanded?: boolean;
   /** Whether the item is disabled */
   disabled?: boolean;
-  /** Target for link (_blank, _self, etc.) */
-  target?: string;
-  /** Additional CSS class names */
+  /** Whether the item is visible — defaults to true */
+  visible?: boolean;
+  /** Renders a separator line instead of an item */
+  separator?: boolean;
+  /** Click handler */
+  command?: (item: MenuItem) => void;
+  /** Custom render for this item */
+  template?: (item: MenuItem) => React.ReactNode;
+  /** Arbitrary data attached to the item */
+  data?: Record<string, unknown>;
+  /** Additional CSS class name */
   className?: string;
-  /** Custom data attributes */
-  data?: Record<string, any>;
+  /** Inline styles */
+  style?: React.CSSProperties;
 }
 
 /**
@@ -33,23 +42,9 @@ export interface MenuItem {
  */
 export interface NavigationRouter {
   /** Function to navigate to a route */
-  push: (href: string) => void;
+  push: (url: string) => void;
   /** Function to replace current route */
-  replace?: (href: string) => void;
+  replace?: (url: string) => void;
   /** Current pathname */
   pathname?: string;
-}
-
-/**
- * Base props for navigation components
- */
-export interface BaseNavigationProps {
-  /** Array of menu items */
-  items: MenuItem[];
-  /** Router instance for programmatic navigation */
-  router?: NavigationRouter;
-  /** Whether to use router for navigation instead of href */
-  useRouter?: boolean;
-  /** Additional CSS class names */
-  className?: string;
 }

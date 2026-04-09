@@ -33,6 +33,8 @@ export interface TooltipProps {
   template?: (content: React.ReactNode) => React.ReactNode;
   /** Additional CSS class names for the tooltip bubble */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
   /** Trigger element */
   children: React.ReactElement;
 }
@@ -79,6 +81,7 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       mouseTrackTop = 10,
       template,
       className = '',
+      style,
       children,
     },
     ref,
@@ -252,6 +255,7 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       <div
         ref={wrapperRef}
         className={`${base}__wrapper`}
+        style={style}
         aria-describedby={visible ? tooltipId : undefined}
         tabIndex={childDisabled ? 0 : undefined}
         {...hoverHandlers}

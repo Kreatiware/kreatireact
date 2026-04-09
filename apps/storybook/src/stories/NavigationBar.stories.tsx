@@ -28,7 +28,7 @@ const meta = {
     },
     useRouter: {
       control: 'boolean',
-      description: 'Whether to use router for navigation instead of href',
+      description: 'Whether to use router for navigation instead of url',
     },
     leftItems: {
       description: 'Array of navigation items displayed on the left side',
@@ -67,7 +67,7 @@ export const Solid: Story = {
 /**
  * Navigation bar with dropdown menus.
  * Click on items with subitems to toggle the dropdown menu.
- * Supports nested navigation with active and disabled states.
+ * Supports nested navigation with disabled states.
  */
 export const WithDropdowns: Story = {
   args: {
@@ -75,95 +75,108 @@ export const WithDropdowns: Story = {
     transparent: false,
     leftItems: [
       {
+        key: 'products',
         label: 'Products',
         items: [
-          { label: 'Laptops', href: '/products/laptops' },
-          { label: 'Phones', href: '/products/phones' },
-          { label: 'Tablets', href: '/products/tablets' },
-          { label: 'Accessories', href: '/products/accessories' }
-        ]
+          { key: 'laptops', label: 'Laptops', url: '/products/laptops' },
+          { key: 'phones', label: 'Phones', url: '/products/phones' },
+          { key: 'tablets', label: 'Tablets', url: '/products/tablets' },
+          { key: 'accessories', label: 'Accessories', url: '/products/accessories' },
+        ],
       },
       {
+        key: 'services',
         label: 'Services',
         items: [
-          { label: 'Web Development', href: '/services/web' },
-          { label: 'Mobile Apps', href: '/services/mobile' },
-          { label: 'Consulting', href: '/services/consulting', disabled: true }
-        ]
-      }
+          { key: 'web', label: 'Web Development', url: '/services/web' },
+          { key: 'mobile', label: 'Mobile Apps', url: '/services/mobile' },
+          { key: 'consulting', label: 'Consulting', url: '/services/consulting', disabled: true },
+        ],
+      },
     ],
     rightItems: [
       {
+        key: 'resources',
         label: 'Resources',
         items: [
-          { label: 'Documentation', href: '/docs' },
-          { label: 'Blog', href: '/blog' },
-          { label: 'Tutorials', href: '/tutorials' }
-        ]
+          { key: 'docs', label: 'Documentation', url: '/docs' },
+          { key: 'blog', label: 'Blog', url: '/blog' },
+          { key: 'tutorials', label: 'Tutorials', url: '/tutorials' },
+        ],
       },
-      { label: 'Contact', href: '/contact' }
+      { key: 'contact', label: 'Contact', url: '/contact' },
     ],
   },
 };
 
 /**
  * Navigation items with different states.
- * Demonstrates active, disabled, and external link states.
+ * Demonstrates disabled and external link states.
  */
 export const WithStates: Story = {
   args: {
     logo: 'KREATI',
     transparent: false,
     leftItems: [
-      { 
-        label: 'Home', 
-        href: '/',
-        active: true
-      },
-      { 
-        label: 'About', 
-        href: '/about'
-      },
-      { 
-        label: 'Projects', 
-        href: '/projects'
-      }
+      { key: 'home', label: 'Home', url: '/' },
+      { key: 'about', label: 'About', url: '/about' },
+      { key: 'projects', label: 'Projects', url: '/projects' },
     ],
     rightItems: [
-      { 
-        label: 'Disabled Item', 
-        href: '/disabled',
-        disabled: true
-      },
-      { 
-        label: 'External Link', 
-        href: 'https://example.com',
-        target: '_blank'
-      }
+      { key: 'disabled', label: 'Disabled Item', url: '/disabled', disabled: true },
+      { key: 'external', label: 'External Link', url: 'https://example.com', target: '_blank' },
     ],
   },
 };
 
 /**
- * Navigation with custom click handlers.
- * Items can have onClick callbacks instead of href for custom behavior.
+ * Navigation with custom command handlers.
+ * Items can have command callbacks instead of url for custom behavior.
  */
-export const WithClickHandlers: Story = {
+export const WithCommands: Story = {
   args: {
     logo: 'KREATI',
     transparent: false,
     leftItems: [
       {
+        key: 'alert',
         label: 'Alert Demo',
-        onClick: (item) => alert(`Clicked: ${item.label}`)
+        command: (item) => alert(`Clicked: ${item.label}`),
       },
       {
+        key: 'console',
         label: 'Console Demo',
-        onClick: (item) => console.log('Item clicked:', item)
-      }
+        command: (item) => console.log('Item clicked:', item),
+      },
     ],
     rightItems: [
-      { label: 'Regular Link', href: '/link' }
+      { key: 'link', label: 'Regular Link', url: '/link' },
+    ],
+  },
+};
+
+/**
+ * Navigation with separators between items.
+ * Demonstrates the separator feature in menu items.
+ */
+export const WithSeparators: Story = {
+  args: {
+    logo: 'KREATI',
+    transparent: false,
+    leftItems: [
+      {
+        key: 'file',
+        label: 'File',
+        items: [
+          { key: 'new', label: 'New', command: () => console.log('New') },
+          { key: 'open', label: 'Open', command: () => console.log('Open') },
+          { key: 'sep1', separator: true },
+          { key: 'save', label: 'Save', command: () => console.log('Save') },
+        ],
+      },
+    ],
+    rightItems: [
+      { key: 'help', label: 'Help', url: '/help' },
     ],
   },
 };
@@ -177,13 +190,13 @@ export const Transparent: Story = {
     logo: 'KREATI',
     transparent: true,
     leftItems: [
-      { label: 'Home', href: '/' },
-      { label: 'About', href: '/about' },
-      { label: 'Services', href: '/services' }
+      { key: 'home', label: 'Home', url: '/' },
+      { key: 'about', label: 'About', url: '/about' },
+      { key: 'services', label: 'Services', url: '/services' },
     ],
     rightItems: [
-      { label: 'Blog', href: '/blog' },
-      { label: 'Contact', href: '/contact' }
+      { key: 'blog', label: 'Blog', url: '/blog' },
+      { key: 'contact', label: 'Contact', url: '/contact' },
     ],
   },
 };

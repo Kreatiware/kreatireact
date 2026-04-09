@@ -63,6 +63,8 @@ export interface DialogProps {
   onReject?: () => void;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
   /** Dialog body content */
   children?: React.ReactNode;
 }
@@ -99,7 +101,8 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
       message, icon,
       acceptLabel: acceptLabelProp, rejectLabel: rejectLabelProp,
       acceptSeverity = 'primary', rejectSeverity = 'secondary',
-      onAccept, onReject, className = '', children,
+      onAccept, onReject, className = '',
+      style, children,
     },
     ref,
   ) => {
@@ -224,14 +227,14 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
 
     const dialogEl = modal ? (
       <div className={overlayClasses} style={{ zIndex: zDialog }} onClick={closeOnOverlay ? (e) => { if (e.target === e.currentTarget) close(); } : undefined}>
-        <div ref={dialogRef} className={dialogClasses} role="dialog" aria-modal="true" aria-labelledby={hasHeader ? titleId : undefined} aria-describedby={bodyId} tabIndex={-1} onKeyDown={handleKeyDown}>
+        <div ref={dialogRef} className={dialogClasses} style={style} role="dialog" aria-modal="true" aria-labelledby={hasHeader ? titleId : undefined} aria-describedby={bodyId} tabIndex={-1} onKeyDown={handleKeyDown}>
           <LayerContext.Provider value={layer}>
             {dialogContent}
           </LayerContext.Provider>
         </div>
       </div>
     ) : (
-      <div ref={dialogRef} className={dialogClasses} style={{ zIndex: zDialog }} role="dialog" aria-modal="false" aria-labelledby={hasHeader ? titleId : undefined} aria-describedby={bodyId} tabIndex={-1} onKeyDown={handleKeyDown}>
+      <div ref={dialogRef} className={dialogClasses} style={{ ...style, zIndex: zDialog }} role="dialog" aria-modal="false" aria-labelledby={hasHeader ? titleId : undefined} aria-describedby={bodyId} tabIndex={-1} onKeyDown={handleKeyDown}>
         <LayerContext.Provider value={layer}>
           {dialogContent}
         </LayerContext.Provider>

@@ -45,6 +45,8 @@ export interface CheckboxProps {
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
 }
 
 /**
@@ -88,6 +90,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       onChange,
       onBlur,
       className = '',
+      style,
     },
     ref,
   ) => {
@@ -168,7 +171,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     ) : null;
 
     return (
-      <div className={wrapperClasses}>
+      <div className={wrapperClasses} style={style}>
         <label className={`${base}__control`} htmlFor={inputId}>
           <input
             ref={innerRef}

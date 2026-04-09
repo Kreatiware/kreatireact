@@ -12,6 +12,8 @@ export interface BadgeProps {
   children: React.ReactNode;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
 }
 
 /**
@@ -39,6 +41,7 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
       severity = 'danger',
       children,
       className = '',
+      style,
     },
     ref,
   ) => {
@@ -46,7 +49,7 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
     const isEmpty = value == null || value === '';
 
     return (
-      <span ref={ref} className={`${base} ${className}`.trim()}>
+      <span ref={ref} className={`${base} ${className}`.trim()} style={style}>
         {children}
         <span
           className={[

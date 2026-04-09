@@ -34,6 +34,8 @@ export interface ToggleButtonGroupProps {
   disabled?: boolean;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
   /** Children ToggleButtons (alternative to options) */
   children?: React.ReactNode;
 }
@@ -65,6 +67,7 @@ export const ToggleButtonGroup = forwardRef<HTMLDivElement, ToggleButtonGroupPro
       size = 'md',
       disabled = false,
       className = '',
+      style,
       children,
     },
     ref,
@@ -99,7 +102,7 @@ export const ToggleButtonGroup = forwardRef<HTMLDivElement, ToggleButtonGroupPro
 
     if (children) {
       return (
-        <div ref={ref} className={classes} role="group">
+        <div ref={ref} className={classes} style={style} role="group">
           {React.Children.map(children, (child) => {
             if (!React.isValidElement<ToggleButtonProps>(child)) return child;
             const val = child.props.value;

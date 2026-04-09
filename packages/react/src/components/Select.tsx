@@ -72,6 +72,8 @@ export interface SelectProps {
   name?: string;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
   /** Fires when the dropdown opens */
   onOpen?: () => void;
   /** Fires when the dropdown closes */
@@ -135,6 +137,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       fullWidth = false,
       name,
       className = '',
+      style,
       onOpen,
       onClose,
       onInputChange,
@@ -147,7 +150,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     const dropdownId = `${selectId}-listbox`;
     const wrapperRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
-    const triggerRef = useRef<HTMLDivElement>(null);
+    const triggerRef = useRef<HTMLElement>(null);
     const panelRef = useRef<HTMLDivElement>(null);
     useImperativeHandle(ref, () => wrapperRef.current as HTMLDivElement);
 
@@ -437,7 +440,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       </fieldset>
     ) : (
       <div
-        ref={triggerRef}
+        ref={triggerRef as React.Ref<HTMLDivElement>}
         className={triggerClasses}
         onClick={handleTriggerClick}
         onKeyDown={handleKeyDown}
@@ -496,7 +499,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     /* -- Floating variant -- */
     if (isFloating) {
       return (
-        <div ref={wrapperRef} className={wrapperClasses}>
+        <div ref={wrapperRef} className={wrapperClasses} style={style}>
           <div className={`${base}__container ${base}__container--${size}`}>
             {triggerEl}
           </div>

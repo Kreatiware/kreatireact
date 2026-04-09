@@ -79,6 +79,8 @@ export interface InputProps {
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
 }
 
 /**
@@ -138,6 +140,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       onBlur,
       onKeyDown,
       className = '',
+      style,
     },
     ref,
   ) => {
@@ -372,6 +375,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <FieldWrapper
+        style={style}
         label={label}
         htmlFor={inputId}
         required={required}

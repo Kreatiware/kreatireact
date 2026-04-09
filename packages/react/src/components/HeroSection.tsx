@@ -63,6 +63,8 @@ export interface HeroSectionProps {
   ariaLabel?: string;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
 }
 
 /**
@@ -118,6 +120,7 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
       id,
       ariaLabel,
       className = '',
+      style,
     },
     ref,
   ) => {
@@ -173,7 +176,7 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
         ref={ref}
         className={classes}
         id={id}
-        style={sectionStyle}
+        style={{ ...sectionStyle, ...style }}
         role="banner"
         aria-label={ariaLabel || title}
       >

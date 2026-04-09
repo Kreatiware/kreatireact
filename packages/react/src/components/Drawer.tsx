@@ -39,6 +39,8 @@ export interface DrawerProps {
   blockScroll?: boolean;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
   /** Drawer body content */
   children?: React.ReactNode;
 }
@@ -82,6 +84,7 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       closeOnOverlay = true,
       blockScroll = true,
       className = '',
+      style,
       children,
     },
     ref,
@@ -219,6 +222,7 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       <div
         ref={drawerRef}
         className={drawerClasses}
+        style={style}
         role="dialog"
         aria-modal={modal ? 'true' : 'false'}
         aria-labelledby={hasHeader ? titleId : undefined}

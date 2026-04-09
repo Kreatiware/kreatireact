@@ -46,6 +46,8 @@ export interface ButtonProps {
   tooltipPosition?: TooltipPosition;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
   /** Render custom content directly inside the button (template slot) */
   children?: React.ReactNode;
 }
@@ -87,6 +89,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       tooltip,
       tooltipPosition = 'top',
       className = '',
+      style,
       children,
     },
     ref,
@@ -113,10 +116,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={classes}
+        style={{ ...style, ...(width ? { width } : undefined) }}
         disabled={disabled}
         onClick={onClick}
         type={type}
-        style={width ? { width } : undefined}
         aria-label={isIconOnly ? ariaLabel : undefined}
         aria-disabled={disabled || undefined}
       >

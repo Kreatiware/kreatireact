@@ -40,6 +40,8 @@ export interface RadioProps {
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
 }
 
 /**
@@ -79,6 +81,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
       onChange,
       onBlur,
       className = '',
+      style,
     },
     ref,
   ) => {
@@ -147,7 +150,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
     ) : null;
 
     return (
-      <div className={wrapperClasses}>
+      <div className={wrapperClasses} style={style}>
         <label className={`${base}__control`} htmlFor={inputId}>
           <input
             ref={innerRef}

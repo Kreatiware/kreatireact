@@ -50,6 +50,8 @@ export interface PopoverProps {
   panelClassName?: string;
   /** Additional CSS class for the wrapper */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
   /** Trigger element(s) */
   children: React.ReactNode;
 }
@@ -94,6 +96,7 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
       panelClassName = '',
       matchTriggerWidth = true,
       className = '',
+      style,
       children,
     },
     ref,
@@ -220,7 +223,7 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
     ) : null;
 
     return (
-      <div ref={wrapperRef} className={`${base} ${className}`.trim()}>
+      <div ref={wrapperRef} className={`${base} ${className}`.trim()} style={style}>
         <div className={`${base}__trigger`} onClick={toggle}>
           {children}
         </div>

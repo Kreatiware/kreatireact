@@ -61,7 +61,7 @@ export { ToggleButtonGroup } from './components/ToggleButtonGroup';
 export type { ToggleButtonGroupProps, ToggleButtonGroupOption } from './components/ToggleButtonGroup';
 
 // Types
-export type { MenuItem, NavigationRouter, BaseNavigationProps } from './types/navigation';
+export type { MenuItem, NavigationRouter } from './types/navigation';
 
 // Locale
 export { KreatiProvider, useKreatiLocale, en, es } from './locale';

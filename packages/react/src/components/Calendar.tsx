@@ -173,6 +173,8 @@ export interface CalendarProps {
   onBlur?: () => void;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
 }
 
 const isSameDay = (a: Date, b: Date) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
@@ -266,7 +268,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
       dayTemplate, unstyledDays = false, presets = false, variant = 'floating', size = 'md',
       label, placeholder, helperText, error, success = false, helperSeverity,
       disabled = false, readOnly = false, required = false, fullWidth = false,
-      name, onBlur, className = '',
+      name, onBlur, className = '', style,
     },
     ref,
   ) => {
@@ -764,7 +766,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
 
     if (isFloating) {
       return (
-        <div ref={wrapperRef} className={wrapperClasses}>
+        <div ref={wrapperRef} className={wrapperClasses} style={style}>
           {inputEl}
           {hasError && errorMessage && <span className={`${base}__error`} id={errorId} role="alert">{errorMessage}</span>}
           {helperText && <span className={[`${base}__helper`, helperSeverity && `${base}__helper--${helperSeverity}`].filter(Boolean).join(' ')} id={helperId}>{helperText}</span>}

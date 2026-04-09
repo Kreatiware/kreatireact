@@ -57,6 +57,8 @@ export interface ListProps {
   maxHeight?: string | number;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
 }
 
 /**
@@ -93,6 +95,7 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
       size = 'md',
       maxHeight,
       className = '',
+      style,
     },
     ref,
   ) => {
@@ -180,7 +183,7 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
 
     const base = 'k-list';
     const containerClasses = [base, size !== 'md' && `${base}--${size}`, className].filter(Boolean).join(' ');
-    const style: React.CSSProperties | undefined = maxHeight ? { maxHeight } : undefined;
+    const mergedStyle: React.CSSProperties | undefined = maxHeight ? { ...style, maxHeight } : style;
 
     const groups = useMemo(() => {
       const map = new Map<string | undefined, ListItem[]>();
@@ -271,7 +274,7 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
         aria-multiselectable={multiple || undefined}
         tabIndex={0}
         onKeyDown={handleKeyDown}
-        style={style}
+        style={mergedStyle}
         aria-activedescendant={focusedIndex >= 0 ? `${listId}-opt-${focusedIndex}` : undefined}
       >
         {filterable && (

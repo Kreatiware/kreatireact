@@ -24,6 +24,8 @@ export interface FieldWrapperProps {
   fullWidth?: boolean;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
   /** Content (Input, Textarea, Select, etc.) */
   children: React.ReactNode;
 }
@@ -61,6 +63,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
       disabled = false,
       fullWidth = false,
       className = '',
+      style,
       children,
     },
     ref,
@@ -91,7 +94,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
     const helperId = htmlFor ? `${htmlFor}-helper` : undefined;
 
     return (
-      <div ref={ref} className={classes}>
+      <div ref={ref} className={classes} style={style}>
         {label && (
           <label className={`${base}__label`} htmlFor={htmlFor}>
             {label}

@@ -46,6 +46,8 @@ export interface RadioGroupProps {
   onBlur?: () => void;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
 }
 
 /**
@@ -90,6 +92,7 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
       name,
       onBlur,
       className = '',
+      style,
     },
     ref,
   ) => {
@@ -141,14 +144,14 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
 
     if (!hasWrapper) {
       return (
-        <div ref={ref} className={`${base} ${className}`.trim()}>
+        <div ref={ref} className={`${base} ${className}`.trim()} style={style}>
           {content}
         </div>
       );
     }
 
     return (
-      <div ref={ref} className={`${base} ${fullWidth ? `${base}--full-width` : ''} ${className}`.trim()}>
+      <div ref={ref} className={`${base} ${fullWidth ? `${base}--full-width` : ''} ${className}`.trim()} style={style}>
         <FieldWrapper
           label={label}
           htmlFor={groupId}

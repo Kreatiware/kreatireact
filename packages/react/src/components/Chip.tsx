@@ -14,6 +14,8 @@ export interface ChipProps {
   raised?: boolean;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
 }
 
 /**
@@ -39,6 +41,7 @@ export const Chip = forwardRef<HTMLSpanElement, ChipProps>(
       icon,
       raised = false,
       className = '',
+      style,
     },
     ref,
   ) => {
@@ -54,7 +57,7 @@ export const Chip = forwardRef<HTMLSpanElement, ChipProps>(
       .join(' ');
 
     return (
-      <span ref={ref} className={classes} role="status">
+      <span ref={ref} className={classes} style={style} role="status">
         {icon && <span className="k-chip__icon" aria-hidden="true">{icon}</span>}
         {children}
       </span>

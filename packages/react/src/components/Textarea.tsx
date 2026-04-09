@@ -76,6 +76,8 @@ export interface TextareaProps {
   onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
 }
 
 /**
@@ -137,6 +139,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       onBlur,
       onKeyDown,
       className = '',
+      style,
     },
     ref,
   ) => {
@@ -353,6 +356,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     return (
       <FieldWrapper
+        style={style}
         label={label}
         htmlFor={textareaId}
         required={required}

@@ -22,6 +22,8 @@ export interface ToggleButtonProps {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   /** Additional CSS class names */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
 }
 
 /**
@@ -50,6 +52,7 @@ export const ToggleButton = forwardRef<HTMLButtonElement, ToggleButtonProps>(
       raised = false,
       onClick,
       className = '',
+      style,
     },
     ref,
   ) => {
@@ -68,6 +71,7 @@ export const ToggleButton = forwardRef<HTMLButtonElement, ToggleButtonProps>(
         ref={ref}
         type="button"
         className={classes}
+        style={style}
         disabled={disabled}
         onClick={onClick}
         aria-pressed={active}
