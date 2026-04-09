@@ -31,6 +31,8 @@ export interface MenuItem {
   template?: (item: MenuItem) => React.ReactNode;
   /** Arbitrary data attached to the item */
   data?: Record<string, unknown>;
+  /** Position of submenu relative to this item (overrides component default) */
+  submenuPosition?: 'right' | 'left' | 'top' | 'bottom';
   /** Additional CSS class name */
   className?: string;
   /** Inline styles */

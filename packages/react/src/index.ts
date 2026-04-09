@@ -7,6 +7,18 @@ export { Chip } from './components/Chip';
 export type { ChipProps } from './components/Chip';
 export { NavigationBar } from './components/NavigationBar';
 export type { NavigationBarProps } from './components/NavigationBar';
+export { TabMenu } from './components/TabMenu';
+export type { TabMenuProps } from './components/TabMenu';
+export { SideMenu } from './components/SideMenu';
+export type { SideMenuProps } from './components/SideMenu';
+export { Breadcrumb } from './components/Breadcrumb';
+export type { BreadcrumbProps } from './components/Breadcrumb';
+export { ContextMenu } from './components/ContextMenu';
+export type { ContextMenuProps } from './components/ContextMenu';
+export { MenuBar } from './components/MenuBar';
+export type { MenuBarProps } from './components/MenuBar';
+export { DockMenu } from './components/DockMenu';
+export type { DockMenuProps } from './components/DockMenu';
 export { HeroSection } from './components/HeroSection';
 export type { HeroSectionProps } from './components/HeroSection';
 export { DynamicSvg } from './components/DynamicSvg';
@@ -62,6 +74,7 @@ export type { ToggleButtonGroupProps, ToggleButtonGroupOption } from './componen
 
 // Types
 export type { MenuItem, NavigationRouter } from './types/navigation';
+export { resolveIcon, renderMenuIcon } from './components/resolveIcon';
 
 // Locale
 export { KreatiProvider, useKreatiLocale, en, es } from './locale';
@@ -74,6 +87,12 @@ import './components/Button.css';
 import './components/Badge.css';
 import './components/Chip.css';
 import './components/NavigationBar.css';
+import './components/TabMenu.css';
+import './components/SideMenu.css';
+import './components/Breadcrumb.css';
+import './components/ContextMenu.css';
+import './components/MenuBar.css';
+import './components/DockMenu.css';
 import './components/HeroSection.css';
 import './components/DynamicSvg.css';
 import './components/FieldWrapper.css';

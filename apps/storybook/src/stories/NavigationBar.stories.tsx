@@ -30,10 +30,10 @@ const meta = {
       control: 'boolean',
       description: 'Whether to use router for navigation instead of url',
     },
-    leftItems: {
+    start: {
       description: 'Array of navigation items displayed on the left side',
     },
-    rightItems: {
+    end: {
       description: 'Array of navigation items displayed on the right side',
     },
   },
@@ -73,7 +73,7 @@ export const WithDropdowns: Story = {
   args: {
     logo: 'KREATI',
     transparent: false,
-    leftItems: [
+    start: [
       {
         key: 'products',
         label: 'Products',
@@ -94,7 +94,7 @@ export const WithDropdowns: Story = {
         ],
       },
     ],
-    rightItems: [
+    end: [
       {
         key: 'resources',
         label: 'Resources',
@@ -117,12 +117,12 @@ export const WithStates: Story = {
   args: {
     logo: 'KREATI',
     transparent: false,
-    leftItems: [
+    start: [
       { key: 'home', label: 'Home', url: '/' },
       { key: 'about', label: 'About', url: '/about' },
       { key: 'projects', label: 'Projects', url: '/projects' },
     ],
-    rightItems: [
+    end: [
       { key: 'disabled', label: 'Disabled Item', url: '/disabled', disabled: true },
       { key: 'external', label: 'External Link', url: 'https://example.com', target: '_blank' },
     ],
@@ -137,7 +137,7 @@ export const WithCommands: Story = {
   args: {
     logo: 'KREATI',
     transparent: false,
-    leftItems: [
+    start: [
       {
         key: 'alert',
         label: 'Alert Demo',
@@ -149,7 +149,7 @@ export const WithCommands: Story = {
         command: (item) => console.log('Item clicked:', item),
       },
     ],
-    rightItems: [
+    end: [
       { key: 'link', label: 'Regular Link', url: '/link' },
     ],
   },
@@ -163,7 +163,7 @@ export const WithSeparators: Story = {
   args: {
     logo: 'KREATI',
     transparent: false,
-    leftItems: [
+    start: [
       {
         key: 'file',
         label: 'File',
@@ -175,7 +175,7 @@ export const WithSeparators: Story = {
         ],
       },
     ],
-    rightItems: [
+    end: [
       { key: 'help', label: 'Help', url: '/help' },
     ],
   },
@@ -189,12 +189,12 @@ export const Transparent: Story = {
   args: {
     logo: 'KREATI',
     transparent: true,
-    leftItems: [
+    start: [
       { key: 'home', label: 'Home', url: '/' },
       { key: 'about', label: 'About', url: '/about' },
       { key: 'services', label: 'Services', url: '/services' },
     ],
-    rightItems: [
+    end: [
       { key: 'blog', label: 'Blog', url: '/blog' },
       { key: 'contact', label: 'Contact', url: '/contact' },
     ],

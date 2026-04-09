@@ -104,8 +104,8 @@
   --kreati-font-family: 'Raleway', 'Roboto', 'Helvetica', sans-serif;
 
   /* ─── Typography — Font Sizes (8-step scale) ────────────────────────── */
-  --kreati-font-size-xxs: 12px;
-  --kreati-font-size-xs: 13px;
+  --kreati-font-size-xxs: 10px;
+  --kreati-font-size-xs: 12px;
   --kreati-font-size-sm: 14px;
   --kreati-font-size-base: 16px;
   --kreati-font-size-md: 18px;
@@ -122,6 +122,15 @@
   --kreati-line-height-lg: 1.6;
   --kreati-line-height-xl: 1.6;
   --kreati-line-height-xxl: 1.65;
+
+  /* ─── Typography — Letter Spacing ──────────────────────────────────── */
+  --kreati-letter-spacing-tighter: -0.02em;
+  --kreati-letter-spacing-tight: -0.01em;
+  --kreati-letter-spacing-normal: 0;
+  --kreati-letter-spacing-wide: 0.01em;
+  --kreati-letter-spacing-wider: 0.025em;
+  --kreati-letter-spacing-widest: 0.05em;
+  --kreati-letter-spacing-caps: 0.1em;
 
   /* ─── Typography — Font Weights ─────────────────────────────────────── */
   --kreati-font-weight-light: 300;
@@ -168,9 +177,9 @@
   /* ─── Border Radius ─────────────────────────────────────────────────── */
   --kreati-radius-none: 0;
   --kreati-radius-sm: 4px;
-  --kreati-radius-md: 6px;
-  --kreati-radius-lg: 8px;
-  --kreati-radius-xl: 12px;
+  --kreati-radius-md: 8px;
+  --kreati-radius-lg: 12px;
+  --kreati-radius-xl: 16px;
   --kreati-radius-full: 9999px;
 
   /* ─── Shadows ───────────────────────────────────────────────────────── */

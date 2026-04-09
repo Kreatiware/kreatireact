@@ -3,6 +3,7 @@ import './NavigationBar.css';
 import { MenuItem, NavigationRouter } from '../types/navigation';
 import { CHEVRON_DOWN_PATH, HAMBURGER_RECTS } from './iconPaths';
 import { Drawer } from './Drawer';
+import { SideMenu } from './SideMenu';
 
 /**
  * Props for the NavigationBar component
@@ -10,10 +11,10 @@ import { Drawer } from './Drawer';
 export interface NavigationBarProps {
   /** Logo content - can be a string or React component */
   logo?: React.ReactNode | string;
-  /** Array of navigation items displayed on the left side */
-  leftItems?: MenuItem[];
-  /** Array of navigation items displayed on the right side */
-  rightItems?: MenuItem[];
+  /** Array of navigation items displayed at the start (left) */
+  start?: MenuItem[];
+  /** Array of navigation items displayed at the end (right) */
+  end?: MenuItem[];
   /** Router instance for programmatic navigation */
   router?: NavigationRouter;
   /** Whether to use router for navigation instead of url */
@@ -41,11 +42,11 @@ export interface NavigationBarProps {
  * ```tsx
  * <NavigationBar
  *   logo="BRAND"
- *   leftItems={[
+ *   start={[
  *     { key: 'products', label: 'Products', items: [{ key: 'web', label: 'Web', url: '/web' }] },
  *     { key: 'about', label: 'About', url: '/about' },
  *   ]}
- *   rightItems={[{ key: 'contact', label: 'Contact', url: '/contact' }]}
+ *   end={[{ key: 'contact', label: 'Contact', url: '/contact' }]}
  *   transparent={true}
  * />
  * ```
@@ -54,11 +55,11 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
   (
     {
       logo = 'LOGO',
-      leftItems = [
+      start = [
         { key: 'about', label: 'About', url: '#about' },
         { key: 'projects', label: 'Projects', url: '#projects' },
       ],
-      rightItems = [
+      end = [
         { key: 'shop', label: 'Shop', url: '#shop' },
         { key: 'contact', label: 'Contact', url: '#contact' },
       ],
@@ -290,7 +291,7 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
       return linkElement;
     };
 
-    const allItems = [...leftItems, ...rightItems];
+    const allItems = [...start, ...end];
 
     return (
       <nav ref={ref} className={classes} style={style} role="navigation" aria-label="Main navigation">
@@ -298,7 +299,7 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
           {!isMobile && (
             <>
               <div className="kreati-navbar__section kreati-navbar__section--left">
-                {leftItems.map((item, index) => renderNavItem(item, index))}
+                {start.map((item, index) => renderNavItem(item, index))}
               </div>
 
               <div className="kreati-navbar__logo">
@@ -310,7 +311,7 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
               </div>
 
               <div className="kreati-navbar__section kreati-navbar__section--right">
-                {rightItems.map((item, index) => renderNavItem(item, index))}
+                {end.map((item, index) => renderNavItem(item, index))}
               </div>
             </>
           )}
@@ -350,9 +351,14 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
             size="sm"
             closable
           >
-            <div className="kreati-navbar__drawer-items">
-              {allItems.map((item, index) => renderNavItem(item, index))}
-            </div>
+            <SideMenu
+              items={allItems}
+              onItemSelect={(key, item) => {
+                if (!item.items || item.items.length === 0) {
+                  closeMobile();
+                }
+              }}
+            />
           </Drawer>
         )}
       </nav>

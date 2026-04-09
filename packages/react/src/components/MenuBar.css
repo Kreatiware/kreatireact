@@ -1,0 +1,205 @@
+.k-menubar {
+  display: flex;
+  align-items: center;
+  background: var(--kreati-menubar-bg, var(--kreati-white, #ffffff));
+  border-bottom: 1px solid var(--kreati-menubar-border-color, var(--kreati-gray-200, #e5e7eb));
+  padding: 0 var(--kreati-menubar-padding, var(--kreati-space-1, 4px));
+  font-family: var(--kreati-font-family);
+  min-height: var(--kreati-menubar-height, 36px);
+}
+
+.k-menubar__spacer {
+  flex: 1;
+}
+
+/* Vertical orientation */
+.k-menubar--vertical {
+  flex-direction: column;
+  align-items: stretch;
+  border-bottom: none;
+  border-right: 1px solid var(--kreati-menubar-border-color, var(--kreati-gray-200, #e5e7eb));
+  width: var(--kreati-menubar-vertical-width, fit-content);
+  height: var(--kreati-menubar-vertical-height, auto);
+  min-height: auto;
+}
+
+.k-menubar--vertical .k-menubar__top-item {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.k-menubar--vertical .k-menubar__spacer {
+  flex: 1;
+}
+
+.k-menubar--vertical .k-menubar__top-separator {
+  width: auto;
+  height: 1px;
+  margin: var(--kreati-menubar-separator-margin, var(--kreati-space-1, 4px) 0);
+}
+
+.k-menubar__top-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kreati-menubar-item-gap, var(--kreati-space-1, 4px));
+  padding: var(--kreati-menubar-item-padding, var(--kreati-space-1, 4px) var(--kreati-space-3, 12px));
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--kreati-font-family);
+  font-size: var(--kreati-menubar-font-size, var(--kreati-font-size-sm, 14px));
+  color: var(--kreati-menubar-color, var(--kreati-gray-700, #374151));
+  border-radius: var(--kreati-menubar-item-radius, var(--kreati-radius-sm, 4px));
+  transition: background 0.12s ease, color 0.12s ease;
+  white-space: nowrap;
+}
+
+.k-menubar__top-item:hover:not(:disabled) {
+  background: var(--kreati-menubar-hover-bg, var(--kreati-gray-100, #f3f4f6));
+}
+
+.k-menubar__top-item--open {
+  background: var(--kreati-menubar-active-bg, var(--kreati-primary-50, #e0f2fe));
+  color: var(--kreati-menubar-active-color, var(--kreati-primary-500));
+  font-weight: var(--kreati-menubar-active-font-weight, 600);
+}
+
+.k-menubar__top-item:focus-visible {
+  outline: 2px solid var(--kreati-menubar-focus-color, var(--kreati-primary-500));
+  outline-offset: -2px;
+}
+
+.k-menubar__top-item--disabled {
+  color: var(--kreati-menubar-disabled-color, var(--kreati-gray-300, #d1d5db));
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.k-menubar__top-separator {
+  width: 1px;
+  align-self: stretch;
+  margin: var(--kreati-menubar-separator-margin, var(--kreati-space-1, 4px) 0);
+  background: var(--kreati-menubar-separator-color, var(--kreati-gray-200, #e5e7eb));
+}
+
+.k-menubar__icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.k-menubar__label {
+  flex: 1;
+}
+
+.k-menubar__chevron {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  opacity: 0.5;
+  transition: transform 0.15s ease;
+}
+
+.k-menubar--disabled .k-menubar__top-item {
+  cursor: not-allowed;
+}
+
+/* Mobile */
+.k-menubar--mobile {
+  justify-content: flex-start;
+}
+
+.k-menubar--mobile-end {
+  justify-content: flex-end;
+}
+
+.k-menubar__hamburger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--kreati-menubar-item-padding, var(--kreati-space-1, 4px) var(--kreati-space-3, 12px));
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--kreati-menubar-color, var(--kreati-gray-700, #374151));
+  border-radius: var(--kreati-menubar-item-radius, var(--kreati-radius-sm, 4px));
+  transition: background 0.12s ease;
+}
+
+.k-menubar__hamburger:hover {
+  background: var(--kreati-menubar-hover-bg, var(--kreati-gray-100, #f3f4f6));
+}
+
+.k-menubar__hamburger:focus-visible {
+  outline: 2px solid var(--kreati-menubar-focus-color, var(--kreati-primary-500));
+  outline-offset: -2px;
+}
+
+/* Inline group (panel/tree variants) */
+.k-menubar__inline-group {
+  width: 100%;
+}
+
+.k-menubar__inline-submenu {
+  overflow: hidden;
+  padding: var(--kreati-menubar-inline-submenu-padding, var(--kreati-space-1, 4px) 0);
+}
+
+/* Panel variant — prominent headers */
+.k-menubar--panel .k-menubar__inline-group {
+  margin-bottom: var(--kreati-menubar-panel-gap, var(--kreati-space-2, 8px));
+}
+
+.k-menubar__top-item--panel {
+  background: var(--kreati-menubar-panel-header-bg, var(--kreati-gray-50, #f9fafb));
+  border: 1px solid var(--kreati-menubar-border-color, var(--kreati-gray-200, #e5e7eb));
+  border-radius: var(--kreati-menubar-panel-radius, var(--kreati-radius-sm, 4px));
+  font-weight: var(--kreati-menubar-panel-header-weight, 600);
+  padding: var(--kreati-menubar-panel-header-padding, var(--kreati-space-3, 12px) var(--kreati-space-3, 12px));
+}
+
+.k-menubar__top-item--panel.k-menubar__top-item--expanded {
+  background: var(--kreati-menubar-panel-header-active-bg, var(--kreati-primary-50, #e0f2fe));
+  color: var(--kreati-menubar-active-color, var(--kreati-primary-500));
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.k-menubar--panel .k-menubar__inline-submenu {
+  border: 1px solid var(--kreati-menubar-border-color, var(--kreati-gray-200, #e5e7eb));
+  border-top: none;
+  border-radius: 0 0 var(--kreati-menubar-panel-radius, var(--kreati-radius-sm, 4px)) var(--kreati-menubar-panel-radius, var(--kreati-radius-sm, 4px));
+  padding: var(--kreati-menubar-panel-submenu-padding, var(--kreati-space-2, 8px) 0);
+  animation: k-menubar-expand 0.2s ease;
+}
+
+/* Tree variant — inline expand */
+.k-menubar__top-item--tree {
+  font-weight: var(--kreati-menubar-tree-header-weight, 600);
+  padding: var(--kreati-menubar-tree-header-padding, var(--kreati-space-3, 12px) var(--kreati-space-3, 12px));
+  font-size: var(--kreati-menubar-tree-header-font-size, var(--kreati-font-size-sm, 14px));
+}
+
+.k-menubar__top-item--tree.k-menubar__top-item--expanded {
+  color: var(--kreati-menubar-active-color, var(--kreati-primary-500));
+}
+
+/* Items without children in panel/tree should match header style */
+.k-menubar--panel .k-menubar__top-item:not(.k-menubar__top-item--panel),
+.k-menubar--tree .k-menubar__top-item:not(.k-menubar__top-item--tree) {
+  padding: var(--kreati-menubar-panel-header-padding, var(--kreati-space-3, 12px) var(--kreati-space-3, 12px));
+}
+
+/* Chevron animation for inline */
+.k-menubar__chevron {
+  transition: transform 0.2s ease;
+}
+
+.k-menubar__chevron--open {
+  transform: rotate(180deg);
+}
+
+@keyframes k-menubar-expand {
+  from { opacity: 0; max-height: 0; }
+  to { opacity: 1; max-height: 500px; }
+}
