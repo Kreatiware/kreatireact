@@ -1,5 +1,12 @@
 # @kreatiware/react
 
+## 0.10.0
+
+### Minor Changes
+
+- 2215a32: feat: add menu components
+- 9e416d3: feat(react): add panels and surfaces components
+
 ## 0.9.1
 
 ### Patch Changes
