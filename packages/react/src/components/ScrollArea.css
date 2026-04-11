@@ -1,0 +1,8 @@
+/* ============================================
+   ScrollArea — Scrollable content container
+   ============================================ */
+.k-scroll-area {
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+}

@@ -1,0 +1,81 @@
+.k-panel {
+  background: var(--kreati-panel-bg, var(--kreati-white, #ffffff));
+  border: 1px solid var(--kreati-panel-border-color, var(--kreati-gray-200, #e5e7eb));
+  border-radius: var(--kreati-panel-radius, var(--kreati-radius-lg, 12px));
+  overflow: hidden;
+  font-family: var(--kreati-font-family);
+  color: var(--kreati-panel-color, var(--kreati-gray-700, #374151));
+}
+
+/* Header */
+.k-panel__header {
+  display: flex;
+  align-items: center;
+  padding: var(--kreati-panel-header-padding, var(--kreati-space-4, 16px));
+  background: var(--kreati-panel-header-bg, var(--kreati-gray-50, #f9fafb));
+  border-bottom: 1px solid var(--kreati-panel-border-color, var(--kreati-gray-200, #e5e7eb));
+}
+
+.k-panel__header--toggleable {
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease;
+}
+
+.k-panel__header--toggleable:hover {
+  background: var(--kreati-panel-header-hover-bg, var(--kreati-gray-100, #f3f4f6));
+}
+
+.k-panel__header--toggleable:focus-visible {
+  outline: 2px solid var(--kreati-panel-focus-color, var(--kreati-primary-500));
+  outline-offset: -2px;
+}
+
+.k-panel__title {
+  flex: 1;
+  font-size: var(--kreati-panel-title-font-size, var(--kreati-font-size-base, 16px));
+  font-weight: var(--kreati-panel-title-font-weight, var(--kreati-font-weight-semibold, 600));
+  color: var(--kreati-panel-title-color, var(--kreati-gray-900, #111827));
+}
+
+.k-panel__chevron {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.k-panel__chevron--open {
+  transform: rotate(180deg);
+}
+
+/* Content — animated collapse */
+.k-panel__content {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.25s ease;
+}
+
+.k-panel--collapsed .k-panel__content {
+  grid-template-rows: 0fr;
+}
+
+.k-panel__content-inner {
+  overflow: hidden;
+}
+
+/* Collapsed: hide border */
+.k-panel--collapsed .k-panel__header {
+  border-bottom-color: transparent;
+}
+
+/* Body */
+.k-panel__body {
+  padding: var(--kreati-panel-body-padding, var(--kreati-space-4, 16px));
+}
+
+/* Footer */
+.k-panel__footer {
+  padding: var(--kreati-panel-footer-padding, var(--kreati-space-4, 16px));
+  border-top: 1px solid var(--kreati-panel-border-color, var(--kreati-gray-200, #e5e7eb));
+}

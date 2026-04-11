@@ -65,7 +65,8 @@
   color: var(--kreati-contextmenu-hover-color, var(--kreati-primary-500));
 }
 
-.k-contextmenu__item--open {
+.k-contextmenu__item--open,
+.k-contextmenu__item--open:hover {
   background: var(--kreati-contextmenu-active-bg, var(--kreati-primary-50, #e0f2fe));
   color: var(--kreati-contextmenu-active-color, var(--kreati-primary-500));
   font-weight: var(--kreati-contextmenu-active-font-weight, 600);

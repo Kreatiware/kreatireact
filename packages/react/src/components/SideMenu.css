@@ -54,6 +54,12 @@
   font-weight: var(--kreati-sidemenu-parent-font-weight, 500);
 }
 
+.k-sidemenu__item--expanded,
+.k-sidemenu__item--expanded:hover {
+  background: var(--kreati-sidemenu-active-bg, var(--kreati-primary-50, #e0f2fe));
+  color: var(--kreati-sidemenu-active-color, var(--kreati-primary-500));
+}
+
 .k-sidemenu__icon {
   display: inline-flex;
   align-items: center;

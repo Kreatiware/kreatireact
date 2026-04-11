@@ -418,4 +418,26 @@
   --kreati-slider-thumb-size-md: 18px;
   --kreati-slider-thumb-size-lg: 22px;
   --kreati-slider-thumb-size-xl: 26px;
+
+  /* ─── Component Tokens — Divider ──────────────────────────────────── */
+  --kreati-divider-color: var(--kreati-gray-200);
+  --kreati-divider-width: 1px;
+  --kreati-divider-style: solid;
+
+  /* ─── Component Tokens — Tabs ─────────────────────────────────────── */
+  --kreati-tabs-panel-padding: var(--kreati-space-4);
+
+  /* ─── Component Tokens — Stepper ──────────────────────────────────── */
+  --kreati-stepper-indicator-size: 32px;
+  --kreati-stepper-active-bg: var(--kreati-primary-500);
+  --kreati-stepper-active-color: var(--kreati-white);
+  --kreati-stepper-active-label: var(--kreati-gray-900);
+  --kreati-stepper-completed-bg: var(--kreati-primary-500);
+  --kreati-stepper-completed-color: var(--kreati-white);
+  --kreati-stepper-completed-label: var(--kreati-gray-700);
+  --kreati-stepper-pending-bg: var(--kreati-gray-200);
+  --kreati-stepper-pending-color: var(--kreati-gray-500);
+  --kreati-stepper-connector-bg: var(--kreati-gray-200);
+  --kreati-stepper-connector-active-bg: var(--kreati-primary-500);
+  --kreati-stepper-content-padding: var(--kreati-space-4) 0;
 }

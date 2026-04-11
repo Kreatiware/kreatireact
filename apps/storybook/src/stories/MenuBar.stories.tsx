@@ -229,6 +229,43 @@ export const VerticalPanelWithSlots: Story = {
   ),
 };
 
+/** Panel variant — nested submenus. */
+export const VerticalPanelNested: Story = {
+  render: () => (
+    <div style={{ height: 500, display: 'flex' }}>
+      <MenuBar
+        orientation="vertical"
+        variant="panel"
+        style={{ height: '100%', width: 260 }}
+        items={[
+          { key: 'general', label: 'General', icon: 'check', items: [
+            { key: 'profile', label: 'Profile' },
+            { key: 'appearance', label: 'Appearance', items: [
+              { key: 'theme', label: 'Theme' },
+              { key: 'fonts', label: 'Fonts' },
+              { key: 'colors', label: 'Colors', items: [
+                { key: 'primary', label: 'Primary' },
+                { key: 'secondary', label: 'Secondary' },
+              ]},
+            ]},
+            { key: 'language', label: 'Language' },
+          ]},
+          { key: 'security', label: 'Security', icon: 'search', items: [
+            { key: 'password', label: 'Password' },
+            { key: 'advanced', label: 'Advanced', items: [
+              { key: 'twofa', label: 'Two-Factor Auth' },
+              { key: 'sessions', label: 'Active Sessions' },
+            ]},
+          ]},
+          { key: 'about', label: 'About' },
+        ]}
+        onItemSelect={(key) => console.log(key)}
+      />
+      <div style={{ flex: 1, padding: 16, color: 'var(--kreati-gray-500)' }}>Panel with nested submenus — verify active styles on expanded headers.</div>
+    </div>
+  ),
+};
+
 // ─── VERTICAL TREE ──────────────────────────────────────
 
 /** Tree variant — inline expand like a file explorer. */

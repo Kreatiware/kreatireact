@@ -220,6 +220,7 @@ export const SideMenu = forwardRef<HTMLElement, SideMenuProps>(
         isActive && `${base}__item--active`,
         isDisabled && `${base}__item--disabled`,
         hasChildren && `${base}__item--parent`,
+        hasChildren && isExpanded && `${base}__item--expanded`,
         item.className,
       ]
         .filter(Boolean)

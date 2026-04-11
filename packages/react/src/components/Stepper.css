@@ -1,0 +1,121 @@
+/* ============================================
+   Stepper
+   ============================================ */
+.k-stepper {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--kreati-font-family);
+}
+
+/* ─── Header (steps bar) ──────────────────────── */
+.k-stepper__header {
+  display: flex;
+  align-items: center;
+}
+
+.k-stepper--vertical .k-stepper__header {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* ─── Step item ───────────────────────────────── */
+.k-stepper__step {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-2);
+  cursor: default;
+}
+
+.k-stepper--label-bottom .k-stepper__step {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.k-stepper__step--clickable {
+  cursor: pointer;
+}
+
+.k-stepper__step--clickable:hover .k-stepper__indicator {
+  box-shadow: 0 0 0 4px var(--kreati-primary-alpha-8);
+}
+
+.k-stepper__step--clickable:focus-visible .k-stepper__indicator {
+  outline: 2px solid var(--kreati-primary-500);
+  outline-offset: 2px;
+}
+
+/* ─── Indicator (circle) ──────────────────────── */
+.k-stepper__indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--kreati-stepper-indicator-size, 32px);
+  height: var(--kreati-stepper-indicator-size, 32px);
+  border-radius: var(--kreati-radius-full);
+  font-size: var(--kreati-font-size-sm);
+  font-weight: var(--kreati-font-weight-semibold);
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  background: var(--kreati-stepper-pending-bg, var(--kreati-gray-200));
+  color: var(--kreati-stepper-pending-color, var(--kreati-gray-500));
+}
+
+.k-stepper__step--active .k-stepper__indicator {
+  background: var(--kreati-stepper-active-bg, var(--kreati-primary-500));
+  color: var(--kreati-stepper-active-color, var(--kreati-white));
+}
+
+.k-stepper__step--completed .k-stepper__indicator {
+  background: var(--kreati-stepper-completed-bg, var(--kreati-primary-500));
+  color: var(--kreati-stepper-completed-color, var(--kreati-white));
+}
+
+/* ─── Label ───────────────────────────────────── */
+.k-stepper__label {
+  font-size: var(--kreati-font-size-sm);
+  color: var(--kreati-gray-500);
+  white-space: nowrap;
+}
+
+.k-stepper__step--active .k-stepper__label {
+  color: var(--kreati-stepper-active-label, var(--kreati-gray-900));
+  font-weight: var(--kreati-font-weight-semibold);
+}
+
+.k-stepper__step--completed .k-stepper__label {
+  color: var(--kreati-stepper-completed-label, var(--kreati-gray-700));
+}
+
+/* ─── Connector line ──────────────────────────── */
+.k-stepper__connector {
+  flex: 1;
+  height: 2px;
+  min-width: var(--kreati-space-6);
+  margin: 0 var(--kreati-space-2);
+  background: var(--kreati-stepper-connector-bg, var(--kreati-gray-200));
+  transition: background 0.2s ease;
+}
+
+.k-stepper__connector--completed {
+  background: var(--kreati-stepper-connector-active-bg, var(--kreati-primary-500));
+}
+
+/* ─── Label bottom: connector aligns with indicators ── */
+.k-stepper--label-bottom .k-stepper__connector {
+  align-self: flex-start;
+  margin-top: calc(var(--kreati-stepper-indicator-size, 32px) / 2 - 1px);
+}
+
+/* ─── Vertical connector ──────────────────────── */
+.k-stepper--vertical .k-stepper__connector {
+  width: 2px;
+  height: var(--kreati-space-6);
+  min-width: unset;
+  margin: var(--kreati-space-1) 0 var(--kreati-space-1) calc(var(--kreati-stepper-indicator-size, 32px) / 2 - 1px);
+}
+
+/* ─── Content panel ───────────────────────────── */
+.k-stepper__content {
+  padding: var(--kreati-stepper-content-padding, var(--kreati-space-4) 0);
+}
