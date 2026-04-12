@@ -209,6 +209,7 @@
   --kreati-z-overlay: 1002;
   --kreati-z-modal: 1003;
   --kreati-z-tooltip: 1004;
+  --kreati-z-toast: 1100;
 
   /* ─── Animations ────────────────────────────────────────────────────── */
   --kreati-transition: all 0.2s ease-in-out;
@@ -440,4 +441,76 @@
   --kreati-stepper-connector-bg: var(--kreati-gray-200);
   --kreati-stepper-connector-active-bg: var(--kreati-primary-500);
   --kreati-stepper-content-padding: var(--kreati-space-4) 0;
+
+  /* ─── Component Tokens — ProgressBar ────────────────────────────────── */
+  --kreati-progressbar-height: 8px;
+  --kreati-progressbar-bg: var(--kreati-gray-200);
+  --kreati-progressbar-radius: var(--kreati-radius-full);
+
+  /* ─── Component Tokens — Avatar ───────────────────────────────────── */
+  --kreati-avatar-size-xs: 24px;
+  --kreati-avatar-size-sm: 32px;
+  --kreati-avatar-size-md: 40px;
+  --kreati-avatar-size-lg: 48px;
+  --kreati-avatar-size-xl: 64px;
+  --kreati-avatar-bg: var(--kreati-gray-200);
+  --kreati-avatar-color: var(--kreati-gray-600);
+
+  /* ─── Component Tokens — Tag ──────────────────────────────────────── */
+  --kreati-tag-padding: var(--kreati-space-1) var(--kreati-space-2);
+  --kreati-tag-radius: var(--kreati-radius-full);
+  --kreati-tag-font-size: var(--kreati-font-size-xxs);
+
+  /* ─── Component Tokens — Spinner ──────────────────────────────────── */
+  --kreati-spinner-size-xs: 16px;
+  --kreati-spinner-size-sm: 24px;
+  --kreati-spinner-size-md: 32px;
+  --kreati-spinner-size-lg: 48px;
+  --kreati-spinner-size-xl: 64px;
+  --kreati-spinner-stroke: 3;
+  --kreati-spinner-color: var(--kreati-severity-primary);
+
+  /* ─── Component Tokens — Skeleton ───────────────────────────────────── */
+  --kreati-skeleton-bg: var(--kreati-gray-200);
+  --kreati-skeleton-shimmer: var(--kreati-gray-100);
+  --kreati-skeleton-radius: var(--kreati-radius-sm);
+
+  /* ─── Component Tokens — Toast ──────────────────────────────────────── */
+  --kreati-toast-width: 320px;
+  --kreati-toast-padding: var(--kreati-space-3) var(--kreati-space-4);
+  --kreati-toast-border-radius: var(--kreati-radius-md);
+  --kreati-toast-shadow: var(--kreati-shadow-lg);
+  --kreati-toast-gap: var(--kreati-space-2);
+  --kreati-toast-offset: var(--kreati-space-4);
+
+  /* ─── Component Tokens — Message ────────────────────────────────────── */
+  --kreati-message-padding: var(--kreati-space-3) var(--kreati-space-4);
+  --kreati-message-border-radius: var(--kreati-radius-md);
+  --kreati-message-font-size: var(--kreati-font-size-sm);
+  --kreati-message-icon-size: 18px;
+  --kreati-message-border-width: 4px;
+  --kreati-message-gap: var(--kreati-space-2);
+
+  /* ─── Component Tokens — Dial ───────────────────────────────────────── */
+  --kreati-dial-size-xs: 80px;
+  --kreati-dial-size-sm: 100px;
+  --kreati-dial-size-md: 120px;
+  --kreati-dial-size-lg: 150px;
+  --kreati-dial-size-xl: 180px;
+  --kreati-dial-stroke-width: 10;
+  --kreati-dial-range-color: var(--kreati-gray-200);
+  --kreati-dial-value-color: var(--kreati-severity-primary);
+  --kreati-dial-text-color: var(--kreati-gray-800);
+  --kreati-dial-text-size: var(--kreati-font-size-lg);
+
+  /* ─── Component Tokens — Transfer ─────────────────────────────────── */
+  --kreati-transfer-border: 1px solid var(--kreati-gray-200);
+  --kreati-transfer-border-radius: var(--kreati-radius-md);
+  --kreati-transfer-bg: var(--kreati-white);
+  --kreati-transfer-header-bg: var(--kreati-gray-50);
+  --kreati-transfer-header-padding: var(--kreati-space-2) var(--kreati-space-3);
+  --kreati-transfer-header-color: var(--kreati-gray-800);
+  --kreati-transfer-controls-gap: var(--kreati-space-2);
+  --kreati-transfer-drag-bg: var(--kreati-severity-primary-light);
+  --kreati-transfer-drop-border: 2px dashed var(--kreati-severity-primary);
 }

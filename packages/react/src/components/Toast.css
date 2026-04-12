@@ -1,0 +1,211 @@
+/* ============================================
+   Toast — Container (fixed overlay)
+   ============================================ */
+.k-toast__container {
+  position: fixed;
+  z-index: var(--kreati-z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: var(--kreati-toast-gap);
+  max-height: calc(100vh - var(--kreati-toast-offset) * 2);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  padding: var(--kreati-space-1);
+}
+
+.k-toast__container::-webkit-scrollbar {
+  display: none;
+}
+
+.k-toast__container--top-right    { top: var(--kreati-toast-offset); right: var(--kreati-toast-offset); align-items: flex-end; }
+.k-toast__container--top-left     { top: var(--kreati-toast-offset); left: var(--kreati-toast-offset); align-items: flex-start; }
+.k-toast__container--top-center   { top: var(--kreati-toast-offset); left: 50%; transform: translateX(-50%); align-items: center; }
+.k-toast__container--bottom-right { bottom: var(--kreati-toast-offset); right: var(--kreati-toast-offset); align-items: flex-end; }
+.k-toast__container--bottom-left  { bottom: var(--kreati-toast-offset); left: var(--kreati-toast-offset); align-items: flex-start; }
+.k-toast__container--bottom-center { bottom: var(--kreati-toast-offset); left: 50%; transform: translateX(-50%); align-items: center; }
+
+/* ============================================
+   Toast — Item
+   ============================================ */
+.k-toast__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--kreati-space-3);
+  width: var(--kreati-toast-width);
+  max-width: calc(100vw - var(--kreati-toast-offset) * 2);
+  padding: var(--kreati-toast-padding);
+  border-radius: var(--kreati-toast-border-radius);
+  box-shadow: var(--kreati-toast-shadow);
+  font-family: var(--kreati-font-family);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   Toast — Severities
+   ============================================ */
+.k-toast__item--primary   { background: var(--kreati-severity-primary-light); color: var(--kreati-severity-primary); border-left: 4px solid var(--kreati-severity-primary); }
+.k-toast__item--secondary { background: var(--kreati-severity-secondary-light); color: var(--kreati-severity-secondary); border-left: 4px solid var(--kreati-severity-secondary); }
+.k-toast__item--success   { background: var(--kreati-severity-success-light); color: var(--kreati-severity-success); border-left: 4px solid var(--kreati-severity-success); }
+.k-toast__item--info      { background: var(--kreati-severity-info-light); color: var(--kreati-severity-info); border-left: 4px solid var(--kreati-severity-info); }
+.k-toast__item--warning   { background: var(--kreati-severity-warning-light); color: var(--kreati-severity-warning); border-left: 4px solid var(--kreati-severity-warning); }
+.k-toast__item--help      { background: var(--kreati-severity-help-light); color: var(--kreati-severity-help); border-left: 4px solid var(--kreati-severity-help); }
+.k-toast__item--danger    { background: var(--kreati-severity-danger-light); color: var(--kreati-severity-danger); border-left: 4px solid var(--kreati-severity-danger); }
+
+/* ============================================
+   Toast — Slide animations
+   ============================================ */
+.k-toast--slide-right {
+  animation: k-toast-slide-in-right 0.25s ease-out;
+}
+.k-toast--slide-right.k-toast__item--exit {
+  animation: k-toast-slide-out-right 0.2s ease-in forwards;
+}
+
+.k-toast--slide-left {
+  animation: k-toast-slide-in-left 0.25s ease-out;
+}
+.k-toast--slide-left.k-toast__item--exit {
+  animation: k-toast-slide-out-left 0.2s ease-in forwards;
+}
+
+.k-toast--slide-top {
+  animation: k-toast-slide-in-top 0.25s ease-out;
+}
+.k-toast--slide-top.k-toast__item--exit {
+  animation: k-toast-slide-out-top 0.2s ease-in forwards;
+}
+
+@keyframes k-toast-slide-in-right {
+  from { opacity: 0; transform: translateX(100%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes k-toast-slide-out-right {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(100%); }
+}
+@keyframes k-toast-slide-in-left {
+  from { opacity: 0; transform: translateX(-100%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes k-toast-slide-out-left {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(-100%); }
+}
+@keyframes k-toast-slide-in-top {
+  from { opacity: 0; transform: translateY(-100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes k-toast-slide-out-top {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-100%); }
+}
+
+/* ============================================
+   Toast — Icon
+   ============================================ */
+.k-toast__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ============================================
+   Toast — Content
+   ============================================ */
+.k-toast__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.k-toast__summary {
+  font-size: var(--kreati-font-size-sm);
+  font-weight: var(--kreati-font-weight-semibold);
+  line-height: var(--kreati-line-height-sm);
+}
+
+.k-toast__detail {
+  font-size: var(--kreati-font-size-xs);
+  opacity: 0.85;
+  margin-top: 2px;
+  line-height: var(--kreati-line-height-sm);
+  word-break: break-word;
+}
+
+/* ============================================
+   Toast — Close button
+   ============================================ */
+.k-toast__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: var(--kreati-radius-sm);
+  background: transparent;
+  color: currentColor;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.k-toast__close:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.k-toast__close:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -1px;
+  opacity: 1;
+}
+
+/* ============================================
+   Toast — Progress bar
+   ============================================ */
+.k-toast__progress {
+  position: absolute;
+  bottom: 0;
+  left: 4px;
+  right: 0;
+  height: 3px;
+  transform-origin: left;
+  animation: k-toast-progress var(--k-toast-life, 3000ms) linear forwards;
+  border-radius: 0 0 var(--kreati-toast-border-radius) 0;
+}
+
+.k-toast__progress--primary   { background: var(--kreati-severity-primary); }
+.k-toast__progress--secondary { background: var(--kreati-severity-secondary); }
+.k-toast__progress--success   { background: var(--kreati-severity-success); }
+.k-toast__progress--info      { background: var(--kreati-severity-info); }
+.k-toast__progress--warning   { background: var(--kreati-severity-warning); }
+.k-toast__progress--help      { background: var(--kreati-severity-help); }
+.k-toast__progress--danger    { background: var(--kreati-severity-danger); }
+
+@keyframes k-toast-progress {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+
+/* ============================================
+   Toast — Reduced motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .k-toast--slide-right,
+  .k-toast--slide-left,
+  .k-toast--slide-top,
+  .k-toast--slide-right.k-toast__item--exit,
+  .k-toast--slide-left.k-toast__item--exit,
+  .k-toast--slide-top.k-toast__item--exit {
+    animation: none;
+  }
+
+  .k-toast__progress {
+    animation: none;
+  }
+}

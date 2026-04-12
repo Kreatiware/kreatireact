@@ -1,0 +1,139 @@
+/* ============================================
+   Dial — Container
+   ============================================ */
+.k-dial {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--kreati-font-family);
+  touch-action: none;
+  user-select: none;
+  max-width: 100%;
+}
+
+.k-dial--disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ============================================
+   Dial — Wrapper (positions SVG + center overlay)
+   ============================================ */
+.k-dial__wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================
+   Dial — Sizes
+   ============================================ */
+.k-dial--xs { width: var(--kreati-dial-size-xs); height: var(--kreati-dial-size-xs); }
+.k-dial--sm { width: var(--kreati-dial-size-sm); height: var(--kreati-dial-size-sm); }
+.k-dial--md { width: var(--kreati-dial-size-md); height: var(--kreati-dial-size-md); }
+.k-dial--lg { width: var(--kreati-dial-size-lg); height: var(--kreati-dial-size-lg); }
+.k-dial--xl { width: var(--kreati-dial-size-xl); height: var(--kreati-dial-size-xl); }
+
+/* ============================================
+   Dial — SVG
+   ============================================ */
+.k-dial__svg {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  outline: none;
+  display: block;
+}
+
+.k-dial--disabled .k-dial__svg {
+  cursor: not-allowed;
+}
+
+.k-dial__svg:focus-visible {
+  outline: 2px solid var(--kreati-severity-primary);
+  outline-offset: 2px;
+  border-radius: var(--kreati-radius-full);
+}
+
+/* ============================================
+   Dial — Arcs
+   ============================================ */
+.k-dial__range {
+  stroke: var(--k-dial-range-color, var(--kreati-dial-range-color));
+}
+
+.k-dial__value {
+  stroke: var(--k-dial-value-color, var(--kreati-dial-value-color));
+}
+
+/* ============================================
+   Dial — Center overlay (for ReactNode valueTemplate)
+   ============================================ */
+.k-dial__center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  text-align: center;
+  color: var(--kreati-dial-text-color);
+  font-family: var(--kreati-font-family);
+}
+
+/* ============================================
+   Dial — Center text (SVG)
+   ============================================ */
+.k-dial__text {
+  fill: var(--kreati-dial-text-color);
+  font-family: var(--kreati-font-family);
+  font-weight: var(--kreati-font-weight-semibold);
+  font-size: var(--kreati-dial-text-size);
+  pointer-events: none;
+}
+
+/* ============================================
+   Dial — Min/Max labels
+   ============================================ */
+.k-dial__min-max {
+  fill: var(--kreati-gray-500);
+  font-family: var(--kreati-font-family);
+  font-size: 8px;
+  font-weight: var(--kreati-font-weight-medium);
+  pointer-events: none;
+}
+
+/* ============================================
+   Dial — States
+   ============================================ */
+.k-dial--error .k-dial__value {
+  stroke: var(--kreati-severity-danger);
+}
+
+.k-dial--error .k-dial__text,
+.k-dial--error .k-dial__center {
+  fill: var(--kreati-severity-danger);
+  color: var(--kreati-severity-danger);
+}
+
+.k-dial--success .k-dial__value {
+  stroke: var(--kreati-severity-success);
+}
+
+.k-dial--success .k-dial__text,
+.k-dial--success .k-dial__center {
+  fill: var(--kreati-severity-success);
+  color: var(--kreati-severity-success);
+}
+
+/* ============================================
+   Dial — Reduced motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .k-dial__range,
+  .k-dial__value {
+    transition: none;
+  }
+}

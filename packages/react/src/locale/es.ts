@@ -61,4 +61,26 @@ export const es: KreatiLocale = {
     maximize: 'Maximizar',
     restore: 'Restaurar',
   },
+  message: {
+    close: 'Cerrar mensaje',
+  },
+  toast: {
+    close: 'Cerrar notificacion',
+  },
+  dial: {
+    ariaLabel: 'Dial',
+  },
+  transfer: {
+    sourceHeader: 'Disponibles',
+    targetHeader: 'Seleccionados',
+    moveAllToTarget: 'Mover todos al destino',
+    moveToTarget: 'Mover al destino',
+    moveToSource: 'Mover al origen',
+    moveAllToSource: 'Mover todos al origen',
+    filterPlaceholder: 'Buscar...',
+    emptyMessage: 'Sin elementos',
+    itemCount: '{count} elementos',
+    moveUp: 'Subir',
+    moveDown: 'Bajar',
+  },
 };

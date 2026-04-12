@@ -1,0 +1,109 @@
+/* ============================================
+   Message — Base
+   ============================================ */
+.k-message {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-message-gap);
+  padding: var(--kreati-message-padding);
+  border-radius: var(--kreati-message-border-radius);
+  font-family: var(--kreati-font-family);
+  font-size: var(--kreati-message-font-size);
+  line-height: var(--kreati-line-height-sm);
+  animation: k-message-enter 0.2s ease-out;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+/* ============================================
+   Message — Severities
+   ============================================ */
+.k-message--primary   { background: var(--kreati-severity-primary-light); color: var(--kreati-severity-primary); }
+.k-message--secondary { background: var(--kreati-severity-secondary-light); color: var(--kreati-severity-secondary); }
+.k-message--success   { background: var(--kreati-severity-success-light); color: var(--kreati-severity-success); }
+.k-message--info      { background: var(--kreati-severity-info-light); color: var(--kreati-severity-info); }
+.k-message--warning   { background: var(--kreati-severity-warning-light); color: var(--kreati-severity-warning); }
+.k-message--help      { background: var(--kreati-severity-help-light); color: var(--kreati-severity-help); }
+.k-message--danger    { background: var(--kreati-severity-danger-light); color: var(--kreati-severity-danger); }
+
+/* ============================================
+   Message — Border accent
+   ============================================ */
+.k-message--border-left   { border-left: var(--kreati-message-border-width) solid currentColor; }
+.k-message--border-right  { border-right: var(--kreati-message-border-width) solid currentColor; }
+.k-message--border-top    { border-top: var(--kreati-message-border-width) solid currentColor; }
+.k-message--border-bottom { border-bottom: var(--kreati-message-border-width) solid currentColor; }
+
+/* ============================================
+   Message — Icon
+   ============================================ */
+.k-message__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   Message — Text
+   ============================================ */
+.k-message__text {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ============================================
+   Message — Close button
+   ============================================ */
+.k-message__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: var(--kreati-radius-sm);
+  background: transparent;
+  color: currentColor;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.k-message__close:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.k-message__close:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -1px;
+  opacity: 1;
+}
+
+/* ============================================
+   Message — Animations
+   ============================================ */
+@keyframes k-message-enter {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes k-message-exit {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+
+.k-message--exit {
+  animation: k-message-exit 0.2s ease-in forwards;
+}
+
+/* ============================================
+   Message — Reduced motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .k-message,
+  .k-message--exit {
+    animation: none;
+  }
+}

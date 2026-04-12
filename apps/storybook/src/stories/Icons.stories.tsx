@@ -6,9 +6,22 @@ import {
   ChevronUp,
   ChevronDown,
   ArrowRight,
+  ArrowLeft,
+  DoubleArrowRight,
+  DoubleArrowLeft,
   Check,
   Hamburger,
   Times,
+  Search,
+  Minus,
+  Plus,
+  CalendarIcon,
+  Maximize,
+  Restore,
+  InfoCircle,
+  ExclamationTriangle,
+  HelpCircle,
+  User,
   KreatiIcon,
 } from '../../../../packages/icons/src';
 import type { IconProps } from '../../../../packages/icons/src';
@@ -19,13 +32,26 @@ const AllIcons: Record<string, React.FC<IconProps>> = {
   ChevronUp,
   ChevronDown,
   ArrowRight,
+  ArrowLeft,
+  DoubleArrowRight,
+  DoubleArrowLeft,
   Check,
   Hamburger,
   Times,
+  Search,
+  Minus,
+  Plus,
+  CalendarIcon,
+  Maximize,
+  Restore,
+  InfoCircle,
+  ExclamationTriangle,
+  HelpCircle,
+  User,
 };
 
 const IconShowcase: React.FC<{ size: number; color: string }> = ({ size, color }) => (
-  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 24 }}>
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 16 }}>
     {Object.entries(AllIcons).map(([name, Icon]) => (
       <div
         key={name}
@@ -34,13 +60,13 @@ const IconShowcase: React.FC<{ size: number; color: string }> = ({ size, color }
           flexDirection: 'column',
           alignItems: 'center',
           gap: 8,
-          padding: 16,
+          padding: 12,
           borderRadius: 8,
           border: '1px solid #e5e7eb',
         }}
       >
         <Icon size={size} color={color} />
-        <span style={{ fontSize: 12, color: '#6b7280' }}>{name}</span>
+        <span style={{ fontSize: 11, color: '#6b7280', textAlign: 'center' }}>{name}</span>
       </div>
     ))}
   </div>
@@ -73,9 +99,6 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/**
- * All icons at default size with currentColor.
- */
 export const AllIconsGrid: Story = {
   args: {
     size: 24,
@@ -83,12 +106,9 @@ export const AllIconsGrid: Story = {
   },
 };
 
-/**
- * Icons wrapped with KreatiIcon component for consistent sizing.
- */
 export const WithKreatiIconWrapper: Story = {
   render: (args) => (
-    <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
       {Object.entries(AllIcons).map(([name, Icon]) => (
         <KreatiIcon key={name} size={args.size}>
           <Icon color={args.color} />

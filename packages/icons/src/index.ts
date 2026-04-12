@@ -15,15 +15,23 @@ export {
   ChevronDown,
   // Arrows
   ArrowRight,
+  ArrowLeft,
+  DoubleArrowRight,
+  DoubleArrowLeft,
   // UI
   Check,
   Hamburger,
   Times,
   Search,
   Minus,
+  Plus,
   CalendarIcon,
   Maximize,
   Restore,
+  InfoCircle,
+  ExclamationTriangle,
+  HelpCircle,
+  User,
   // Deprecated aliases
   Menu,
 } from './icons';

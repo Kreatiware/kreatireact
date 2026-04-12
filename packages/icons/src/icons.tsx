@@ -382,6 +382,107 @@ export const CalendarIcon: React.FC<IconProps> = ({
 );
 
 /**
+ * Arrow Left icon
+ *
+ * @description Horizontal bar connected to a ChevronLeft-style arrowhead.
+ * Mirror of ArrowRight.
+ *
+ * @author ai — Pending designer review
+ */
+export const ArrowLeft: React.FC<IconProps> = ({
+  size = 24,
+  color = 'currentColor',
+  className = '',
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={color}
+    className={className}
+    aria-hidden="true"
+  >
+    <rect x="6" y="10.63" width="16" height="2.74" rx=".57" ry=".57" />
+    <path d="M6.88,12.77h0c.07.34.21.62.41.83,1.27,1.36,2.52,2.69,3.71,3.95,1.19,1.26,2.41,2.56,3.62,3.85l.29.32.02.03c.17.16.37.24.6.24.27,0,.52-.14.75-.4.21-.24.18-.27.24-.4.21-.43.13-.29.24-.6.16-.39.16-.35.21-.56.05-.32.02-.6-.11-.85-.09-.17-.22-.34-.38-.52-1.84-1.83-6.17-6.02-6.45-6.47.11-.27,2.42-2.8,3.01-3.39.23-.23.44-.44.62-.63.93-.97,1.96-1.7,2.88-2.65.16-.18.29-.34.37-.51.13-.24.16-.53.11-.86-.04-.2-.13-.48-.29-.86-.14-.36,0-.08-.17-.43-.09-.14-.05-.14-.26-.39-.24-.29-.49-.42-.78-.42-.24,0-.46.11-.62.3l-.26.3c-1.13,1.21-2.3,2.45-3.63,3.86-1.2,1.27-2.45,2.6-3.72,3.96-.16.18-.27.41-.35.7-.07.24-.1.51-.11.79,0,.29.02.57.08.84Z"/>
+  </svg>
+);
+
+/**
+ * Double Arrow Right icon (move all right)
+ *
+ * @description Two chevron-right arrows side by side. Fill-based with
+ * rounded ends matching the designer's icon style.
+ *
+ * @author ai — Pending designer review
+ */
+export const DoubleArrowRight: React.FC<IconProps> = ({
+  size = 24,
+  color = 'currentColor',
+  className = '',
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={color}
+    className={className}
+    aria-hidden="true"
+  >
+    <path d="M11.12,11.23c-.07-.34-.21-.62-.41-.83-1.27-1.36-2.52-2.69-3.71-3.95C5.81,5.19,4.59,3.89,3.38,2.6l-.29-.32L3.07,2.25c-.17-.16-.37-.24-.6-.24-.27,0-.52.14-.75.4-.21.24-.18.27-.24.4-.21.43-.13.29-.24.6-.16.39-.16.35-.21.56-.05.32-.02.6.11.85.09.17.22.34.38.52,1.84,1.83,6.17,6.02,6.45,6.47-.11.27-2.42,2.8-3.01,3.39-.23.23-.44.44-.62.63-.93.97-1.96,1.7-2.88,2.65-.16.18-.29.34-.37.51-.13.24-.16.53-.11.86.04.2.13.48.29.86.14.36,0,.08.17.43.09.14.05.14.26.39.24.29.49.42.78.42.24,0,.46-.11.62-.3l.26-.3c1.13-1.21,2.3-2.45,3.63-3.86,1.2-1.27,2.45-2.6,3.72-3.96.16-.18.27-.41.35-.7.07-.24.1-.51.11-.79,0-.29-.02-.57-.08-.84ZM22.12,11.23c-.07-.34-.21-.62-.41-.83-1.27-1.36-2.52-2.69-3.71-3.95-1.19-1.26-2.41-2.56-3.62-3.85l-.29-.32-.02-.03c-.17-.16-.37-.24-.6-.24-.27,0-.52.14-.75.4-.21.24-.18.27-.24.4-.21.43-.13.29-.24.6-.16.39-.16.35-.21.56-.05.32-.02.6.11.85.09.17.22.34.38.52,1.84,1.83,6.17,6.02,6.45,6.47-.11.27-2.42,2.8-3.01,3.39-.23.23-.44.44-.62.63-.93.97-1.96,1.7-2.88,2.65-.16.18-.29.34-.37.51-.13.24-.16.53-.11.86.04.2.13.48.29.86.14.36,0,.08.17.43.09.14.05.14.26.39.24.29.49.42.78.42.24,0,.46-.11.62-.3l.26-.3c1.13-1.21,2.3-2.45,3.63-3.86,1.2-1.27,2.45-2.6,3.72-3.96.16-.18.27-.41.35-.7.07-.24.1-.51.11-.79,0-.29-.02-.57-.08-.84Z"/>
+  </svg>
+);
+
+/**
+ * Double Arrow Left icon (move all left)
+ *
+ * @description Two chevron-left arrows side by side. Fill-based with
+ * rounded ends matching the designer's icon style.
+ *
+ * @author ai — Pending designer review
+ */
+export const DoubleArrowLeft: React.FC<IconProps> = ({
+  size = 24,
+  color = 'currentColor',
+  className = '',
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={color}
+    className={className}
+    aria-hidden="true"
+  >
+    <path d="M12.88,12.77c.07.34.21.62.41.83,1.27,1.36,2.52,2.69,3.71,3.95,1.19,1.26,2.41,2.56,3.62,3.85l.29.32.02.03c.17.16.37.24.6.24.27,0,.52-.14.75-.4.21-.24.18-.27.24-.4.21-.43.13-.29.24-.6.16-.39.16-.35.21-.56.05-.32.02-.6-.11-.85-.09-.17-.22-.34-.38-.52-1.84-1.83-6.17-6.02-6.45-6.47.11-.27,2.42-2.8,3.01-3.39.23-.23.44-.44.62-.63.93-.97,1.96-1.7,2.88-2.65.16-.18.29-.34.37-.51.13-.24.16-.53.11-.86-.04-.2-.13-.48-.29-.86-.14-.36,0-.08-.17-.43-.09-.14-.05-.14-.26-.39-.24-.29-.49-.42-.78-.42-.24,0-.46.11-.62.3l-.26.3c-1.13,1.21-2.3,2.45-3.63,3.86-1.2,1.27-2.45,2.6-3.72,3.96-.16.18-.27.41-.35.7-.07.24-.1.51-.11.79,0,.29.02.57.08.84ZM1.88,12.77c.07.34.21.62.41.83,1.27,1.36,2.52,2.69,3.71,3.95,1.19,1.26,2.41,2.56,3.62,3.85l.29.32.02.03c.17.16.37.24.6.24.27,0,.52-.14.75-.4.21-.24.18-.27.24-.4.21-.43.13-.29.24-.6.16-.39.16-.35.21-.56.05-.32.02-.6-.11-.85-.09-.17-.22-.34-.38-.52-1.84-1.83-6.17-6.02-6.45-6.47.11-.27,2.42-2.8,3.01-3.39.23-.23.44-.44.62-.63.93-.97,1.96-1.7,2.88-2.65.16-.18.29-.34.37-.51.13-.24.16-.53.11-.86-.04-.2-.13-.48-.29-.86-.14-.36,0-.08-.17-.43-.09-.14-.05-.14-.26-.39-.24-.29-.49-.42-.78-.42-.24,0-.46.11-.62.3l-.26.3c-1.13,1.21-2.3,2.45-3.63,3.86-1.2,1.27-2.45,2.6-3.72,3.96-.16.18-.27.41-.35.7-.07.24-.1.51-.11.79,0,.29.02.57.08.84Z"/>
+  </svg>
+);
+
+/**
+ * Plus icon (addition / create)
+ *
+ * @description Cross-shaped plus sign. Fill-based with rounded ends
+ * matching the designer's icon style.
+ *
+ * @author ai — Pending designer review
+ */
+export const Plus: React.FC<IconProps> = ({
+  size = 24,
+  color = 'currentColor',
+  className = '',
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={color}
+    className={className}
+    aria-hidden="true"
+  >
+    <path d="M21,10.63H13.37V3c0-.31-.26-.57-.57-.57h-1.6c-.31,0-.57.26-.57.57v7.63H3c-.31,0-.57.26-.57.57v1.6c0,.31.26.57.57.57h7.63V21c0,.31.26.57.57.57h1.6c.31,0,.57-.26.57-.57v-7.63H21c.31,0,.57-.26.57-.57v-1.6c0-.31-.26-.57-.57-.57Z" />
+  </svg>
+);
+
+/**
  * Maximize icon (expand to full size)
  *
  * @description Single square outline representing a maximized window.
@@ -428,5 +529,45 @@ export const Restore: React.FC<IconProps> = ({
     aria-hidden="true"
   >
     <path d="M8,2h12v12h-4v4H4V6h4V2Zm2,4h8V4H10v2ZM6,8v8h8v-2H10V8H6Z" />
+  </svg>
+);
+
+/**
+ * Info circle icon — information indicator
+ * @author ai — Pending designer review
+ */
+export const InfoCircle: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10,10-4.48,10-10S17.52,2,12,2Zm0,18c-4.41,0-8-3.59-8-8S7.59,4,12,4s8,3.59,8,8-3.59,8-8,8Zm-1-11h2v6h-2v-6Zm0-3h2v2h-2v-2Z" />
+  </svg>
+);
+
+/**
+ * Exclamation triangle icon — warning indicator
+ * @author ai — Pending designer review
+ */
+export const ExclamationTriangle: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M12,2.5L1.5,21h21L12,2.5Zm0,3.74L19.53,19.5H4.47L12,6.24Zm-1,5.76h2v4h-2v-4Zm0,5.5h2v2h-2v-2Z" />
+  </svg>
+);
+
+/**
+ * Help circle icon — help/question indicator
+ * @author ai — Pending designer review
+ */
+export const HelpCircle: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10,10-4.48,10-10S17.52,2,12,2Zm0,18c-4.41,0-8-3.59-8-8S7.59,4,12,4s8,3.59,8,8-3.59,8-8,8Zm-1-3h2v2h-2v-2Zm1.61-9.96c-1.86-.37-3.48.89-3.58,2.76h1.97c.05-.72.62-1.3,1.36-1.3.79,0,1.43.64,1.43,1.43,0,.81-.88,1.12-1.54,1.88-.6.7-.68,1.42-.68,2.19h2c0-.62.08-.96.46-1.42.58-.7,1.76-1.07,1.76-2.65,0-1.52-1.31-2.59-3.18-2.89Z" />
+  </svg>
+);
+
+/**
+ * User icon — person/avatar placeholder
+ * @author ai — Pending designer review
+ */
+export const User: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M12,12c2.76,0,5-2.24,5-5s-2.24-5-5-5-5,2.24-5,5,2.24,5,5,5Zm0,2c-3.33,0-10,1.67-10,5v2h20v-2c0-3.33-6.67-5-10-5Z" />
   </svg>
 );

@@ -1,0 +1,246 @@
+/* ============================================
+   Transfer — Layout
+   ============================================ */
+.k-itempicker {
+  display: flex;
+  align-items: stretch;
+  gap: var(--kreati-space-3);
+  font-family: var(--kreati-font-family);
+}
+
+.k-itempicker--full-width {
+  width: 100%;
+}
+
+/* ============================================
+   Transfer — Panel (source / target)
+   ============================================ */
+.k-itempicker__panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border: var(--kreati-transfer-border);
+  border-radius: var(--kreati-transfer-border-radius);
+  background: var(--kreati-transfer-bg);
+  overflow: hidden;
+}
+
+.k-itempicker__panel--drop-active {
+  border: var(--kreati-transfer-drop-border);
+}
+
+.k-itempicker--error .k-itempicker__panel {
+  border-color: var(--kreati-severity-danger);
+}
+
+.k-itempicker--success .k-itempicker__panel {
+  border-color: var(--kreati-severity-success);
+}
+
+/* ============================================
+   Transfer — Header
+   ============================================ */
+.k-itempicker__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--kreati-transfer-header-padding);
+  background: var(--kreati-transfer-header-bg);
+  border-bottom: var(--kreati-transfer-border);
+  user-select: none;
+}
+
+.k-itempicker__header-title {
+  font-size: var(--kreati-font-size-sm);
+  font-weight: var(--kreati-font-weight-semibold);
+  color: var(--kreati-transfer-header-color);
+}
+
+.k-itempicker__header-count {
+  font-size: var(--kreati-font-size-xxs);
+  color: var(--kreati-gray-400);
+}
+
+.k-itempicker__header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-1);
+}
+
+/* ============================================
+   Transfer — Reorder buttons
+   ============================================ */
+.k-itempicker__reorder-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--kreati-gray-200);
+  border-radius: var(--kreati-radius-sm);
+  background: var(--kreati-white);
+  color: var(--kreati-gray-600);
+  cursor: pointer;
+  transition: var(--kreati-transition-fast);
+}
+
+.k-itempicker__reorder-btn:hover:not(:disabled) {
+  background: var(--kreati-gray-100);
+  color: var(--kreati-gray-800);
+}
+
+.k-itempicker__reorder-btn:focus-visible {
+  outline: 2px solid var(--kreati-severity-primary);
+  outline-offset: -1px;
+}
+
+.k-itempicker__reorder-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   Transfer — Filter
+   ============================================ */
+.k-itempicker__filter {
+  padding: var(--kreati-space-2) var(--kreati-space-3);
+  border-bottom: var(--kreati-transfer-border);
+}
+
+/* ============================================
+   Transfer — List area
+   ============================================ */
+.k-itempicker__list {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* ============================================
+   Transfer — Item
+   ============================================ */
+.k-itempicker__item {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-2);
+  padding: var(--kreati-space-2) var(--kreati-space-3);
+  cursor: pointer;
+  transition: var(--kreati-transition-fast);
+  font-size: var(--kreati-font-size-sm);
+  color: var(--kreati-gray-800);
+  user-select: none;
+  outline: none;
+}
+
+.k-itempicker__item:hover:not(.k-itempicker__item--disabled) {
+  background-color: var(--kreati-list-item-hover-bg);
+}
+
+.k-itempicker__item--selected {
+  background-color: var(--kreati-list-item-active-bg);
+  color: var(--kreati-list-item-active-color);
+}
+
+.k-itempicker__item--disabled {
+  opacity: 0.55;
+  cursor: pointer;
+  font-style: italic;
+}
+
+.k-itempicker__item:focus-visible {
+  outline: 2px solid var(--kreati-severity-primary);
+  outline-offset: -2px;
+}
+
+/* ============================================
+   Transfer — Inline checkbox (visual only)
+   ============================================ */
+.k-itempicker__checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--kreati-gray-300);
+  border-radius: var(--kreati-radius-xs, 3px);
+  background: var(--kreati-white);
+  transition: var(--kreati-transition-fast);
+  pointer-events: none;
+  color: var(--kreati-white);
+}
+
+.k-itempicker__item--selected .k-itempicker__checkbox {
+  background: var(--kreati-severity-primary);
+  border-color: var(--kreati-severity-primary);
+}
+
+.k-itempicker__item--disabled .k-itempicker__checkbox {
+  opacity: 0.5;
+}
+
+/* ============================================
+   Transfer — Item content
+   ============================================ */
+.k-itempicker__item-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+}
+
+.k-itempicker__item-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================
+   Transfer — Empty
+   ============================================ */
+.k-itempicker__empty {
+  padding: var(--kreati-space-4) var(--kreati-space-3);
+  text-align: center;
+  color: var(--kreati-gray-400);
+  font-size: var(--kreati-font-size-sm);
+}
+
+/* ============================================
+   Transfer — Controls (center buttons)
+   ============================================ */
+.k-itempicker__controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--kreati-transfer-controls-gap);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   Transfer — Responsive: stack on small screens
+   ============================================ */
+@media (max-width: 480px) {
+  .k-itempicker {
+    flex-direction: column;
+  }
+
+  .k-itempicker__controls {
+    flex-direction: row;
+  }
+}
+
+/* ============================================
+   Transfer — Drop indicator line
+   ============================================ */
+.k-itempicker__item--drop-before {
+  box-shadow: inset 0 2px 0 0 var(--kreati-severity-primary);
+}
+
+.k-itempicker__drop-line {
+  height: 2px;
+  background: var(--kreati-severity-primary);
+  flex-shrink: 0;
+}

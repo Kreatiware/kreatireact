@@ -67,4 +67,30 @@ export interface KreatiLocale {
     increment: string;
     decrement: string;
   };
+  /** Message component */
+  message: {
+    close: string;
+  };
+  /** Toast component */
+  toast: {
+    close: string;
+  };
+  /** Dial component */
+  dial: {
+    ariaLabel: string;
+  };
+  /** Transfer component */
+  transfer: {
+    sourceHeader: string;
+    targetHeader: string;
+    moveAllToTarget: string;
+    moveToTarget: string;
+    moveToSource: string;
+    moveAllToSource: string;
+    filterPlaceholder: string;
+    emptyMessage: string;
+    itemCount: string;
+    moveUp: string;
+    moveDown: string;
+  };
 }

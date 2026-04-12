@@ -1,0 +1,67 @@
+/* ============================================
+   Skeleton — Base
+   ============================================ */
+.k-skeleton {
+  background: var(--kreati-skeleton-bg);
+  border-radius: var(--kreati-skeleton-radius);
+  display: block;
+}
+
+/* ============================================
+   Skeleton — Text (multi-line container)
+   ============================================ */
+.k-skeleton--text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kreati-space-2);
+  background: none;
+}
+
+.k-skeleton__line {
+  height: 0.8em;
+  background: var(--kreati-skeleton-bg);
+  border-radius: var(--kreati-skeleton-radius);
+}
+
+/* ============================================
+   Skeleton — Shimmer animation
+   ============================================ */
+.k-skeleton--shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--kreati-skeleton-bg) 25%,
+    var(--kreati-skeleton-shimmer) 50%,
+    var(--kreati-skeleton-bg) 75%
+  );
+  background-size: 200% 100%;
+  animation: k-skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes k-skeleton-shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+/* ============================================
+   Skeleton — Pulse animation
+   ============================================ */
+.k-skeleton--pulse {
+  animation: k-skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes k-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+/* ============================================
+   Skeleton — Reduced motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .k-skeleton--shimmer,
+  .k-skeleton--pulse,
+  .k-skeleton__line.k-skeleton--shimmer,
+  .k-skeleton__line.k-skeleton--pulse {
+    animation: none;
+  }
+}

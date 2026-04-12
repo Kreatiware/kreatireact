@@ -1,0 +1,41 @@
+/* ============================================
+   DropdownButton — Container
+   ============================================ */
+.k-dropdownbutton {
+  display: inline-flex;
+  position: relative;
+}
+
+.k-dropdownbutton__main {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.k-dropdownbutton__main.k-button--rounded {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.k-dropdownbutton__toggle {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: 1px solid var(--kreati-overlay-light);
+  min-width: 0;
+  padding-left: var(--kreati-space-2);
+  padding-right: var(--kreati-space-2);
+}
+
+.k-dropdownbutton__toggle.k-button--rounded {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Outlined variant separator */
+.k-dropdownbutton__toggle.k-button--outlined {
+  border-left-color: currentColor;
+}
+
+/* Text variant separator */
+.k-dropdownbutton__toggle.k-button--text {
+  border-left: 1px solid var(--kreati-gray-200);
+}

@@ -1,0 +1,175 @@
+/* ============================================
+   SpeedDial — Container
+   ============================================ */
+.k-speeddial {
+  position: relative;
+  display: inline-flex;
+}
+
+/* ============================================
+   SpeedDial — Trigger
+   ============================================ */
+.k-speeddial__trigger .k-button {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.k-speeddial__trigger--open .k-button {
+  transform: rotate(45deg);
+}
+
+/* ============================================
+   SpeedDial — Actions container
+   ============================================ */
+.k-speeddial__actions {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.k-speeddial__actions--visible {
+  pointer-events: auto;
+}
+
+/* Directions — padding separates actions from trigger */
+.k-speeddial__actions--up {
+  flex-direction: column-reverse;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-bottom: var(--kreati-space-2);
+}
+
+.k-speeddial__actions--down {
+  flex-direction: column;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-top: var(--kreati-space-2);
+}
+
+.k-speeddial__actions--left {
+  flex-direction: row-reverse;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  padding-right: var(--kreati-space-2);
+}
+
+.k-speeddial__actions--right {
+  flex-direction: row;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  padding-left: var(--kreati-space-2);
+}
+
+/* Quarter circle */
+.k-speeddial__actions--quarter-up-right,
+.k-speeddial__actions--quarter-up-left,
+.k-speeddial__actions--quarter-down-right,
+.k-speeddial__actions--quarter-down-left {
+  position: absolute;
+}
+
+/* ============================================
+   SpeedDial — Action item (staggered animation)
+   ============================================ */
+.k-speeddial__action {
+  position: relative;
+  opacity: 0;
+  transform: scale(0.3);
+  transition:
+    opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-delay: calc(var(--k-dial-i, 0) * 40ms);
+}
+
+/* Direction-specific initial offset + gap between items */
+.k-speeddial__actions--up > .k-speeddial__action {
+  transform: scale(0.3) translateY(12px);
+  margin: var(--kreati-space-1) 0;
+}
+
+.k-speeddial__actions--down > .k-speeddial__action {
+  transform: scale(0.3) translateY(-12px);
+  margin: var(--kreati-space-1) 0;
+}
+
+.k-speeddial__actions--left > .k-speeddial__action {
+  transform: scale(0.3) translateX(12px);
+  margin: 0 var(--kreati-space-1);
+}
+
+.k-speeddial__actions--right > .k-speeddial__action {
+  transform: scale(0.3) translateX(-12px);
+  margin: 0 var(--kreati-space-1);
+}
+
+/* Quarter circle items start from center */
+.k-speeddial__actions[class*="quarter"] > .k-speeddial__action {
+  transform: scale(0.3);
+}
+
+/* Visible state */
+.k-speeddial__actions--visible > .k-speeddial__action {
+  opacity: 1;
+  transform: scale(1) translateY(0) translateX(0);
+}
+
+.k-speeddial__actions--visible[class*="quarter"] > .k-speeddial__action {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ============================================
+   SpeedDial — Tooltip label
+   ============================================ */
+.k-speeddial__label {
+  position: absolute;
+  white-space: nowrap;
+  font-family: var(--kreati-font-family);
+  font-size: var(--kreati-font-size-xxs);
+  background: var(--kreati-gray-800);
+  color: var(--kreati-white);
+  padding: var(--kreati-space-1) var(--kreati-space-2);
+  border-radius: var(--kreati-radius-sm);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--kreati-transition-fast);
+}
+
+.k-speeddial__action:hover .k-speeddial__label,
+.k-speeddial__action:focus-within .k-speeddial__label {
+  opacity: 1;
+}
+
+.k-speeddial__actions--up .k-speeddial__label,
+.k-speeddial__actions--down .k-speeddial__label {
+  right: calc(100% + var(--kreati-space-2));
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.k-speeddial__actions--left .k-speeddial__label,
+.k-speeddial__actions--right .k-speeddial__label {
+  bottom: calc(100% + var(--kreati-space-2));
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ============================================
+   SpeedDial — Mask overlay
+   ============================================ */
+.k-speeddial__mask {
+  position: fixed;
+  inset: 0;
+  background: var(--kreati-overlay-dark);
+  z-index: -1;
+  animation: k-speeddial-mask-in 0.2s ease-out;
+}
+
+@keyframes k-speeddial-mask-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

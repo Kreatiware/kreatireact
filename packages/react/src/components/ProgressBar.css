@@ -1,0 +1,78 @@
+.k-progressbar {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-2);
+  width: 100%;
+  font-family: var(--kreati-font-family);
+}
+
+/* Track (background) */
+.k-progressbar__track {
+  flex: 1;
+  min-width: 0;
+  height: var(--kreati-progressbar-height);
+  background: var(--kreati-progressbar-bg);
+  border-radius: var(--kreati-progressbar-radius);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Fill */
+.k-progressbar__fill {
+  height: 100%;
+  border-radius: var(--kreati-progressbar-radius);
+  transition: width 0.3s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.k-progressbar--primary .k-progressbar__fill   { background: var(--kreati-severity-primary); }
+.k-progressbar--secondary .k-progressbar__fill { background: var(--kreati-severity-secondary); }
+.k-progressbar--success .k-progressbar__fill   { background: var(--kreati-severity-success); }
+.k-progressbar--info .k-progressbar__fill      { background: var(--kreati-severity-info); }
+.k-progressbar--warning .k-progressbar__fill   { background: var(--kreati-severity-warning); }
+.k-progressbar--help .k-progressbar__fill      { background: var(--kreati-severity-help); }
+.k-progressbar--danger .k-progressbar__fill    { background: var(--kreati-severity-danger); }
+
+/* Label — outside (right of bar) */
+.k-progressbar__label--outside {
+  flex-shrink: 0;
+  font-size: var(--kreati-font-size-xs);
+  font-weight: var(--kreati-font-weight-semibold);
+  color: var(--kreati-gray-700);
+  min-width: 3ch;
+  text-align: right;
+}
+
+/* Label — inside (within the fill) */
+.k-progressbar__label--inside {
+  font-size: var(--kreati-font-size-xxs);
+  font-weight: var(--kreati-font-weight-bold);
+  color: var(--kreati-white);
+  padding: 0 var(--kreati-space-1);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Label inside needs taller bar */
+.k-progressbar--label-inside .k-progressbar__track {
+  height: 18px;
+}
+
+/* Indeterminate */
+.k-progressbar--indeterminate .k-progressbar__fill {
+  width: 40%;
+  animation: k-progressbar-indeterminate 1.5s ease-in-out infinite;
+}
+
+@keyframes k-progressbar-indeterminate {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k-progressbar--indeterminate .k-progressbar__fill { animation: none; width: 100%; opacity: 0.5; }
+  .k-progressbar__fill { transition: none; }
+}
