@@ -1,4 +1,5 @@
 import React, { forwardRef, useRef, useState, useEffect, useCallback, useImperativeHandle } from 'react';
+import { TRIANGLE_UP_PATH, TRIANGLE_DOWN_PATH, TRIANGLE_LEFT_PATH, TRIANGLE_RIGHT_PATH } from './iconPaths';
 import './ScrollBar.css';
 
 export interface ScrollBarProps {
@@ -360,7 +361,7 @@ export const ScrollBar = forwardRef<HTMLDivElement, ScrollBarProps>(
             {trackTemplate && <div className={`${base}__track-template`}>{trackTemplate}</div>}
             {arrows && (
               <button className={`${base}__arrow ${base}__arrow--up`} onClick={() => scrollBy('up')} aria-label="Scroll up" tabIndex={-1}>
-                <svg viewBox="0 0 24 24" fill="currentColor" width={arrowSize} height={arrowSize}><path d="M12 8l-6 6h12z" /></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor" width={arrowSize} height={arrowSize}><path d={TRIANGLE_UP_PATH} /></svg>
               </button>
             )}
             <div ref={arrows ? thumbZoneVRef : undefined} className={arrows ? `${base}__thumb-zone` : undefined} style={arrows ? { flex: 1, position: 'relative' } : undefined}>
@@ -379,7 +380,7 @@ export const ScrollBar = forwardRef<HTMLDivElement, ScrollBarProps>(
             </div>
             {arrows && (
               <button className={`${base}__arrow ${base}__arrow--down`} onClick={() => scrollBy('down')} aria-label="Scroll down" tabIndex={-1}>
-                <svg viewBox="0 0 24 24" fill="currentColor" width={arrowSize} height={arrowSize}><path d="M12 16l6-6H6z" /></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor" width={arrowSize} height={arrowSize}><path d={TRIANGLE_DOWN_PATH} /></svg>
               </button>
             )}
           </div>
@@ -400,7 +401,7 @@ export const ScrollBar = forwardRef<HTMLDivElement, ScrollBarProps>(
             {trackTemplate && <div className={`${base}__track-template`}>{trackTemplate}</div>}
             {arrows && (
               <button className={`${base}__arrow ${base}__arrow--left`} onClick={() => scrollBy('left')} aria-label="Scroll left" tabIndex={-1}>
-                <svg viewBox="0 0 24 24" fill="currentColor" width={arrowSize} height={arrowSize}><path d="M8 12l6-6v12z" /></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor" width={arrowSize} height={arrowSize}><path d={TRIANGLE_LEFT_PATH} /></svg>
               </button>
             )}
             <div ref={arrows ? thumbZoneHRef : undefined} className={arrows ? `${base}__thumb-zone` : undefined} style={arrows ? { flex: 1, position: 'relative' } : undefined}>
@@ -419,7 +420,7 @@ export const ScrollBar = forwardRef<HTMLDivElement, ScrollBarProps>(
             </div>
             {arrows && (
               <button className={`${base}__arrow ${base}__arrow--right`} onClick={() => scrollBy('right')} aria-label="Scroll right" tabIndex={-1}>
-                <svg viewBox="0 0 24 24" fill="currentColor" width={arrowSize} height={arrowSize}><path d="M16 12l-6 6V6z" /></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor" width={arrowSize} height={arrowSize}><path d={TRIANGLE_RIGHT_PATH} /></svg>
               </button>
             )}
           </div>

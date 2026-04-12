@@ -21,6 +21,11 @@ import {
   ExclamationTriangle,
   HelpCircle,
   User,
+  Star,
+  StarHalf,
+  TimesCircle,
+  Heart,
+  Upload,
 } from './icons';
 import type { IconProps } from './icons';
 
@@ -47,6 +52,11 @@ const ICON_MAP: Record<string, React.FC<IconProps>> = {
   'exclamation-triangle': ExclamationTriangle,
   'help-circle': HelpCircle,
   user: User,
+  star: Star,
+  'star-half': StarHalf,
+  'times-circle': TimesCircle,
+  heart: Heart,
+  upload: Upload,
 };
 
 export interface IconResolverProps extends IconProps {

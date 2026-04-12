@@ -514,4 +514,21 @@
   --kreati-item-picker-controls-gap: var(--kreati-space-2);
   --kreati-item-picker-drag-bg: var(--kreati-severity-primary-light);
   --kreati-item-picker-drop-border: 2px dashed var(--kreati-severity-primary);
+
+  /* ─── Component Tokens — Rating ────────────────────────────────── */
+  --kreati-rating-color: var(--kreati-severity-warning);
+  --kreati-rating-inactive-color: var(--kreati-gray-300);
+  --kreati-rating-size-xs: var(--kreati-space-3);
+  --kreati-rating-size-sm: var(--kreati-space-4);
+  --kreati-rating-size-md: var(--kreati-space-6);
+  --kreati-rating-size-lg: var(--kreati-space-8);
+  --kreati-rating-size-xl: var(--kreati-font-size-4xl);
+
+  /* ─── Component Tokens — Timeline ────────────────────────────────── */
+  --kreati-timeline-marker-size: var(--kreati-space-3);
+  --kreati-timeline-marker-color: var(--kreati-severity-primary);
+  --kreati-timeline-connector-width: 2px;
+  --kreati-timeline-connector-color: var(--kreati-gray-200);
+  --kreati-timeline-gap: var(--kreati-space-3);
+  --kreati-timeline-item-spacing: var(--kreati-space-6);
 }

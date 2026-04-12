@@ -1,0 +1,193 @@
+/* ─── AutoComplete — Dropdown ─────────────────────────────────────── */
+
+.k-autocomplete {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.k-autocomplete--full-width {
+  width: 100%;
+}
+
+.k-autocomplete__panel {
+  position: fixed;
+  z-index: var(--kreati-z-overlay);
+  background: var(--kreati-white);
+  border: 1px solid var(--kreati-gray-200);
+  border-radius: var(--kreati-radius-md);
+  box-shadow: var(--kreati-shadow-lg);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--kreati-transition-fast), transform var(--kreati-transition-fast);
+}
+
+.k-autocomplete__panel--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── AutoComplete — List ─────────────────────────────────────────── */
+
+.k-autocomplete__list {
+  max-height: var(--kreati-select-dropdown-max-height);
+  overflow-y: auto;
+  padding: var(--kreati-space-1) 0;
+}
+
+/* ─── AutoComplete — Item ─────────────────────────────────────────── */
+
+.k-autocomplete__item {
+  display: flex;
+  align-items: center;
+  padding: var(--kreati-select-option-padding);
+  cursor: pointer;
+  font-size: var(--kreati-font-size-sm);
+  color: var(--kreati-gray-800);
+  transition: background var(--kreati-transition-fast);
+}
+
+.k-autocomplete__item:hover,
+.k-autocomplete__item--focused {
+  background: var(--kreati-select-option-hover-bg);
+}
+
+.k-autocomplete__item--selected {
+  background: var(--kreati-select-option-active-bg);
+  color: var(--kreati-select-option-active-color);
+  font-weight: var(--kreati-font-weight-medium);
+}
+
+.k-autocomplete__item--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── AutoComplete — Empty / Loading ──────────────────────────────── */
+
+.k-autocomplete__empty,
+.k-autocomplete__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--kreati-space-3);
+  color: var(--kreati-select-empty-color);
+  font-size: var(--kreati-font-size-sm);
+  gap: var(--kreati-space-2);
+}
+
+/* ─── AutoComplete — Multiple: Tokens container ──────────────────── */
+
+.k-autocomplete__tokens {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--kreati-space-1);
+  padding: var(--kreati-space-1) var(--kreati-space-2);
+  border: 1px solid var(--kreati-gray-300);
+  border-radius: var(--kreati-radius-md);
+  background: var(--kreati-white);
+  cursor: text;
+  min-height: var(--kreati-input-height-md);
+  transition: border-color var(--kreati-transition-fast), box-shadow var(--kreati-transition-fast);
+}
+
+.k-autocomplete__tokens:focus-within {
+  border-color: var(--kreati-severity-primary);
+  box-shadow: 0 0 0 1px var(--kreati-severity-primary);
+}
+
+.k-autocomplete__tokens--error {
+  border-color: var(--kreati-severity-danger);
+}
+
+.k-autocomplete__tokens--error:focus-within {
+  box-shadow: 0 0 0 1px var(--kreati-severity-danger);
+}
+
+.k-autocomplete__tokens--success {
+  border-color: var(--kreati-severity-success);
+}
+
+.k-autocomplete__tokens--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  background: var(--kreati-gray-50);
+}
+
+.k-autocomplete__tokens--full-width {
+  width: 100%;
+}
+
+/* ─── AutoComplete — Multiple: Sizes ─────────────────────────────── */
+
+.k-autocomplete__tokens--xs { min-height: var(--kreati-input-height-xs); font-size: var(--kreati-font-size-xs); }
+.k-autocomplete__tokens--sm { min-height: var(--kreati-input-height-sm); font-size: var(--kreati-font-size-sm); }
+.k-autocomplete__tokens--md { min-height: var(--kreati-input-height-md); font-size: var(--kreati-font-size-sm); }
+.k-autocomplete__tokens--lg { min-height: var(--kreati-input-height-lg); font-size: var(--kreati-font-size-base); }
+.k-autocomplete__tokens--xl { min-height: var(--kreati-input-height-xl); font-size: var(--kreati-font-size-lg); }
+
+/* ─── AutoComplete — Multiple: Inline input ──────────────────────── */
+
+.k-autocomplete__tokens-input {
+  flex: 1;
+  min-width: 60px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--kreati-gray-800);
+  padding: var(--kreati-space-1) 0;
+}
+
+.k-autocomplete__tokens-input::placeholder {
+  color: var(--kreati-gray-400);
+}
+
+/* ─── AutoComplete — Multiple: Icons ─────────────────────────────── */
+
+.k-autocomplete__icon-left,
+.k-autocomplete__icon-right {
+  display: flex;
+  align-items: center;
+  color: var(--kreati-gray-400);
+}
+
+/* ─── AutoComplete — Multiple: Label / Error / Helper ────────────── */
+
+.k-autocomplete__label {
+  display: block;
+  font-size: var(--kreati-font-size-sm);
+  font-weight: var(--kreati-font-weight-medium);
+  color: var(--kreati-gray-700);
+  margin-bottom: var(--kreati-space-1);
+}
+
+.k-autocomplete__required {
+  color: var(--kreati-severity-danger);
+  margin-left: var(--kreati-space-half, 2px);
+}
+
+.k-autocomplete__error {
+  display: block;
+  font-size: var(--kreati-font-size-xs);
+  color: var(--kreati-severity-danger);
+  margin-top: var(--kreati-space-1);
+}
+
+.k-autocomplete__helper {
+  display: block;
+  font-size: var(--kreati-font-size-xs);
+  color: var(--kreati-gray-500);
+  margin-top: var(--kreati-space-1);
+}
+
+/* ─── AutoComplete — Reduced motion ──────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .k-autocomplete__panel {
+    transition: none;
+  }
+}

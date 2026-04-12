@@ -170,6 +170,11 @@
   color: var(--kreati-gray-400);
 }
 
+/* Hide placeholder when floating label is in resting position */
+.k-multiselect__trigger:has(.k-multiselect__floating-label:not(.k-multiselect__floating-label--active)) .k-multiselect__value--placeholder {
+  color: transparent;
+}
+
 /* ============================================
    Chips
    ============================================ */

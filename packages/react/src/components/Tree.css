@@ -1,0 +1,97 @@
+/* ─── Tree ───────────────────────────────────────────────────────── */
+
+.k-tree {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-family: var(--kreati-font-family);
+  font-size: var(--kreati-font-size-sm);
+}
+
+.k-tree__subtree {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  padding-left: var(--kreati-space-4);
+}
+
+/* ─── Tree — Node ────────────────────────────────────────────────── */
+
+.k-tree__node {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-1);
+  padding: var(--kreati-space-1) var(--kreati-space-2);
+  border-radius: var(--kreati-radius-sm);
+  cursor: pointer;
+  color: var(--kreati-gray-800);
+  transition: background var(--kreati-transition-fast);
+  user-select: none;
+}
+
+.k-tree__node:hover {
+  background: var(--kreati-primary-alpha-6);
+}
+
+.k-tree__node--selected {
+  background: var(--kreati-select-option-active-bg);
+  color: var(--kreati-select-option-active-color);
+  font-weight: var(--kreati-font-weight-medium);
+}
+
+.k-tree__node--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.k-tree__node--disabled:hover {
+  background: none;
+}
+
+.k-tree__node:focus-visible {
+  outline: 2px solid var(--kreati-severity-primary);
+  outline-offset: -2px;
+}
+
+/* ─── Tree — Toggle ──────────────────────────────────────────────── */
+
+.k-tree__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  transition: transform var(--kreati-transition-fast);
+  color: var(--kreati-gray-500);
+}
+
+.k-tree__toggle--expanded {
+  transform: rotate(90deg);
+}
+
+.k-tree__toggle--leaf {
+  visibility: hidden;
+}
+
+/* ─── Tree — Icon / Label ────────────────────────────────────────── */
+
+.k-tree__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.k-tree__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ─── Tree — Reduced motion ──────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .k-tree__toggle { transition: none; }
+  .k-tree__node { transition: none; }
+}

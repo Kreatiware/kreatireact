@@ -451,7 +451,6 @@ export const ItemPicker = forwardRef<HTMLDivElement, ItemPickerProps>(
     const renderItem = (item: ItemPickerItem, selected: Set<string>, setSelected: React.Dispatch<React.SetStateAction<Set<string>>>, from: 'source' | 'target', indexInList: number) => {
       const isSel = selected.has(item.value);
       const isDis = !!item.disabled || disabled;
-      const isGlobalDis = disabled;
       const showDropLine = dropIndicator?.panel === from && dropIndicator.index === indexInList;
       const cls = [
         `${base}__item`,
@@ -468,14 +467,14 @@ export const ItemPicker = forwardRef<HTMLDivElement, ItemPickerProps>(
           style={item.style}
           role="option"
           aria-selected={isSel}
-          aria-disabled={isGlobalDis || undefined}
+          aria-disabled={isDis || undefined}
           data-value={item.value}
-          tabIndex={isGlobalDis ? -1 : 0}
+          tabIndex={isDis ? -1 : 0}
           draggable={dragDrop && !isDis}
           onDragStart={(e) => handleDragStart(e, item, from)}
           onDragEnd={handleDragEnd}
-          onClick={isGlobalDis ? undefined : () => toggleSelection(setSelected, item.value)}
-          onKeyDown={isGlobalDis ? undefined : (e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleSelection(setSelected, item.value); } }}
+          onClick={isDis ? undefined : () => toggleSelection(setSelected, item.value)}
+          onKeyDown={isDis ? undefined : (e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleSelection(setSelected, item.value); } }}
         >
           <span className={`${base}__checkbox`} aria-hidden="true">
             {isSel && <svg width={12} height={12} viewBox="0 0 24 24" fill="currentColor"><path d={CHECK_PATH} /></svg>}

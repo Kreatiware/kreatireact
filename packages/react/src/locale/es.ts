@@ -70,6 +70,31 @@ export const es: KreatiLocale = {
   dial: {
     ariaLabel: 'Dial',
   },
+  rating: {
+    ariaLabel: 'Calificacion',
+    clear: 'Limpiar calificacion',
+  },
+  colorPicker: {
+    ariaLabel: 'Selector de color',
+    saturation: 'Saturacion y brillo',
+    hue: 'Tono',
+    opacity: 'Opacidad',
+    switchFormat: 'Cambiar formato de color',
+  },
+  fileUpload: {
+    clickToUpload: 'Haz clic para subir',
+    dragAndDrop: 'o arrastra y suelta',
+    maxSize: 'Max',
+    removeFile: 'Eliminar archivo',
+  },
+  pagination: {
+    ariaLabel: 'Paginacion',
+    first: 'Primera pagina',
+    previous: 'Pagina anterior',
+    next: 'Pagina siguiente',
+    last: 'Ultima pagina',
+    page: 'Pagina',
+  },
   itemPicker: {
     sourceHeader: 'Disponibles',
     targetHeader: 'Seleccionados',

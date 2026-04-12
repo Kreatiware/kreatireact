@@ -79,6 +79,35 @@ export interface KreatiLocale {
   dial: {
     ariaLabel: string;
   };
+  /** Rating component */
+  rating: {
+    ariaLabel: string;
+    clear: string;
+  };
+  /** ColorPicker component */
+  colorPicker: {
+    ariaLabel: string;
+    saturation: string;
+    hue: string;
+    opacity: string;
+    switchFormat: string;
+  };
+  /** FileUpload component */
+  fileUpload: {
+    clickToUpload: string;
+    dragAndDrop: string;
+    maxSize: string;
+    removeFile: string;
+  };
+  /** Pagination component */
+  pagination: {
+    ariaLabel: string;
+    first: string;
+    previous: string;
+    next: string;
+    last: string;
+    page: string;
+  };
   /** ItemPicker component */
   itemPicker: {
     sourceHeader: string;

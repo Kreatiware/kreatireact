@@ -1,0 +1,165 @@
+/* ─── InputGroup ─────────────────────────────────────────────────── */
+
+.k-input-group {
+  font-family: var(--kreati-font-family);
+}
+
+.k-input-group--full-width { width: 100%; }
+
+/* ─── Row (the flex container with addon + input + addon) ────────── */
+
+.k-input-group__row {
+  display: inline-flex;
+  align-items: stretch;
+  width: 100%;
+}
+
+.k-input-group__row--disabled { opacity: 0.5; pointer-events: none; }
+
+/* ─── Input slot ─────────────────────────────────────────────────── */
+
+.k-input-group__input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Reset radius on grouped inputs */
+.k-input-group__input .k-input__fieldset,
+.k-input-group__input .k-input__container {
+  border-radius: 0;
+}
+
+/* Remove border on the side touching the addon */
+.k-input-group__input--has-prefix .k-input__fieldset,
+.k-input-group__input--has-prefix .k-input__container {
+  border-left: none;
+}
+
+.k-input-group__input--has-suffix .k-input__fieldset,
+.k-input-group__input--has-suffix .k-input__container {
+  border-right: none;
+}
+
+/* No prefix: restore left radius */
+.k-input-group__input:first-child .k-input__fieldset,
+.k-input-group__input:first-child .k-input__container {
+  border-radius: var(--kreati-radius-md) 0 0 var(--kreati-radius-md);
+}
+
+/* No suffix: restore right radius */
+.k-input-group__input:last-child .k-input__fieldset,
+.k-input-group__input:last-child .k-input__container {
+  border-radius: 0 var(--kreati-radius-md) var(--kreati-radius-md) 0;
+}
+
+/* Only child: full radius */
+.k-input-group__input:only-child .k-input__fieldset,
+.k-input-group__input:only-child .k-input__container {
+  border-radius: var(--kreati-radius-md);
+}
+
+/* ─── Addon ──────────────────────────────────────────────────────── */
+
+.k-input-group__addon {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--kreati-space-3);
+  background: var(--kreati-gray-50);
+  border: 2px solid var(--kreati-gray-300);
+  color: var(--kreati-gray-600);
+  font-size: var(--kreati-font-size-sm);
+  white-space: nowrap;
+  transition: border-color var(--kreati-transition-fast);
+}
+
+.k-input-group__addon--prefix {
+  border-right: none;
+  border-radius: var(--kreati-radius-md) 0 0 var(--kreati-radius-md);
+}
+
+.k-input-group__addon--suffix {
+  border-left: none;
+  border-radius: 0 var(--kreati-radius-md) var(--kreati-radius-md) 0;
+}
+
+/* ─── Addon state sync ───────────────────────────────────────────── */
+
+/* Focus: match Input border */
+.k-input-group__row:focus-within .k-input-group__addon {
+  border-color: var(--kreati-severity-primary);
+  border-width: 3px;
+}
+
+/* Compensate padding when border grows */
+.k-input-group__row:focus-within .k-input-group__addon--prefix { padding-right: 0; }
+.k-input-group__row:focus-within .k-input-group__addon--suffix { padding-left: 0; }
+
+/* Error */
+.k-input-group__row--error .k-input-group__addon {
+  border-color: var(--kreati-severity-danger);
+}
+
+.k-input-group__row--error:focus-within .k-input-group__addon {
+  border-color: var(--kreati-severity-danger);
+}
+
+/* Success */
+.k-input-group__row--success .k-input-group__addon {
+  border-color: var(--kreati-severity-success);
+}
+
+.k-input-group__row--success:focus-within .k-input-group__addon {
+  border-color: var(--kreati-severity-success);
+}
+
+/* ─── Addon with Button ──────────────────────────────────────────── */
+
+.k-input-group__addon > .k-button {
+  border-radius: 0;
+  height: 100%;
+}
+
+.k-input-group__addon--prefix > .k-button {
+  border-radius: var(--kreati-radius-md) 0 0 var(--kreati-radius-md);
+}
+
+.k-input-group__addon--suffix > .k-button {
+  border-radius: 0 var(--kreati-radius-md) var(--kreati-radius-md) 0;
+}
+
+.k-input-group__addon--button {
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+/* ─── Input state sync — propagate error/success border to the input ── */
+
+.k-input-group__row--error .k-input-group__input .k-input__fieldset,
+.k-input-group__row--error .k-input-group__input .k-input__container {
+  border-color: var(--kreati-severity-danger);
+}
+
+.k-input-group__row--success .k-input-group__input .k-input__fieldset,
+.k-input-group__row--success .k-input-group__input .k-input__container {
+  border-color: var(--kreati-severity-success);
+}
+
+/* ─── Sizes ──────────────────────────────────────────────────────── */
+
+.k-input-group--xs .k-input-group__addon { font-size: var(--kreati-font-size-xs); padding: 0 var(--kreati-space-2); }
+.k-input-group--sm .k-input-group__addon { font-size: var(--kreati-font-size-xs); padding: 0 var(--kreati-space-2); }
+.k-input-group--lg .k-input-group__addon { font-size: var(--kreati-font-size-base); padding: 0 var(--kreati-space-4); }
+.k-input-group--xl .k-input-group__addon { font-size: var(--kreati-font-size-lg); padding: 0 var(--kreati-space-4); }
+
+/* ─── Responsive ─────────────────────────────────────────────────── */
+
+@media (max-width: 320px) {
+  .k-input-group__addon { padding: 0 var(--kreati-space-2); }
+}
+
+/* ─── Reduced motion ─────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .k-input-group__addon { transition: none; }
+}

@@ -185,6 +185,11 @@
   color: var(--kreati-gray-400);
 }
 
+/* Hide placeholder when floating label is in resting position */
+.k-select__trigger:has(.k-select__floating-label:not(.k-select__floating-label--active)) .k-select__value--placeholder {
+  color: transparent;
+}
+
 /* ============================================
    Editable/filterable input
    ============================================ */

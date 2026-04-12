@@ -1,0 +1,95 @@
+/* ─── Timeline ───────────────────────────────────────────────────── */
+
+.k-timeline {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--kreati-font-family);
+}
+
+/* ─── Item: [connector] [content] ────────────────────────────────── */
+
+.k-timeline__item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 var(--kreati-timeline-gap);
+}
+
+/* Alternate: [sideA] [connector] [sideB] */
+.k-timeline--alternate .k-timeline__item {
+  grid-template-columns: 1fr auto 1fr;
+}
+
+/* ─── Connector (center column with line + marker) ───────────────── */
+
+.k-timeline__connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--kreati-timeline-item-spacing) 0;
+  position: relative;
+}
+
+.k-timeline__connector::before,
+.k-timeline__connector::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--kreati-timeline-connector-width);
+  background: var(--kreati-timeline-connector-color);
+}
+
+/* Top half: from top edge down to marker */
+.k-timeline__connector::before {
+  top: 0;
+  height: var(--kreati-timeline-item-spacing);
+}
+
+/* Bottom half: from marker down to bottom edge */
+.k-timeline__connector::after {
+  bottom: 0;
+  height: var(--kreati-timeline-item-spacing);
+}
+
+.k-timeline__connector--first::before { display: none; }
+.k-timeline__connector--last::after { display: none; }
+
+/* ─── Marker ─────────────────────────────────────────────────────── */
+
+.k-timeline__marker {
+  width: var(--kreati-timeline-marker-size);
+  height: var(--kreati-timeline-marker-size);
+  border-radius: var(--kreati-radius-full);
+  background: var(--kreati-timeline-marker-color);
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.k-timeline__marker--custom {
+  width: auto;
+  height: auto;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── Content / Sides ────────────────────────────────────────────── */
+
+.k-timeline__content {
+  min-width: 0;
+  align-self: center;
+}
+
+.k-timeline__side {
+  min-width: 0;
+  align-self: center;
+}
+
+.k-timeline__side--a {
+  text-align: right;
+}
+
+.k-timeline__side--b {
+  text-align: left;
+}

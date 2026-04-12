@@ -32,6 +32,11 @@ export {
   ExclamationTriangle,
   HelpCircle,
   User,
+  Star,
+  StarHalf,
+  TimesCircle,
+  Heart,
+  Upload,
   // Deprecated aliases
   Menu,
 } from './icons';

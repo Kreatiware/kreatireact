@@ -39,3 +39,29 @@
    ============================================ */
 .k-chip--raised { box-shadow: var(--kreati-shadow-sm); }
 .k-chip--raised:hover { box-shadow: var(--kreati-shadow-md); }
+
+/* ============================================
+   Text
+   ============================================ */
+.k-chip__text { display: inline-flex; align-items: center; }
+
+/* ============================================
+   Remove button
+   ============================================ */
+.k-chip__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: var(--kreati-space-1);
+  color: inherit;
+  opacity: 0.6;
+  transition: opacity var(--kreati-transition-fast);
+}
+
+.k-chip__remove:hover {
+  opacity: 1;
+}

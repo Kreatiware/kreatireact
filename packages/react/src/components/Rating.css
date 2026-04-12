@@ -1,0 +1,135 @@
+/* ─── Rating ─────────────────────────────────────────────────────── */
+
+.k-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kreati-space-1);
+}
+
+.k-rating--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.k-rating--readonly {
+  pointer-events: none;
+}
+
+/* ─── Rating — Sizes ─────────────────────────────────────────────── */
+
+.k-rating--xs { --k-rating-size: var(--kreati-rating-size-xs); }
+.k-rating--sm { --k-rating-size: var(--kreati-rating-size-sm); }
+.k-rating--md { --k-rating-size: var(--kreati-rating-size-md); }
+.k-rating--lg { --k-rating-size: var(--kreati-rating-size-lg); }
+.k-rating--xl { --k-rating-size: var(--kreati-rating-size-xl); }
+
+/* ─── Rating — Item ──────────────────────────────────────────────── */
+
+.k-rating__item {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+  transition: transform var(--kreati-transition-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.k-rating__item:hover {
+  transform: scale(1.15);
+}
+
+.k-rating--readonly .k-rating__item,
+.k-rating--disabled .k-rating__item {
+  cursor: default;
+}
+
+.k-rating--readonly .k-rating__item:hover,
+.k-rating--disabled .k-rating__item:hover {
+  transform: none;
+}
+
+/* ─── Rating — Half hit areas ────────────────────────────────────── */
+
+.k-rating__half-left,
+.k-rating__half-right {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 50%;
+}
+
+.k-rating__half-left { left: 0; }
+.k-rating__half-right { right: 0; }
+
+/* ─── Rating — Icon ──────────────────────────────────────────────── */
+
+.k-rating__icon {
+  position: relative;
+  display: flex;
+  width: var(--k-rating-size);
+  height: var(--k-rating-size);
+}
+
+.k-rating__icon svg {
+  width: var(--k-rating-size);
+  height: var(--k-rating-size);
+}
+
+.k-rating__icon--off {
+  color: var(--kreati-rating-inactive-color);
+}
+
+.k-rating__icon--on {
+  color: var(--kreati-rating-color);
+}
+
+.k-rating__icon--half {
+  position: relative;
+}
+
+.k-rating__icon--half .k-rating__icon-bg {
+  color: var(--kreati-rating-inactive-color);
+}
+
+.k-rating__icon--half .k-rating__icon-fg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  clip-path: inset(0 50% 0 0);
+  color: var(--kreati-rating-color);
+}
+
+/* ─── Rating — Focus ─────────────────────────────────────────────── */
+
+.k-rating:focus-visible {
+  outline: 2px solid var(--kreati-severity-primary);
+  outline-offset: 2px;
+  border-radius: var(--kreati-radius-sm);
+}
+
+/* ─── Rating — Cancel icon ───────────────────────────────────────── */
+
+.k-rating__cancel {
+  display: inline-flex;
+  cursor: pointer;
+  color: var(--kreati-rating-inactive-color);
+  transition: color var(--kreati-transition-fast), transform var(--kreati-transition-fast);
+}
+
+.k-rating__cancel:hover {
+  color: var(--kreati-severity-danger);
+  transform: scale(1.15);
+}
+
+.k-rating__cancel svg {
+  width: var(--k-rating-size);
+  height: var(--k-rating-size);
+}
+
+/* ─── Rating — Reduced motion ────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .k-rating__item:hover,
+  .k-rating__cancel:hover {
+    transform: none;
+  }
+}

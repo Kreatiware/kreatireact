@@ -1,0 +1,131 @@
+/* ─── FileUpload ─────────────────────────────────────────────────── */
+
+.k-file-upload {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--kreati-font-family);
+}
+
+.k-file-upload--disabled { opacity: 0.5; pointer-events: none; }
+
+/* ─── FileUpload — Dropzone ──────────────────────────────────────── */
+
+.k-file-upload__dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--kreati-space-2);
+  padding: var(--kreati-space-6) var(--kreati-space-4);
+  border: 2px dashed var(--kreati-gray-300);
+  border-radius: var(--kreati-radius-lg);
+  background: var(--kreati-gray-50);
+  cursor: pointer;
+  transition: border-color var(--kreati-transition-fast), background var(--kreati-transition-fast);
+  text-align: center;
+}
+
+.k-file-upload__dropzone:hover {
+  border-color: var(--kreati-severity-primary);
+  background: var(--kreati-primary-alpha-6);
+}
+
+.k-file-upload__dropzone--dragging {
+  border-color: var(--kreati-severity-primary);
+  background: var(--kreati-primary-alpha-8);
+}
+
+.k-file-upload__dropzone--error {
+  border-color: var(--kreati-severity-danger);
+}
+
+.k-file-upload__dropzone--success {
+  border-color: var(--kreati-severity-success);
+}
+
+.k-file-upload__dropzone:focus-visible {
+  outline: 2px solid var(--kreati-severity-primary);
+  outline-offset: 2px;
+}
+
+/* ─── FileUpload — Icon / Text ───────────────────────────────────── */
+
+.k-file-upload__icon {
+  color: var(--kreati-gray-400);
+  font-size: var(--kreati-font-size-2xl);
+}
+
+.k-file-upload__text {
+  color: var(--kreati-gray-600);
+  font-size: var(--kreati-font-size-sm);
+}
+
+.k-file-upload__text strong {
+  color: var(--kreati-severity-primary);
+}
+
+.k-file-upload__hint {
+  color: var(--kreati-gray-400);
+  font-size: var(--kreati-font-size-xs);
+}
+
+/* ─── FileUpload — File list ─────────────────────────────────────── */
+
+.k-file-upload__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kreati-space-1);
+  margin-top: var(--kreati-space-2);
+}
+
+.k-file-upload__file {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-2);
+  padding: var(--kreati-space-2);
+  border: 1px solid var(--kreati-gray-200);
+  border-radius: var(--kreati-radius-md);
+  font-size: var(--kreati-font-size-sm);
+}
+
+.k-file-upload__file-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--kreati-gray-800);
+}
+
+.k-file-upload__file-size {
+  color: var(--kreati-gray-400);
+  font-size: var(--kreati-font-size-xs);
+  flex-shrink: 0;
+}
+
+.k-file-upload__file-remove {
+  display: inline-flex;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--kreati-gray-400);
+  padding: var(--kreati-space-1);
+  border-radius: var(--kreati-radius-sm);
+  transition: color var(--kreati-transition-fast);
+}
+
+.k-file-upload__file-remove:hover {
+  color: var(--kreati-severity-danger);
+}
+
+.k-file-upload__file-remove:focus-visible {
+  outline: 2px solid var(--kreati-severity-primary);
+  outline-offset: 1px;
+}
+
+/* ─── FileUpload — Reduced motion ────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .k-file-upload__dropzone { transition: none; }
+  .k-file-upload__file-remove { transition: none; }
+}

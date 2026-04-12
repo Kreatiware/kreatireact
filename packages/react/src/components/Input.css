@@ -52,6 +52,16 @@
   color: var(--kreati-gray-400);
 }
 
+/* In floating mode, hide placeholder when label is in resting position (not focused, no value) */
+.k-input__fieldset .k-input__native:not(:focus)::placeholder {
+  color: transparent;
+}
+
+/* Show placeholder when focused (label has floated up) */
+.k-input__fieldset .k-input__native:focus::placeholder {
+  color: var(--kreati-gray-400);
+}
+
 /* Hide native number steppers */
 .k-input__native--no-steppers::-webkit-outer-spin-button,
 .k-input__native--no-steppers::-webkit-inner-spin-button {

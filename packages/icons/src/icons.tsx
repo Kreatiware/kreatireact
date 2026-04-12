@@ -571,3 +571,53 @@ export const User: React.FC<IconProps> = ({ size = 24, color = 'currentColor', c
     <path d="M12,12c2.76,0,5-2.24,5-5s-2.24-5-5-5-5,2.24-5,5,2.24,5,5,5Zm0,2c-3.33,0-10,1.67-10,5v2h20v-2c0-3.33-6.67-5-10-5Z" />
   </svg>
 );
+
+/**
+ * Star icon — filled star for ratings
+ * @author ai — Pending designer review
+ */
+export const Star: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M12,2l2.94,6.34L22,9.27l-5,5.18L18.18,22,12,18.27,5.82,22,7,14.45,2,9.27l7.06-.93L12,2Z" />
+  </svg>
+);
+
+/**
+ * StarHalf icon — half-filled star for ratings
+ * @author ai — Pending designer review
+ */
+export const StarHalf: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M12,2l2.94,6.34L22,9.27l-5,5.18L18.18,22,12,18.27,5.82,22,7,14.45,2,9.27l7.06-.93L12,2Zm0,3.88V18.27l-3.71,2.24.71-4.26L5.37,12.7l4.24-.56L12,5.88Z" />
+  </svg>
+);
+
+/**
+ * TimesCircle icon — close/cancel in a circle
+ * @author ai — Pending designer review
+ */
+export const TimesCircle: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10,10-4.48,10-10S17.52,2,12,2Zm5,13.59L15.59,17,12,13.41,8.41,17,7,15.59,10.59,12,7,8.41,8.41,7,12,10.59,15.59,7,17,8.41,13.41,12,17,15.59Z" />
+  </svg>
+);
+
+/**
+ * Heart icon — love/favorite indicator
+ * @author ai — Pending designer review
+ */
+export const Heart: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M12,21.35l-1.45-1.32C5.4,15.36,2,12.28,2,8.5,2,5.42,4.42,3,7.5,3c1.74,0,3.41.81,4.5,2.09C13.09,3.81,14.76,3,16.5,3,19.58,3,22,5.42,22,8.5c0,3.78-3.4,6.86-8.55,11.54L12,21.35Z" />
+  </svg>
+);
+
+/**
+ * Upload icon — file upload indicator
+ * @author ai — Pending designer review
+ */
+export const Upload: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M5,4V6H19V4ZM5,14H9V20H15V14H19L12,7Z" />
+  </svg>
+);

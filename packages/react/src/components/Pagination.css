@@ -1,0 +1,80 @@
+/* ─── Pagination ─────────────────────────────────────────────────── */
+
+.k-pagination {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kreati-space-1);
+  font-family: var(--kreati-font-family);
+}
+
+.k-pagination--full-width { width: 100%; justify-content: center; }
+
+/* ─── Pagination — Sizes ─────────────────────────────────────────── */
+
+.k-pagination--xs .k-pagination__btn { width: 24px; height: 24px; font-size: var(--kreati-font-size-xxs); }
+.k-pagination--sm .k-pagination__btn { width: 28px; height: 28px; font-size: var(--kreati-font-size-xs); }
+.k-pagination--md .k-pagination__btn { width: 32px; height: 32px; font-size: var(--kreati-font-size-sm); }
+.k-pagination--lg .k-pagination__btn { width: 40px; height: 40px; font-size: var(--kreati-font-size-base); }
+.k-pagination--xl .k-pagination__btn { width: 48px; height: 48px; font-size: var(--kreati-font-size-lg); }
+
+/* ─── Pagination — Button ────────────────────────────────────────── */
+
+.k-pagination__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--kreati-gray-200);
+  border-radius: var(--kreati-radius-md);
+  background: var(--kreati-white);
+  color: var(--kreati-gray-700);
+  cursor: pointer;
+  transition: background var(--kreati-transition-fast), border-color var(--kreati-transition-fast), color var(--kreati-transition-fast);
+  padding: 0;
+  font-family: inherit;
+}
+
+.k-pagination__btn:hover:not(:disabled) {
+  background: var(--kreati-primary-alpha-6);
+  border-color: var(--kreati-severity-primary);
+  color: var(--kreati-severity-primary);
+}
+
+.k-pagination__btn:focus-visible {
+  outline: 2px solid var(--kreati-severity-primary);
+  outline-offset: 2px;
+}
+
+.k-pagination__btn--active {
+  background: var(--kreati-severity-primary);
+  border-color: var(--kreati-severity-primary);
+  color: var(--kreati-white);
+  font-weight: var(--kreati-font-weight-semibold);
+}
+
+.k-pagination__btn--active:hover:not(:disabled) {
+  background: var(--kreati-severity-primary-active);
+  border-color: var(--kreati-severity-primary-active);
+  color: var(--kreati-white);
+}
+
+.k-pagination__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ─── Pagination — Ellipsis ──────────────────────────────────────── */
+
+.k-pagination__ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--kreati-gray-400);
+  user-select: none;
+  min-width: 24px;
+}
+
+/* ─── Pagination — Reduced motion ────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .k-pagination__btn { transition: none; }
+}

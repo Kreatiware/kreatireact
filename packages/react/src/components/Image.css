@@ -1,0 +1,73 @@
+/* ─── Image ──────────────────────────────────────────────────────── */
+
+.k-image {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+
+.k-image__img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  transition: opacity var(--kreati-transition-fast);
+}
+
+.k-image__img--loading {
+  opacity: 0;
+}
+
+.k-image__img--loaded {
+  opacity: 1;
+}
+
+/* ─── Image — Fallback ───────────────────────────────────────────── */
+
+.k-image__fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--kreati-gray-100);
+  color: var(--kreati-gray-400);
+  font-size: var(--kreati-font-size-sm);
+  width: 100%;
+  height: 100%;
+  min-height: 80px;
+}
+
+/* ─── Image — Preview overlay ────────────────────────────────────── */
+
+.k-image--preview {
+  cursor: zoom-in;
+}
+
+.k-image__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--kreati-z-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--kreati-overlay-heavy);
+  cursor: zoom-out;
+  opacity: 0;
+  transition: opacity var(--kreati-transition-fast);
+}
+
+.k-image__overlay--visible {
+  opacity: 1;
+}
+
+.k-image__overlay img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: var(--kreati-radius-md);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k-image__img,
+  .k-image__overlay {
+    transition: none;
+  }
+}
