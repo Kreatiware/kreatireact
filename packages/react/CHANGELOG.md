@@ -1,5 +1,11 @@
 # @kreatiware/react
 
+## 0.11.0
+
+### Minor Changes
+
+- 8c37a4a: feat(react+icons): add feedback , misc components, icons svg
+
 ## 0.10.0
 
 ### Minor Changes
