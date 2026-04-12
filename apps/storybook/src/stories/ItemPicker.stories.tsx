@@ -27,6 +27,7 @@ const sampleItems: ItemPickerItem[] = [
 
 export const Basic: Story = {
   name: 'Basic',
+  args: {} as any,
   render: () => {
     const [val, setVal] = useState<string[]>(['react']);
     return <ItemPicker items={sampleItems} value={val} onChange={setVal} />;
@@ -35,6 +36,7 @@ export const Basic: Story = {
 
 export const WithLabelAndHelper: Story = {
   name: 'Label & Helper Text',
+  args: {} as any,
   render: () => {
     const [val, setVal] = useState<string[]>([]);
     return (
@@ -52,6 +54,7 @@ export const WithLabelAndHelper: Story = {
 
 export const WithError: Story = {
   name: 'Error State',
+  args: {} as any,
   render: () => {
     const [val, setVal] = useState<string[]>([]);
     return (
@@ -70,6 +73,7 @@ export const WithError: Story = {
 
 export const WithSuccess: Story = {
   name: 'Success State',
+  args: {} as any,
   render: () => {
     const [val, setVal] = useState<string[]>(['react', 'vue']);
     return (
@@ -87,6 +91,7 @@ export const WithSuccess: Story = {
 
 export const Filterable: Story = {
   name: 'Filterable',
+  args: {} as any,
   render: () => {
     const [val, setVal] = useState<string[]>([]);
     return <ItemPicker items={sampleItems} value={val} onChange={setVal} filterable />;
@@ -95,6 +100,7 @@ export const Filterable: Story = {
 
 export const DragAndDrop: Story = {
   name: 'Drag & Drop Between Panels',
+  args: {} as any,
   render: () => {
     const [val, setVal] = useState<string[]>(['vue', 'qwik', 'svelte']);
     return (
@@ -108,6 +114,7 @@ export const DragAndDrop: Story = {
 
 export const DragReorderWithin: Story = {
   name: 'Drag to Reorder Within Panels',
+  args: {} as any,
   render: () => {
     const [val, setVal] = useState<string[]>(['react', 'vue', 'angular', 'svelte']);
     return (
@@ -126,6 +133,7 @@ export const DragReorderWithin: Story = {
 
 export const ReorderTarget: Story = {
   name: 'Reorder Target (Buttons)',
+  args: {} as any,
   render: () => {
     const [val, setVal] = useState<string[]>(['react', 'vue', 'angular', 'svelte']);
     return (
@@ -143,6 +151,7 @@ export const ReorderTarget: Story = {
 
 export const ReorderBoth: Story = {
   name: 'Reorder Both Panels',
+  args: {} as any,
   render: () => {
     const [val, setVal] = useState<string[]>(['react', 'vue']);
     return (
@@ -161,6 +170,7 @@ export const ReorderBoth: Story = {
 
 export const CustomHeaders: Story = {
   name: 'Custom Headers',
+  args: {} as any,
   render: () => {
     const [val, setVal] = useState<string[]>([]);
     return <ItemPicker items={sampleItems} value={val} onChange={setVal} sourceHeader="Frameworks" targetHeader="My Stack" filterable />;
@@ -169,6 +179,7 @@ export const CustomHeaders: Story = {
 
 export const HeaderTemplates: Story = {
   name: 'Header Templates (JSX)',
+  args: {} as any,
   render: () => {
     const [val, setVal] = useState<string[]>([]);
     return (
@@ -196,6 +207,7 @@ export const HeaderTemplates: Story = {
 
 export const CustomTemplate: Story = {
   name: 'Custom Item Template',
+  args: {} as any,
   render: () => {
     const [val, setVal] = useState<string[]>([]);
     const items: ItemPickerItem[] = sampleItems.map((i) => ({
@@ -212,6 +224,7 @@ export const CustomTemplate: Story = {
 
 export const Disabled: Story = {
   name: 'Disabled',
+  args: {} as any,
   render: () => {
     const [val, setVal] = useState<string[]>(['react']);
     return <ItemPicker items={sampleItems} value={val} onChange={setVal} disabled label="Disabled Picker" />;

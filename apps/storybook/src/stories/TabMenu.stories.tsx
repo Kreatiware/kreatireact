@@ -52,6 +52,7 @@ export const Default: Story = {
  * Click tabs to see the active indicator animate.
  */
 export const Controlled: Story = {
+  args: {} as any,
   render: () => {
     const [active, setActive] = useState('home');
     return (
@@ -69,6 +70,7 @@ export const Controlled: Story = {
  * Icons can be passed as string names (resolved internally) or as ReactNode.
  */
 export const WithIcons: Story = {
+  args: {} as any,
   render: () => {
     const items: MenuItem[] = [
       { key: 'home', label: 'Home', icon: 'check' },
@@ -85,6 +87,7 @@ export const WithIcons: Story = {
  * Some tabs can be individually disabled.
  */
 export const WithDisabledTabs: Story = {
+  args: {} as any,
   render: () => {
     const items: MenuItem[] = [
       { key: 'home', label: 'Home' },
@@ -112,6 +115,7 @@ export const AllDisabled: Story = {
  * Tabs with separators between groups.
  */
 export const WithSeparators: Story = {
+  args: {} as any,
   render: () => {
     const items: MenuItem[] = [
       { key: 'home', label: 'Home' },
@@ -130,6 +134,7 @@ export const WithSeparators: Story = {
  * Open the browser console to see the output.
  */
 export const WithCommands: Story = {
+  args: {} as any,
   render: () => {
     const items: MenuItem[] = [
       { key: 'save', label: 'Save', command: (item) => console.log('Save clicked', item) },
@@ -145,6 +150,7 @@ export const WithCommands: Story = {
  * Many tabs — scrolls horizontally with visible scrollbar.
  */
 export const ManyTabs: Story = {
+  args: {} as any,
   render: () => {
     const items: MenuItem[] = Array.from({ length: 15 }, (_, i) => ({
       key: `tab-${i}`,
@@ -163,6 +169,7 @@ export const ManyTabs: Story = {
  * Tab with custom template rendering.
  */
 export const WithTemplate: Story = {
+  args: {} as any,
   render: () => {
     const items: MenuItem[] = [
       { key: 'home', label: 'Home' },
@@ -197,6 +204,7 @@ export const WithTemplate: Story = {
  * The "Secret" tab is hidden.
  */
 export const WithHiddenItems: Story = {
+  args: {} as any,
   render: () => {
     const items: MenuItem[] = [
       { key: 'home', label: 'Home' },

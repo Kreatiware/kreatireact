@@ -152,10 +152,10 @@ export const ItemPicker = forwardRef<HTMLDivElement, ItemPickerProps>(
 
     const baseId = useId();
     const locale = useKreatiLocale();
-    const resolvedFilterPlaceholder = filterPlaceholder ?? locale.transfer.filterPlaceholder;
-    const resolvedEmptyMessage = emptyMessage ?? locale.transfer.emptyMessage;
-    const resolvedSourceHeader = sourceHeader ?? locale.transfer.sourceHeader;
-    const resolvedTargetHeader = targetHeader ?? locale.transfer.targetHeader;
+    const resolvedFilterPlaceholder = filterPlaceholder ?? locale.itemPicker.filterPlaceholder;
+    const resolvedEmptyMessage = emptyMessage ?? locale.itemPicker.emptyMessage;
+    const resolvedSourceHeader = sourceHeader ?? locale.itemPicker.sourceHeader;
+    const resolvedTargetHeader = targetHeader ?? locale.itemPicker.targetHeader;
 
     const hasError = !!error;
     const errorMessage = typeof error === 'boolean' ? undefined : error;
@@ -520,17 +520,17 @@ export const ItemPicker = forwardRef<HTMLDivElement, ItemPickerProps>(
             <span className={`${base}__header-actions`}>
               {onUp && onDown && (
                 <>
-                  <button type="button" className={`${base}__reorder-btn`} onClick={onUp} disabled={disabled || !hasSel} aria-label={locale.transfer.moveUp} title={locale.transfer.moveUp}>
+                  <button type="button" className={`${base}__reorder-btn`} onClick={onUp} disabled={disabled || !hasSel} aria-label={locale.itemPicker.moveUp} title={locale.itemPicker.moveUp}>
                     {iconSvg(CHEVRON_UP_PATH)}
                   </button>
-                  <button type="button" className={`${base}__reorder-btn`} onClick={onDown} disabled={disabled || !hasSel} aria-label={locale.transfer.moveDown} title={locale.transfer.moveDown}>
+                  <button type="button" className={`${base}__reorder-btn`} onClick={onDown} disabled={disabled || !hasSel} aria-label={locale.itemPicker.moveDown} title={locale.itemPicker.moveDown}>
                     {iconSvg(CHEVRON_DOWN_PATH)}
                   </button>
                 </>
               )}
               {showCount && (
                 <span className={`${base}__header-count`}>
-                  {locale.transfer.itemCount.replace('{count}', String(panelItems.length))}
+                  {locale.itemPicker.itemCount.replace('{count}', String(panelItems.length))}
                 </span>
               )}
             </span>
@@ -585,10 +585,10 @@ export const ItemPicker = forwardRef<HTMLDivElement, ItemPickerProps>(
         {renderPanel(sourceItems, filteredSource, sourceSelected, setSourceSelected, resolvedSourceHeader, sourceFilter, setSourceFilter, 'source', sourceReorder ? moveSourceUp : undefined, sourceReorder ? moveSourceDown : undefined)}
 
         <div className={`${base}__controls`} role="toolbar" aria-label="Item picker controls">
-          <Button buttonType="outlined" severity="secondary" size="sm" rounded ariaLabel={locale.transfer.moveAllToTarget} tooltip={locale.transfer.moveAllToTarget} disabled={disabled || !hasMovableSource} onClick={moveAllToTarget} iconLeft={iconSvg(DOUBLE_ARROW_RIGHT_PATH)} />
-          <Button buttonType="outlined" severity="primary" size="sm" rounded ariaLabel={locale.transfer.moveToTarget} tooltip={locale.transfer.moveToTarget} disabled={disabled || !hasSourceSel} onClick={moveToTarget} iconLeft={iconSvg(CHEVRON_RIGHT_PATH)} />
-          <Button buttonType="outlined" severity="primary" size="sm" rounded ariaLabel={locale.transfer.moveToSource} tooltip={locale.transfer.moveToSource} disabled={disabled || !hasTargetSel} onClick={moveToSource} iconLeft={iconSvg(CHEVRON_LEFT_PATH)} />
-          <Button buttonType="outlined" severity="secondary" size="sm" rounded ariaLabel={locale.transfer.moveAllToSource} tooltip={locale.transfer.moveAllToSource} disabled={disabled || !hasMovableTarget} onClick={moveAllToSource} iconLeft={iconSvg(DOUBLE_ARROW_LEFT_PATH)} />
+          <Button buttonType="outlined" severity="secondary" size="sm" rounded ariaLabel={locale.itemPicker.moveAllToTarget} tooltip={locale.itemPicker.moveAllToTarget} disabled={disabled || !hasMovableSource} onClick={moveAllToTarget} iconLeft={iconSvg(DOUBLE_ARROW_RIGHT_PATH)} />
+          <Button buttonType="outlined" severity="primary" size="sm" rounded ariaLabel={locale.itemPicker.moveToTarget} tooltip={locale.itemPicker.moveToTarget} disabled={disabled || !hasSourceSel} onClick={moveToTarget} iconLeft={iconSvg(CHEVRON_RIGHT_PATH)} />
+          <Button buttonType="outlined" severity="primary" size="sm" rounded ariaLabel={locale.itemPicker.moveToSource} tooltip={locale.itemPicker.moveToSource} disabled={disabled || !hasTargetSel} onClick={moveToSource} iconLeft={iconSvg(CHEVRON_LEFT_PATH)} />
+          <Button buttonType="outlined" severity="secondary" size="sm" rounded ariaLabel={locale.itemPicker.moveAllToSource} tooltip={locale.itemPicker.moveAllToSource} disabled={disabled || !hasMovableTarget} onClick={moveAllToSource} iconLeft={iconSvg(DOUBLE_ARROW_LEFT_PATH)} />
         </div>
 
         {renderPanel(targetItems, filteredTarget, targetSelected, setTargetSelected, resolvedTargetHeader, targetFilter, setTargetFilter, 'target', targetReorder ? moveTargetUp : undefined, targetReorder ? moveTargetDown : undefined)}

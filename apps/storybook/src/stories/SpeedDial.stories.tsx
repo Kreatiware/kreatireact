@@ -28,46 +28,55 @@ const sampleItems: SpeedDialItem[] = [
 
 export const Up: Story = {
   name: 'Direction Up',
+  args: {} as any,
   render: () => <SpeedDial items={sampleItems} direction="up" />,
 };
 
 export const Down: Story = {
   name: 'Direction Down',
+  args: {} as any,
   render: () => <SpeedDial items={sampleItems} direction="down" />,
 };
 
 export const Left: Story = {
   name: 'Direction Left',
+  args: {} as any,
   render: () => <SpeedDial items={sampleItems} direction="left" />,
 };
 
 export const Right: Story = {
   name: 'Direction Right',
+  args: {} as any,
   render: () => <SpeedDial items={sampleItems} direction="right" />,
 };
 
 export const QuarterUpRight: Story = {
   name: 'Quarter Circle — Up Right',
+  args: {} as any,
   render: () => <SpeedDial items={sampleItems} layout="quarter-up-right" radius={90} />,
 };
 
 export const QuarterDownLeft: Story = {
   name: 'Quarter Circle — Down Left',
+  args: {} as any,
   render: () => <SpeedDial items={sampleItems} layout="quarter-down-left" radius={90} />,
 };
 
 export const WithMask: Story = {
   name: 'With Mask Overlay',
+  args: {} as any,
   render: () => <SpeedDial items={sampleItems} direction="up" mask />,
 };
 
 export const HoverTrigger: Story = {
   name: 'Hover Trigger',
+  args: {} as any,
   render: () => <SpeedDial items={sampleItems} direction="up" triggerOn="hover" />,
 };
 
 export const CustomSeverity: Story = {
   name: 'Custom Severity & Outlined',
+  args: {} as any,
   render: () => (
     <SpeedDial
       items={sampleItems}
@@ -80,11 +89,13 @@ export const CustomSeverity: Story = {
 
 export const Disabled: Story = {
   name: 'Disabled',
+  args: {} as any,
   render: () => <SpeedDial items={sampleItems} direction="up" disabled />,
 };
 
 export const NestedSubDial: Story = {
   name: 'Nested Sub-Dial (3 levels)',
+  args: {} as any,
   render: () => {
     const nestedItems: SpeedDialItem[] = [
       { key: 'star', icon: starIcon, label: 'Favorite' },

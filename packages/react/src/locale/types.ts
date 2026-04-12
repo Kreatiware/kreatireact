@@ -79,8 +79,8 @@ export interface KreatiLocale {
   dial: {
     ariaLabel: string;
   };
-  /** Transfer component */
-  transfer: {
+  /** ItemPicker component */
+  itemPicker: {
     sourceHeader: string;
     targetHeader: string;
     moveAllToTarget: string;

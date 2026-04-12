@@ -1,5 +1,5 @@
 /* ============================================
-   Transfer — Layout
+   ItemPicker — Layout
    ============================================ */
 .k-itempicker {
   display: flex;
@@ -13,21 +13,21 @@
 }
 
 /* ============================================
-   Transfer — Panel (source / target)
+   ItemPicker — Panel (source / target)
    ============================================ */
 .k-itempicker__panel {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  border: var(--kreati-transfer-border);
-  border-radius: var(--kreati-transfer-border-radius);
-  background: var(--kreati-transfer-bg);
+  border: var(--kreati-item-picker-border);
+  border-radius: var(--kreati-item-picker-border-radius);
+  background: var(--kreati-item-picker-bg);
   overflow: hidden;
 }
 
 .k-itempicker__panel--drop-active {
-  border: var(--kreati-transfer-drop-border);
+  border: var(--kreati-item-picker-drop-border);
 }
 
 .k-itempicker--error .k-itempicker__panel {
@@ -39,22 +39,22 @@
 }
 
 /* ============================================
-   Transfer — Header
+   ItemPicker — Header
    ============================================ */
 .k-itempicker__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--kreati-transfer-header-padding);
-  background: var(--kreati-transfer-header-bg);
-  border-bottom: var(--kreati-transfer-border);
+  padding: var(--kreati-item-picker-header-padding);
+  background: var(--kreati-item-picker-header-bg);
+  border-bottom: var(--kreati-item-picker-border);
   user-select: none;
 }
 
 .k-itempicker__header-title {
   font-size: var(--kreati-font-size-sm);
   font-weight: var(--kreati-font-weight-semibold);
-  color: var(--kreati-transfer-header-color);
+  color: var(--kreati-item-picker-header-color);
 }
 
 .k-itempicker__header-count {
@@ -69,7 +69,7 @@
 }
 
 /* ============================================
-   Transfer — Reorder buttons
+   ItemPicker — Reorder buttons
    ============================================ */
 .k-itempicker__reorder-btn {
   display: inline-flex;
@@ -102,15 +102,15 @@
 }
 
 /* ============================================
-   Transfer — Filter
+   ItemPicker — Filter
    ============================================ */
 .k-itempicker__filter {
   padding: var(--kreati-space-2) var(--kreati-space-3);
-  border-bottom: var(--kreati-transfer-border);
+  border-bottom: var(--kreati-item-picker-border);
 }
 
 /* ============================================
-   Transfer — List area
+   ItemPicker — List area
    ============================================ */
 .k-itempicker__list {
   flex: 1;
@@ -119,7 +119,7 @@
 }
 
 /* ============================================
-   Transfer — Item
+   ItemPicker — Item
    ============================================ */
 .k-itempicker__item {
   display: flex;
@@ -155,7 +155,7 @@
 }
 
 /* ============================================
-   Transfer — Inline checkbox (visual only)
+   ItemPicker — Inline checkbox (visual only)
    ============================================ */
 .k-itempicker__checkbox {
   display: inline-flex;
@@ -182,7 +182,7 @@
 }
 
 /* ============================================
-   Transfer — Item content
+   ItemPicker — Item content
    ============================================ */
 .k-itempicker__item-icon {
   flex-shrink: 0;
@@ -198,7 +198,7 @@
 }
 
 /* ============================================
-   Transfer — Empty
+   ItemPicker — Empty
    ============================================ */
 .k-itempicker__empty {
   padding: var(--kreati-space-4) var(--kreati-space-3);
@@ -208,19 +208,19 @@
 }
 
 /* ============================================
-   Transfer — Controls (center buttons)
+   ItemPicker — Controls (center buttons)
    ============================================ */
 .k-itempicker__controls {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--kreati-transfer-controls-gap);
+  gap: var(--kreati-item-picker-controls-gap);
   flex-shrink: 0;
 }
 
 /* ============================================
-   Transfer — Responsive: stack on small screens
+   ItemPicker — Responsive: stack on small screens
    ============================================ */
 @media (max-width: 480px) {
   .k-itempicker {
@@ -233,7 +233,7 @@
 }
 
 /* ============================================
-   Transfer — Drop indicator line
+   ItemPicker — Drop indicator line
    ============================================ */
 .k-itempicker__item--drop-before {
   box-shadow: inset 0 2px 0 0 var(--kreati-severity-primary);

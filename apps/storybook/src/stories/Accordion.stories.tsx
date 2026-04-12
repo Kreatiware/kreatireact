@@ -22,6 +22,7 @@ type Story = StoryObj<typeof meta>;
 
 /** Single mode — only one tab open at a time. */
 export const Default: Story = {
+  args: {} as any,
   render: () => (
     <Accordion defaultActiveKeys={['a']} style={{ width: 450 }}>
       <AccordionTab tabKey="a" header="Section 1">
@@ -39,6 +40,7 @@ export const Default: Story = {
 
 /** Multiple tabs can be open simultaneously. */
 export const Multiple: Story = {
+  args: {} as any,
   render: () => (
     <Accordion multiple defaultActiveKeys={['a', 'c']} style={{ width: 450 }}>
       <AccordionTab tabKey="a" header="First">
@@ -56,6 +58,7 @@ export const Multiple: Story = {
 
 /** Controlled mode — state managed externally. */
 export const Controlled: Story = {
+  args: {} as any,
   render: () => {
     const [keys, setKeys] = useState<string[]>(['a']);
     return (
@@ -82,6 +85,7 @@ export const Controlled: Story = {
 
 /** A disabled tab cannot be toggled. */
 export const DisabledTab: Story = {
+  args: {} as any,
   render: () => (
     <Accordion defaultActiveKeys={['a']} style={{ width: 450 }}>
       <AccordionTab tabKey="a" header="Enabled">
@@ -99,6 +103,7 @@ export const DisabledTab: Story = {
 
 /** Custom header template on a tab. */
 export const CustomHeader: Story = {
+  args: {} as any,
   render: () => (
     <Accordion defaultActiveKeys={['a']} style={{ width: 450 }}>
       <AccordionTab

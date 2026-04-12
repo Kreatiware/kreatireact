@@ -123,6 +123,7 @@ export const WithCommands: Story = {
 
 /** Fixed to bottom of viewport — typical dock placement with dark background. */
 export const FixedBottom: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ position: 'relative', height: '100vh', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
       <div style={{ position: 'fixed', bottom: 16, left: '50%', transform: 'translateX(-50%)', zIndex: 100 }}>
@@ -138,6 +139,7 @@ export const FixedBottom: Story = {
 
 /** Fixed to left of viewport with gradient background. */
 export const FixedLeft: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ position: 'relative', height: '100vh', background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)' }}>
       <div style={{ position: 'fixed', left: 16, top: '50%', transform: 'translateY(-50%)', zIndex: 100 }}>
@@ -153,6 +155,7 @@ export const FixedLeft: Story = {
 
 /** Fixed to top of viewport. */
 export const FixedTop: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ position: 'relative', height: '100vh', background: 'linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d)' }}>
       <div style={{ position: 'fixed', top: 16, left: '50%', transform: 'translateX(-50%)', zIndex: 100 }}>
@@ -168,6 +171,7 @@ export const FixedTop: Story = {
 
 /** Fixed to right of viewport. */
 export const FixedRight: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ position: 'relative', height: '100vh', background: 'linear-gradient(135deg, #11998e, #38ef7d)' }}>
       <div style={{ position: 'fixed', right: 16, top: '50%', transform: 'translateY(-50%)', zIndex: 100 }}>
@@ -183,6 +187,7 @@ export const FixedRight: Story = {
 
 /** All four positions side by side. */
 export const AllPositions: Story = {
+  args: {} as any,
   render: () => {
     const smallItems: MenuItem[] = [
       { key: 'a', label: 'Home', icon: 'check' },

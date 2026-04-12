@@ -49,6 +49,7 @@ export const Default: Story = {
  * Controlled side menu with active state tracking.
  */
 export const Controlled: Story = {
+  args: {} as any,
   render: () => {
     const [active, setActive] = useState('home');
     return (
@@ -63,6 +64,7 @@ export const Controlled: Story = {
  * Nested submenus up to multiple levels deep.
  */
 export const DeepNesting: Story = {
+  args: {} as any,
   render: () => {
     const items: MenuItem[] = [
       { key: 'settings', label: 'Settings', icon: 'times', items: [
@@ -89,6 +91,7 @@ export const DeepNesting: Story = {
  * Multiple submenus can be open at the same time.
  */
 export const MultipleOpen: Story = {
+  args: {} as any,
   render: () => {
     const items: MenuItem[] = [
       { key: 'section1', label: 'Section 1', items: [
@@ -141,6 +144,7 @@ export const AllDisabled: Story = {
  * SideMenu inside a Drawer — typical mobile navigation pattern.
  */
 export const InsideDrawer: Story = {
+  args: {} as any,
   render: () => {
     const [open, setOpen] = useState(false);
     const [active, setActive] = useState('home');
@@ -166,6 +170,7 @@ export const InsideDrawer: Story = {
  * With command callbacks. Open the console to see output.
  */
 export const WithCommands: Story = {
+  args: {} as any,
   render: () => {
     const items: MenuItem[] = [
       { key: 'save', label: 'Save', icon: 'check', command: (item) => console.log('Save', item) },
@@ -186,6 +191,7 @@ export const WithCommands: Story = {
  * Animation disabled.
  */
 export const NoAnimation: Story = {
+  args: {} as any,
   render: () => {
     const [active, setActive] = useState('home');
     return (
@@ -200,6 +206,7 @@ export const NoAnimation: Story = {
  * Icon position at the start (left of label).
  */
 export const IconPositionStart: Story = {
+  args: {} as any,
   render: () => {
     const [active, setActive] = useState('home');
     return (
@@ -214,6 +221,7 @@ export const IconPositionStart: Story = {
  * Custom header template for parent items — PanelMenu style.
  */
 export const PanelMenuStyle: Story = {
+  args: {} as any,
   render: () => {
     const items: MenuItem[] = [
       { key: 'general', label: 'General', icon: 'check', items: [

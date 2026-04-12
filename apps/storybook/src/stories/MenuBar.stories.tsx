@@ -146,6 +146,7 @@ export const WithCommands: Story = {
 
 /** Vertical — dropdowns open to the right. */
 export const Vertical: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ height: 350, display: 'flex' }}>
       <MenuBar orientation="vertical" items={appMenuItems} onItemSelect={(key) => console.log(key)} />
@@ -156,6 +157,7 @@ export const Vertical: Story = {
 
 /** Vertical with start, end, and fixed width. */
 export const VerticalWithSlots: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ height: 400, display: 'flex' }}>
       <MenuBar
@@ -180,6 +182,7 @@ export const VerticalWithSlots: Story = {
 
 /** Panel variant — accordion-style sections (single open). */
 export const VerticalPanel: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ height: 450, display: 'flex' }}>
       <MenuBar
@@ -196,6 +199,7 @@ export const VerticalPanel: Story = {
 
 /** Panel variant — multiple sections open. */
 export const VerticalPanelMultiple: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ height: 450, display: 'flex' }}>
       <MenuBar
@@ -213,6 +217,7 @@ export const VerticalPanelMultiple: Story = {
 
 /** Panel with start and end slots. */
 export const VerticalPanelWithSlots: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ height: 500, display: 'flex' }}>
       <MenuBar
@@ -231,6 +236,7 @@ export const VerticalPanelWithSlots: Story = {
 
 /** Panel variant — nested submenus. */
 export const VerticalPanelNested: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ height: 500, display: 'flex' }}>
       <MenuBar
@@ -270,6 +276,7 @@ export const VerticalPanelNested: Story = {
 
 /** Tree variant — inline expand like a file explorer. */
 export const VerticalTree: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ height: 400, display: 'flex' }}>
       <MenuBar
@@ -306,6 +313,7 @@ export const VerticalTree: Story = {
 
 /** Tree variant — multiple open. */
 export const VerticalTreeMultiple: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ height: 400, display: 'flex' }}>
       <MenuBar
@@ -325,6 +333,7 @@ export const VerticalTreeMultiple: Story = {
 
 /** MegaMenu — horizontal bar with wide multi-column dropdown panel. */
 export const MegaMenuStyle: Story = {
+  args: {} as any,
   render: () => {
     const categories: MenuItem[] = [
       { key: 'electronics', label: 'Electronics', items: [
@@ -383,6 +392,7 @@ export const MegaMenuStyle: Story = {
 
 /** MenuBar inside nested Dialogs — tests z-index stacking. */
 export const InsideDialogs: Story = {
+  args: {} as any,
   render: () => {
     const [outerOpen, setOuterOpen] = useState(false);
     const [innerOpen, setInnerOpen] = useState(false);

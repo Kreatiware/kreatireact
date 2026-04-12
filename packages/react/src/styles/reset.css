@@ -10,7 +10,7 @@
 body {
   font-family: var(--kreati-font-family);
   font-weight: var(--kreati-font-weight-normal);
-  color: #333;
+  color: var(--kreati-gray-800);
   line-height: var(--kreati-line-height);
   background-color: var(--kreati-background);
   margin: 0;

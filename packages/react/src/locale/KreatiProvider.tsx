@@ -45,7 +45,7 @@ export const KreatiProvider: React.FC<KreatiProviderProps> = ({ locale, children
       list: { ...en.list, ...locale.list },
       dialog: { ...en.dialog, ...locale.dialog },
       common: { ...en.common, ...locale.common },
-      transfer: { ...en.transfer, ...locale.transfer },
+      itemPicker: { ...en.itemPicker, ...locale.itemPicker },
     };
   }, [locale]);
 

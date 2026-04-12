@@ -75,6 +75,7 @@ export const Default: Story = {
 };
 
 export const Variants: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', gap: 24 }}>
       {(['kreati', 'visible', 'native'] as const).map((v) => (
@@ -88,6 +89,7 @@ export const Variants: Story = {
 };
 
 export const Sizes: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', gap: 24 }}>
       {(['sm', 'md', 'lg'] as const).map((s) => (
@@ -101,6 +103,7 @@ export const Sizes: Story = {
 };
 
 export const CustomColors: Story = {
+  args: {} as any,
   render: () => (
     <ScrollBar variant="visible" color="#0f78a5" trackColor="#deeff7" size="md" maxHeight="200px" style={boxStyle}>
       <LongContent />
@@ -110,6 +113,7 @@ export const CustomColors: Story = {
 
 export const WithGradient: Story = {
   name: 'Gradient (vertical)',
+  args: {} as any,
   render: () => (
     <ScrollBar variant="visible" gradient={{ from: '#0f78a5', to: '#ffdb4f' }} size="lg" maxHeight="200px" style={boxStyle}>
       <LongContent />
@@ -119,6 +123,7 @@ export const WithGradient: Story = {
 
 export const GradientDiagonal: Story = {
   name: 'Gradient (diagonal 135°)',
+  args: {} as any,
   render: () => (
     <ScrollBar variant="visible" gradient={{ from: '#a855f7', to: '#0f78a5', angle: 135 }} size="lg" maxHeight="200px" style={boxStyle}>
       <LongContent />
@@ -128,6 +133,7 @@ export const GradientDiagonal: Story = {
 
 export const CustomRadius: Story = {
   name: 'Custom thumb radius',
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', gap: 24 }}>
       <ScrollBar variant="visible" thumbRadius="0px" size="md" maxHeight="200px" style={{ ...boxStyle, width: 280 }}>
@@ -143,6 +149,7 @@ export const CustomRadius: Story = {
 };
 
 export const Horizontal: Story = {
+  args: {} as any,
   render: () => (
     <ScrollBar orientation="horizontal" variant="visible" maxWidth="400px" maxHeight="250px" style={{ ...boxStyle, width: 'auto' }}>
       <WideContent />
@@ -152,6 +159,7 @@ export const Horizontal: Story = {
 
 export const BothDirections: Story = {
   name: 'Both directions',
+  args: {} as any,
   render: () => (
     <ScrollBar orientation="both" variant="visible" size="md" maxHeight="250px" maxWidth="400px" style={{ ...boxStyle, width: 'auto' }}>
       <GridContent />
@@ -161,6 +169,7 @@ export const BothDirections: Story = {
 
 export const WithArrows: Story = {
   name: 'With arrows (optional)',
+  args: {} as any,
   render: () => (
     <ScrollBar variant="visible" arrows size="lg" trackColor="#f3f4f6" maxHeight="200px" style={boxStyle}>
       <LongContent />
@@ -170,6 +179,7 @@ export const WithArrows: Story = {
 
 export const TrackGradient: Story = {
   name: 'Track gradient',
+  args: {} as any,
   render: () => (
     <ScrollBar
       variant="visible"
@@ -186,6 +196,7 @@ export const TrackGradient: Story = {
 
 export const TrackTemplate: Story = {
   name: 'Track template (custom content)',
+  args: {} as any,
   render: () => (
     <ScrollBar
       variant="visible"
@@ -209,6 +220,7 @@ export const TrackTemplate: Story = {
 
 export const ThumbIcon: Story = {
   name: 'Custom thumb icon',
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', gap: 24 }}>
       <ScrollBar

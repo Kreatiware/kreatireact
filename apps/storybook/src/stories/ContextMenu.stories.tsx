@@ -312,6 +312,7 @@ export const MixedPositions: Story = {
  * Submenus should flip to the left automatically.
  */
 export const AutoFlip: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '20px' }}>
       <ContextMenu
@@ -407,6 +408,7 @@ export const MixedDeepPositions: Story = {
  * Tests z-index stacking and portal behavior in overlay layers.
  */
 export const InsideDialog: Story = {
+  args: {} as any,
   render: () => {
     const [outerOpen, setOuterOpen] = useState(false);
     const [innerOpen, setInnerOpen] = useState(false);
@@ -470,6 +472,7 @@ export const InsideDialog: Story = {
  * Renders items in a multi-column grid layout instead of a vertical list.
  */
 export const MegaPanel: Story = {
+  args: {} as any,
   render: () => {
     const items: MenuItem[] = [
       { key: 'electronics', label: 'Electronics', items: [

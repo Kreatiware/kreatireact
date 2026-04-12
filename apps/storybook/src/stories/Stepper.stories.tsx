@@ -24,6 +24,7 @@ const steps = ['account', 'details', 'confirm'] as const;
 
 /** Interactive stepper with next/back navigation. */
 export const Default: Story = {
+  args: {} as any,
   render: () => {
     const [active, setActive] = useState('account');
     const idx = steps.indexOf(active as typeof steps[number]);
@@ -52,6 +53,7 @@ export const Default: Story = {
 
 /** Labels positioned below the indicators. */
 export const LabelBottom: Story = {
+  args: {} as any,
   render: () => {
     const [active, setActive] = useState('details');
     const idx = steps.indexOf(active as typeof steps[number]);
@@ -79,6 +81,7 @@ export const LabelBottom: Story = {
 
 /** Clickable completed steps allow navigating back. */
 export const Clickable: Story = {
+  args: {} as any,
   render: () => {
     const [active, setActive] = useState('account');
     const idx = steps.indexOf(active as typeof steps[number]);
@@ -105,6 +108,7 @@ export const Clickable: Story = {
 
 /** Vertical orientation with clickable steps. */
 export const Vertical: Story = {
+  args: {} as any,
   render: () => {
     const [active, setActive] = useState('details');
     return (
@@ -125,6 +129,7 @@ export const Vertical: Story = {
 
 /** Custom icons on each step indicator. */
 export const CustomIcons: Story = {
+  args: {} as any,
   render: () => {
     const [active, setActive] = useState('account');
     const idx = steps.indexOf(active as typeof steps[number]);
@@ -152,6 +157,7 @@ export const CustomIcons: Story = {
 
 /** Indicator only — no panel content. */
 export const IndicatorOnly: Story = {
+  args: {} as any,
   render: () => (
     <Stepper activeStep="details" style={{ width: 400 }}>
       <StepperPanel stepKey="account" header="Account" />
@@ -164,6 +170,7 @@ export const IndicatorOnly: Story = {
 
 /** Label bottom without content — pure progress bar. */
 export const ProgressBar: Story = {
+  args: {} as any,
   render: () => (
     <Stepper activeStep="payment" labelPosition="bottom" style={{ width: 500 }}>
       <StepperPanel stepKey="cart" header="Cart" />

@@ -15,6 +15,7 @@ type Story = StoryObj<typeof meta>;
 
 export const AllSeverities: Story = {
   name: 'All Severities',
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
       {(['primary', 'secondary', 'success', 'info', 'warning', 'help', 'danger'] as const).map((s) => (
@@ -26,6 +27,7 @@ export const AllSeverities: Story = {
 
 export const Removable: Story = {
   name: 'Removable',
+  args: {} as any,
   render: () => {
     const [tags, setTags] = useState(['React', 'Vue', 'Angular', 'Svelte']);
     return (
@@ -40,6 +42,7 @@ export const Removable: Story = {
 
 export const WithIcon: Story = {
   name: 'With Icon',
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', gap: 8 }}>
       <Tag severity="success" icon={<span>{'\u2713'}</span>}>Approved</Tag>
@@ -51,6 +54,7 @@ export const WithIcon: Story = {
 
 export const NotRounded: Story = {
   name: 'Rounded (pill)',
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', gap: 8 }}>
       <Tag severity="info" rounded>v2.4.0</Tag>
@@ -61,6 +65,7 @@ export const NotRounded: Story = {
 
 export const ContentTemplate: Story = {
   name: 'Content Template',
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
       <Tag

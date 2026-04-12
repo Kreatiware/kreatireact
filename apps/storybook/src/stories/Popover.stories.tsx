@@ -34,6 +34,7 @@ const PanelContent = ({ text = 'Popover content' }: { text?: string }) => (
 );
 
 export const Default: Story = {
+  args: {} as any,
   render: () => (
     <Popover content={<PanelContent />} position="bottom">
       <Button label="Click me" />
@@ -42,6 +43,7 @@ export const Default: Story = {
 };
 
 export const Positions: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', gap: 32, padding: 100 }}>
       {(['bottom', 'top', 'left', 'right'] as const).map((pos) => (
@@ -55,6 +57,7 @@ export const Positions: Story = {
 
 export const Controlled: Story = {
   name: 'Controlled mode',
+  args: {} as any,
   render: () => {
     const Demo = () => {
       const [open, setOpen] = useState(false);
@@ -75,6 +78,7 @@ export const Controlled: Story = {
 
 export const PortalComparison: Story = {
   name: 'Portal vs no portal',
+  args: {} as any,
   render: () => (
     <div style={{ overflow: 'hidden', border: '1px dashed #d1d5db', padding: 24, borderRadius: 8, maxHeight: 120 }}>
       <p style={{ fontSize: 12, color: '#6b7280', margin: '0 0 12px' }}>Container has overflow: hidden + maxHeight</p>
@@ -92,6 +96,7 @@ export const PortalComparison: Story = {
 
 export const RichContent: Story = {
   name: 'Rich content',
+  args: {} as any,
   render: () => (
     <Popover
       content={
@@ -116,6 +121,7 @@ export const RichContent: Story = {
 
 export const Offset: Story = {
   name: 'Custom offset',
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', gap: 24 }}>
       <Popover content={<PanelContent text="offset: 4 (default)" />} offset={4}>
@@ -133,6 +139,7 @@ export const Offset: Story = {
 
 export const ConfirmVariant: Story = {
   name: 'Confirm variant',
+  args: {} as any,
   render: () => {
     const Demo = () => {
       const [result, setResult] = useState('');
@@ -157,6 +164,7 @@ export const ConfirmVariant: Story = {
 
 export const ConfirmSpanish: Story = {
   name: 'Confirm — Spanish locale',
+  args: {} as any,
   render: () => {
     const Demo = () => {
       const [result, setResult] = useState('');
@@ -182,6 +190,7 @@ export const ConfirmSpanish: Story = {
 
 export const ConfirmCustomLabels: Story = {
   name: 'Confirm — Custom labels',
+  args: {} as any,
   render: () => (
     <Popover
       variant="confirm"

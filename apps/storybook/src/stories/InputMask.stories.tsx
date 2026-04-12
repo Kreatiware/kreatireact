@@ -35,6 +35,7 @@ export const Default: Story = {
 
 export const Masks: Story = {
   name: 'Common masks',
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, width: 320, paddingTop: 12 }}>
       <InputMask mask="+99 999 9999 99" label="Phone" size="md" helperText="Mask: +99 999 9999 99" />
@@ -49,6 +50,7 @@ export const Masks: Story = {
 
 export const Controlled: Story = {
   name: 'Controlled mode',
+  args: {} as any,
   render: () => {
     const ControlledDemo = () => {
       const [raw, setRaw] = useState('');
@@ -76,6 +78,7 @@ export const Controlled: Story = {
 
 export const CustomPlaceholder: Story = {
   name: 'Custom placeholder char',
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, width: 320, paddingTop: 12 }}>
       <InputMask mask="99/99/9999" label="Underscore (default)" size="md" placeholderChar="_" />
@@ -87,6 +90,7 @@ export const CustomPlaceholder: Story = {
 
 export const WithStates: Story = {
   name: 'States',
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, width: 320, paddingTop: 12 }}>
       <InputMask mask="+99 999 9999 99" label="Default" size="md" />

@@ -22,6 +22,7 @@ type Story = StoryObj<typeof meta>;
 
 /** Basic tabs with three panels. */
 export const Default: Story = {
+  args: {} as any,
   render: () => (
     <Tabs defaultActiveKey="home" style={{ width: 500 }}>
       <TabPanel tabKey="home" header="Home">
@@ -39,6 +40,7 @@ export const Default: Story = {
 
 /** Tabs with icons. */
 export const WithIcons: Story = {
+  args: {} as any,
   render: () => (
     <Tabs defaultActiveKey="search" style={{ width: 500 }}>
       <TabPanel tabKey="search" header="Search" icon="search">
@@ -53,6 +55,7 @@ export const WithIcons: Story = {
 
 /** A disabled tab cannot be selected. */
 export const DisabledTab: Story = {
+  args: {} as any,
   render: () => (
     <Tabs defaultActiveKey="active" style={{ width: 500 }}>
       <TabPanel tabKey="active" header="Active">
@@ -70,6 +73,7 @@ export const DisabledTab: Story = {
 
 /** Controlled mode — state managed externally. */
 export const Controlled: Story = {
+  args: {} as any,
   render: () => {
     const [active, setActive] = useState('first');
     return (
@@ -96,6 +100,7 @@ export const Controlled: Story = {
 
 /** Rich content inside panels. */
 export const RichContent: Story = {
+  args: {} as any,
   render: () => (
     <Tabs defaultActiveKey="overview" style={{ width: 500 }}>
       <TabPanel tabKey="overview" header="Overview">

@@ -69,6 +69,7 @@ export const Default: Story = {
 };
 
 export const Sizes: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, width: 320, paddingTop: 12 }}>
       {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((s) => (
@@ -90,6 +91,7 @@ export const Filterable: Story = {
 };
 
 export const Editable: Story = {
+  args: {} as any,
   render: () => {
     const Demo = () => {
       const [value, setValue] = useState<string | number | null>(null);
@@ -114,6 +116,7 @@ export const Editable: Story = {
 
 export const FilterableAndEditable: Story = {
   name: 'Filterable + Editable',
+  args: {} as any,
   render: () => {
     const Demo = () => {
       const [value, setValue] = useState<string | number | null>(null);
@@ -167,6 +170,7 @@ export const Grouped: Story = {
 
 export const CustomTemplates: Story = {
   name: 'Custom templates',
+  args: {} as any,
   render: () => {
     const flagMap: Record<string, string> = { us: '🇺🇸', mx: '🇲🇽', ca: '🇨🇦', br: '🇧🇷', ar: '🇦🇷', co: '🇨🇴', cl: '🇨🇱', pe: '🇵🇪' };
     const popMap: Record<string, string> = { us: '331M', mx: '128M', ca: '38M', br: '214M', ar: '46M', co: '51M', cl: '19M', pe: '33M' };
@@ -235,6 +239,7 @@ export const VirtualScroll: Story = {
 };
 
 export const States: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, width: 320, paddingTop: 12 }}>
       <Select label="Default" options={countries} size="md" />
@@ -249,6 +254,7 @@ export const States: Story = {
 
 export const StackedVariant: Story = {
   name: 'Stacked variant (FieldWrapper)',
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 320 }}>
       <Select label="Country" variant="stacked" options={countries} size="md" helperText="Uses FieldWrapper for label + helper" />
@@ -263,6 +269,7 @@ export const StackedVariant: Story = {
 
 export const Controlled: Story = {
   name: 'Controlled mode',
+  args: {} as any,
   render: () => {
     const Demo = () => {
       const [value, setValue] = useState<string | number | null>('mx');
@@ -303,6 +310,7 @@ export const DisabledOptions: Story = {
 
 export const SpanishLocale: Story = {
   name: 'Locale: Spanish',
+  args: {} as any,
   render: () => (
     <KreatiProvider locale={es}>
       <div style={{ width: 320, paddingTop: 12 }}>
@@ -321,6 +329,7 @@ export const SpanishLocale: Story = {
 
 export const FormIntegration: Story = {
   name: 'Form integration (native)',
+  args: {} as any,
   render: () => {
     const Demo = () => {
       const [submitted, setSubmitted] = useState<Record<string, string> | null>(null);

@@ -60,6 +60,7 @@ export const Default: Story = {
 
 export const WithChips: Story = {
   name: 'Chip display',
+  args: {} as any,
   render: () => {
     const Demo = () => {
       const [val, setVal] = useState<Array<string | number>>(['us', 'mx']);
@@ -86,6 +87,7 @@ export const Filterable: Story = {
 
 export const MaxSelection: Story = {
   name: 'Max selection (3)',
+  args: {} as any,
   render: () => {
     const Demo = () => {
       const [val, setVal] = useState<Array<string | number>>([]);
@@ -119,6 +121,7 @@ export const WithIcon: Story = {
 
 export const MaxSelectedLabels: Story = {
   name: 'Max selected labels',
+  args: {} as any,
   render: () => {
     const Demo = () => {
       const [val, setVal] = useState<Array<string | number>>(['us', 'mx', 'ca', 'br']);
@@ -135,6 +138,7 @@ export const MaxSelectedLabels: Story = {
 };
 
 export const States: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, width: 360, paddingTop: 12 }}>
       <MultiSelect label="Default" options={countries} size="md" />
@@ -147,6 +151,7 @@ export const States: Story = {
 };
 
 export const Sizes: Story = {
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, width: 360, paddingTop: 12 }}>
       {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((s) => (
@@ -158,6 +163,7 @@ export const Sizes: Story = {
 
 export const StackedVariant: Story = {
   name: 'Stacked variant',
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 360 }}>
       <MultiSelect label="Countries" variant="stacked" options={countries} size="md" chipDisplay helperText="Uses FieldWrapper" />
@@ -168,6 +174,7 @@ export const StackedVariant: Story = {
 
 export const SpanishLocale: Story = {
   name: 'Locale: Spanish',
+  args: {} as any,
   render: () => (
     <KreatiProvider locale={es}>
       <div style={{ width: 360, paddingTop: 12 }}>
@@ -179,6 +186,7 @@ export const SpanishLocale: Story = {
 
 export const CustomSelectedTemplate: Story = {
   name: 'Custom selected template (override)',
+  args: {} as any,
   render: () => (
     <div style={{ width: 360, paddingTop: 12 }}>
       <MultiSelect
@@ -199,6 +207,7 @@ export const CustomSelectedTemplate: Story = {
 
 export const CustomCheckboxTemplates: Story = {
   name: 'Custom checkbox templates',
+  args: {} as any,
   render: () => {
     const flagMap: Record<string, string> = { us: '\ud83c\uddfa\ud83c\uddf8', mx: '\ud83c\uddf2\ud83c\uddfd', ca: '\ud83c\udde8\ud83c\udde6', br: '\ud83c\udde7\ud83c\uddf7', ar: '\ud83c\udde6\ud83c\uddf7', co: '\ud83c\udde8\ud83c\uddf4', cl: '\ud83c\udde8\ud83c\uddf1', pe: '\ud83c\uddf5\ud83c\uddea' };
 

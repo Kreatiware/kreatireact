@@ -48,6 +48,7 @@
   --kreati-primary-alpha-6: rgba(15, 120, 165, 0.06);
   --kreati-primary-alpha-8: rgba(15, 120, 165, 0.08);
   --kreati-black-alpha-5: rgba(0, 0, 0, 0.05);
+  --kreati-black-alpha-6: rgba(0, 0, 0, 0.06);
   --kreati-black-alpha-12: rgba(0, 0, 0, 0.12);
 
   /* ─── Severity Colors ───────────────────────────────────────────────── */
@@ -503,14 +504,14 @@
   --kreati-dial-text-color: var(--kreati-gray-800);
   --kreati-dial-text-size: var(--kreati-font-size-lg);
 
-  /* ─── Component Tokens — Transfer ─────────────────────────────────── */
-  --kreati-transfer-border: 1px solid var(--kreati-gray-200);
-  --kreati-transfer-border-radius: var(--kreati-radius-md);
-  --kreati-transfer-bg: var(--kreati-white);
-  --kreati-transfer-header-bg: var(--kreati-gray-50);
-  --kreati-transfer-header-padding: var(--kreati-space-2) var(--kreati-space-3);
-  --kreati-transfer-header-color: var(--kreati-gray-800);
-  --kreati-transfer-controls-gap: var(--kreati-space-2);
-  --kreati-transfer-drag-bg: var(--kreati-severity-primary-light);
-  --kreati-transfer-drop-border: 2px dashed var(--kreati-severity-primary);
+  /* ─── Component Tokens — ItemPicker ──────────────────────────────── */
+  --kreati-item-picker-border: 1px solid var(--kreati-gray-200);
+  --kreati-item-picker-border-radius: var(--kreati-radius-md);
+  --kreati-item-picker-bg: var(--kreati-white);
+  --kreati-item-picker-header-bg: var(--kreati-gray-50);
+  --kreati-item-picker-header-padding: var(--kreati-space-2) var(--kreati-space-3);
+  --kreati-item-picker-header-color: var(--kreati-gray-800);
+  --kreati-item-picker-controls-gap: var(--kreati-space-2);
+  --kreati-item-picker-drag-bg: var(--kreati-severity-primary-light);
+  --kreati-item-picker-drop-border: 2px dashed var(--kreati-severity-primary);
 }

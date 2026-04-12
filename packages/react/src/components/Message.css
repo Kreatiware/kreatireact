@@ -72,7 +72,7 @@
 
 .k-message__close:hover {
   opacity: 1;
-  background: rgba(0, 0, 0, 0.06);
+  background: var(--kreati-black-alpha-6);
 }
 
 .k-message__close:focus-visible {

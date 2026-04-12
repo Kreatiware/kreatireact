@@ -67,6 +67,7 @@ export const WithEmoji: Story = {
 
 export const Raised: Story = {
   name: 'Raised',
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', gap: 12, padding: 16 }}>
       <Chip variant="primary" raised>Raised</Chip>

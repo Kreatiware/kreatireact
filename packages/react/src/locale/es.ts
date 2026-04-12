@@ -70,7 +70,7 @@ export const es: KreatiLocale = {
   dial: {
     ariaLabel: 'Dial',
   },
-  transfer: {
+  itemPicker: {
     sourceHeader: 'Disponibles',
     targetHeader: 'Seleccionados',
     moveAllToTarget: 'Mover todos al destino',

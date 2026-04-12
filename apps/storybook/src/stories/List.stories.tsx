@@ -27,6 +27,7 @@ const basicItems: ListItem[] = [
 
 export const Basic: Story = {
   name: 'Basic',
+  args: {} as any,
   render: () => {
     const Demo = () => {
       const [selected, setSelected] = useState<string | null>(null);
@@ -53,6 +54,7 @@ const groupedItems: ListItem[] = [
 
 export const Grouped: Story = {
   name: 'Grouped',
+  args: {} as any,
   render: () => {
     const Demo = () => {
       const [selected, setSelected] = useState<string | null>(null);
@@ -64,6 +66,7 @@ export const Grouped: Story = {
 
 export const GroupTemplate: Story = {
   name: 'Group template',
+  args: {} as any,
   render: () => {
     const Demo = () => {
       const [selected, setSelected] = useState<string | null>(null);
@@ -87,6 +90,7 @@ export const GroupTemplate: Story = {
 
 export const MultiSelect: Story = {
   name: 'Multiple selection',
+  args: {} as any,
   render: () => {
     const Demo = () => {
       const [selected, setSelected] = useState<string[]>([]);
@@ -106,6 +110,7 @@ export const MultiSelect: Story = {
 
 export const Filterable: Story = {
   name: 'Filterable',
+  args: {} as any,
   render: () => {
     const Demo = () => {
       const [selected, setSelected] = useState<string | null>(null);
@@ -126,6 +131,7 @@ export const Filterable: Story = {
 
 export const Sizes: Story = {
   name: 'All sizes',
+  args: {} as any,
   render: () => (
     <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'flex-start' }}>
       {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((s) => (
@@ -140,6 +146,7 @@ export const Sizes: Story = {
 
 export const CustomTemplate: Story = {
   name: 'Custom template',
+  args: {} as any,
   render: () => {
     const Demo = () => {
       const [selected, setSelected] = useState<string | null>(null);

@@ -105,6 +105,7 @@ export const NativeScrollbar: Story = {
 
 /** Custom scrollBar render function replacing the internal ScrollBar. */
 export const CustomScrollBar: Story = {
+  args: {} as any,
   render: () => (
     <ScrollArea
       maxHeight="250px"
