@@ -1,5 +1,12 @@
 # @kreatiware/react
 
+## 0.12.0
+
+### Minor Changes
+
+- 385fee6: feat(react): add datatable and icons
+- 0aa0a47: feat(react+icons): add misc componentes, autocomplete, button groups, forms components"
+
 ## 0.11.0
 
 ### Minor Changes
