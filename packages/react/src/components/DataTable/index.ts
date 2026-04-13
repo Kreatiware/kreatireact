@@ -1,0 +1,21 @@
+export { DataTable } from './DataTable';
+export type {
+  DataTableProps,
+  DataTableRef,
+  DataTableColumn,
+  DataTableActionItem,
+  DataTableLazyEvent,
+  DataTableCellEditEvent,
+  DataTableRowEditEvent,
+  SortDirection,
+  SortMeta,
+  SelectionMode,
+  FilterMatchMode,
+  ColumnFilterMeta,
+  ActionPreset,
+  ExportFormat,
+  FrozenPosition,
+  RowClassCallback,
+  RowStyleCallback,
+  RowExpansionTemplate,
+} from './types';

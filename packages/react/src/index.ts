@@ -132,6 +132,27 @@ export type { FileUploadProps } from './components/FileUpload';
 export { Image } from './components/Image';
 export type { ImageProps } from './components/Image';
 
+export { DataTable } from './components/DataTable';
+export type {
+  DataTableProps,
+  DataTableRef,
+  DataTableColumn,
+  DataTableActionItem,
+  DataTableLazyEvent,
+  DataTableCellEditEvent,
+  DataTableRowEditEvent,
+  SortDirection,
+  SortMeta,
+  SelectionMode,
+  FilterMatchMode,
+  ColumnFilterMeta,
+  ActionPreset,
+  ExportFormat,
+  FrozenPosition,
+  RowClassCallback,
+  RowStyleCallback,
+} from './components/DataTable';
+
 // Types
 export type { MenuItem, NavigationRouter } from './types/navigation';
 export { resolveIcon, renderMenuIcon } from './components/resolveIcon';
@@ -202,3 +223,4 @@ import './components/Tree.css';
 import './components/TreeSelect.css';
 import './components/FileUpload.css';
 import './components/Image.css';
+import './components/DataTable/DataTable.css';

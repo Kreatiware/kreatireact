@@ -1,0 +1,716 @@
+/* ─── DataTable Variables ──────────────────────────────────────────── */
+:root {
+  --kreati-dt-border-color: var(--kreati-gray-200);
+  --kreati-dt-header-bg: var(--kreati-severity-primary);
+  --kreati-dt-header-color: var(--kreati-white);
+  --kreati-dt-header-font-weight: var(--kreati-font-weight-semibold);
+  --kreati-dt-header-hover-bg: var(--kreati-severity-primary-hover);
+  --kreati-dt-row-bg: var(--kreati-white);
+  --kreati-dt-row-hover-bg: var(--kreati-primary-alpha-6);
+  --kreati-dt-row-selected-bg: var(--kreati-severity-primary-light);
+  --kreati-dt-row-selected-hover-bg: var(--kreati-severity-primary-light-hover);
+  --kreati-dt-row-stripe-bg: var(--kreati-gray-50);
+  --kreati-dt-row-disabled-opacity: 0.5;
+  --kreati-dt-cell-padding-sm: 9px var(--kreati-space-2);
+  --kreati-dt-cell-padding-md: 10px var(--kreati-space-3);
+  --kreati-dt-cell-padding-lg: 14px var(--kreati-space-4);
+  --kreati-dt-font-size-sm: var(--kreati-font-size-xs);
+  --kreati-dt-font-size-md: var(--kreati-font-size-sm);
+  --kreati-dt-font-size-lg: var(--kreati-font-size-base);
+  --kreati-dt-radius: var(--kreati-radius-md);
+  --kreati-dt-shadow: var(--kreati-shadow-sm);
+  --kreati-dt-empty-padding: var(--kreati-space-8);
+  --kreati-dt-loading-overlay-bg: rgba(255, 255, 255, 0.7);
+  --kreati-dt-sort-icon-size: 14px;
+  --kreati-dt-action-btn-size: 28px;
+  --kreati-dt-drag-handle-color: var(--kreati-gray-300);
+  --kreati-dt-drag-over-bg: var(--kreati-severity-primary-light);
+  --kreati-dt-edit-cell-outline: 2px solid var(--kreati-severity-primary);
+  --kreati-dt-row-hover-bg-opaque: #edf6fa;
+  --kreati-dt-paginator-gap: var(--kreati-space-3);
+  --kreati-dt-filter-panel-bg: var(--kreati-white);
+  --kreati-dt-filter-panel-shadow: var(--kreati-shadow-lg);
+  --kreati-dt-filter-panel-radius: var(--kreati-radius-md);
+  --kreati-dt-filter-panel-width: 220px;
+  --kreati-dt-group-separator: rgba(255, 255, 255, 0.12);
+}
+
+/* ─── Wrapper ─────────────────────────────────────────────────────── */
+.k-datatable {
+  position: relative;
+  font-family: var(--kreati-font-family);
+  border-radius: var(--kreati-dt-radius);
+  box-shadow: var(--kreati-dt-shadow);
+  overflow: hidden;
+}
+
+/* ─── Header / Footer Slots ───────────────────────────────────────── */
+.k-datatable__header,
+.k-datatable__footer {
+  padding: var(--kreati-space-2) var(--kreati-space-3);
+  background: transparent;
+}
+
+.k-datatable__header-preset {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.k-datatable__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--kreati-space-2);
+}
+
+.k-datatable__toolbar-search {
+  max-width: 240px;
+}
+
+.k-datatable__toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-1);
+}
+
+.k-datatable__global-search {
+  max-width: 260px;
+}
+
+/* ─── Scroll Container ────────────────────────────────────────────── */
+.k-datatable__scroll-container {
+  position: relative;
+}
+
+/* ─── Table ───────────────────────────────────────────────────────── */
+.k-datatable__table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+/* ─── Sizes ───────────────────────────────────────────────────────── */
+.k-datatable--sm .k-datatable__table { font-size: var(--kreati-dt-font-size-sm); }
+.k-datatable--md .k-datatable__table { font-size: var(--kreati-dt-font-size-md); }
+.k-datatable--lg .k-datatable__table { font-size: var(--kreati-dt-font-size-lg); }
+
+.k-datatable--sm .k-datatable__th,
+.k-datatable--sm .k-datatable__td { padding: var(--kreati-dt-cell-padding-sm); }
+.k-datatable--md .k-datatable__th,
+.k-datatable--md .k-datatable__td { padding: var(--kreati-dt-cell-padding-md); }
+.k-datatable--lg .k-datatable__th,
+.k-datatable--lg .k-datatable__td { padding: var(--kreati-dt-cell-padding-lg); }
+
+/* ─── Header Cells ────────────────────────────────────────────────── */
+.k-datatable__thead {
+  background: var(--kreati-dt-header-bg);
+}
+
+.k-datatable--sticky-header .k-datatable__thead {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+}
+
+.k-datatable__th {
+  text-align: left;
+  font-weight: var(--kreati-dt-header-font-weight);
+  color: var(--kreati-dt-header-color);
+  white-space: nowrap;
+  user-select: none;
+  position: relative;
+  background: var(--kreati-dt-header-bg);
+  border: none;
+}
+
+.k-datatable__th--sortable {
+  cursor: pointer;
+}
+
+.k-datatable__th--sortable:hover {
+  background: var(--kreati-dt-header-hover-bg);
+}
+
+.k-datatable__th-content {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-1);
+}
+
+.k-datatable__th-icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  min-width: 32px;
+}
+
+.k-datatable__th--align-center .k-datatable__th-content { justify-content: center; }
+.k-datatable__th--align-right .k-datatable__th-content { justify-content: flex-end; }
+
+/* ─── Sort Icon ───────────────────────────────────────────────────── */
+.k-datatable__sort-icon {
+  width: var(--kreati-dt-sort-icon-size);
+  height: var(--kreati-dt-sort-icon-size);
+  flex-shrink: 0;
+  opacity: 0.5;
+  color: var(--kreati-dt-header-color);
+}
+
+.k-datatable__th--sorted .k-datatable__sort-icon {
+  opacity: 1;
+}
+
+.k-datatable__sort-badge {
+  font-size: 9px;
+  min-width: 14px;
+  height: 14px;
+  border-radius: var(--kreati-radius-full);
+  background: var(--kreati-white);
+  color: var(--kreati-severity-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ─── Filter Trigger ──────────────────────────────────────────────── */
+.k-datatable__filter-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: none;
+  background: transparent;
+  border-radius: var(--kreati-radius-sm);
+  cursor: pointer;
+  color: var(--kreati-dt-header-color);
+  opacity: 0.5;
+  transition: opacity 0.15s ease;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.k-datatable__filter-trigger:hover,
+.k-datatable__filter-trigger--active {
+  opacity: 1;
+}
+
+/* ─── Filter Panel (portal) ───────────────────────────────────────── */
+.k-datatable__filter-panel {
+  position: fixed;
+  width: var(--kreati-dt-filter-panel-width);
+  background: var(--kreati-dt-filter-panel-bg);
+  border-radius: var(--kreati-dt-filter-panel-radius);
+  box-shadow: var(--kreati-dt-filter-panel-shadow);
+  border: 1px solid var(--kreati-dt-border-color);
+  padding: var(--kreati-space-3);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none;
+}
+
+.k-datatable__filter-panel--open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Arrow */
+.k-datatable__filter-panel::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 8px;
+  width: 10px;
+  height: 10px;
+  background: var(--kreati-dt-filter-panel-bg);
+  border-left: 1px solid var(--kreati-dt-border-color);
+  border-top: 1px solid var(--kreati-dt-border-color);
+  transform: rotate(45deg);
+}
+
+.k-datatable__filter-panel__label {
+  font-size: var(--kreati-font-size-xxs);
+  font-weight: var(--kreati-font-weight-medium);
+  color: var(--kreati-gray-500);
+  text-transform: uppercase;
+  letter-spacing: var(--kreati-letter-spacing-wider);
+  margin-bottom: var(--kreati-space-2);
+}
+
+.k-datatable__filter-panel__spacer {
+  height: var(--kreati-space-2);
+}
+
+/* Override Select min-width inside filter panel */
+.k-datatable__filter-panel .k-select {
+  min-width: 0;
+}
+
+.k-datatable__filter-panel__actions {
+  display: flex;
+  gap: var(--kreati-space-2);
+  margin-top: var(--kreati-space-3);
+  justify-content: flex-end;
+}
+
+/* ─── Body ────────────────────────────────────────────────────────── */
+.k-datatable__tr {
+  background: var(--kreati-dt-row-bg);
+  transition: background-color 0.15s ease;
+}
+
+.k-datatable--hover .k-datatable__tr:hover {
+  background: var(--kreati-dt-row-hover-bg);
+}
+
+.k-datatable--striped .k-datatable__tr:nth-child(even) {
+  background: var(--kreati-dt-row-stripe-bg);
+}
+
+.k-datatable--striped.k-datatable--hover .k-datatable__tr:nth-child(even):hover {
+  background: var(--kreati-dt-row-hover-bg);
+}
+
+.k-datatable__tr--selected {
+  background: var(--kreati-dt-row-selected-bg) !important;
+}
+
+.k-datatable__tr--selected:hover {
+  background: var(--kreati-dt-row-selected-hover-bg) !important;
+}
+
+.k-datatable__tr--disabled {
+  opacity: var(--kreati-dt-row-disabled-opacity);
+  pointer-events: none;
+}
+
+.k-datatable__tr--drag-over {
+  box-shadow: inset 0 2px 0 var(--kreati-severity-primary);
+}
+
+/* ─── Body Cells ──────────────────────────────────────────────────── */
+.k-datatable__td {
+  border-bottom: 1px solid var(--kreati-dt-border-color);
+  vertical-align: middle;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.k-datatable__td--align-center { text-align: center; }
+.k-datatable__td--align-right { text-align: right; }
+
+.k-datatable__td--ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.k-datatable__td--clip {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.k-datatable__td--editing {
+  padding: 2px 2px !important;
+  max-width: 1px;
+}
+
+.k-datatable__td--editing .k-field-wrapper {
+  margin: 0;
+  min-width: 0;
+}
+
+.k-datatable__td--editing .k-select {
+  min-width: 0;
+}
+
+/* ─── Gridlines ───────────────────────────────────────────────────── */
+.k-datatable--row-lines .k-datatable__td {
+  border-bottom: 1px solid var(--kreati-dt-border-color);
+}
+
+.k-datatable--col-lines .k-datatable__td,
+.k-datatable--col-lines .k-datatable__th {
+  border-right: 1px solid var(--kreati-dt-border-color);
+}
+
+.k-datatable--col-lines .k-datatable__thead .k-datatable__th {
+  border-right-color: rgba(255, 255, 255, 0.15);
+}
+
+.k-datatable--col-lines .k-datatable__td:last-child,
+.k-datatable--col-lines .k-datatable__th:last-child {
+  border-right: none;
+}
+
+/* ─── Frozen Columns ──────────────────────────────────────────────── */
+.k-datatable__th--frozen-left,
+.k-datatable__td--frozen-left {
+  position: sticky;
+  z-index: 2;
+  background: inherit;
+  border-right: none;
+}
+
+.k-datatable__th--frozen-right,
+.k-datatable__td--frozen-right {
+  position: sticky;
+  z-index: 2;
+  background: inherit;
+  border-left: none;
+}
+
+.k-datatable__thead .k-datatable__th--frozen-left,
+.k-datatable__thead .k-datatable__th--frozen-right {
+  z-index: 7;
+}
+
+/* Frozen cells must always have opaque bg */
+.k-datatable__td--frozen-left,
+.k-datatable__td--frozen-right {
+  background: var(--kreati-dt-row-bg);
+}
+
+.k-datatable--hover .k-datatable__tr:hover .k-datatable__td--frozen-left,
+.k-datatable--hover .k-datatable__tr:hover .k-datatable__td--frozen-right {
+  background: var(--kreati-dt-row-hover-bg-opaque);
+}
+
+.k-datatable__tr--selected .k-datatable__td--frozen-left,
+.k-datatable__tr--selected .k-datatable__td--frozen-right {
+  background: var(--kreati-dt-row-selected-bg);
+}
+
+.k-datatable--striped .k-datatable__tr:nth-child(even) .k-datatable__td--frozen-left,
+.k-datatable--striped .k-datatable__tr:nth-child(even) .k-datatable__td--frozen-right {
+  background: var(--kreati-dt-row-stripe-bg);
+}
+
+.k-datatable--striped.k-datatable--hover .k-datatable__tr:nth-child(even):hover .k-datatable__td--frozen-left,
+.k-datatable--striped.k-datatable--hover .k-datatable__tr:nth-child(even):hover .k-datatable__td--frozen-right {
+  background: var(--kreati-dt-row-hover-bg-opaque);
+}
+
+/* ─── Selection Checkbox ──────────────────────────────────────────── */
+.k-datatable__select-cell {
+  width: 36px;
+  text-align: center;
+  padding: 0 var(--kreati-space-1) !important;
+}
+
+/* ─── Drag Handle ─────────────────────────────────────────────────── */
+.k-datatable__drag-cell {
+  width: 28px;
+  text-align: center;
+  cursor: grab;
+  color: var(--kreati-severity-primary);
+}
+
+.k-datatable__drag-cell:active {
+  cursor: grabbing;
+}
+
+.k-datatable__drag-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+}
+
+.k-datatable__tr:hover .k-datatable__drag-icon {
+  opacity: 1;
+}
+
+/* ─── Actions Column ──────────────────────────────────────────────── */
+.k-datatable__actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  justify-content: center;
+}
+
+/* ─── Empty State ─────────────────────────────────────────────────── */
+.k-datatable__empty {
+  text-align: center;
+  padding: var(--kreati-dt-empty-padding);
+  color: var(--kreati-gray-500);
+}
+
+/* ─── Loading Overlay ─────────────────────────────────────────────── */
+.k-datatable__loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--kreati-dt-loading-overlay-bg);
+  z-index: 3;
+}
+
+/* ─── Paginator Bar ───────────────────────────────────────────────── */
+.k-datatable__paginator-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--kreati-dt-paginator-gap);
+  padding: var(--kreati-space-2) var(--kreati-space-3);
+  flex-wrap: wrap;
+}
+
+.k-datatable__rows-per-page {
+  max-width: 64px;
+}
+
+.k-datatable__rows-per-page .k-select {
+  min-width: 0;
+  min-height: unset;
+}
+
+.k-datatable__rows-per-page .k-select__trigger {
+  height: 26px;
+  min-height: unset;
+  padding: 0 var(--kreati-space-2);
+  font-size: var(--kreati-font-size-xs);
+}
+
+.k-datatable__rows-per-page .k-field-wrapper {
+  margin: 0;
+}
+
+.k-datatable__page-info {
+  font-size: var(--kreati-font-size-xs);
+  color: var(--kreati-gray-500);
+}
+
+/* ─── Column Group Header ─────────────────────────────────────────── */
+.k-datatable__column-group-row .k-datatable__th {
+  text-align: center;
+  background: var(--kreati-severity-primary-active);
+  font-size: var(--kreati-font-size-xxs);
+  letter-spacing: var(--kreati-letter-spacing-wider);
+  padding-top: var(--kreati-space-1);
+  padding-bottom: var(--kreati-space-1);
+  border: none;
+  opacity: 0.9;
+}
+
+/* ─── Table Footer ────────────────────────────────────────────────── */
+.k-datatable__table tfoot {
+  background: var(--kreati-gray-50);
+}
+
+.k-datatable__table tfoot .k-datatable__td {
+  font-size: var(--kreati-font-size-xs);
+  font-weight: var(--kreati-font-weight-medium);
+  color: var(--kreati-gray-600);
+  border-bottom: none;
+  border-top: 2px solid var(--kreati-dt-border-color);
+}
+
+/* ─── Column Reorder ──────────────────────────────────────────────── */
+.k-datatable__th--dragging {
+  opacity: 0.5;
+}
+
+.k-datatable__th--drag-over {
+  box-shadow: inset -3px 0 0 var(--kreati-white);
+}
+
+/* ─── Row Grouping ────────────────────────────────────────────────── */
+.k-datatable__tr--group-header {
+  background: var(--kreati-severity-primary-light) !important;
+}
+
+.k-datatable__group-header-cell {
+  font-weight: var(--kreati-font-weight-semibold);
+  font-size: var(--kreati-font-size-xs);
+  color: var(--kreati-severity-primary);
+  letter-spacing: var(--kreati-letter-spacing-wide);
+}
+
+.k-datatable__th[draggable="true"] {
+  cursor: grab;
+}
+
+.k-datatable__th[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.k-datatable__th-reorder-icon {
+  width: 10px;
+  height: 10px;
+  opacity: 0.4;
+  flex-shrink: 0;
+  color: var(--kreati-dt-header-color);
+}
+
+.k-datatable__th[draggable="true"]:hover .k-datatable__th-reorder-icon {
+  opacity: 0.8;
+}
+
+/* ─── ScrollBar inside DataTable ───────────────────────────────────── */
+.k-datatable .k-scrollbar__track {
+  z-index: 4;
+  background: var(--kreati-white);
+}
+
+.k-datatable .k-scrollbar__thumb {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 5;
+}
+
+.k-datatable .k-scrollbar:hover .k-scrollbar__thumb,
+.k-datatable .k-scrollbar--dragging .k-scrollbar__thumb {
+  opacity: 1;
+}
+
+/* Frozen columns must be above scrollbar track (z-index 1) and thumb (z-index 2) */
+.k-datatable .k-scrollbar .k-datatable__td--frozen-right,
+.k-datatable .k-scrollbar .k-datatable__th--frozen-right {
+  z-index: 3;
+}
+
+.k-datatable .k-scrollbar .k-datatable__td--frozen-left,
+.k-datatable .k-scrollbar .k-datatable__th--frozen-left {
+  z-index: 3;
+}
+/* ─── Slim Mode ────────────────────────────────────────────────────── */
+.k-datatable--slim .k-datatable__th,
+.k-datatable--slim .k-datatable__td {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+/* ─── Row Expansion ───────────────────────────────────────────────── */
+.k-datatable__expand-cell {
+  width: 32px;
+  text-align: center;
+  padding-right: 0 !important;
+}
+
+.k-datatable__expand-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  border-radius: var(--kreati-radius-sm);
+  cursor: pointer;
+  color: var(--kreati-gray-500);
+  transition: transform 0.15s ease, color 0.15s ease;
+  padding: 0;
+}
+
+.k-datatable__expand-btn:hover {
+  color: var(--kreati-severity-primary);
+  background: var(--kreati-primary-alpha-8);
+}
+
+.k-datatable__expansion-cell {
+  padding: var(--kreati-space-3) var(--kreati-space-4) !important;
+  background: var(--kreati-gray-50);
+}
+
+/* ─── Virtual Scroll ───────────────────────────────────────────────── */
+.k-datatable__virtual-scroll {
+  position: relative;
+}
+
+/* ─── Resizable ───────────────────────────────────────────────────── */
+.k-datatable--resizable .k-datatable__table {
+  table-layout: fixed;
+}
+
+.k-datatable--resizable {
+  resize: both;
+  overflow: auto;
+}
+
+.k-datatable__resize-handle {
+  position: absolute;
+  top: 0;
+  right: -3px;
+  width: 7px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 1;
+}
+
+.k-datatable__resize-handle::after {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 3px;
+  width: 1px;
+  height: 60%;
+  background: rgba(255, 255, 255, 0.25);
+  transition: background 0.15s ease, width 0.15s ease;
+}
+
+.k-datatable__th:hover .k-datatable__resize-handle::after {
+  background: rgba(255, 255, 255, 0.6);
+  width: 2px;
+  left: 2px;
+}
+
+.k-datatable__resize-handle--active::after {
+  background: var(--kreati-white) !important;
+  width: 2px !important;
+  left: 2px !important;
+}
+
+/* Cell-level resize grip (bottom-right corner) */
+.k-datatable__cell-resize-grip {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  cursor: nwse-resize;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  background:
+    linear-gradient(135deg, transparent 50%, var(--kreati-severity-primary) 50%, var(--kreati-severity-primary) calc(50% + 1px), transparent calc(50% + 1px)) no-repeat bottom right / 12px 12px,
+    linear-gradient(135deg, transparent 50%, var(--kreati-severity-primary) 50%, var(--kreati-severity-primary) calc(50% + 1px), transparent calc(50% + 1px)) no-repeat bottom right / 8px 8px,
+    linear-gradient(135deg, transparent 50%, var(--kreati-severity-primary) 50%, var(--kreati-severity-primary) calc(50% + 1px), transparent calc(50% + 1px)) no-repeat bottom right / 4px 4px;
+}
+
+.k-datatable__td:hover .k-datatable__cell-resize-grip {
+  opacity: 1;
+}
+
+.k-datatable--resizable-rows .k-datatable__td,
+.k-datatable--resizable .k-datatable__td {
+  position: relative;
+}
+
+@media (max-width: 640px) {
+  .k-datatable__paginator-bar {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--kreati-space-2);
+  }
+}
+
+/* ─── Reduced Motion ──────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .k-datatable__tr,
+  .k-datatable__filter-panel,
+  .k-datatable__filter-trigger,
+  .k-datatable__sort-icon,
+  .k-datatable__expand-btn,
+  .k-datatable__cell-resize-grip,
+  .k-datatable__resize-handle::after,
+  .k-datatable__drag-icon,
+  .k-datatable__th-reorder-icon {
+    transition: none;
+  }
+}

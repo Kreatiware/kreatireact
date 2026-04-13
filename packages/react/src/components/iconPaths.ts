@@ -75,3 +75,36 @@ export const TRIANGLE_RIGHT_PATH = 'M16 12l-6 6V6z';
 
 /** @author ai — Pending designer review */
 export const UPLOAD_PATH = 'M5,4V6H19V4ZM5,14H9V20H15V14H19L12,7Z';
+
+/** @author ai — Pending designer review */
+export const FILTER_PATH = 'M4.25,5.61C6.27,8.2,10,13,10,13v6c0,.55.45,1,1,1h2c.55,0,1-.45,1-1v-6s3.72-4.8,5.74-7.39c.51-.65.04-1.61-.79-1.61H5.04c-.83,0-1.3.95-.79,1.61Z';
+
+/** @author ai — Pending designer review */
+export const SORT_ASC_PATH = 'M7,14l5-5,5,5Z';
+
+/** @author ai — Pending designer review */
+export const SORT_DESC_PATH = 'M7,10l5,5,5-5Z';
+
+/** @author ai — Pending designer review */
+export const SORT_BOTH_PATH = 'M7,14l5,5,5-5Zm0-4l5-5,5,5Z';
+
+/** @author ai — Pending designer review */
+export const PENCIL_PATH = 'M3,17.25V21h3.75L17.81,9.94l-3.75-3.75L3,17.25ZM20.71,7.04c.39-.39.39-1.02,0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41,0l-1.83,1.83,3.75,3.75,1.83-1.83Z';
+
+/** @author ai — Pending designer review */
+export const TRASH_PATH = 'M6,19c0,1.1.9,2,2,2h8c1.1,0,2-.9,2-2V7H6v12ZM19,4h-3.5l-1-1h-5l-1,1H5v2h14V4Z';
+
+/** @author ai — Pending designer review */
+export const ELLIPSIS_V_PATH = 'M12,8c1.1,0,2-.9,2-2s-.9-2-2-2-2,.9-2,2,.9,2,2,2Zm0,2c-1.1,0-2,.9-2,2s.9,2,2,2,2-.9,2-2-.9-2-2-2Zm0,6c-1.1,0-2,.9-2,2s.9,2,2,2,2-.9,2-2-.9-2-2-2Z';
+
+/** @author ai — Pending designer review */
+export const DOWNLOAD_PATH = 'M5,20H19V18H5ZM19,9H15V3H9V9H5L12,16Z';
+
+/** @author ai — Pending designer review */
+export const COPY_PATH = 'M16,1H4C2.9,1,2,1.9,2,3v14h2V3h12V1Zm3,4H8C6.9,5,6,5.9,6,7v14c0,1.1.9,2,2,2h11c1.1,0,2-.9,2-2V7c0-1.1-.9-2-2-2Zm0,16H8V7h11v14Z';
+
+/** @author ai — Pending designer review */
+export const PRINT_PATH = 'M19,8H5c-1.66,0-3,1.34-3,3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3Zm-3,11H8v-5h8v5Zm3-7c-.55,0-1-.45-1-1s.45-1,1-1,1,.45,1,1-.45,1-1,1ZM18,3H6v4h12V3Z';
+
+/** @author ai — Pending designer review */
+export const GRIP_VERTICAL_PATH = 'M8,6h2v12H8Zm6,0h2v12H14Z';

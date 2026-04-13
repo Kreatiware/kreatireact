@@ -26,6 +26,14 @@ import {
   TimesCircle,
   Heart,
   Upload,
+  Filter,
+  Pencil,
+  Trash,
+  EllipsisV,
+  Download,
+  GripVertical,
+  Copy,
+  Print,
 } from './icons';
 import type { IconProps } from './icons';
 
@@ -57,6 +65,14 @@ const ICON_MAP: Record<string, React.FC<IconProps>> = {
   'times-circle': TimesCircle,
   heart: Heart,
   upload: Upload,
+  filter: Filter,
+  pencil: Pencil,
+  trash: Trash,
+  'ellipsis-v': EllipsisV,
+  download: Download,
+  'grip-vertical': GripVertical,
+  copy: Copy,
+  print: Print,
 };
 
 export interface IconResolverProps extends IconProps {

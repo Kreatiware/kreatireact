@@ -122,4 +122,24 @@ export interface KreatiLocale {
     moveUp: string;
     moveDown: string;
   };
+  /** DataTable component */
+  dataTable: {
+    ariaLabel: string;
+    emptyMessage: string;
+    filterPlaceholder: string;
+    sortAscending: string;
+    sortDescending: string;
+    selectAll: string;
+    selectRow: string;
+    edit: string;
+    delete: string;
+    view: string;
+    copy: string;
+    print: string;
+    rowsPerPage: string;
+    pageInfo: string;
+    exportCSV: string;
+    reorderRow: string;
+    reorderColumn: string;
+  };
 }

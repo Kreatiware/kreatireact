@@ -621,3 +621,83 @@ export const Upload: React.FC<IconProps> = ({ size = 24, color = 'currentColor',
     <path d="M5,4V6H19V4ZM5,14H9V20H15V14H19L12,7Z" />
   </svg>
 );
+
+/**
+ * Filter icon — funnel shape for filtering data
+ * @author ai — Pending designer review
+ */
+export const Filter: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M4.25,5.61C6.27,8.2,10,13,10,13v6c0,.55.45,1,1,1h2c.55,0,1-.45,1-1v-6s3.72-4.8,5.74-7.39c.51-.65.04-1.61-.79-1.61H5.04c-.83,0-1.3.95-.79,1.61Z" />
+  </svg>
+);
+
+/**
+ * Pencil icon — edit/modify indicator
+ * @author ai — Pending designer review
+ */
+export const Pencil: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M3,17.25V21h3.75L17.81,9.94l-3.75-3.75L3,17.25ZM20.71,7.04c.39-.39.39-1.02,0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41,0l-1.83,1.83,3.75,3.75,1.83-1.83Z" />
+  </svg>
+);
+
+/**
+ * Trash icon — delete/remove indicator
+ * @author ai — Pending designer review
+ */
+export const Trash: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M6,19c0,1.1.9,2,2,2h8c1.1,0,2-.9,2-2V7H6v12ZM19,4h-3.5l-1-1h-5l-1,1H5v2h14V4Z" />
+  </svg>
+);
+
+/**
+ * EllipsisV icon — vertical three dots menu
+ * @author ai — Pending designer review
+ */
+export const EllipsisV: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M12,8c1.1,0,2-.9,2-2s-.9-2-2-2-2,.9-2,2,.9,2,2,2Zm0,2c-1.1,0-2,.9-2,2s.9,2,2,2,2-.9,2-2-.9-2-2-2Zm0,6c-1.1,0-2,.9-2,2s.9,2,2,2,2-.9,2-2-.9-2-2-2Z" />
+  </svg>
+);
+
+/**
+ * Download icon — file download indicator
+ * @author ai — Pending designer review
+ */
+export const Download: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M5,20H19V18H5ZM19,9H15V3H9V9H5L12,16Z" />
+  </svg>
+);
+
+/**
+ * Copy icon — clipboard copy indicator
+ * @author ai — Pending designer review
+ */
+export const Copy: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M16,1H4C2.9,1,2,1.9,2,3v14h2V3h12V1Zm3,4H8C6.9,5,6,5.9,6,7v14c0,1.1.9,2,2,2h11c1.1,0,2-.9,2-2V7c0-1.1-.9-2-2-2Zm0,16H8V7h11v14Z" />
+  </svg>
+);
+
+/**
+ * Print icon — printer indicator
+ * @author ai — Pending designer review
+ */
+export const Print: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M19,8H5c-1.66,0-3,1.34-3,3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3Zm-3,11H8v-5h8v5Zm3-7c-.55,0-1-.45-1-1s.45-1,1-1,1,.45,1,1-.45,1-1,1ZM18,3H6v4h12V3Z" />
+  </svg>
+);
+
+/**
+ * GripVertical icon — drag handle for reordering
+ * @author ai — Pending designer review
+ */
+export const GripVertical: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M8,6h2v12H8Zm6,0h2v12H14Z" />
+  </svg>
+);

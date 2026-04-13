@@ -37,6 +37,14 @@ export {
   TimesCircle,
   Heart,
   Upload,
+  Filter,
+  Pencil,
+  Trash,
+  EllipsisV,
+  Download,
+  GripVertical,
+  Copy,
+  Print,
   // Deprecated aliases
   Menu,
 } from './icons';
