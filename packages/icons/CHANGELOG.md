@@ -1,5 +1,11 @@
 # @kreatiware/icons
 
+## 0.10.0
+
+### Minor Changes
+
+- fa783d9: feat(icons): add base icons
+
 ## 0.9.0
 
 ### Minor Changes
