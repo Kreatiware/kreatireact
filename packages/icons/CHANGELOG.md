@@ -1,5 +1,11 @@
 # @kreatiware/icons
 
+## 0.10.1
+
+### Patch Changes
+
+- 56c7dac: patch , rename and change packages
+
 ## 0.10.0
 
 ### Minor Changes
