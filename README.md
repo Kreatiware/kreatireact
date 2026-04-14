@@ -1,80 +1,116 @@
 # Ecosistema Kreati
 
-> Herramientas frontend modernas para desarrolladores React
+> Herramientas frontend modernas para desarrolladores React — zero dependencies
 
 ## Paquetes
 
 ### [@kreatiware/react](./packages/react)
-22 componentes React modernos y tipados con sistema de temas integrado.
+55+ componentes React tipados con ARIA/WCAG 2.1 AA, sistema de locale, y temas.
 
 ```bash
 npm install @kreatiware/react
 ```
 
 ### [@kreatiware/icons](./packages/icons)
-Libreria de iconos vectoriales SVG optimizados con componentes React.
+54 iconos vectoriales SVG con componentes React y resolver por nombre.
 
 ```bash
 npm install @kreatiware/icons
 ```
 
-### [@kreatiware/flex](./packages/flex)
-Sistema de utilities CSS para Flexbox y Grid con diseno responsive.
+### [@kreatiware/layout](./packages/layout)
+Sistema de utilities CSS para Flexbox, Grid, Spacing y tipografia responsive.
 
 ```bash
-npm install @kreatiware/flex
+npm install @kreatiware/layout
 ```
 
 ## Inicio Rapido
 
-```jsx
-import { Button, Input, Calendar } from '@kreatiware/react';
+```tsx
+import { Button, Input, DataTable, KreatiProvider } from '@kreatiware/react';
 import { ArrowRight } from '@kreatiware/icons';
-import '@kreatiware/flex/dist/index.css';
+import '@kreatiware/react/dist/style.css';
+import '@kreatiware/layout/dist/index.css';
 
 function App() {
   return (
-    <div className="k-flex k-flex-col k-gap-4">
-      <Input label="Name" size="md" />
-      <Calendar label="Date" showButtonBar />
-      <Button variant="primary">
-        Submit
-        <ArrowRight size={16} />
-      </Button>
-    </div>
+    <KreatiProvider locale={es}>
+      <DataTable
+        value={data}
+        columns={columns}
+        paginator
+        rows={10}
+        toolbar={['search', 'export', 'print']}
+        selectionMode="checkbox"
+        stripedRows
+      />
+    </KreatiProvider>
   );
 }
 ```
 
+## Componentes
+
+### Formularios
+Input, InputMask, InputGroup, Textarea, Select, MultiSelect, AutoComplete, Checkbox, CheckboxGroup, Radio, RadioGroup, Switch, Slider, Calendar, ColorPicker, FileUpload, Rating, Dial
+
+### Feedback & Overlay
+Dialog, Drawer, Tooltip, Popover, Toast, Message, MessageList, Spinner, ProgressBar, Skeleton
+
+### Layout & Data
+Card, Panel, Accordion, Tabs, TabMenu, Divider, Breadcrumb, Pagination, Avatar, Tag, Timeline, Tree, TreeSelect, Stepper, ScrollBar, ScrollArea, Image, List, DataTable
+
+### Navegacion
+NavigationBar, MenuBar, ContextMenu, DockMenu, SideMenu, TabMenu
+
+### Botones
+Button, ButtonGroup, DropdownButton, SpeedDial, ToggleButton, ToggleButtonGroup
+
+### Base
+Badge, Chip, HeroSection, DynamicSvg, FieldWrapper
+
+## DataTable
+
+Componente completo de tabla de datos con:
+- Columnas dinamicas con templates personalizables
+- Sort single/multiple, filtros globales y por columna
+- Seleccion (click, checkbox), filas deshabilitables
+- Edicion inline (celda y fila) con editores custom
+- Drag & drop para reordenar filas y columnas
+- Frozen columns, column groups, row grouping
+- Row expansion y tree mode
+- Virtual scroll (10,000+ filas)
+- Resize de columnas, filas y celdas
+- Toolbar preset (search, export, print, copy)
+- Paginator customizable, column visibility
+- CSV export, print, copy to clipboard
+- ScrollBar de Kreati customizable
+- ARIA completo y navegacion por teclado
+
+## Iconos (54)
+
+Chevrons, Arrows, Check, Times, Search, Plus, Minus, Filter, Sort, Eye, EyeOff, Mail, Lock, Phone, Clock, Calendar, User, Star, Heart, Bell, Home, Settings, Grid, List, Image, Folder, File, Upload, Download, Share, Copy, Print, Pencil, Trash, Refresh, ExternalLink, y mas.
+
 ## Desarrollo
 
 ```bash
-# Instalar dependencias
-npm install
-
-# Desarrollo
-npm run dev
-
-# Build todos los paquetes
-npm run build
-
-# Storybook
-npm run storybook
-
-# Tests
-npm run test
-
-# Linting
-npm run lint
+npm install          # Instalar dependencias
+npm run dev          # Desarrollo
+npm run build        # Build todos los paquetes
+npm run storybook    # Storybook
+npm run lint         # Linting
 ```
 
 ## Roadmap
 
-- [x] **Etapa 1**: Configuracion inicial, Button, NavigationBar, Badge, Chip, Tooltip, HeroSection, DynamicSvg, ScrollBar
-- [x] **Etapa 2**: Componentes de formulario (Input, InputMask, Textarea, Select, MultiSelect, Checkbox, Radio, Switch, ToggleButton, Calendar, Slider, List)
-- [ ] **Etapa 3**: Sistema de temas avanzado, componentes de layout (Dialog, Tabs, Accordion, Table)
-- [ ] **Etapa 4**: Distribucion npm publico
-- [ ] **Etapa 5**: Productos premium
+- [x] **Fundacion**: Infraestructura, sistema de diseno, componentes base
+- [x] **Etapa 1**: Formularios (18 componentes)
+- [x] **Etapa 2**: Feedback & Overlay (10 componentes)
+- [x] **Etapa 3**: Layout & Data Display (19 componentes + DataTable)
+- [ ] **Etapa 4**: Temas & Dark Mode (ThemeProvider, dark mode, tema Corporate)
+- [ ] **Etapa 5**: Distribucion npm publico & v1.0
+- [ ] **Etapa 6**: Premium & Monetizacion
 
 ## Licencia
 

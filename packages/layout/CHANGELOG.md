@@ -1,4 +1,4 @@
-# @kreatiware/flex
+# @kreatiware/layout
 
 ## 0.4.0
 

@@ -2,13 +2,13 @@
   "name": "kreati-ecosystem",
   "version": "1.0.0",
   "private": true,
-  "description": "Ecosistema completo de herramientas frontend: React components, Icons y CSS Flex utilities",
+  "description": "Ecosistema completo de herramientas frontend: React components, Icons y CSS Layout utilities",
   "workspaces": [
     "packages/*",
     "apps/*"
   ],
   "scripts": {
-    "build": "npm run build --workspace=packages/react --workspace=packages/icons --workspace=packages/flex",
+    "build": "npm run build --workspace=packages/react --workspace=packages/icons --workspace=packages/layout",
     "build:all": "npm run build --workspaces",
     "dev": "npm run dev --workspaces",
     "test": "npm run test --workspaces --if-present",

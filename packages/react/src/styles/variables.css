@@ -45,11 +45,17 @@
   --kreati-overlay-strong: rgba(255, 255, 255, 0.25);
   --kreati-overlay-dark: rgba(0, 0, 0, 0.4);
   --kreati-overlay-heavy: rgba(0, 0, 0, 0.5);
+  --kreati-primary-alpha-4: rgba(15, 120, 165, 0.04);
   --kreati-primary-alpha-6: rgba(15, 120, 165, 0.06);
   --kreati-primary-alpha-8: rgba(15, 120, 165, 0.08);
   --kreati-black-alpha-5: rgba(0, 0, 0, 0.05);
   --kreati-black-alpha-6: rgba(0, 0, 0, 0.06);
   --kreati-black-alpha-12: rgba(0, 0, 0, 0.12);
+  --kreati-white-alpha-12: rgba(255, 255, 255, 0.12);
+  --kreati-white-alpha-15: rgba(255, 255, 255, 0.15);
+  --kreati-white-alpha-25: rgba(255, 255, 255, 0.25);
+  --kreati-white-alpha-60: rgba(255, 255, 255, 0.6);
+  --kreati-white-alpha-70: rgba(255, 255, 255, 0.7);
 
   /* ─── Severity Colors ───────────────────────────────────────────────── */
   --kreati-severity-primary: #0f78a5;

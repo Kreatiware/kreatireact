@@ -608,10 +608,10 @@ export const DataTable = forwardRef<DataTableRef, DataTableProps<Record<string, 
           const tableEl = <table className="k-datatable__table">{headerEl}{bodyEl}{footerEl}</table>;
 
           if (scrollable && !virtualScroll) {
-            return <ScrollBar orientation="both" maxHeight={scrollHeight || '400px'} variant="kreati" size="sm" {...(scrollBarPropsProp as object)}>{tableEl}</ScrollBar>;
+            return <ScrollBar orientation="both" maxHeight={scrollHeight || 'var(--kreati-dt-scroll-height)'} variant="kreati" size="sm" {...(scrollBarPropsProp as object)}>{tableEl}</ScrollBar>;
           }
           if (virtualScroll) {
-            return <div className="k-datatable__virtual-scroll" style={{ maxHeight: scrollHeight || '400px', overflow: 'auto' }}>{tableEl}</div>;
+            return <div className="k-datatable__virtual-scroll" style={{ maxHeight: scrollHeight || 'var(--kreati-dt-scroll-height)', overflow: 'auto' }}>{tableEl}</div>;
           }
           return <div className="k-datatable__scroll-container">{tableEl}</div>;
         })()}

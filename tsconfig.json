@@ -23,7 +23,7 @@
     "paths": {
       "@kreati/react": ["./packages/react/src"],
       "@kreati/icons": ["./packages/icons/src"],
-      "@kreati/flex": ["./packages/flex/src"]
+      "@kreati/flex": ["./packages/layout/src"]
     }
   },
   "include": [

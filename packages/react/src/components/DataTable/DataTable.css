@@ -20,19 +20,20 @@
   --kreati-dt-radius: var(--kreati-radius-md);
   --kreati-dt-shadow: var(--kreati-shadow-sm);
   --kreati-dt-empty-padding: var(--kreati-space-8);
-  --kreati-dt-loading-overlay-bg: rgba(255, 255, 255, 0.7);
+  --kreati-dt-scroll-height: 400px;
+  --kreati-dt-loading-overlay-bg: var(--kreati-white-alpha-70);
   --kreati-dt-sort-icon-size: 14px;
   --kreati-dt-action-btn-size: 28px;
   --kreati-dt-drag-handle-color: var(--kreati-gray-300);
   --kreati-dt-drag-over-bg: var(--kreati-severity-primary-light);
   --kreati-dt-edit-cell-outline: 2px solid var(--kreati-severity-primary);
-  --kreati-dt-row-hover-bg-opaque: #edf6fa;
+  --kreati-dt-row-hover-bg-opaque: var(--kreati-primary-alpha-4);
   --kreati-dt-paginator-gap: var(--kreati-space-3);
   --kreati-dt-filter-panel-bg: var(--kreati-white);
   --kreati-dt-filter-panel-shadow: var(--kreati-shadow-lg);
   --kreati-dt-filter-panel-radius: var(--kreati-radius-md);
   --kreati-dt-filter-panel-width: 220px;
-  --kreati-dt-group-separator: rgba(255, 255, 255, 0.12);
+  --kreati-dt-group-separator: var(--kreati-white-alpha-12);
 }
 
 /* ─── Wrapper ─────────────────────────────────────────────────────── */
@@ -340,7 +341,7 @@
 }
 
 .k-datatable--col-lines .k-datatable__thead .k-datatable__th {
-  border-right-color: rgba(255, 255, 255, 0.15);
+  border-right-color: var(--kreati-white-alpha-15);
 }
 
 .k-datatable--col-lines .k-datatable__td:last-child,
@@ -650,12 +651,12 @@
   left: 3px;
   width: 1px;
   height: 60%;
-  background: rgba(255, 255, 255, 0.25);
+  background: var(--kreati-white-alpha-25);
   transition: background 0.15s ease, width 0.15s ease;
 }
 
 .k-datatable__th:hover .k-datatable__resize-handle::after {
-  background: rgba(255, 255, 255, 0.6);
+  background: var(--kreati-white-alpha-60);
   width: 2px;
   left: 2px;
 }
