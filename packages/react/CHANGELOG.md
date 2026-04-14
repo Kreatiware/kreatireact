@@ -1,5 +1,11 @@
 # @kreatiware/react
 
+## 0.12.1
+
+### Patch Changes
+
+- 56c7dac: patch , rename and change packages
+
 ## 0.12.0
 
 ### Minor Changes
