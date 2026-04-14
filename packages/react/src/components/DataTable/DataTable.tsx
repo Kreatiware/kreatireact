@@ -8,7 +8,7 @@ import { ScrollBar } from '../ScrollBar';
 import { useKreatiLocale } from '../../locale';
 import { DataTableHeader } from './DataTableHeader';
 import { DataTableBody } from './DataTableBody';
-import { SEARCH_PATH } from '../iconPaths';
+import { SEARCH_PATH, TIMES_PATH } from '../iconPaths';
 import { getFieldValue, matchFilter, generateCSV, downloadFile } from './utils';
 import { DOWNLOAD_PATH, PRINT_PATH, COPY_PATH } from '../iconPaths';
 import type {
@@ -484,7 +484,7 @@ export const DataTable = forwardRef<DataTableRef, DataTableProps<Record<string, 
         if (!table) return;
         const win = window.open('', '_blank');
         if (!win) return;
-        win.document.write(`<html><head><title>${exportFilename}</title><style>table{border-collapse:collapse;width:100%;font-family:sans-serif}th,td{border:1px solid #ddd;padding:8px;text-align:left}th{background:#0f78a5;color:#fff}tr:nth-child(even){background:#f9fafb}</style></head><body>${table.outerHTML}</body></html>`);
+        win.document.write(`<html><head><title>${exportFilename}</title><style>table{border-collapse:collapse;width:100%;font-family:sans-serif}th,td{border:1px solid var(--kreati-gray-200, #e5e7eb);padding:8px;text-align:left}th{background:var(--kreati-severity-primary, #0f78a5);color:var(--kreati-severity-primary-text, #fff)}tr:nth-child(even){background:var(--kreati-gray-50, #f9fafb)}</style></head><body>${table.outerHTML}</body></html>`);
         win.document.close();
         win.print();
       },
@@ -541,7 +541,7 @@ export const DataTable = forwardRef<DataTableRef, DataTableProps<Record<string, 
                     variant="floating"
                     label={locale.common?.search || 'Search'}
                     iconLeft={<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={SEARCH_PATH} /></svg>}
-                    iconRight={toolbarFilter ? <button type="button" style={{ border: 'none', background: 'none', cursor: 'pointer', padding: 0, display: 'flex' }} onClick={() => setToolbarFilter('')} aria-label="Clear search"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19,6.41L17.59,5,12,10.59,6.41,5,5,6.41,10.59,12,5,17.59,6.41,19,12,13.41,17.59,19,19,17.59,13.41,12Z" /></svg></button> : undefined}
+                    iconRight={toolbarFilter ? <button type="button" style={{ border: 'none', background: 'none', cursor: 'pointer', padding: 0, display: 'flex' }} onClick={() => setToolbarFilter('')} aria-label="Clear search"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={TIMES_PATH} /></svg></button> : undefined}
                     className="k-datatable__toolbar-search"
                   />
                 )}

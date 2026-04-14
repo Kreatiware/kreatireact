@@ -1,0 +1,104 @@
+/* ============================================
+   Kreati Theme: Soft
+   Warm light theme — pastel tones, rounded feel,
+   lower contrast, friendly and approachable.
+   ============================================ */
+[data-kreati-theme="soft"] {
+  --kreati-primary-50: #fef3f0;
+  --kreati-primary-100: #fde4dc;
+  --kreati-primary-200: #fbc8b8;
+  --kreati-primary-300: #f5a08a;
+  --kreati-primary-400: #e8785e;
+  --kreati-primary-500: #d4603f;
+  --kreati-primary-600: #bf5436;
+  --kreati-primary-700: #a8482e;
+  --kreati-primary-800: #8e3c26;
+  --kreati-primary-900: #74301e;
+
+  --kreati-gray-50: #fdfcfb;
+  --kreati-gray-100: #f8f6f4;
+  --kreati-gray-200: #f0ece8;
+  --kreati-gray-300: #e2dbd4;
+  --kreati-gray-400: #c4b8ad;
+  --kreati-gray-500: #8c8078;
+  --kreati-gray-600: #6b6058;
+  --kreati-gray-700: #4d443e;
+  --kreati-gray-800: #332c28;
+  --kreati-gray-900: #1c1816;
+
+  --kreati-white: #fffbf8;
+  --kreati-black: #1c1816;
+  --kreati-background: #fef7f3;
+
+  --kreati-overlay-light: rgba(255, 248, 243, 0.1);
+  --kreati-overlay-medium: rgba(255, 248, 243, 0.15);
+  --kreati-overlay-strong: rgba(255, 248, 243, 0.25);
+  --kreati-overlay-dark: rgba(28, 24, 22, 0.35);
+  --kreati-overlay-heavy: rgba(28, 24, 22, 0.45);
+
+  --kreati-primary-alpha-4: rgba(212, 96, 63, 0.04);
+  --kreati-primary-alpha-6: rgba(212, 96, 63, 0.06);
+  --kreati-primary-alpha-8: rgba(212, 96, 63, 0.08);
+  --kreati-black-alpha-5: rgba(28, 24, 22, 0.04);
+  --kreati-black-alpha-6: rgba(28, 24, 22, 0.05);
+  --kreati-black-alpha-12: rgba(28, 24, 22, 0.1);
+  --kreati-white-alpha-12: rgba(255, 251, 248, 0.12);
+  --kreati-white-alpha-15: rgba(255, 251, 248, 0.15);
+  --kreati-white-alpha-25: rgba(255, 251, 248, 0.25);
+  --kreati-white-alpha-60: rgba(255, 251, 248, 0.6);
+  --kreati-white-alpha-70: rgba(255, 251, 248, 0.7);
+
+  --kreati-severity-primary: #d4603f;
+  --kreati-severity-primary-hover: #bf5436;
+  --kreati-severity-primary-active: #a8482e;
+  --kreati-severity-primary-text: #ffffff;
+  --kreati-severity-primary-light: #fef3f0;
+  --kreati-severity-primary-light-hover: #fde4dc;
+
+  --kreati-severity-secondary: #8c8078;
+  --kreati-severity-secondary-hover: #6b6058;
+  --kreati-severity-secondary-active: #4d443e;
+  --kreati-severity-secondary-text: #ffffff;
+  --kreati-severity-secondary-light: #f8f6f4;
+  --kreati-severity-secondary-light-hover: #f0ece8;
+
+  --kreati-severity-success: #5da87a;
+  --kreati-severity-success-hover: #4d9268;
+  --kreati-severity-success-active: #3d7c56;
+  --kreati-severity-success-text: #ffffff;
+  --kreati-severity-success-light: #eef8f2;
+  --kreati-severity-success-light-hover: #dcf0e3;
+
+  --kreati-severity-info: #6b8fc7;
+  --kreati-severity-info-hover: #5a7db5;
+  --kreati-severity-info-active: #496ba3;
+  --kreati-severity-info-text: #ffffff;
+  --kreati-severity-info-light: #eef3fa;
+  --kreati-severity-info-light-hover: #dce6f4;
+
+  --kreati-severity-warning: #d4a24a;
+  --kreati-severity-warning-hover: #c0903c;
+  --kreati-severity-warning-active: #ac7e2e;
+  --kreati-severity-warning-text: #ffffff;
+  --kreati-severity-warning-light: #fdf6e8;
+  --kreati-severity-warning-light-hover: #faecd0;
+
+  --kreati-severity-help: #9b7bc4;
+  --kreati-severity-help-hover: #8968b2;
+  --kreati-severity-help-active: #7755a0;
+  --kreati-severity-help-text: #ffffff;
+  --kreati-severity-help-light: #f5f0fa;
+  --kreati-severity-help-light-hover: #ebe0f5;
+
+  --kreati-severity-danger: #d06060;
+  --kreati-severity-danger-hover: #bc5050;
+  --kreati-severity-danger-active: #a84040;
+  --kreati-severity-danger-text: #ffffff;
+  --kreati-severity-danger-light: #fdf0f0;
+  --kreati-severity-danger-light-hover: #fae0e0;
+
+  --kreati-shadow-sm: 0 1px 3px 0 rgb(28 24 22 / 0.04);
+  --kreati-shadow-md: 0 4px 8px -1px rgb(28 24 22 / 0.06);
+  --kreati-shadow-lg: 0 10px 18px -3px rgb(28 24 22 / 0.08);
+  --kreati-shadow-xl: 0 20px 28px -5px rgb(28 24 22 / 0.1);
+}

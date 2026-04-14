@@ -1,0 +1,124 @@
+/* ============================================
+   Kreati Theme: Kreati (Brand Identity)
+
+   Kreatiware brand theme — Anil (añil) blue base
+   with creative golden accents. Reflects the
+   "Desarrolla · Diseña · Crea" identity.
+
+   Psychology:
+   - Añil (#3949ab): depth, artistry, creativity with authority
+   - Golden accent (#e6b800): energy, innovation, passion
+   - Warm whites: approachable, human, not sterile
+   ============================================ */
+[data-kreati-theme="kreati"] {
+  /* ─── Primary (Añil — artistic depth) ─────── */
+  --kreati-primary-50: #ebedf8;
+  --kreati-primary-100: #c2c8e9;
+  --kreati-primary-200: #99a3da;
+  --kreati-primary-300: #707ecb;
+  --kreati-primary-400: #4d5dba;
+  --kreati-primary-500: #3949ab;
+  --kreati-primary-600: #334199;
+  --kreati-primary-700: #2d3987;
+  --kreati-primary-800: #273175;
+  --kreati-primary-900: #212963;
+
+  /* ─── Gray (slightly warm) ────────────────── */
+  --kreati-gray-50: #fafaf8;
+  --kreati-gray-100: #f4f4f1;
+  --kreati-gray-200: #e6e6e1;
+  --kreati-gray-300: #d2d2cc;
+  --kreati-gray-400: #a8a8a2;
+  --kreati-gray-500: #6e6e68;
+  --kreati-gray-600: #52524d;
+  --kreati-gray-700: #3a3a36;
+  --kreati-gray-800: #242421;
+  --kreati-gray-900: #121210;
+
+  /* ─── Base (warm white) ───────────────────── */
+  --kreati-white: #fdfcfa;
+  --kreati-black: #121210;
+  --kreati-background: #f4f2ee;
+
+  /* ─── Overlays ────────────────────────────── */
+  --kreati-overlay-light: rgba(253, 252, 250, 0.1);
+  --kreati-overlay-medium: rgba(253, 252, 250, 0.15);
+  --kreati-overlay-strong: rgba(253, 252, 250, 0.25);
+  --kreati-overlay-dark: rgba(18, 18, 16, 0.4);
+  --kreati-overlay-heavy: rgba(18, 18, 16, 0.55);
+
+  /* ─── Alpha ───────────────────────────────── */
+  --kreati-primary-alpha-4: rgba(57, 73, 171, 0.04);
+  --kreati-primary-alpha-6: rgba(57, 73, 171, 0.06);
+  --kreati-primary-alpha-8: rgba(57, 73, 171, 0.08);
+  --kreati-black-alpha-5: rgba(18, 18, 16, 0.05);
+  --kreati-black-alpha-6: rgba(18, 18, 16, 0.06);
+  --kreati-black-alpha-12: rgba(18, 18, 16, 0.12);
+  --kreati-white-alpha-12: rgba(253, 252, 250, 0.12);
+  --kreati-white-alpha-15: rgba(253, 252, 250, 0.15);
+  --kreati-white-alpha-25: rgba(253, 252, 250, 0.25);
+  --kreati-white-alpha-60: rgba(253, 252, 250, 0.6);
+  --kreati-white-alpha-70: rgba(253, 252, 250, 0.7);
+
+  /* ─── Severity: Primary (brand añil) ──────── */
+  --kreati-severity-primary: #3949ab;
+  --kreati-severity-primary-hover: #334199;
+  --kreati-severity-primary-active: #2d3987;
+  --kreati-severity-primary-text: #ffffff;
+  --kreati-severity-primary-light: #ebedf8;
+  --kreati-severity-primary-light-hover: #c2c8e9;
+
+  /* ─── Severity: Secondary (warm gray) ─────── */
+  --kreati-severity-secondary: #6e6e68;
+  --kreati-severity-secondary-hover: #52524d;
+  --kreati-severity-secondary-active: #3a3a36;
+  --kreati-severity-secondary-text: #ffffff;
+  --kreati-severity-secondary-light: #f4f4f1;
+  --kreati-severity-secondary-light-hover: #e6e6e1;
+
+  /* ─── Severity: Success (natural green) ───── */
+  --kreati-severity-success: #288045;
+  --kreati-severity-success-hover: #206b38;
+  --kreati-severity-success-active: #18562b;
+  --kreati-severity-success-text: #ffffff;
+  --kreati-severity-success-light: #e8f5ed;
+  --kreati-severity-success-light-hover: #c8e8d2;
+
+  /* ─── Severity: Info (añil lighter) ──────── */
+  --kreati-severity-info: #4565b8;
+  --kreati-severity-info-hover: #3d5aa5;
+  --kreati-severity-info-active: #354f92;
+  --kreati-severity-info-text: #ffffff;
+  --kreati-severity-info-light: #ecf0fa;
+  --kreati-severity-info-light-hover: #d0daf2;
+
+  /* ─── Severity: Warning (brand golden) ────── */
+  --kreati-severity-warning: #dab000;
+  --kreati-severity-warning-hover: #c09b00;
+  --kreati-severity-warning-active: #a68600;
+  --kreati-severity-warning-text: #121210;
+  --kreati-severity-warning-light: #fdf6d9;
+  --kreati-severity-warning-light-hover: #faedb3;
+
+  /* ─── Severity: Help (creative purple) ────── */
+  --kreati-severity-help: #7040b5;
+  --kreati-severity-help-hover: #6338a0;
+  --kreati-severity-help-active: #56308b;
+  --kreati-severity-help-text: #ffffff;
+  --kreati-severity-help-light: #f0eaf8;
+  --kreati-severity-help-light-hover: #ddd0f0;
+
+  /* ─── Severity: Danger (warm red) ─────────── */
+  --kreati-severity-danger: #c43838;
+  --kreati-severity-danger-hover: #ae3030;
+  --kreati-severity-danger-active: #982828;
+  --kreati-severity-danger-text: #ffffff;
+  --kreati-severity-danger-light: #fceaea;
+  --kreati-severity-danger-light-hover: #f7d0d0;
+
+  /* ─── Shadows (warm tint) ─────────────────── */
+  --kreati-shadow-sm: 0 1px 2px 0 rgb(18 18 16 / 0.06);
+  --kreati-shadow-md: 0 4px 6px -1px rgb(18 18 16 / 0.08);
+  --kreati-shadow-lg: 0 10px 15px -3px rgb(18 18 16 / 0.1);
+  --kreati-shadow-xl: 0 20px 25px -5px rgb(18 18 16 / 0.12);
+}

@@ -1,0 +1,8 @@
+/* Import all Kreati themes */
+@import './dark.css';
+@import './midnight.css';
+@import './abyss.css';
+@import './soft.css';
+@import './arctic.css';
+@import './high-contrast.css';
+@import './kreati.css';

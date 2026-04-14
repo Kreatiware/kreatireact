@@ -158,8 +158,8 @@ export type { MenuItem, NavigationRouter } from './types/navigation';
 export { resolveIcon, renderMenuIcon } from './components/resolveIcon';
 
 // Locale
-export { KreatiProvider, useKreatiLocale, en, es } from './locale';
-export type { KreatiLocale, KreatiProviderProps } from './locale';
+export { KreatiProvider, useKreatiLocale, useKreatiTheme, en, es } from './locale';
+export type { KreatiLocale, KreatiProviderProps, KreatiTheme } from './locale';
 
 // Styles
 import './styles/variables.css';

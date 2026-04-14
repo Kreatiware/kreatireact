@@ -5,7 +5,7 @@
 ## Paquetes
 
 ### [@kreatiware/react](./packages/react)
-55+ componentes React tipados con ARIA/WCAG 2.1 AA, sistema de locale, y temas.
+55+ componentes React tipados con ARIA/WCAG 2.1 AA, sistema de locale, y 8 temas.
 
 ```bash
 npm install @kreatiware/react
@@ -31,11 +31,12 @@ npm install @kreatiware/layout
 import { Button, Input, DataTable, KreatiProvider } from '@kreatiware/react';
 import { ArrowRight } from '@kreatiware/icons';
 import '@kreatiware/react/dist/style.css';
+import '@kreatiware/react/themes/dark.css'; // optional: import themes you need
 import '@kreatiware/layout/dist/index.css';
 
 function App() {
   return (
-    <KreatiProvider locale={es}>
+    <KreatiProvider locale={es} theme="auto">
       <DataTable
         value={data}
         columns={columns}
@@ -91,6 +92,32 @@ Componente completo de tabla de datos con:
 ## Iconos (54)
 
 Chevrons, Arrows, Check, Times, Search, Plus, Minus, Filter, Sort, Eye, EyeOff, Mail, Lock, Phone, Clock, Calendar, User, Star, Heart, Bell, Home, Settings, Grid, List, Image, Folder, File, Upload, Download, Share, Copy, Print, Pencil, Trash, Refresh, ExternalLink, y mas.
+
+## Temas
+
+8 temas incluidos. Importa solo los que necesites:
+
+| Tema | Tipo | Import |
+|------|------|--------|
+| Light | Default | (built-in) |
+| Dark | Dark | `@kreatiware/react/themes/dark.css` |
+| Midnight | Dark | `@kreatiware/react/themes/midnight.css` |
+| Abyss | Dark (OLED) | `@kreatiware/react/themes/abyss.css` |
+| Soft | Light (warm) | `@kreatiware/react/themes/soft.css` |
+| Arctic | Light (cool) | `@kreatiware/react/themes/arctic.css` |
+| High Contrast | Accessibility | `@kreatiware/react/themes/high-contrast.css` |
+| Kreati | Brand | `@kreatiware/react/themes/kreati.css` |
+
+```tsx
+// Auto dark mode (follows system preference)
+<KreatiProvider theme="auto">
+
+// Manual theme
+<KreatiProvider theme="midnight">
+
+// Toggle programmatically
+const { resolvedTheme, setTheme } = useKreatiTheme();
+```
 
 ## Desarrollo
 
