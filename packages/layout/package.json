@@ -4,12 +4,23 @@
   "description": "Sistema de utilities CSS: Flex, Grid, Spacing y Tipografia",
   "main": "dist/index.css",
   "style": "dist/index.css",
+  "bin": {
+    "kreati-layout": "./bin/kreati-layout.js"
+  },
+  "exports": {
+    ".": "./dist/index.css",
+    "./dist/index.css": "./dist/index.css",
+    "./dist/unprefixed.css": "./dist/unprefixed.css",
+    "./unprefixed": "./dist/unprefixed.css"
+  },
   "files": [
     "dist",
-    "src"
+    "src",
+    "scripts",
+    "bin"
   ],
   "scripts": {
-    "build": "node -e \"require('fs').mkdirSync('dist',{recursive:true})\" && postcss src/index.css -o dist/index.css",
+    "build": "node -e \"require('fs').mkdirSync('dist',{recursive:true})\" && postcss src/index.css -o dist/index.css && node scripts/generate-unprefixed.js",
     "dev": "postcss src/index.css -o dist/index.css --watch",
     "test": "echo \"No tests for CSS utilities\"",
     "clean": "rimraf dist"
