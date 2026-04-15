@@ -2,7 +2,6 @@
 node_modules/
 .pnp
 .pnp.js
-
 # Production builds
 dist/
 build/
@@ -46,7 +45,5 @@ Thumbs.db
 # Storybook
 storybook-static/
 
-#Q
-Q/
-.amazonq/
-KREATI_REACT_PLAN.md
+#docs
+docs/
