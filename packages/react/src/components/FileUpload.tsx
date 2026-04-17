@@ -34,7 +34,7 @@ export interface FileUploadProps {
   /** Success state */
   success?: boolean;
   /** Helper text severity color */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
   /** Component size */
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   /** Required indicator */

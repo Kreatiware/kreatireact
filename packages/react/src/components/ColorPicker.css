@@ -52,10 +52,10 @@
   border-radius: var(--kreati-radius-md);
   box-shadow: var(--kreati-shadow-lg);
   padding: var(--kreati-space-3);
-  width: var(--kreati-color-picker-panel-width, 260px);
+  width: var(--kreati-color-picker-panel-width, 16.25rem);
   max-width: calc(100vw - var(--kreati-space-4));
   opacity: 0;
-  transform: translateY(4px);
+  transform: translateY(0.25rem);
   transition: opacity var(--kreati-transition-fast), transform var(--kreati-transition-fast);
 }
 
@@ -69,7 +69,7 @@
 .k-color-picker__sat-area {
   position: relative;
   width: 100%;
-  height: var(--kreati-color-picker-area-height, 160px);
+  height: var(--kreati-color-picker-area-height, 10rem);
   border-radius: var(--kreati-radius-sm);
   cursor: crosshair;
   touch-action: none;
@@ -78,7 +78,7 @@
 
 .k-color-picker__sat-area:focus-visible {
   outline: 2px solid var(--kreati-severity-primary);
-  outline-offset: 2px;
+  outline-offset: 0.125rem;
 }
 
 .k-color-picker__sat-white {
@@ -97,8 +97,8 @@
 
 .k-color-picker__sat-cursor {
   position: absolute;
-  width: 14px;
-  height: 14px;
+  width: 0.875rem;
+  height: 0.875rem;
   border: 2px solid var(--kreati-white);
   border-radius: var(--kreati-radius-full);
   box-shadow: 0 0 0 1px var(--kreati-gray-400), inset 0 0 0 1px var(--kreati-gray-400);
@@ -111,7 +111,7 @@
 .k-color-picker__hue-bar {
   position: relative;
   width: 100%;
-  height: var(--kreati-color-picker-bar-height, 12px);
+  height: var(--kreati-color-picker-bar-height, 0.75rem);
   margin-top: var(--kreati-space-2);
   border-radius: var(--kreati-radius-full);
   background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
@@ -122,7 +122,7 @@
 
 .k-color-picker__hue-bar:focus-visible {
   outline: 2px solid var(--kreati-severity-primary);
-  outline-offset: 2px;
+  outline-offset: 0.125rem;
 }
 
 /* ─── Alpha bar ──────────────────────────────────────────────────── */
@@ -130,13 +130,13 @@
 .k-color-picker__alpha-bar {
   position: relative;
   width: 100%;
-  height: var(--kreati-color-picker-bar-height, 12px);
+  height: var(--kreati-color-picker-bar-height, 0.75rem);
   margin-top: var(--kreati-space-2);
   border-radius: var(--kreati-radius-full);
   background-image:
     linear-gradient(to right, transparent, var(--k-cp-alpha-color, #000)),
     repeating-conic-gradient(var(--kreati-gray-200) 0% 25%, var(--kreati-white) 0% 50%);
-  background-size: 100% 100%, 8px 8px;
+  background-size: 100% 100%, 0.5rem 0.5rem;
   cursor: pointer;
   touch-action: none;
   user-select: none;
@@ -144,7 +144,7 @@
 
 .k-color-picker__alpha-bar:focus-visible {
   outline: 2px solid var(--kreati-severity-primary);
-  outline-offset: 2px;
+  outline-offset: 0.125rem;
 }
 
 /* ─── Bar cursor (shared hue/alpha) ──────────────────────────────── */
@@ -152,8 +152,8 @@
 .k-color-picker__bar-cursor {
   position: absolute;
   top: 50%;
-  width: 14px;
-  height: 14px;
+  width: 0.875rem;
+  height: 0.875rem;
   border: 2px solid var(--kreati-white);
   border-radius: var(--kreati-radius-full);
   box-shadow: 0 0 0 1px var(--kreati-gray-400);
@@ -212,7 +212,7 @@
 
 .k-color-picker__format-btn:focus-visible {
   outline: 2px solid var(--kreati-severity-primary);
-  outline-offset: 1px;
+  outline-offset: 0.0625rem;
 }
 
 /* ─── Presets ─────────────────────────────────────────────────────── */

@@ -4,7 +4,7 @@ import { useKreatiLocale } from '../locale';
 import './Toast.css';
 
 /** Severity types for Toast */
-export type ToastSeverity = 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+export type ToastSeverity = 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
 
 export interface ToastItem {
   /** Unique key — auto-generated if not provided */

@@ -128,8 +128,10 @@
 }
 
 .k-drawer__title {
-  font-size: var(--kreati-font-size-md);
-  font-weight: var(--kreati-font-weight-semibold);
+  font-family: var(--kreati-preset-h4-family);
+  font-size: var(--kreati-preset-h4-size);
+  font-weight: var(--kreati-preset-h4-weight);
+  line-height: var(--kreati-preset-h4-line-height);
   color: var(--kreati-gray-900);
   margin: 0;
   overflow: hidden;
@@ -173,7 +175,7 @@
 /* ============================================
    Responsive — full width on small screens
    ============================================ */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .k-drawer--left,
   .k-drawer--right {
     width: 100vw;

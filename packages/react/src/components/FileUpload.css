@@ -45,7 +45,7 @@
 
 .k-file-upload__dropzone:focus-visible {
   outline: 2px solid var(--kreati-severity-primary);
-  outline-offset: 2px;
+  outline-offset: 0.125rem;
 }
 
 /* ─── FileUpload — Icon / Text ───────────────────────────────────── */
@@ -120,7 +120,7 @@
 
 .k-file-upload__file-remove:focus-visible {
   outline: 2px solid var(--kreati-severity-primary);
-  outline-offset: 1px;
+  outline-offset: 0.0625rem;
 }
 
 /* ─── FileUpload — Reduced motion ────────────────────────────────── */

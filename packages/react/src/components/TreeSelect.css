@@ -23,7 +23,7 @@
   overflow-y: auto;
   padding: var(--kreati-space-1) 0;
   opacity: 0;
-  transform: translateY(4px);
+  transform: translateY(0.25rem);
   transition: opacity var(--kreati-transition-fast), transform var(--kreati-transition-fast);
 }
 

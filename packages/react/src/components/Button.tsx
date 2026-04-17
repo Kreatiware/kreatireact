@@ -19,7 +19,7 @@ export interface ButtonProps {
   /** Button type style */
   buttonType?: 'filled' | 'outlined' | 'text';
   /** Color severity */
-  severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
   /** Disabled state (keeps color, applies 40% opacity) */
   disabled?: boolean;
   /** Raised shadow effect */

@@ -76,7 +76,7 @@ export interface ItemPickerProps {
   /** Component size for FieldWrapper */
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   /** Helper severity */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
   /** Additional CSS class names */
   className?: string;
   /** Inline styles */

@@ -17,7 +17,7 @@
 }
 
 .k-tabmenu__list::-webkit-scrollbar {
-  height: 4px;
+  height: 0.25rem;
 }
 
 .k-tabmenu__list::-webkit-scrollbar-track {
@@ -33,14 +33,14 @@
 .k-tabmenu__tab {
   display: inline-flex;
   align-items: center;
-  gap: var(--kreati-tabmenu-tab-gap, var(--kreati-space-2, 8px));
-  padding: var(--kreati-tabmenu-tab-padding, var(--kreati-space-3, 12px) var(--kreati-space-4, 16px));
+  gap: var(--kreati-tabmenu-tab-gap, var(--kreati-space-2, 0.5rem));
+  padding: var(--kreati-tabmenu-tab-padding, var(--kreati-space-3, 0.75rem) var(--kreati-space-4, 1rem));
   border: none;
   background: none;
   cursor: pointer;
   font-family: var(--kreati-font-family);
-  font-size: var(--kreati-tabmenu-font-size, var(--kreati-font-size-base, 16px));
-  font-weight: var(--kreati-tabmenu-font-weight, 500);
+  font-size: var(--kreati-tabmenu-font-size, var(--kreati-font-size-base, 1rem));
+  font-weight: var(--kreati-tabmenu-font-weight, var(--kreati-font-weight-medium));
   color: var(--kreati-tabmenu-color, var(--kreati-gray-500, #6b7280));
   white-space: nowrap;
   position: relative;
@@ -54,13 +54,13 @@
 
 .k-tabmenu__tab:focus-visible {
   outline: 2px solid var(--kreati-tabmenu-focus-color, var(--kreati-primary-500));
-  outline-offset: -2px;
-  border-radius: var(--kreati-radius-sm, 4px);
+  outline-offset: -0.125rem;
+  border-radius: var(--kreati-radius-sm, 0.25rem);
 }
 
 .k-tabmenu__tab--active {
   color: var(--kreati-tabmenu-active-color, var(--kreati-primary-500));
-  font-weight: var(--kreati-tabmenu-active-font-weight, 600);
+  font-weight: var(--kreati-tabmenu-active-font-weight, var(--kreati-font-weight-semibold));
 }
 
 .k-tabmenu__tab--disabled {
@@ -83,9 +83,9 @@
 
 /* Separator */
 .k-tabmenu__separator {
-  width: var(--kreati-tabmenu-separator-width, 1px);
+  width: var(--kreati-tabmenu-separator-width, 0.0625rem);
   align-self: stretch;
-  margin: var(--kreati-tabmenu-separator-margin, var(--kreati-space-2, 8px) 0);
+  margin: var(--kreati-tabmenu-separator-margin, var(--kreati-space-2, 0.5rem) 0);
   background: var(--kreati-tabmenu-separator-color, var(--kreati-gray-200, #e5e7eb));
   flex-shrink: 0;
 }
@@ -95,7 +95,7 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  height: var(--kreati-tabmenu-ink-height, 2px);
+  height: var(--kreati-tabmenu-ink-height, 0.125rem);
   background: var(--kreati-tabmenu-ink-color, var(--kreati-primary-500));
   transition: transform var(--kreati-tabmenu-ink-transition, 0.3s ease),
               width var(--kreati-tabmenu-ink-transition, 0.3s ease);

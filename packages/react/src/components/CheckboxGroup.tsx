@@ -33,7 +33,7 @@ export interface CheckboxGroupProps {
   /** Error message or boolean */
   error?: React.ReactNode | boolean;
   /** Severity color for the helper text */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
   /** Success state */
   success?: boolean;
   /** Disabled state for all checkboxes */

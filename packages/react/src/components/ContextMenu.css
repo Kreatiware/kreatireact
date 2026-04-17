@@ -4,12 +4,12 @@
 
 .k-contextmenu__panel {
   position: fixed;
-  min-width: var(--kreati-contextmenu-min-width, 180px);
+  min-width: var(--kreati-contextmenu-min-width, 11.25rem);
   background: var(--kreati-contextmenu-bg, var(--kreati-white, #ffffff));
   border: 1px solid var(--kreati-contextmenu-border-color, var(--kreati-gray-200, #e5e7eb));
-  border-radius: var(--kreati-contextmenu-radius, var(--kreati-radius-md, 8px));
+  border-radius: var(--kreati-contextmenu-radius, var(--kreati-radius-md, 0.5rem));
   box-shadow: var(--kreati-contextmenu-shadow, var(--kreati-shadow-lg, 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1)));
-  padding: var(--kreati-contextmenu-padding, var(--kreati-space-1, 4px));
+  padding: var(--kreati-contextmenu-padding, var(--kreati-space-1, 0.25rem));
   animation: k-contextmenu-in var(--kreati-contextmenu-transition, 0.12s ease);
 }
 
@@ -23,7 +23,7 @@
   width: 100%;
   max-height: 70vh;
   overflow-y: auto;
-  border-radius: var(--kreati-contextmenu-radius, var(--kreati-radius-md, 8px)) var(--kreati-contextmenu-radius, var(--kreati-radius-md, 8px)) 0 0;
+  border-radius: var(--kreati-contextmenu-radius, var(--kreati-radius-md, 0.5rem)) var(--kreati-contextmenu-radius, var(--kreati-radius-md, 0.5rem)) 0 0;
   animation: k-contextmenu-slide-up var(--kreati-contextmenu-transition, 0.2s ease);
 }
 
@@ -44,17 +44,17 @@
 .k-contextmenu__item {
   display: flex;
   align-items: center;
-  gap: var(--kreati-contextmenu-item-gap, var(--kreati-space-2, 8px));
+  gap: var(--kreati-contextmenu-item-gap, var(--kreati-space-2, 0.5rem));
   width: 100%;
-  padding: var(--kreati-contextmenu-item-padding, var(--kreati-space-2, 8px) var(--kreati-space-3, 12px));
+  padding: var(--kreati-contextmenu-item-padding, var(--kreati-space-2, 0.5rem) var(--kreati-space-3, 0.75rem));
   border: none;
   background: none;
   cursor: pointer;
   font-family: var(--kreati-font-family);
-  font-size: var(--kreati-contextmenu-font-size, var(--kreati-font-size-sm, 14px));
+  font-size: var(--kreati-contextmenu-font-size, var(--kreati-font-size-sm, 0.875rem));
   color: var(--kreati-contextmenu-color, var(--kreati-gray-700, #374151));
   text-align: left;
-  border-radius: var(--kreati-contextmenu-item-radius, var(--kreati-radius-sm, 4px));
+  border-radius: var(--kreati-contextmenu-item-radius, var(--kreati-radius-sm, 0.25rem));
   transition: background var(--kreati-contextmenu-transition, 0.12s ease),
               color var(--kreati-contextmenu-transition, 0.12s ease);
   white-space: nowrap;
@@ -69,12 +69,12 @@
 .k-contextmenu__item--open:hover {
   background: var(--kreati-contextmenu-active-bg, var(--kreati-primary-50, #e0f2fe));
   color: var(--kreati-contextmenu-active-color, var(--kreati-primary-500));
-  font-weight: var(--kreati-contextmenu-active-font-weight, 600);
+  font-weight: var(--kreati-contextmenu-active-font-weight, var(--kreati-font-weight-semibold));
 }
 
 .k-contextmenu__item:focus-visible {
   outline: 2px solid var(--kreati-contextmenu-focus-color, var(--kreati-primary-500));
-  outline-offset: -2px;
+  outline-offset: -0.125rem;
 }
 
 .k-contextmenu__item--disabled {
@@ -87,7 +87,7 @@
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
-  width: var(--kreati-contextmenu-icon-width, 16px);
+  width: var(--kreati-contextmenu-icon-width, 1rem);
 }
 
 .k-contextmenu__label {
@@ -111,18 +111,18 @@
 .k-contextmenu__separator {
   border: none;
   border-top: 1px solid var(--kreati-contextmenu-separator-color, var(--kreati-gray-200, #e5e7eb));
-  margin: var(--kreati-contextmenu-separator-margin, var(--kreati-space-1, 4px) 0);
+  margin: var(--kreati-contextmenu-separator-margin, var(--kreati-space-1, 0.25rem) 0);
 }
 
 /* Desktop: submenu floats to the right */
 .k-contextmenu__submenu {
   position: absolute;
-  min-width: var(--kreati-contextmenu-min-width, 180px);
+  min-width: var(--kreati-contextmenu-min-width, 11.25rem);
   background: var(--kreati-contextmenu-bg, var(--kreati-white, #ffffff));
   border: 1px solid var(--kreati-contextmenu-border-color, var(--kreati-gray-200, #e5e7eb));
-  border-radius: var(--kreati-contextmenu-radius, var(--kreati-radius-md, 8px));
+  border-radius: var(--kreati-contextmenu-radius, var(--kreati-radius-md, 0.5rem));
   box-shadow: var(--kreati-contextmenu-shadow, var(--kreati-shadow-lg, 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1)));
-  padding: var(--kreati-contextmenu-padding, var(--kreati-space-1, 4px));
+  padding: var(--kreati-contextmenu-padding, var(--kreati-space-1, 0.25rem));
   animation: k-contextmenu-in var(--kreati-contextmenu-transition, 0.12s ease);
   z-index: 1;
 }
@@ -151,7 +151,7 @@
 
 /* Mobile: larger touch targets */
 .k-contextmenu__panel--mobile .k-contextmenu__item {
-  padding: var(--kreati-contextmenu-item-padding-mobile, var(--kreati-space-3, 12px) var(--kreati-space-4, 16px));
-  font-size: var(--kreati-contextmenu-font-size-mobile, var(--kreati-font-size-base, 16px));
+  padding: var(--kreati-contextmenu-item-padding-mobile, var(--kreati-space-3, 0.75rem) var(--kreati-space-4, 1rem));
+  font-size: var(--kreati-contextmenu-font-size-mobile, var(--kreati-font-size-base, 1rem));
   white-space: normal;
 }

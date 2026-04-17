@@ -116,6 +116,36 @@
   --kreati-severity-danger-light: #fceaea;
   --kreati-severity-danger-light-hover: #f7d0d0;
 
+  /* ─── Severity: Accent (brand golden) ─────── */
+  --kreati-severity-accent: #dab000;
+  --kreati-severity-accent-hover: #c09b00;
+  --kreati-severity-accent-active: #a68600;
+  --kreati-severity-accent-text: #121210;
+  --kreati-severity-accent-light: #fdf6d9;
+  --kreati-severity-accent-light-hover: #faedb3;
+
+  /* ─── Accent scale ───────────────────────── */
+  --kreati-accent-50: #fefcf0;
+  --kreati-accent-100: #fdf6d9;
+  --kreati-accent-200: #faedb3;
+  --kreati-accent-300: #f5e08a;
+  --kreati-accent-400: #efd360;
+  --kreati-accent-500: #dab000;
+
+  /* ─── Semantic text ──────────────────────── */
+  --kreati-text-primary: var(--kreati-gray-900);
+  --kreati-text-body: var(--kreati-gray-800);
+  --kreati-text-secondary: var(--kreati-gray-600);
+  --kreati-text-muted: var(--kreati-gray-500);
+  --kreati-text-disabled: var(--kreati-gray-400);
+  --kreati-text-on-primary: #ffffff;
+  --kreati-text-on-accent: #121210;
+
+  /* ─── Surfaces ───────────────────────────── */
+  --kreati-surface: var(--kreati-white);
+  --kreati-surface-hover: var(--kreati-primary-alpha-4);
+  --kreati-surface-active: var(--kreati-severity-primary-light);
+
   /* ─── Shadows (warm tint) ─────────────────── */
   --kreati-shadow-sm: 0 1px 2px 0 rgb(18 18 16 / 0.06);
   --kreati-shadow-md: 0 4px 6px -1px rgb(18 18 16 / 0.08);

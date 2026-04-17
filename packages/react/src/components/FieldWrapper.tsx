@@ -15,7 +15,7 @@ export interface FieldWrapperProps {
   /** Applies success color to helper text */
   success?: boolean;
   /** Severity color for the helper text (overrides default gray) */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
   /** Size controls font sizes of label and helper */
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   /** Reduces opacity and disables interaction */

@@ -21,9 +21,9 @@ export interface PopoverProps {
   /** Reject button label — overrides locale default */
   rejectLabel?: string;
   /** Accept button severity */
-  acceptSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  acceptSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
   /** Reject button severity */
-  rejectSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  rejectSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
   /** Fires when accept is clicked (confirm variant) */
   onAccept?: () => void;
   /** Fires when reject is clicked (confirm variant) */

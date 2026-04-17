@@ -1,5 +1,5 @@
 /* Kreati Reset - Global Styles */
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Raleway:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 *,
 *::before,
@@ -8,24 +8,32 @@
 }
 
 body {
-  font-family: var(--kreati-font-family);
-  font-weight: var(--kreati-font-weight-normal);
+  font-family: var(--kreati-font-family-body);
+  font-weight: var(--kreati-font-weight-regular);
   color: var(--kreati-gray-800);
-  line-height: var(--kreati-line-height);
+  line-height: var(--kreati-line-height-base);
   background-color: var(--kreati-background);
   margin: 0;
 }
 
-h1, h2, h3, h4, h5, h6, p, span, label {
-  font-family: var(--kreati-font-family);
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--kreati-font-family-display);
 }
 
-/* Componentes Kreati */
+p, span, label {
+  font-family: var(--kreati-font-family-body);
+}
+
+/* Kreati components */
 .kreati-button,
 .kreati-input,
 .kreati-textarea,
 .kreati-select {
-  font-family: var(--kreati-font-family);
+  font-family: var(--kreati-font-family-body);
+}
+
+code, pre, kbd, samp {
+  font-family: var(--kreati-font-family-mono);
 }
 
 /* Animaciones */

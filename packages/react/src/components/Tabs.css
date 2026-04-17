@@ -2,5 +2,5 @@
    Tabs
    ============================================ */
 .k-tabs__panels {
-  padding: var(--kreati-tabs-panel-padding, var(--kreati-space-4, 16px));
+  padding: var(--kreati-tabs-panel-padding, var(--kreati-space-4, 1rem));
 }

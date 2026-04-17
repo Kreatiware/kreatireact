@@ -7,7 +7,7 @@ export interface BadgeProps {
   /** Position using cardinal directions */
   position?: 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw';
   /** Color severity */
-  severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
   /** The element the badge is attached to */
   children: React.ReactNode;
   /** Additional CSS class names */

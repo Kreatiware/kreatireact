@@ -6,9 +6,9 @@
 .k-dock__track {
   display: flex;
   align-items: flex-end;
-  gap: var(--kreati-dock-gap, var(--kreati-space-2, 8px));
+  gap: var(--kreati-dock-gap, var(--kreati-space-2, 0.5rem));
   position: relative;
-  padding: 0 var(--kreati-dock-padding-x, var(--kreati-space-4, 16px));
+  padding: 0 var(--kreati-dock-padding-x, var(--kreati-space-4, 1rem));
 }
 
 /* Glass background — separate element with fixed height */
@@ -18,12 +18,12 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: var(--kreati-dock-glass-height, 64px);
+  height: var(--kreati-dock-glass-height, 4rem);
   background: var(--kreati-dock-bg, rgba(255, 255, 255, 0.15));
-  backdrop-filter: blur(var(--kreati-dock-blur, 20px)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--kreati-dock-blur, 20px)) saturate(180%);
+  backdrop-filter: blur(var(--kreati-dock-blur, 1.25rem)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--kreati-dock-blur, 1.25rem)) saturate(180%);
   border: 1px solid var(--kreati-dock-border-color, rgba(255, 255, 255, 0.3));
-  border-radius: var(--kreati-dock-radius, var(--kreati-radius-xl, 16px));
+  border-radius: var(--kreati-dock-radius, var(--kreati-radius-xl, 1rem));
   box-shadow: var(--kreati-dock-shadow, 0 8px 32px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.05));
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 0;
@@ -42,7 +42,7 @@
 .k-dock--left .k-dock__track,
 .k-dock--right .k-dock__track {
   flex-direction: column;
-  padding: var(--kreati-dock-padding-x, var(--kreati-space-3, 12px)) 0;
+  padding: var(--kreati-dock-padding-x, var(--kreati-space-3, 0.75rem)) 0;
 }
 
 .k-dock--left .k-dock__track {
@@ -53,7 +53,7 @@
   height: auto;
   top: 0;
   bottom: 0;
-  width: var(--kreati-dock-glass-height, 64px);
+  width: var(--kreati-dock-glass-height, 4rem);
   left: 0;
   right: auto;
 }
@@ -66,7 +66,7 @@
   height: auto;
   top: 0;
   bottom: 0;
-  width: var(--kreati-dock-glass-height, 64px);
+  width: var(--kreati-dock-glass-height, 4rem);
   right: 0;
   left: auto;
 }
@@ -80,7 +80,7 @@
   justify-content: center;
   border: none;
   background: var(--kreati-dock-item-bg, rgba(255, 255, 255, 0.25));
-  border-radius: var(--kreati-dock-item-radius, var(--kreati-radius-lg, 12px));
+  border-radius: var(--kreati-dock-item-radius, var(--kreati-radius-lg, 0.75rem));
   cursor: pointer;
   transition: width 0.12s cubic-bezier(0.4, 0, 0.2, 1),
               height 0.12s cubic-bezier(0.4, 0, 0.2, 1),
@@ -88,7 +88,7 @@
               box-shadow 0.12s ease;
   flex-shrink: 0;
   padding: 0;
-  margin-bottom: var(--kreati-dock-item-margin, 8px);
+  margin-bottom: var(--kreati-dock-item-margin, 0.5rem);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
@@ -99,7 +99,7 @@
 
 .k-dock__item:focus-visible {
   outline: 2px solid var(--kreati-dock-focus-color, var(--kreati-primary-500));
-  outline-offset: 2px;
+  outline-offset: 0.125rem;
 }
 
 .k-dock__item--disabled {
@@ -122,15 +122,15 @@
 .k-dock__label {
   position: absolute;
   white-space: nowrap;
-  padding: var(--kreati-dock-label-padding, 6px 10px);
+  padding: var(--kreati-dock-label-padding, 0.375rem 0.625rem);
   background: var(--kreati-dock-label-bg, rgba(0, 0, 0, 0.75));
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(0.5rem);
+  -webkit-backdrop-filter: blur(0.5rem);
   color: var(--kreati-dock-label-color, var(--kreati-white, #ffffff));
   font-family: var(--kreati-font-family);
-  font-size: var(--kreati-dock-label-font-size, var(--kreati-font-size-xs, 12px));
-  font-weight: var(--kreati-dock-label-font-weight, 500);
-  border-radius: var(--kreati-dock-label-radius, var(--kreati-radius-sm, 4px));
+  font-size: var(--kreati-dock-label-font-size, var(--kreati-font-size-xs, 0.75rem));
+  font-weight: var(--kreati-dock-label-font-weight, var(--kreati-font-weight-medium));
+  border-radius: var(--kreati-dock-label-radius, var(--kreati-radius-sm, 0.25rem));
   pointer-events: none;
   animation: k-dock-label-in 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1;
@@ -138,31 +138,31 @@
 }
 
 .k-dock__label--top {
-  bottom: calc(100% + 10px);
+  bottom: calc(100% + 0.625rem);
   left: 50%;
   transform: translateX(-50%);
 }
 
 .k-dock__label--bottom {
-  top: calc(100% + 10px);
+  top: calc(100% + 0.625rem);
   left: 50%;
   transform: translateX(-50%);
 }
 
 .k-dock__label--left {
-  right: calc(100% + 10px);
+  right: calc(100% + 0.625rem);
   top: 50%;
   transform: translateY(-50%);
 }
 
 .k-dock__label--right {
-  left: calc(100% + 10px);
+  left: calc(100% + 0.625rem);
   top: 50%;
   transform: translateY(-50%);
 }
 
 @keyframes k-dock-label-in {
-  from { opacity: 0; transform: translateX(-50%) translateY(4px); }
+  from { opacity: 0; transform: translateX(-50%) translateY(0.25rem); }
   to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
@@ -178,17 +178,17 @@
 
 .k-dock--top .k-dock__item {
   margin-bottom: 0;
-  margin-top: var(--kreati-dock-item-margin, 8px);
+  margin-top: var(--kreati-dock-item-margin, 0.5rem);
 }
 
 .k-dock--left .k-dock__item {
   margin-bottom: 0;
-  margin-left: var(--kreati-dock-item-margin, 8px);
+  margin-left: var(--kreati-dock-item-margin, 0.5rem);
 }
 
 .k-dock--right .k-dock__item {
   margin-bottom: 0;
-  margin-right: var(--kreati-dock-item-margin, 8px);
+  margin-right: var(--kreati-dock-item-margin, 0.5rem);
 }
 
 /* Separator */
@@ -198,18 +198,18 @@
 
 .k-dock--bottom .k-dock__separator,
 .k-dock--top .k-dock__separator {
-  width: 1px;
-  height: var(--kreati-dock-separator-size, 32px);
-  margin: 0 var(--kreati-dock-separator-margin, var(--kreati-space-1, 4px));
+  width: 0.0625rem;
+  height: var(--kreati-dock-separator-size, 2rem);
+  margin: 0 var(--kreati-dock-separator-margin, var(--kreati-space-1, 0.25rem));
   background: var(--kreati-dock-separator-color, rgba(255, 255, 255, 0.3));
   align-self: center;
 }
 
 .k-dock--left .k-dock__separator,
 .k-dock--right .k-dock__separator {
-  height: 1px;
-  width: var(--kreati-dock-separator-size, 32px);
-  margin: var(--kreati-dock-separator-margin, var(--kreati-space-1, 4px)) 0;
+  height: 0.0625rem;
+  width: var(--kreati-dock-separator-size, 2rem);
+  margin: var(--kreati-dock-separator-margin, var(--kreati-space-1, 0.25rem)) 0;
   background: var(--kreati-dock-separator-color, rgba(255, 255, 255, 0.3));
   align-self: center;
 }

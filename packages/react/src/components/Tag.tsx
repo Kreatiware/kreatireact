@@ -7,7 +7,7 @@ export interface TagProps {
   /** Tag content */
   children: React.ReactNode;
   /** Visual severity */
-  severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
   /** Icon before the text */
   icon?: React.ReactNode;
   /** Show remove button */

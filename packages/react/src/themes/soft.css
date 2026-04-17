@@ -97,6 +97,14 @@
   --kreati-severity-danger-light: #fdf0f0;
   --kreati-severity-danger-light-hover: #fae0e0;
 
+  /* ─── Severity: Accent (warm gold) ────────── */
+  --kreati-severity-accent: #e6a040;
+  --kreati-severity-accent-hover: #d08e30;
+  --kreati-severity-accent-active: #ba7c22;
+  --kreati-severity-accent-text: #111827;
+  --kreati-severity-accent-light: #fdf5e8;
+  --kreati-severity-accent-light-hover: #faecd0;
+
   --kreati-shadow-sm: 0 1px 3px 0 rgb(28 24 22 / 0.04);
   --kreati-shadow-md: 0 4px 8px -1px rgb(28 24 22 / 0.06);
   --kreati-shadow-lg: 0 10px 18px -3px rgb(28 24 22 / 0.08);

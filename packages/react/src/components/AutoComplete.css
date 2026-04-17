@@ -19,7 +19,7 @@
   box-shadow: var(--kreati-shadow-lg);
   overflow: hidden;
   opacity: 0;
-  transform: translateY(4px);
+  transform: translateY(0.25rem);
   transition: opacity var(--kreati-transition-fast), transform var(--kreati-transition-fast);
 }
 
@@ -132,7 +132,7 @@
 
 .k-autocomplete__tokens-input {
   flex: 1;
-  min-width: 60px;
+  min-width: 3.75rem;
   border: none;
   outline: none;
   background: transparent;
@@ -167,7 +167,7 @@
 
 .k-autocomplete__required {
   color: var(--kreati-severity-danger);
-  margin-left: var(--kreati-space-half, 2px);
+  margin-left: var(--kreati-space-half, 0.125rem);
 }
 
 .k-autocomplete__error {

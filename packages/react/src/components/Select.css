@@ -5,7 +5,7 @@
   display: inline-flex;
   flex-direction: column;
   font-family: var(--kreati-font-family);
-  min-width: 200px;
+  min-width: 12.5rem;
 }
 
 .k-select--full-width {
@@ -93,9 +93,9 @@
   width: 0;
   overflow: hidden;
   transition: width 0.2s ease-in-out;
-  font-size: 0.01px;
+  font-size: 0.0.0625rem;
   line-height: 0;
-  max-height: 3px;
+  max-height: 0.1875rem;
 }
 
 .k-select__legend-text {
@@ -134,13 +134,13 @@
 }
 
 .k-select__trigger--has-icon-left .k-select__floating-label:not(.k-select__floating-label--active) {
-  left: calc(var(--kreati-space-3) + 24px + var(--kreati-input-icon-gap));
+  left: calc(var(--kreati-space-3) + 1.5rem + var(--kreati-input-icon-gap));
 }
 
 .k-select__floating-label--active {
   top: 0;
   left: var(--kreati-space-2);
-  padding-left: 2px;
+  padding-left: 0.125rem;
   transform: translateY(-55%) scale(0.75);
   color: var(--kreati-severity-primary);
   font-weight: var(--kreati-font-weight-medium);
@@ -151,7 +151,7 @@
   color: var(--kreati-severity-danger);
   font-weight: var(--kreati-font-weight-bold);
   font-size: 1.3em;
-  margin-left: 2px;
+  margin-left: 0.125rem;
   vertical-align: middle;
 }
 
@@ -282,7 +282,7 @@
 .k-select__trigger:focus:not(.k-select__trigger--disabled):not(.k-select__trigger--readonly),
 .k-select__trigger--open:not(.k-select__trigger--disabled):not(.k-select__trigger--readonly) {
   border-color: var(--kreati-severity-primary);
-  border-width: 3px;
+  border-width: 0.1875rem;
 }
 
 .k-select__trigger:focus:not(.k-select__trigger--disabled) .k-select__icon,
@@ -305,7 +305,7 @@
 .k-select__trigger--error:focus,
 .k-select__trigger--error.k-select__trigger--open {
   border-color: var(--kreati-severity-danger);
-  border-width: 3px;
+  border-width: 0.1875rem;
 }
 
 .k-select__trigger--error .k-select__floating-label--active {
@@ -322,7 +322,7 @@
 .k-select__trigger--success:focus,
 .k-select__trigger--success.k-select__trigger--open {
   border-color: var(--kreati-severity-success);
-  border-width: 3px;
+  border-width: 0.1875rem;
 }
 
 .k-select__trigger--success .k-select__floating-label--active {
@@ -362,7 +362,7 @@
 }
 
 @keyframes k-select-enter {
-  from { opacity: 0; transform: translateY(-4px); }
+  from { opacity: 0; transform: translateY(-0.25rem); }
   to { opacity: 1; transform: translateY(0); }
 }
 

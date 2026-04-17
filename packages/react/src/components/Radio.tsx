@@ -25,7 +25,7 @@ export interface RadioProps {
   /** Success state — applies success border color */
   success?: boolean;
   /** Severity color for the helper text */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
   /** Disabled state */
   disabled?: boolean;
   /** Read-only state */

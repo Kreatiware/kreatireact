@@ -18,7 +18,7 @@
 .k-divider--horizontal .k-divider__line {
   flex: 1;
   height: 0;
-  border-top-width: var(--kreati-divider-width, 1px);
+  border-top-width: var(--kreati-divider-width, 0.0625rem);
   border-top-style: var(--kreati-divider-style, solid);
   border-top-color: var(--kreati-divider-color, var(--kreati-gray-200));
 }
@@ -32,7 +32,7 @@
 .k-divider--vertical .k-divider__line {
   flex: 1;
   width: 0;
-  border-left-width: var(--kreati-divider-width, 1px);
+  border-left-width: var(--kreati-divider-width, 0.0625rem);
   border-left-style: var(--kreati-divider-style, solid);
   border-left-color: var(--kreati-divider-color, var(--kreati-gray-200));
 }

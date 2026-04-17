@@ -42,18 +42,18 @@
 }
 
 @keyframes k-dialog-in {
-  from { opacity: 0; transform: scale(0.95) translateY(8px); }
+  from { opacity: 0; transform: scale(0.95) translateY(0.5rem); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 /* ============================================
    Sizes
    ============================================ */
-.k-dialog--xs { width: 320px; }
-.k-dialog--sm { width: 440px; }
-.k-dialog--md { width: 560px; }
-.k-dialog--lg { width: 720px; }
-.k-dialog--xl { width: 900px; }
+.k-dialog--xs { width: 20rem; }
+.k-dialog--sm { width: 27.5rem; }
+.k-dialog--md { width: 35rem; }
+.k-dialog--lg { width: 45rem; }
+.k-dialog--xl { width: 56.25rem; }
 
 .k-dialog--full-screen {
   width: 100vw;
@@ -83,8 +83,10 @@
 }
 
 .k-dialog__title {
-  font-size: var(--kreati-font-size-md);
-  font-weight: var(--kreati-font-weight-semibold);
+  font-family: var(--kreati-preset-h4-family);
+  font-size: var(--kreati-preset-h4-size);
+  font-weight: var(--kreati-preset-h4-weight);
+  line-height: var(--kreati-preset-h4-line-height);
   color: var(--kreati-gray-900);
   margin: 0;
   overflow: hidden;
@@ -185,7 +187,7 @@
 /* ============================================
    Responsive — fullscreen on small screens
    ============================================ */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .k-dialog--responsive {
     width: 100vw;
     height: 100vh;

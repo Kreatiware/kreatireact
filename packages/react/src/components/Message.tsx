@@ -4,7 +4,7 @@ import { useKreatiLocale } from '../locale';
 import './Message.css';
 
 /** Severity types for Message */
-export type MessageSeverity = 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+export type MessageSeverity = 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
 
 export interface MessageProps {
   /** Visual severity — determines background, border, and default icon */

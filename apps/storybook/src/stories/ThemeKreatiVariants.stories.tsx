@@ -40,11 +40,13 @@ const SeverityRow = ({ v }: { v: Variant }) => (
   <div style={{ display: 'flex', gap: 'var(--kreati-space-1)', marginBottom: 'var(--kreati-space-2)' }}>
     {[
       { name: 'Primary', bg: v.primary },
+      { name: 'Secondary', bg: '#6e6e68' },
       { name: 'Info', bg: v.info },
       { name: 'Success', bg: v.success },
       { name: 'Warning', bg: v.warning },
       { name: 'Danger', bg: v.danger },
       { name: 'Help', bg: v.help },
+      { name: 'Accent', bg: v.warning },
     ].map(({ name, bg }) => (
       <div key={name} style={{ flex: 1, textAlign: 'center' }}>
         <div style={{ height: '28px', background: bg, borderRadius: 'var(--kreati-radius-sm)' }} title={`${name}: ${bg}`} />
@@ -103,11 +105,13 @@ const FullPreview = () => {
           <div style={{ display: 'flex', gap: 'var(--kreati-space-2)', flexWrap: 'wrap', marginBottom: 'var(--kreati-space-3)' }}>
             {[
               { name: 'Primary', bg: active.primary, text: '#fff' },
+              { name: 'Secondary', bg: '#6e6e68', text: '#fff' },
               { name: 'Info', bg: active.info, text: '#fff' },
               { name: 'Success', bg: active.success, text: '#fff' },
               { name: 'Warning', bg: active.warning, text: '#121210' },
               { name: 'Danger', bg: active.danger, text: '#fff' },
               { name: 'Help', bg: active.help, text: '#fff' },
+              { name: 'Accent', bg: active.warning, text: '#121210' },
             ].map(({ name, bg, text }) => (
               <div key={name} style={{ background: bg, color: text, padding: 'var(--kreati-space-2) var(--kreati-space-4)', borderRadius: 'var(--kreati-radius-sm)', fontSize: 'var(--kreati-font-size-xs)', textAlign: 'center', minWidth: '80px' }}>
                 {name}<br /><span style={{ opacity: 0.8, fontSize: '10px' }}>{bg}</span>

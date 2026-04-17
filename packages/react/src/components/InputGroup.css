@@ -87,7 +87,7 @@
 /* Focus: match Input border */
 .k-input-group__row:focus-within .k-input-group__addon {
   border-color: var(--kreati-severity-primary);
-  border-width: 3px;
+  border-width: 0.1875rem;
 }
 
 /* Compensate padding when border grows */
@@ -154,7 +154,7 @@
 
 /* ─── Responsive ─────────────────────────────────────────────────── */
 
-@media (max-width: 320px) {
+@media (max-width: 20rem) {
   .k-input-group__addon { padding: 0 var(--kreati-space-2); }
 }
 

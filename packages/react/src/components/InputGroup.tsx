@@ -16,7 +16,7 @@ export interface InputGroupProps {
   /** Success state — syncs addon border color */
   success?: boolean;
   /** Helper text severity */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
   /** Component size */
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   /** Required indicator */

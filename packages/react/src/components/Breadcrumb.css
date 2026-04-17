@@ -9,21 +9,21 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  gap: var(--kreati-breadcrumb-gap, var(--kreati-space-1, 4px));
+  gap: var(--kreati-breadcrumb-gap, var(--kreati-space-1, 0.25rem));
 }
 
 .k-breadcrumb__item {
   display: inline-flex;
   align-items: center;
-  gap: var(--kreati-breadcrumb-gap, var(--kreati-space-1, 4px));
+  gap: var(--kreati-breadcrumb-gap, var(--kreati-space-1, 0.25rem));
 }
 
 .k-breadcrumb__link {
   display: inline-flex;
   align-items: center;
-  gap: var(--kreati-breadcrumb-link-gap, var(--kreati-space-1, 4px));
+  gap: var(--kreati-breadcrumb-link-gap, var(--kreati-space-1, 0.25rem));
   font-family: var(--kreati-font-family);
-  font-size: var(--kreati-breadcrumb-font-size, var(--kreati-font-size-sm, 14px));
+  font-size: var(--kreati-breadcrumb-font-size, var(--kreati-font-size-sm, 0.875rem));
   color: var(--kreati-breadcrumb-color, var(--kreati-gray-500, #6b7280));
   text-decoration: none;
   transition: color var(--kreati-breadcrumb-transition, 0.15s ease);
@@ -36,13 +36,13 @@ a.k-breadcrumb__link:hover {
 
 a.k-breadcrumb__link:focus-visible {
   outline: 2px solid var(--kreati-breadcrumb-focus-color, var(--kreati-primary-500));
-  outline-offset: 2px;
-  border-radius: var(--kreati-radius-sm, 4px);
+  outline-offset: 0.125rem;
+  border-radius: var(--kreati-radius-sm, 0.25rem);
 }
 
 .k-breadcrumb__link--current {
   color: var(--kreati-breadcrumb-current-color, var(--kreati-primary-500));
-  font-weight: var(--kreati-breadcrumb-current-font-weight, 600);
+  font-weight: var(--kreati-breadcrumb-current-font-weight, var(--kreati-font-weight-semibold));
   cursor: default;
 }
 

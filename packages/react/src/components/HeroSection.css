@@ -33,15 +33,17 @@
 }
 
 .kreati-hero__title {
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: var(--kreati-font-weight-bold);
+  font-family: var(--kreati-preset-display-family);
+  font-size: clamp(var(--kreati-font-size-3xl), 5vw, var(--kreati-font-size-5xl));
+  font-weight: var(--kreati-preset-display-weight);
   color: var(--kreati-gray-900);
-  line-height: var(--kreati-line-height-xxs);
+  line-height: var(--kreati-preset-display-line-height);
+  letter-spacing: var(--kreati-preset-display-tracking);
   margin: 0 0 var(--kreati-space-4) 0;
 }
 
 .kreati-hero__subtitle {
-  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-size: clamp(var(--kreati-font-size-base), 2vw, var(--kreati-font-size-lg));
   color: var(--kreati-gray-500);
   line-height: var(--kreati-line-height-base);
   margin: 0 0 var(--kreati-space-6) 0;
@@ -155,8 +157,8 @@
 /* Glassmorphism */
 .kreati-hero--glass .kreati-hero__content {
   background: var(--kreati-hero-glass-bg, var(--kreati-overlay-medium));
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(0.75rem);
+  -webkit-backdrop-filter: blur(0.75rem);
   border: 1px solid var(--kreati-overlay-strong);
   border-radius: var(--kreati-radius-xl);
   padding: var(--kreati-space-8);
@@ -216,15 +218,15 @@
 /* Glassmorphism on split-full */
 .kreati-hero--split-full.kreati-hero--glass .kreati-hero__content {
   background: var(--kreati-hero-glass-bg, var(--kreati-overlay-medium));
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(0.75rem);
+  -webkit-backdrop-filter: blur(0.75rem);
   border: none;
   border-radius: var(--kreati-radius-none);
   margin: 0;
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 48rem) {
   .kreati-hero--sm { min-height: 30vh; padding: var(--kreati-space-6) var(--kreati-space-4); }
   .kreati-hero--md { min-height: 40vh; padding: var(--kreati-space-6) var(--kreati-space-4); }
   .kreati-hero--lg { min-height: 50vh; padding: var(--kreati-space-6) var(--kreati-space-4); }
@@ -283,9 +285,9 @@
 }
 
 /* Extra small screens */
-@media (max-width: 480px) {
+@media (max-width: 30rem) {
   .kreati-hero__title {
-    font-size: clamp(1.5rem, 7vw, 2rem);
+    font-size: clamp(var(--kreati-font-size-xl), 7vw, var(--kreati-font-size-2xl));
   }
 
   .kreati-hero__actions {

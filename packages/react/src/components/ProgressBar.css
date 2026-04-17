@@ -35,6 +35,7 @@
 .k-progressbar--warning .k-progressbar__fill   { background: var(--kreati-severity-warning); }
 .k-progressbar--help .k-progressbar__fill      { background: var(--kreati-severity-help); }
 .k-progressbar--danger .k-progressbar__fill    { background: var(--kreati-severity-danger); }
+.k-progressbar--accent .k-progressbar__fill    { background: var(--kreati-severity-accent); }
 
 /* Label — outside (right of bar) */
 .k-progressbar__label--outside {
@@ -58,7 +59,7 @@
 
 /* Label inside needs taller bar */
 .k-progressbar--label-inside .k-progressbar__track {
-  height: 18px;
+  height: 1.125rem;
 }
 
 /* Indeterminate */

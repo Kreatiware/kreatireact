@@ -70,7 +70,7 @@ export interface MultiSelectProps {
   /** Success state */
   success?: boolean;
   /** Helper severity color */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
   /** Disabled state */
   disabled?: boolean;
   /** Read-only state */

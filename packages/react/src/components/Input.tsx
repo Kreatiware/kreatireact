@@ -27,7 +27,7 @@ export interface InputProps {
   /** Applies success border and helper color */
   success?: boolean;
   /** Severity color for the helper text */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
   /** Icon rendered inside the input on the left */
   iconLeft?: React.ReactNode;
   /** Icon rendered inside the input on the right */

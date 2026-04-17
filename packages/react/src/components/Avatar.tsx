@@ -19,7 +19,7 @@ export interface AvatarProps {
   /** Shape */
   shape?: AvatarShape;
   /** Severity color for the background (when no image) */
-  severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
   /** Additional CSS class names */
   className?: string;
   /** Inline styles */

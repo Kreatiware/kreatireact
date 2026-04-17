@@ -11,13 +11,13 @@
   --kreati-primary-800: #095172;
   --kreati-primary-900: #074461;
 
-  /* ─── Colors — Secondary ────────────────────────────────────────────── */
-  --kreati-secondary-50: #fffef9;
-  --kreati-secondary-100: #fff7d7;
-  --kreati-secondary-200: #fff0b5;
-  --kreati-secondary-300: #ffe993;
-  --kreati-secondary-400: #ffe271;
-  --kreati-secondary-500: #ffdb4f;
+  /* ─── Colors — Accent (brand secondary color) ────────────────────────── */
+  --kreati-accent-50: #fffef9;
+  --kreati-accent-100: #fff7d7;
+  --kreati-accent-200: #fff0b5;
+  --kreati-accent-300: #ffe993;
+  --kreati-accent-400: #ffe271;
+  --kreati-accent-500: #ffdb4f;
 
   /* ─── Colors — Gray ─────────────────────────────────────────────────── */
   --kreati-gray-50: #f9fafb;
@@ -107,37 +107,59 @@
   --kreati-severity-danger-light: #fee2e2;
   --kreati-severity-danger-light-hover: #fecaca;
 
-  /* ─── Typography — Font Family ──────────────────────────────────────── */
-  --kreati-font-family: 'Raleway', 'Roboto', 'Helvetica', sans-serif;
+  /* ─── Severity — Accent (brand highlight) ───────────────────────────── */
+  --kreati-severity-accent: #e6a817;
+  --kreati-severity-accent-hover: #cc9400;
+  --kreati-severity-accent-active: #b38200;
+  --kreati-severity-accent-text: #111827;
+  --kreati-severity-accent-light: #fef9e7;
+  --kreati-severity-accent-light-hover: #fdf0c4;
 
-  /* ─── Typography — Font Sizes (8-step scale) ────────────────────────── */
-  --kreati-font-size-xxs: 10px;
-  --kreati-font-size-xs: 12px;
-  --kreati-font-size-sm: 14px;
-  --kreati-font-size-base: 16px;
-  --kreati-font-size-md: 18px;
-  --kreati-font-size-lg: 20px;
-  --kreati-font-size-xl: 22px;
-  --kreati-font-size-xxl: 24px;
+  /* ─── Semantic — Text Colors ────────────────────────────────────────── */
+  --kreati-text-primary: var(--kreati-gray-900);
+  --kreati-text-body: var(--kreati-gray-800);
+  --kreati-text-secondary: var(--kreati-gray-600);
+  --kreati-text-muted: var(--kreati-gray-500);
+  --kreati-text-disabled: var(--kreati-gray-400);
+  --kreati-text-on-primary: #ffffff;
+  --kreati-text-on-accent: var(--kreati-gray-900);
 
-  /* ─── Typography — Line Heights (per size) ──────────────────────────── */
-  --kreati-line-height-xxs: 1.12;
-  --kreati-line-height-xs: 1.2;
-  --kreati-line-height-sm: 1.3;
+  /* ─── Semantic — Surfaces ───────────────────────────────────────────── */
+  --kreati-surface: var(--kreati-white);
+  --kreati-surface-hover: var(--kreati-primary-alpha-4);
+  --kreati-surface-active: var(--kreati-severity-primary-light);
+
+  /* ─── Typography — Font Families ─────────────────────────────────────── */
+  --kreati-font-family-display: 'Raleway', 'Helvetica Neue', sans-serif;
+  --kreati-font-family-body: 'Inter', 'Helvetica', sans-serif;
+  --kreati-font-family-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --kreati-font-family: var(--kreati-font-family-body);
+
+  /* ─── Typography — Font Sizes (hybrid scale: rem) ──────────────────── */
+  --kreati-font-size-xxs: 0.625rem;
+  --kreati-font-size-xs: 0.75rem;
+  --kreati-font-size-sm: 0.875rem;
+  --kreati-font-size-base: 1rem;
+  --kreati-font-size-md: 1.125rem;
+  --kreati-font-size-lg: 1.25rem;
+  --kreati-font-size-xl: 1.5rem;
+  --kreati-font-size-2xl: 1.875rem;
+  --kreati-font-size-3xl: 2.25rem;
+  --kreati-font-size-4xl: 3rem;
+  --kreati-font-size-5xl: 3.75rem;
+
+  /* ─── Typography — Line Heights (descending: more air on small text) ── */
+  --kreati-line-height-xxs: 1.6;
+  --kreati-line-height-xs: 1.5;
+  --kreati-line-height-sm: 1.5;
   --kreati-line-height-base: 1.5;
-  --kreati-line-height-md: 1.55;
-  --kreati-line-height-lg: 1.6;
-  --kreati-line-height-xl: 1.6;
-  --kreati-line-height-xxl: 1.65;
-
-  /* ─── Typography — Letter Spacing ──────────────────────────────────── */
-  --kreati-letter-spacing-tighter: -0.02em;
-  --kreati-letter-spacing-tight: -0.01em;
-  --kreati-letter-spacing-normal: 0;
-  --kreati-letter-spacing-wide: 0.01em;
-  --kreati-letter-spacing-wider: 0.025em;
-  --kreati-letter-spacing-widest: 0.05em;
-  --kreati-letter-spacing-caps: 0.1em;
+  --kreati-line-height-md: 1.45;
+  --kreati-line-height-lg: 1.4;
+  --kreati-line-height-xl: 1.35;
+  --kreati-line-height-2xl: 1.3;
+  --kreati-line-height-3xl: 1.25;
+  --kreati-line-height-4xl: 1.2;
+  --kreati-line-height-5xl: 1.15;
 
   /* ─── Typography — Font Weights ─────────────────────────────────────── */
   --kreati-font-weight-light: 300;
@@ -147,46 +169,138 @@
   --kreati-font-weight-bold: 700;
   --kreati-font-weight-extrabold: 800;
 
-  /* ─── Typography — Letter Spacing ───────────────────────────────────── */
-  --kreati-tracking-tighter: -0.05em;
-  --kreati-tracking-tight: -0.025em;
+  /* ─── Typography — Letter Spacing (tracking) ────────────────────────── */
+  --kreati-tracking-tighter: -0.025em;
+  --kreati-tracking-tight: -0.01em;
   --kreati-tracking-normal: 0;
   --kreati-tracking-wide: 0.025em;
   --kreati-tracking-wider: 0.05em;
   --kreati-tracking-widest: 0.1em;
 
+  /* ─── Typography — Presets ──────────────────────────────────────────── */
+  /* Display: hero headlines */
+  --kreati-preset-display-family: var(--kreati-font-family-display);
+  --kreati-preset-display-size: var(--kreati-font-size-5xl);
+  --kreati-preset-display-weight: var(--kreati-font-weight-bold);
+  --kreati-preset-display-line-height: var(--kreati-line-height-5xl);
+  --kreati-preset-display-tracking: var(--kreati-tracking-tighter);
+
+  /* Heading 1: page titles */
+  --kreati-preset-h1-family: var(--kreati-font-family-display);
+  --kreati-preset-h1-size: var(--kreati-font-size-4xl);
+  --kreati-preset-h1-weight: var(--kreati-font-weight-bold);
+  --kreati-preset-h1-line-height: var(--kreati-line-height-4xl);
+  --kreati-preset-h1-tracking: var(--kreati-tracking-tighter);
+
+  /* Heading 2: section titles */
+  --kreati-preset-h2-family: var(--kreati-font-family-display);
+  --kreati-preset-h2-size: var(--kreati-font-size-3xl);
+  --kreati-preset-h2-weight: var(--kreati-font-weight-semibold);
+  --kreati-preset-h2-line-height: var(--kreati-line-height-3xl);
+  --kreati-preset-h2-tracking: var(--kreati-tracking-tight);
+
+  /* Heading 3: card/dialog/drawer titles */
+  --kreati-preset-h3-family: var(--kreati-font-family-display);
+  --kreati-preset-h3-size: var(--kreati-font-size-xl);
+  --kreati-preset-h3-weight: var(--kreati-font-weight-semibold);
+  --kreati-preset-h3-line-height: var(--kreati-line-height-xl);
+  --kreati-preset-h3-tracking: var(--kreati-tracking-normal);
+
+  /* Heading 4: panel/accordion titles, subtitles */
+  --kreati-preset-h4-family: var(--kreati-font-family-display);
+  --kreati-preset-h4-size: var(--kreati-font-size-md);
+  --kreati-preset-h4-weight: var(--kreati-font-weight-semibold);
+  --kreati-preset-h4-line-height: var(--kreati-line-height-md);
+  --kreati-preset-h4-tracking: var(--kreati-tracking-normal);
+
+  /* Body: default text */
+  --kreati-preset-body-family: var(--kreati-font-family-body);
+  --kreati-preset-body-size: var(--kreati-font-size-base);
+  --kreati-preset-body-weight: var(--kreati-font-weight-regular);
+  --kreati-preset-body-line-height: var(--kreati-line-height-base);
+  --kreati-preset-body-tracking: var(--kreati-tracking-normal);
+
+  /* Body small: secondary text, descriptions */
+  --kreati-preset-body-sm-family: var(--kreati-font-family-body);
+  --kreati-preset-body-sm-size: var(--kreati-font-size-sm);
+  --kreati-preset-body-sm-weight: var(--kreati-font-weight-regular);
+  --kreati-preset-body-sm-line-height: var(--kreati-line-height-sm);
+  --kreati-preset-body-sm-tracking: var(--kreati-tracking-normal);
+
+  /* Label: form labels, nav items */
+  --kreati-preset-label-family: var(--kreati-font-family-body);
+  --kreati-preset-label-size: var(--kreati-font-size-sm);
+  --kreati-preset-label-weight: var(--kreati-font-weight-medium);
+  --kreati-preset-label-line-height: var(--kreati-line-height-sm);
+  --kreati-preset-label-tracking: var(--kreati-tracking-normal);
+
+  /* Caption: helpers, error messages, small descriptions */
+  --kreati-preset-caption-family: var(--kreati-font-family-body);
+  --kreati-preset-caption-size: var(--kreati-font-size-xs);
+  --kreati-preset-caption-weight: var(--kreati-font-weight-regular);
+  --kreati-preset-caption-line-height: var(--kreati-line-height-xs);
+  --kreati-preset-caption-tracking: var(--kreati-tracking-normal);
+
+  /* Overline: category labels, section markers (uppercase) */
+  --kreati-preset-overline-family: var(--kreati-font-family-body);
+  --kreati-preset-overline-size: var(--kreati-font-size-xxs);
+  --kreati-preset-overline-weight: var(--kreati-font-weight-semibold);
+  --kreati-preset-overline-line-height: var(--kreati-line-height-xxs);
+  --kreati-preset-overline-tracking: var(--kreati-tracking-widest);
+
+  /* Table header */
+  --kreati-preset-th-family: var(--kreati-font-family-body);
+  --kreati-preset-th-size: var(--kreati-font-size-sm);
+  --kreati-preset-th-weight: var(--kreati-font-weight-semibold);
+  --kreati-preset-th-line-height: var(--kreati-line-height-sm);
+  --kreati-preset-th-tracking: var(--kreati-tracking-wide);
+
+  /* Table cell */
+  --kreati-preset-td-family: var(--kreati-font-family-body);
+  --kreati-preset-td-size: var(--kreati-font-size-sm);
+  --kreati-preset-td-weight: var(--kreati-font-weight-regular);
+  --kreati-preset-td-line-height: var(--kreati-line-height-sm);
+  --kreati-preset-td-tracking: var(--kreati-tracking-normal);
+
+  /* Code: monospace content */
+  --kreati-preset-code-family: var(--kreati-font-family-mono);
+  --kreati-preset-code-size: var(--kreati-font-size-sm);
+  --kreati-preset-code-weight: var(--kreati-font-weight-regular);
+  --kreati-preset-code-line-height: var(--kreati-line-height-base);
+  --kreati-preset-code-tracking: var(--kreati-tracking-normal);
+
   /* ─── Spacing ───────────────────────────────────────────────────────── */
   --kreati-space-0: 0;
-  --kreati-space-1: 4px;
-  --kreati-space-2: 8px;
-  --kreati-space-3: 12px;
-  --kreati-space-4: 16px;
-  --kreati-space-5: 20px;
-  --kreati-space-6: 24px;
-  --kreati-space-8: 32px;
-  --kreati-space-10: 40px;
-  --kreati-space-12: 48px;
-  --kreati-space-16: 64px;
+  --kreati-space-1: 0.25rem;
+  --kreati-space-2: 0.5rem;
+  --kreati-space-3: 0.75rem;
+  --kreati-space-4: 1rem;
+  --kreati-space-5: 1.25rem;
+  --kreati-space-6: 1.5rem;
+  --kreati-space-8: 2rem;
+  --kreati-space-10: 2.5rem;
+  --kreati-space-12: 3rem;
+  --kreati-space-16: 4rem;
 
   /* ─── Layout — Max Widths ───────────────────────────────────────────── */
-  --kreati-max-width-sm: 640px;
-  --kreati-max-width-md: 768px;
-  --kreati-max-width-lg: 1024px;
-  --kreati-max-width-xl: 1200px;
-  --kreati-max-width-prose: 600px;
+  --kreati-max-width-sm: 40rem;
+  --kreati-max-width-md: 48rem;
+  --kreati-max-width-lg: 64rem;
+  --kreati-max-width-xl: 75rem;
+  --kreati-max-width-prose: 37.5rem;
 
   /* ─── Layout — Breakpoints (reference, used in media queries) ───────── */
-  --kreati-breakpoint-sm: 640px;
-  --kreati-breakpoint-md: 768px;
-  --kreati-breakpoint-lg: 1024px;
-  --kreati-breakpoint-xl: 1280px;
+  --kreati-breakpoint-sm: 40rem;
+  --kreati-breakpoint-md: 48rem;
+  --kreati-breakpoint-lg: 64rem;
+  --kreati-breakpoint-xl: 80rem;
 
   /* ─── Border Radius ─────────────────────────────────────────────────── */
   --kreati-radius-none: 0;
-  --kreati-radius-sm: 4px;
-  --kreati-radius-md: 8px;
-  --kreati-radius-lg: 12px;
-  --kreati-radius-xl: 16px;
+  --kreati-radius-sm: 0.25rem;
+  --kreati-radius-md: 0.5rem;
+  --kreati-radius-lg: 0.75rem;
+  --kreati-radius-xl: 1rem;
   --kreati-radius-full: 9999px;
 
   /* ─── Shadows ───────────────────────────────────────────────────────── */
@@ -198,16 +312,16 @@
   --kreati-shadow-drawer: -4px 0 24px rgba(0, 0, 0, 0.12);
 
   /* Drawer */
-  --kreati-drawer-width-xs: 240px;
-  --kreati-drawer-width-sm: 320px;
-  --kreati-drawer-width-md: 400px;
-  --kreati-drawer-width-lg: 560px;
-  --kreati-drawer-width-xl: 720px;
-  --kreati-drawer-height-xs: 160px;
-  --kreati-drawer-height-sm: 240px;
-  --kreati-drawer-height-md: 320px;
-  --kreati-drawer-height-lg: 440px;
-  --kreati-drawer-height-xl: 560px;
+  --kreati-drawer-width-xs: 15rem;
+  --kreati-drawer-width-sm: 20rem;
+  --kreati-drawer-width-md: 25rem;
+  --kreati-drawer-width-lg: 35rem;
+  --kreati-drawer-width-xl: 45rem;
+  --kreati-drawer-height-xs: 10rem;
+  --kreati-drawer-height-sm: 15rem;
+  --kreati-drawer-height-md: 20rem;
+  --kreati-drawer-height-lg: 27.5rem;
+  --kreati-drawer-height-xl: 35rem;
   --kreati-drawer-transition-duration: 0.25s;
 
   /* ─── Z-Index ───────────────────────────────────────────────────────── */
@@ -224,46 +338,46 @@
   --kreati-transition-slow: all 0.3s ease;
 
   /* ─── Component Tokens — Badge / Dot ────────────────────────────────── */
-  --kreati-badge-size: 18px;
-  --kreati-badge-size-empty: 10px;
-  --kreati-badge-font-size: 11px;
-  --kreati-badge-offset: -6px;
-  --kreati-badge-padding: 0 5px;
+  --kreati-badge-size: 1.125rem;
+  --kreati-badge-size-empty: 0.625rem;
+  --kreati-badge-font-size: 0.6875rem;
+  --kreati-badge-offset: -0.375rem;
+  --kreati-badge-padding: 0 0.3125rem;
 
   /* ─── Component Tokens — Button Sizes ───────────────────────────────── */
-  --kreati-btn-height-xs: 28px;
-  --kreati-btn-height-sm: 32px;
-  --kreati-btn-height-md: 40px;
-  --kreati-btn-height-lg: 48px;
-  --kreati-btn-height-xl: 56px;
-  --kreati-btn-padding-xs: 0 10px;
-  --kreati-btn-padding-sm: 0 14px;
-  --kreati-btn-padding-md: 0 18px;
-  --kreati-btn-padding-lg: 0 22px;
-  --kreati-btn-padding-xl: 0 28px;
-  --kreati-btn-gap-xs: 4px;
-  --kreati-btn-gap-sm: 6px;
-  --kreati-btn-gap-md: 8px;
-  --kreati-btn-gap-lg: 8px;
-  --kreati-btn-gap-xl: 10px;
-  --kreati-btn-slim-xs: 22px;
-  --kreati-btn-slim-sm: 26px;
-  --kreati-btn-slim-md: 32px;
-  --kreati-btn-slim-lg: 38px;
-  --kreati-btn-slim-xl: 44px;
-  --kreati-btn-badge-size: 18px;
-  --kreati-btn-badge-font-size: 11px;
-  --kreati-btn-badge-offset: -8px;
-  --kreati-btn-badge-padding: 0 5px;
+  --kreati-btn-height-xs: 1.75rem;
+  --kreati-btn-height-sm: 2rem;
+  --kreati-btn-height-md: 2.5rem;
+  --kreati-btn-height-lg: 3rem;
+  --kreati-btn-height-xl: 3.5rem;
+  --kreati-btn-padding-xs: 0 0.625rem;
+  --kreati-btn-padding-sm: 0 0.875rem;
+  --kreati-btn-padding-md: 0 1.125rem;
+  --kreati-btn-padding-lg: 0 1.375rem;
+  --kreati-btn-padding-xl: 0 1.75rem;
+  --kreati-btn-gap-xs: 0.25rem;
+  --kreati-btn-gap-sm: 0.375rem;
+  --kreati-btn-gap-md: 0.5rem;
+  --kreati-btn-gap-lg: 0.5rem;
+  --kreati-btn-gap-xl: 0.625rem;
+  --kreati-btn-slim-xs: 1.375rem;
+  --kreati-btn-slim-sm: 1.625rem;
+  --kreati-btn-slim-md: 2rem;
+  --kreati-btn-slim-lg: 2.375rem;
+  --kreati-btn-slim-xl: 2.75rem;
+  --kreati-btn-badge-size: 1.125rem;
+  --kreati-btn-badge-font-size: 0.6875rem;
+  --kreati-btn-badge-offset: -0.5rem;
+  --kreati-btn-badge-padding: 0 0.3125rem;
 
   /* ─── Component Tokens — NavigationBar ──────────────────────────────── */
-  --kreati-navbar-dropdown-min-width: 200px;
-  --kreati-navbar-drawer-width: 280px;
+  --kreati-navbar-dropdown-min-width: 12.5rem;
+  --kreati-navbar-drawer-width: 17.5rem;
   --kreati-navbar-drawer-max-width: 80vw;
-  --kreati-navbar-hamburger-size: 32px;
+  --kreati-navbar-hamburger-size: 2rem;
 
   /* ─── Component Tokens — Chip ───────────────────────────────────────── */
-  --kreati-chip-padding-sm: 2px var(--kreati-space-2);
+  --kreati-chip-padding-sm: 0.125rem var(--kreati-space-2);
   --kreati-chip-padding-md: var(--kreati-space-1) var(--kreati-space-3);
   --kreati-chip-padding-lg: var(--kreati-space-2) var(--kreati-space-4);
 
@@ -273,32 +387,32 @@
   --kreati-tooltip-padding: var(--kreati-space-1) var(--kreati-space-2);
   --kreati-tooltip-radius: var(--kreati-radius-sm);
   --kreati-tooltip-font-size: var(--kreati-font-size-xxs);
-  --kreati-tooltip-max-width: 200px;
-  --kreati-tooltip-offset: 6px;
-  --kreati-tooltip-arrow-size: 5px;
+  --kreati-tooltip-max-width: 12.5rem;
+  --kreati-tooltip-offset: 0.375rem;
+  --kreati-tooltip-arrow-size: 0.3125rem;
   --kreati-tooltip-transition-duration: 0.15s;
 
   /* ─── Component Tokens — ScrollArea ──────────────────────────────────── */
-  --kreati-scroll-size-sm: 6px;
-  --kreati-scroll-size-md: 8px;
-  --kreati-scroll-size-lg: 12px;
+  --kreati-scroll-size-sm: 0.375rem;
+  --kreati-scroll-size-md: 0.5rem;
+  --kreati-scroll-size-lg: 0.75rem;
   --kreati-scroll-thumb-color: var(--kreati-gray-400);
   --kreati-scroll-thumb-hover: var(--kreati-gray-500);
   --kreati-scroll-track-color: transparent;
   --kreati-scroll-thumb-radius: var(--kreati-radius-full);
-  --kreati-scroll-idle-size: 3px;
+  --kreati-scroll-idle-size: 0.1875rem;
 
   /* ─── Component Tokens — Input Sizes ─────────────────────────────────── */
-  --kreati-input-height-xs: 28px;
-  --kreati-input-height-sm: 32px;
-  --kreati-input-height-md: 40px;
-  --kreati-input-height-lg: 48px;
-  --kreati-input-height-xl: 56px;
-  --kreati-input-padding-xs: 0 10px;
-  --kreati-input-padding-sm: 0 14px;
-  --kreati-input-padding-md: 0 18px;
-  --kreati-input-padding-lg: 0 22px;
-  --kreati-input-padding-xl: 0 28px;
+  --kreati-input-height-xs: 1.75rem;
+  --kreati-input-height-sm: 2rem;
+  --kreati-input-height-md: 2.5rem;
+  --kreati-input-height-lg: 3rem;
+  --kreati-input-height-xl: 3.5rem;
+  --kreati-input-padding-xs: 0 0.625rem;
+  --kreati-input-padding-sm: 0 0.875rem;
+  --kreati-input-padding-md: 0 1.125rem;
+  --kreati-input-padding-lg: 0 1.375rem;
+  --kreati-input-padding-xl: 0 1.75rem;
   --kreati-input-icon-gap: var(--kreati-space-2);
 
   /* ─── Component Tokens — FieldWrapper ────────────────────────────────── */
@@ -306,7 +420,7 @@
   --kreati-field-helper-gap: var(--kreati-space-1);
 
   /* ─── Component Tokens — Select ─────────────────────────────────────── */
-  --kreati-select-dropdown-max-height: 256px;
+  --kreati-select-dropdown-max-height: 16rem;
   --kreati-select-option-padding: var(--kreati-space-2) var(--kreati-space-3);
   --kreati-select-option-hover-bg: var(--kreati-primary-alpha-6);
   --kreati-select-option-active-bg: var(--kreati-severity-primary-light);
@@ -314,14 +428,14 @@
   --kreati-select-group-padding: var(--kreati-space-2) var(--kreati-space-3);
   --kreati-select-group-color: var(--kreati-gray-500);
   --kreati-select-empty-color: var(--kreati-gray-400);
-  --kreati-select-virtual-item-height: 36px;
+  --kreati-select-virtual-item-height: 2.25rem;
 
   /* ─── Component Tokens — Checkbox ───────────────────────────────────── */
-  --kreati-checkbox-size-xs: 14px;
-  --kreati-checkbox-size-sm: 16px;
-  --kreati-checkbox-size-md: 20px;
-  --kreati-checkbox-size-lg: 24px;
-  --kreati-checkbox-size-xl: 28px;
+  --kreati-checkbox-size-xs: 0.875rem;
+  --kreati-checkbox-size-sm: 1rem;
+  --kreati-checkbox-size-md: 1.25rem;
+  --kreati-checkbox-size-lg: 1.5rem;
+  --kreati-checkbox-size-xl: 1.75rem;
   --kreati-checkbox-border-color: var(--kreati-gray-300);
   --kreati-checkbox-checked-bg: var(--kreati-severity-primary);
   --kreati-checkbox-checked-color: var(--kreati-white);
@@ -331,11 +445,11 @@
   --kreati-checkbox-gap: var(--kreati-space-2);
 
   /* ─── Component Tokens — Radio ──────────────────────────────────────── */
-  --kreati-radio-size-xs: 14px;
-  --kreati-radio-size-sm: 16px;
-  --kreati-radio-size-md: 20px;
-  --kreati-radio-size-lg: 24px;
-  --kreati-radio-size-xl: 28px;
+  --kreati-radio-size-xs: 0.875rem;
+  --kreati-radio-size-sm: 1rem;
+  --kreati-radio-size-md: 1.25rem;
+  --kreati-radio-size-lg: 1.5rem;
+  --kreati-radio-size-xl: 1.75rem;
   --kreati-radio-dot-scale: 0.45;
   --kreati-radio-border-color: var(--kreati-gray-300);
   --kreati-radio-checked-bg: var(--kreati-severity-primary);
@@ -343,22 +457,22 @@
   --kreati-radio-gap: var(--kreati-space-2);
 
   /* ─── Component Tokens — Switch ──────────────────────────────────────── */
-  --kreati-switch-track-width-xs: 28px;
-  --kreati-switch-track-width-sm: 32px;
-  --kreati-switch-track-width-md: 40px;
-  --kreati-switch-track-width-lg: 48px;
-  --kreati-switch-track-width-xl: 56px;
-  --kreati-switch-track-height-xs: 16px;
-  --kreati-switch-track-height-sm: 18px;
-  --kreati-switch-track-height-md: 22px;
-  --kreati-switch-track-height-lg: 26px;
-  --kreati-switch-track-height-xl: 30px;
-  --kreati-switch-thumb-size-xs: 12px;
-  --kreati-switch-thumb-size-sm: 14px;
-  --kreati-switch-thumb-size-md: 18px;
-  --kreati-switch-thumb-size-lg: 22px;
-  --kreati-switch-thumb-size-xl: 26px;
-  --kreati-switch-thumb-offset: 2px;
+  --kreati-switch-track-width-xs: 1.75rem;
+  --kreati-switch-track-width-sm: 2rem;
+  --kreati-switch-track-width-md: 2.5rem;
+  --kreati-switch-track-width-lg: 3rem;
+  --kreati-switch-track-width-xl: 3.5rem;
+  --kreati-switch-track-height-xs: 1rem;
+  --kreati-switch-track-height-sm: 1.125rem;
+  --kreati-switch-track-height-md: 1.375rem;
+  --kreati-switch-track-height-lg: 1.625rem;
+  --kreati-switch-track-height-xl: 1.875rem;
+  --kreati-switch-thumb-size-xs: 0.75rem;
+  --kreati-switch-thumb-size-sm: 0.875rem;
+  --kreati-switch-thumb-size-md: 1.125rem;
+  --kreati-switch-thumb-size-lg: 1.375rem;
+  --kreati-switch-thumb-size-xl: 1.625rem;
+  --kreati-switch-thumb-offset: 0.125rem;
   --kreati-switch-track-off-bg: var(--kreati-gray-300);
   --kreati-switch-track-on-bg: var(--kreati-severity-primary);
   --kreati-switch-thumb-bg: var(--kreati-white);
@@ -368,17 +482,17 @@
   --kreati-hero-bg: var(--kreati-white);
   --kreati-hero-gradient-angle: 135deg;
   --kreati-hero-gradient-from: var(--kreati-primary-50);
-  --kreati-hero-gradient-to: var(--kreati-secondary-100);
+  --kreati-hero-gradient-to: var(--kreati-accent-100);
 
   /* ─── Component Tokens — Popover ───────────────────────────────────── */
   --kreati-popover-bg: var(--kreati-white);
   --kreati-popover-border: var(--kreati-gray-200);
   --kreati-popover-radius: var(--kreati-radius-md);
   --kreati-popover-shadow: var(--kreati-shadow-lg);
-  --kreati-popover-offset: 4px;
+  --kreati-popover-offset: 0.25rem;
 
   /* ─── Component Tokens — Calendar ──────────────────────────────────── */
-  --kreati-calendar-cell-size: 32px;
+  --kreati-calendar-cell-size: 2rem;
   --kreati-calendar-header-gap: var(--kreati-space-2);
   --kreati-calendar-day-radius: var(--kreati-radius-full);
   --kreati-calendar-day-hover-bg: var(--kreati-primary-alpha-8);
@@ -416,27 +530,27 @@
   --kreati-slider-tooltip-bg: var(--kreati-gray-900);
   --kreati-slider-tooltip-color: var(--kreati-white);
   --kreati-slider-mark-color: var(--kreati-gray-500);
-  --kreati-slider-track-height-xs: 2px;
-  --kreati-slider-track-height-sm: 3px;
-  --kreati-slider-track-height-md: 4px;
-  --kreati-slider-track-height-lg: 6px;
-  --kreati-slider-track-height-xl: 8px;
-  --kreati-slider-thumb-size-xs: 12px;
-  --kreati-slider-thumb-size-sm: 14px;
-  --kreati-slider-thumb-size-md: 18px;
-  --kreati-slider-thumb-size-lg: 22px;
-  --kreati-slider-thumb-size-xl: 26px;
+  --kreati-slider-track-height-xs: 0.125rem;
+  --kreati-slider-track-height-sm: 0.1875rem;
+  --kreati-slider-track-height-md: 0.25rem;
+  --kreati-slider-track-height-lg: 0.375rem;
+  --kreati-slider-track-height-xl: 0.5rem;
+  --kreati-slider-thumb-size-xs: 0.75rem;
+  --kreati-slider-thumb-size-sm: 0.875rem;
+  --kreati-slider-thumb-size-md: 1.125rem;
+  --kreati-slider-thumb-size-lg: 1.375rem;
+  --kreati-slider-thumb-size-xl: 1.625rem;
 
   /* ─── Component Tokens — Divider ──────────────────────────────────── */
   --kreati-divider-color: var(--kreati-gray-200);
-  --kreati-divider-width: 1px;
+  --kreati-divider-width: 0.0625rem;
   --kreati-divider-style: solid;
 
   /* ─── Component Tokens — Tabs ─────────────────────────────────────── */
   --kreati-tabs-panel-padding: var(--kreati-space-4);
 
   /* ─── Component Tokens — Stepper ──────────────────────────────────── */
-  --kreati-stepper-indicator-size: 32px;
+  --kreati-stepper-indicator-size: 2rem;
   --kreati-stepper-active-bg: var(--kreati-primary-500);
   --kreati-stepper-active-color: var(--kreati-white);
   --kreati-stepper-active-label: var(--kreati-gray-900);
@@ -450,16 +564,16 @@
   --kreati-stepper-content-padding: var(--kreati-space-4) 0;
 
   /* ─── Component Tokens — ProgressBar ────────────────────────────────── */
-  --kreati-progressbar-height: 8px;
+  --kreati-progressbar-height: 0.5rem;
   --kreati-progressbar-bg: var(--kreati-gray-200);
   --kreati-progressbar-radius: var(--kreati-radius-full);
 
   /* ─── Component Tokens — Avatar ───────────────────────────────────── */
-  --kreati-avatar-size-xs: 24px;
-  --kreati-avatar-size-sm: 32px;
-  --kreati-avatar-size-md: 40px;
-  --kreati-avatar-size-lg: 48px;
-  --kreati-avatar-size-xl: 64px;
+  --kreati-avatar-size-xs: 1.5rem;
+  --kreati-avatar-size-sm: 2rem;
+  --kreati-avatar-size-md: 2.5rem;
+  --kreati-avatar-size-lg: 3rem;
+  --kreati-avatar-size-xl: 4rem;
   --kreati-avatar-bg: var(--kreati-gray-200);
   --kreati-avatar-color: var(--kreati-gray-600);
 
@@ -469,11 +583,11 @@
   --kreati-tag-font-size: var(--kreati-font-size-xxs);
 
   /* ─── Component Tokens — Spinner ──────────────────────────────────── */
-  --kreati-spinner-size-xs: 16px;
-  --kreati-spinner-size-sm: 24px;
-  --kreati-spinner-size-md: 32px;
-  --kreati-spinner-size-lg: 48px;
-  --kreati-spinner-size-xl: 64px;
+  --kreati-spinner-size-xs: 1rem;
+  --kreati-spinner-size-sm: 1.5rem;
+  --kreati-spinner-size-md: 2rem;
+  --kreati-spinner-size-lg: 3rem;
+  --kreati-spinner-size-xl: 4rem;
   --kreati-spinner-stroke: 3;
   --kreati-spinner-color: var(--kreati-severity-primary);
 
@@ -483,7 +597,7 @@
   --kreati-skeleton-radius: var(--kreati-radius-sm);
 
   /* ─── Component Tokens — Toast ──────────────────────────────────────── */
-  --kreati-toast-width: 320px;
+  --kreati-toast-width: 20rem;
   --kreati-toast-padding: var(--kreati-space-3) var(--kreati-space-4);
   --kreati-toast-border-radius: var(--kreati-radius-md);
   --kreati-toast-shadow: var(--kreati-shadow-lg);
@@ -494,16 +608,16 @@
   --kreati-message-padding: var(--kreati-space-3) var(--kreati-space-4);
   --kreati-message-border-radius: var(--kreati-radius-md);
   --kreati-message-font-size: var(--kreati-font-size-sm);
-  --kreati-message-icon-size: 18px;
-  --kreati-message-border-width: 4px;
+  --kreati-message-icon-size: 1.125rem;
+  --kreati-message-border-width: 0.25rem;
   --kreati-message-gap: var(--kreati-space-2);
 
   /* ─── Component Tokens — Dial ───────────────────────────────────────── */
-  --kreati-dial-size-xs: 80px;
-  --kreati-dial-size-sm: 100px;
-  --kreati-dial-size-md: 120px;
-  --kreati-dial-size-lg: 150px;
-  --kreati-dial-size-xl: 180px;
+  --kreati-dial-size-xs: 5rem;
+  --kreati-dial-size-sm: 6.25rem;
+  --kreati-dial-size-md: 7.5rem;
+  --kreati-dial-size-lg: 9.375rem;
+  --kreati-dial-size-xl: 11.25rem;
   --kreati-dial-stroke-width: 10;
   --kreati-dial-range-color: var(--kreati-gray-200);
   --kreati-dial-value-color: var(--kreati-severity-primary);
@@ -511,7 +625,7 @@
   --kreati-dial-text-size: var(--kreati-font-size-lg);
 
   /* ─── Component Tokens — ItemPicker ──────────────────────────────── */
-  --kreati-item-picker-border: 1px solid var(--kreati-gray-200);
+  --kreati-item-picker-border: 0.0625rem solid var(--kreati-gray-200);
   --kreati-item-picker-border-radius: var(--kreati-radius-md);
   --kreati-item-picker-bg: var(--kreati-white);
   --kreati-item-picker-header-bg: var(--kreati-gray-50);
@@ -519,7 +633,7 @@
   --kreati-item-picker-header-color: var(--kreati-gray-800);
   --kreati-item-picker-controls-gap: var(--kreati-space-2);
   --kreati-item-picker-drag-bg: var(--kreati-severity-primary-light);
-  --kreati-item-picker-drop-border: 2px dashed var(--kreati-severity-primary);
+  --kreati-item-picker-drop-border: 0.125rem dashed var(--kreati-severity-primary);
 
   /* ─── Component Tokens — Rating ────────────────────────────────── */
   --kreati-rating-color: var(--kreati-severity-warning);
@@ -533,7 +647,7 @@
   /* ─── Component Tokens — Timeline ────────────────────────────────── */
   --kreati-timeline-marker-size: var(--kreati-space-3);
   --kreati-timeline-marker-color: var(--kreati-severity-primary);
-  --kreati-timeline-connector-width: 2px;
+  --kreati-timeline-connector-width: 0.125rem;
   --kreati-timeline-connector-color: var(--kreati-gray-200);
   --kreati-timeline-gap: var(--kreati-space-3);
   --kreati-timeline-item-spacing: var(--kreati-space-6);

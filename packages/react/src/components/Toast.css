@@ -53,6 +53,7 @@
 .k-toast__item--warning   { background: var(--kreati-severity-warning-light); color: var(--kreati-severity-warning); border-left: 4px solid var(--kreati-severity-warning); }
 .k-toast__item--help      { background: var(--kreati-severity-help-light); color: var(--kreati-severity-help); border-left: 4px solid var(--kreati-severity-help); }
 .k-toast__item--danger    { background: var(--kreati-severity-danger-light); color: var(--kreati-severity-danger); border-left: 4px solid var(--kreati-severity-danger); }
+.k-toast__item--accent    { background: var(--kreati-severity-accent-light); color: var(--kreati-severity-accent); border-left: 4px solid var(--kreati-severity-accent); }
 
 /* ============================================
    Toast — Slide animations
@@ -109,7 +110,7 @@
 .k-toast__icon {
   display: inline-flex;
   flex-shrink: 0;
-  margin-top: 1px;
+  margin-top: 0.0625rem;
 }
 
 /* ============================================
@@ -129,7 +130,7 @@
 .k-toast__detail {
   font-size: var(--kreati-font-size-xs);
   opacity: 0.85;
-  margin-top: 2px;
+  margin-top: 0.125rem;
   line-height: var(--kreati-line-height-sm);
   word-break: break-word;
 }
@@ -142,8 +143,8 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 24px;
-  height: 24px;
+  width: 1.5rem;
+  height: 1.5rem;
   padding: 0;
   border: none;
   border-radius: var(--kreati-radius-sm);
@@ -161,7 +162,7 @@
 
 .k-toast__close:focus-visible {
   outline: 2px solid currentColor;
-  outline-offset: -1px;
+  outline-offset: -0.0625rem;
   opacity: 1;
 }
 
@@ -171,9 +172,9 @@
 .k-toast__progress {
   position: absolute;
   bottom: 0;
-  left: 4px;
+  left: 0.25rem;
   right: 0;
-  height: 3px;
+  height: 0.1875rem;
   transform-origin: left;
   animation: k-toast-progress var(--k-toast-life, 3000ms) linear forwards;
   border-radius: 0 0 var(--kreati-toast-border-radius) 0;
@@ -186,6 +187,7 @@
 .k-toast__progress--warning   { background: var(--kreati-severity-warning); }
 .k-toast__progress--help      { background: var(--kreati-severity-help); }
 .k-toast__progress--danger    { background: var(--kreati-severity-danger); }
+.k-toast__progress--accent    { background: var(--kreati-severity-accent); }
 
 @keyframes k-toast-progress {
   from { transform: scaleX(1); }

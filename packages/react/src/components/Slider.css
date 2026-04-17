@@ -11,7 +11,7 @@
 }
 
 .k-slider--horizontal { width: 100%; display: flex; }
-.k-slider--vertical { height: 200px; align-items: center; }
+.k-slider--vertical { height: 12.5rem; align-items: center; }
 .k-slider--full-width { display: flex; }
 .k-slider--disabled { opacity: 0.4; pointer-events: none; }
 
@@ -115,13 +115,13 @@
 .k-slider__tooltip--visible { opacity: 1; }
 
 .k-slider--horizontal .k-slider__tooltip {
-  bottom: calc(100% + 8px);
+  bottom: calc(100% + 0.5rem);
   left: 50%;
   transform: translateX(-50%);
 }
 
 .k-slider--vertical .k-slider__tooltip {
-  right: calc(100% + 8px);
+  right: calc(100% + 0.5rem);
   top: 50%;
   transform: translateY(-50%);
 }
@@ -154,8 +154,8 @@
 .k-slider--vertical .k-slider__mark { transform: translateY(50%); left: 0; }
 
 .k-slider__mark-dot {
-  width: 4px;
-  height: 4px;
+  width: 0.25rem;
+  height: 0.25rem;
   border-radius: var(--kreati-radius-full);
   background-color: var(--kreati-slider-track-bg);
 }

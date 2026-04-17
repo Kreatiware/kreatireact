@@ -33,7 +33,7 @@ export interface RadioGroupProps {
   /** Success state */
   success?: boolean;
   /** Severity color for the helper text */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
   /** Disabled state for all radios */
   disabled?: boolean;
   /** Required indicator on the group label */

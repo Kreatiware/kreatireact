@@ -105,7 +105,7 @@
 }
 .k-button--filled.k-button--primary:focus-visible {
   outline: 2px solid var(--kreati-severity-primary);
-  outline-offset: 2px;
+  outline-offset: 0.125rem;
 }
 
 .k-button--filled.k-button--secondary {
@@ -120,7 +120,7 @@
 }
 .k-button--filled.k-button--secondary:focus-visible {
   outline: 2px solid var(--kreati-severity-secondary);
-  outline-offset: 2px;
+  outline-offset: 0.125rem;
 }
 
 .k-button--filled.k-button--success {
@@ -135,7 +135,7 @@
 }
 .k-button--filled.k-button--success:focus-visible {
   outline: 2px solid var(--kreati-severity-success);
-  outline-offset: 2px;
+  outline-offset: 0.125rem;
 }
 
 .k-button--filled.k-button--info {
@@ -150,7 +150,7 @@
 }
 .k-button--filled.k-button--info:focus-visible {
   outline: 2px solid var(--kreati-severity-info);
-  outline-offset: 2px;
+  outline-offset: 0.125rem;
 }
 
 .k-button--filled.k-button--warning {
@@ -165,7 +165,7 @@
 }
 .k-button--filled.k-button--warning:focus-visible {
   outline: 2px solid var(--kreati-severity-warning);
-  outline-offset: 2px;
+  outline-offset: 0.125rem;
 }
 
 .k-button--filled.k-button--help {
@@ -180,7 +180,22 @@
 }
 .k-button--filled.k-button--help:focus-visible {
   outline: 2px solid var(--kreati-severity-help);
-  outline-offset: 2px;
+  outline-offset: 0.125rem;
+}
+
+.k-button--filled.k-button--accent {
+  background-color: var(--kreati-severity-accent);
+  color: var(--kreati-severity-accent-text);
+}
+.k-button--filled.k-button--accent:hover:not(:disabled) {
+  background-color: var(--kreati-severity-accent-hover);
+}
+.k-button--filled.k-button--accent:active:not(:disabled) {
+  background-color: var(--kreati-severity-accent-active);
+}
+.k-button--filled.k-button--accent:focus-visible {
+  outline: 2px solid var(--kreati-severity-accent);
+  outline-offset: 0.125rem;
 }
 
 .k-button--filled.k-button--danger {
@@ -195,7 +210,7 @@
 }
 .k-button--filled.k-button--danger:focus-visible {
   outline: 2px solid var(--kreati-severity-danger);
-  outline-offset: 2px;
+  outline-offset: 0.125rem;
 }
 
 /* ============================================
@@ -269,6 +284,17 @@
   background-color: var(--kreati-severity-help-light-hover);
 }
 
+.k-button--outlined.k-button--accent {
+  border-color: var(--kreati-severity-accent);
+  color: var(--kreati-severity-accent);
+}
+.k-button--outlined.k-button--accent:hover:not(:disabled) {
+  background-color: var(--kreati-severity-accent-light);
+}
+.k-button--outlined.k-button--accent:active:not(:disabled) {
+  background-color: var(--kreati-severity-accent-light-hover);
+}
+
 .k-button--outlined.k-button--danger {
   border-color: var(--kreati-severity-danger);
   color: var(--kreati-severity-danger);
@@ -282,7 +308,7 @@
 
 .k-button--outlined:focus-visible {
   outline: 2px solid currentColor;
-  outline-offset: 2px;
+  outline-offset: 0.125rem;
 }
 
 /* ============================================
@@ -317,13 +343,17 @@
 .k-button--text.k-button--help:hover:not(:disabled) { background-color: var(--kreati-severity-help-light); }
 .k-button--text.k-button--help:active:not(:disabled) { background-color: var(--kreati-severity-help-light-hover); }
 
+.k-button--text.k-button--accent { color: var(--kreati-severity-accent); }
+.k-button--text.k-button--accent:hover:not(:disabled) { background-color: var(--kreati-severity-accent-light); }
+.k-button--text.k-button--accent:active:not(:disabled) { background-color: var(--kreati-severity-accent-light-hover); }
+
 .k-button--text.k-button--danger { color: var(--kreati-severity-danger); }
 .k-button--text.k-button--danger:hover:not(:disabled) { background-color: var(--kreati-severity-danger-light); }
 .k-button--text.k-button--danger:active:not(:disabled) { background-color: var(--kreati-severity-danger-light-hover); }
 
 .k-button--text:focus-visible {
   outline: 2px solid currentColor;
-  outline-offset: 2px;
+  outline-offset: 0.125rem;
 }
 
 /* ============================================

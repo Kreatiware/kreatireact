@@ -97,6 +97,14 @@
   --kreati-severity-danger-light: #3b0a0a;
   --kreati-severity-danger-light-hover: #5a1a1a;
 
+  /* ─── Severity: Accent (emerald) ──────────── */
+  --kreati-severity-accent: #34d399;
+  --kreati-severity-accent-hover: #2ab885;
+  --kreati-severity-accent-active: #209e71;
+  --kreati-severity-accent-text: #111827;
+  --kreati-severity-accent-light: #0a2e1f;
+  --kreati-severity-accent-light-hover: #103d2a;
+
   --kreati-shadow-none: none;
   --kreati-shadow-sm: 0 0 0 1px rgba(255, 255, 255, 0.06);
   --kreati-shadow-md: 0 0 0 1px rgba(255, 255, 255, 0.08);

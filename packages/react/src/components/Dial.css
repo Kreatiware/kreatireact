@@ -51,7 +51,7 @@
 
 .k-dial__svg:focus-visible {
   outline: 2px solid var(--kreati-severity-primary);
-  outline-offset: 2px;
+  outline-offset: 0.125rem;
   border-radius: var(--kreati-radius-full);
 }
 
@@ -99,8 +99,8 @@
    ============================================ */
 .k-dial__min-max {
   fill: var(--kreati-gray-500);
-  font-family: var(--kreati-font-family);
-  font-size: 8px;
+  font-family: var(--kreati-font-family-body);
+  font-size: var(--kreati-font-size-xxs);
   font-weight: var(--kreati-font-weight-medium);
   pointer-events: none;
 }

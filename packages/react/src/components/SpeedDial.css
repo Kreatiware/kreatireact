@@ -87,22 +87,22 @@
 
 /* Direction-specific initial offset + gap between items */
 .k-speeddial__actions--up > .k-speeddial__action {
-  transform: scale(0.3) translateY(12px);
+  transform: scale(0.3) translateY(0.75rem);
   margin: var(--kreati-space-1) 0;
 }
 
 .k-speeddial__actions--down > .k-speeddial__action {
-  transform: scale(0.3) translateY(-12px);
+  transform: scale(0.3) translateY(-0.75rem);
   margin: var(--kreati-space-1) 0;
 }
 
 .k-speeddial__actions--left > .k-speeddial__action {
-  transform: scale(0.3) translateX(12px);
+  transform: scale(0.3) translateX(0.75rem);
   margin: 0 var(--kreati-space-1);
 }
 
 .k-speeddial__actions--right > .k-speeddial__action {
-  transform: scale(0.3) translateX(-12px);
+  transform: scale(0.3) translateX(-0.75rem);
   margin: 0 var(--kreati-space-1);
 }
 

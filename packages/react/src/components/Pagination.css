@@ -11,11 +11,11 @@
 
 /* ─── Pagination — Sizes ─────────────────────────────────────────── */
 
-.k-pagination--xs .k-pagination__btn { width: 24px; height: 24px; font-size: var(--kreati-font-size-xxs); }
-.k-pagination--sm .k-pagination__btn { width: 28px; height: 28px; font-size: var(--kreati-font-size-xs); }
-.k-pagination--md .k-pagination__btn { width: 32px; height: 32px; font-size: var(--kreati-font-size-sm); }
-.k-pagination--lg .k-pagination__btn { width: 40px; height: 40px; font-size: var(--kreati-font-size-base); }
-.k-pagination--xl .k-pagination__btn { width: 48px; height: 48px; font-size: var(--kreati-font-size-lg); }
+.k-pagination--xs .k-pagination__btn { width: 1.5rem; height: 1.5rem; font-size: var(--kreati-font-size-xxs); }
+.k-pagination--sm .k-pagination__btn { width: 1.75rem; height: 1.75rem; font-size: var(--kreati-font-size-xs); }
+.k-pagination--md .k-pagination__btn { width: 2rem; height: 2rem; font-size: var(--kreati-font-size-sm); }
+.k-pagination--lg .k-pagination__btn { width: 2.5rem; height: 2.5rem; font-size: var(--kreati-font-size-base); }
+.k-pagination--xl .k-pagination__btn { width: 3rem; height: 3rem; font-size: var(--kreati-font-size-lg); }
 
 /* ─── Pagination — Button ────────────────────────────────────────── */
 
@@ -41,7 +41,7 @@
 
 .k-pagination__btn:focus-visible {
   outline: 2px solid var(--kreati-severity-primary);
-  outline-offset: 2px;
+  outline-offset: 0.125rem;
 }
 
 .k-pagination__btn--active {
@@ -70,7 +70,7 @@
   justify-content: center;
   color: var(--kreati-gray-400);
   user-select: none;
-  min-width: 24px;
+  min-width: 1.5rem;
 }
 
 /* ─── Pagination — Reduced motion ────────────────────────────────── */

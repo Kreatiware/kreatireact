@@ -23,7 +23,7 @@
    Variants
    ============================================ */
 .k-chip--primary   { background-color: var(--kreati-primary-50);      color: var(--kreati-primary-700); }
-.k-chip--secondary { background-color: var(--kreati-secondary-100);   color: var(--kreati-gray-800); }
+.k-chip--secondary { background-color: var(--kreati-accent-100);     color: var(--kreati-gray-800); }
 .k-chip--success   { background-color: var(--kreati-severity-success-light);  color: var(--kreati-severity-success-active); }
 .k-chip--warning   { background-color: var(--kreati-severity-warning-light);  color: var(--kreati-severity-warning-active); }
 .k-chip--error     { background-color: var(--kreati-severity-danger-light);   color: var(--kreati-severity-danger-active); }

@@ -18,7 +18,7 @@ export interface ProgressBarProps {
    */
   fillTemplate?: (props: { value: number; severity: string }) => React.ReactNode;
   /** Visual severity */
-  severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
   /** Height — CSS value */
   height?: string | number;
   /** Accessible label for screen readers */

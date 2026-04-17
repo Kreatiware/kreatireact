@@ -76,7 +76,7 @@ export interface DialProps {
   /** Success state */
   success?: boolean;
   /** Helper severity */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger';
+  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
   /** Disabled state */
   disabled?: boolean;
   /** Read-only state */

@@ -49,3 +49,4 @@
 .k-badge__dot--warning   { background-color: var(--kreati-severity-warning); }
 .k-badge__dot--help      { background-color: var(--kreati-severity-help); }
 .k-badge__dot--danger    { background-color: var(--kreati-severity-danger); }
+.k-badge__dot--accent    { background-color: var(--kreati-severity-accent); }

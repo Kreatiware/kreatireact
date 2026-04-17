@@ -33,7 +33,7 @@
 }
 
 .k-list__separator {
-  height: 1px;
+  height: 0.0625rem;
   background-color: var(--kreati-list-separator-color);
   margin: var(--kreati-space-1) 0;
   border: none;
@@ -84,7 +84,7 @@
 
 .k-list__item:focus-visible {
   outline: 2px solid var(--kreati-severity-primary);
-  outline-offset: -2px;
+  outline-offset: -0.125rem;
 }
 
 /* ============================================

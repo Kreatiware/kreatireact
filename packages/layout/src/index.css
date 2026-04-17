@@ -165,15 +165,53 @@
 .k-auto-rows-min { grid-auto-rows: min-content; }
 .k-auto-rows-max { grid-auto-rows: max-content; }
 
+/* ─── Grid — Template Rows ────────────────────────────────────────── */
+.k-grid-rows-1 { grid-template-rows: repeat(1, minmax(0, 1fr)); }
+.k-grid-rows-2 { grid-template-rows: repeat(2, minmax(0, 1fr)); }
+.k-grid-rows-3 { grid-template-rows: repeat(3, minmax(0, 1fr)); }
+.k-grid-rows-4 { grid-template-rows: repeat(4, minmax(0, 1fr)); }
+.k-grid-rows-5 { grid-template-rows: repeat(5, minmax(0, 1fr)); }
+.k-grid-rows-6 { grid-template-rows: repeat(6, minmax(0, 1fr)); }
+.k-grid-rows-none { grid-template-rows: none; }
+
+/* ─── Grid — Place ────────────────────────────────────────────────── */
+.k-place-items-center { place-items: center; }
+.k-place-items-start { place-items: start; }
+.k-place-items-end { place-items: end; }
+.k-place-items-stretch { place-items: stretch; }
+.k-place-content-center { place-content: center; }
+.k-place-content-start { place-content: start; }
+.k-place-content-end { place-content: end; }
+.k-place-content-between { place-content: space-between; }
+
+/* ─── Order ───────────────────────────────────────────────────────── */
+.k-order-first { order: -9999; }
+.k-order-last { order: 9999; }
+.k-order-none { order: 0; }
+.k-order-1 { order: 1; }
+.k-order-2 { order: 2; }
+.k-order-3 { order: 3; }
+.k-order-4 { order: 4; }
+.k-order-5 { order: 5; }
+.k-order-6 { order: 6; }
+
 /* ─── Typography — Font Sizes ─────────────────────────────────────── */
-.k-text-xxs  { font-size: var(--kreati-font-size-xxs); line-height: var(--kreati-line-height-xxs); }
-.k-text-xs   { font-size: var(--kreati-font-size-xs);  line-height: var(--kreati-line-height-xs); }
-.k-text-sm   { font-size: var(--kreati-font-size-sm);  line-height: var(--kreati-line-height-sm); }
+.k-text-xxs  { font-size: var(--kreati-font-size-xxs);  line-height: var(--kreati-line-height-xxs); }
+.k-text-xs   { font-size: var(--kreati-font-size-xs);   line-height: var(--kreati-line-height-xs); }
+.k-text-sm   { font-size: var(--kreati-font-size-sm);   line-height: var(--kreati-line-height-sm); }
 .k-text-base { font-size: var(--kreati-font-size-base); line-height: var(--kreati-line-height-base); }
-.k-text-md   { font-size: var(--kreati-font-size-md);  line-height: var(--kreati-line-height-md); }
-.k-text-lg   { font-size: var(--kreati-font-size-lg);  line-height: var(--kreati-line-height-lg); }
-.k-text-xl   { font-size: var(--kreati-font-size-xl);  line-height: var(--kreati-line-height-xl); }
-.k-text-xxl  { font-size: var(--kreati-font-size-xxl); line-height: var(--kreati-line-height-xxl); }
+.k-text-md   { font-size: var(--kreati-font-size-md);   line-height: var(--kreati-line-height-md); }
+.k-text-lg   { font-size: var(--kreati-font-size-lg);   line-height: var(--kreati-line-height-lg); }
+.k-text-xl   { font-size: var(--kreati-font-size-xl);   line-height: var(--kreati-line-height-xl); }
+.k-text-2xl  { font-size: var(--kreati-font-size-2xl);  line-height: var(--kreati-line-height-2xl); }
+.k-text-3xl  { font-size: var(--kreati-font-size-3xl);  line-height: var(--kreati-line-height-3xl); }
+.k-text-4xl  { font-size: var(--kreati-font-size-4xl);  line-height: var(--kreati-line-height-4xl); }
+.k-text-5xl  { font-size: var(--kreati-font-size-5xl);  line-height: var(--kreati-line-height-5xl); }
+
+/* ─── Typography — Font Families ──────────────────────────────────── */
+.k-font-display  { font-family: var(--kreati-font-family-display); }
+.k-font-body     { font-family: var(--kreati-font-family-body); }
+.k-font-mono     { font-family: var(--kreati-font-family-mono); }
 
 /* ─── Typography — Font Weights ───────────────────────────────────── */
 .k-font-light     { font-weight: var(--kreati-font-weight-light); }
@@ -220,7 +258,6 @@
 
 /* ─── Responsive: sm (640px) ──────────────────────────────────────── */
 @media (min-width: 640px) {
-  /* Flex */
   .k-sm\:flex { display: flex; }
   .k-sm\:inline-flex { display: inline-flex; }
   .k-sm\:flex-row { flex-direction: row; }
@@ -239,24 +276,43 @@
   .k-sm\:items-end { align-items: flex-end; }
   .k-sm\:items-center { align-items: center; }
   .k-sm\:items-stretch { align-items: stretch; }
-
-  /* Grid */
   .k-sm\:grid { display: grid; }
   .k-sm\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
   .k-sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .k-sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .k-sm\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .k-sm\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .k-sm\:grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .k-sm\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .k-sm\:grid-rows-1 { grid-template-rows: repeat(1, minmax(0, 1fr)); }
+  .k-sm\:grid-rows-2 { grid-template-rows: repeat(2, minmax(0, 1fr)); }
+  .k-sm\:grid-rows-3 { grid-template-rows: repeat(3, minmax(0, 1fr)); }
+  .k-sm\:grid-rows-4 { grid-template-rows: repeat(4, minmax(0, 1fr)); }
+  .k-sm\:grid-rows-5 { grid-template-rows: repeat(5, minmax(0, 1fr)); }
+  .k-sm\:grid-rows-6 { grid-template-rows: repeat(6, minmax(0, 1fr)); }
   .k-sm\:col-span-1 { grid-column: span 1 / span 1; }
   .k-sm\:col-span-2 { grid-column: span 2 / span 2; }
   .k-sm\:col-span-3 { grid-column: span 3 / span 3; }
   .k-sm\:col-span-4 { grid-column: span 4 / span 4; }
+  .k-sm\:col-span-5 { grid-column: span 5 / span 5; }
   .k-sm\:col-span-6 { grid-column: span 6 / span 6; }
+  .k-sm\:col-span-7 { grid-column: span 7 / span 7; }
+  .k-sm\:col-span-8 { grid-column: span 8 / span 8; }
+  .k-sm\:col-span-9 { grid-column: span 9 / span 9; }
+  .k-sm\:col-span-10 { grid-column: span 10 / span 10; }
+  .k-sm\:col-span-11 { grid-column: span 11 / span 11; }
   .k-sm\:col-span-12 { grid-column: span 12 / span 12; }
   .k-sm\:col-span-full { grid-column: 1 / -1; }
-
-  /* Gap */
+  .k-sm\:row-span-1 { grid-row: span 1 / span 1; }
+  .k-sm\:row-span-2 { grid-row: span 2 / span 2; }
+  .k-sm\:row-span-3 { grid-row: span 3 / span 3; }
+  .k-sm\:row-span-4 { grid-row: span 4 / span 4; }
+  .k-sm\:row-span-5 { grid-row: span 5 / span 5; }
+  .k-sm\:row-span-6 { grid-row: span 6 / span 6; }
+  .k-sm\:row-span-full { grid-row: 1 / -1; }
+  .k-sm\:order-first { order: -9999; }
+  .k-sm\:order-last { order: 9999; }
+  .k-sm\:order-none { order: 0; }
   .k-sm\:gap-0 { gap: var(--kreati-space-0); }
   .k-sm\:gap-1 { gap: var(--kreati-space-1); }
   .k-sm\:gap-2 { gap: var(--kreati-space-2); }
@@ -264,12 +320,11 @@
   .k-sm\:gap-4 { gap: var(--kreati-space-4); }
   .k-sm\:gap-6 { gap: var(--kreati-space-6); }
   .k-sm\:gap-8 { gap: var(--kreati-space-8); }
-
-  /* Typography */
   .k-sm\:text-sm { font-size: var(--kreati-font-size-sm); line-height: var(--kreati-line-height-sm); }
   .k-sm\:text-base { font-size: var(--kreati-font-size-base); line-height: var(--kreati-line-height-base); }
   .k-sm\:text-lg { font-size: var(--kreati-font-size-lg); line-height: var(--kreati-line-height-lg); }
   .k-sm\:text-xl { font-size: var(--kreati-font-size-xl); line-height: var(--kreati-line-height-xl); }
+  .k-sm\:text-2xl { font-size: var(--kreati-font-size-2xl); line-height: var(--kreati-line-height-2xl); }
   .k-sm\:text-left { text-align: left; }
   .k-sm\:text-center { text-align: center; }
   .k-sm\:text-right { text-align: right; }
@@ -277,7 +332,6 @@
 
 /* ─── Responsive: md (768px) ──────────────────────────────────────── */
 @media (min-width: 768px) {
-  /* Flex */
   .k-md\:flex { display: flex; }
   .k-md\:inline-flex { display: inline-flex; }
   .k-md\:flex-row { flex-direction: row; }
@@ -296,24 +350,43 @@
   .k-md\:items-end { align-items: flex-end; }
   .k-md\:items-center { align-items: center; }
   .k-md\:items-stretch { align-items: stretch; }
-
-  /* Grid */
   .k-md\:grid { display: grid; }
   .k-md\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
   .k-md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .k-md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .k-md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .k-md\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .k-md\:grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .k-md\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .k-md\:grid-rows-1 { grid-template-rows: repeat(1, minmax(0, 1fr)); }
+  .k-md\:grid-rows-2 { grid-template-rows: repeat(2, minmax(0, 1fr)); }
+  .k-md\:grid-rows-3 { grid-template-rows: repeat(3, minmax(0, 1fr)); }
+  .k-md\:grid-rows-4 { grid-template-rows: repeat(4, minmax(0, 1fr)); }
+  .k-md\:grid-rows-5 { grid-template-rows: repeat(5, minmax(0, 1fr)); }
+  .k-md\:grid-rows-6 { grid-template-rows: repeat(6, minmax(0, 1fr)); }
   .k-md\:col-span-1 { grid-column: span 1 / span 1; }
   .k-md\:col-span-2 { grid-column: span 2 / span 2; }
   .k-md\:col-span-3 { grid-column: span 3 / span 3; }
   .k-md\:col-span-4 { grid-column: span 4 / span 4; }
+  .k-md\:col-span-5 { grid-column: span 5 / span 5; }
   .k-md\:col-span-6 { grid-column: span 6 / span 6; }
+  .k-md\:col-span-7 { grid-column: span 7 / span 7; }
+  .k-md\:col-span-8 { grid-column: span 8 / span 8; }
+  .k-md\:col-span-9 { grid-column: span 9 / span 9; }
+  .k-md\:col-span-10 { grid-column: span 10 / span 10; }
+  .k-md\:col-span-11 { grid-column: span 11 / span 11; }
   .k-md\:col-span-12 { grid-column: span 12 / span 12; }
   .k-md\:col-span-full { grid-column: 1 / -1; }
-
-  /* Gap */
+  .k-md\:row-span-1 { grid-row: span 1 / span 1; }
+  .k-md\:row-span-2 { grid-row: span 2 / span 2; }
+  .k-md\:row-span-3 { grid-row: span 3 / span 3; }
+  .k-md\:row-span-4 { grid-row: span 4 / span 4; }
+  .k-md\:row-span-5 { grid-row: span 5 / span 5; }
+  .k-md\:row-span-6 { grid-row: span 6 / span 6; }
+  .k-md\:row-span-full { grid-row: 1 / -1; }
+  .k-md\:order-first { order: -9999; }
+  .k-md\:order-last { order: 9999; }
+  .k-md\:order-none { order: 0; }
   .k-md\:gap-0 { gap: var(--kreati-space-0); }
   .k-md\:gap-1 { gap: var(--kreati-space-1); }
   .k-md\:gap-2 { gap: var(--kreati-space-2); }
@@ -321,13 +394,14 @@
   .k-md\:gap-4 { gap: var(--kreati-space-4); }
   .k-md\:gap-6 { gap: var(--kreati-space-6); }
   .k-md\:gap-8 { gap: var(--kreati-space-8); }
-
-  /* Typography */
   .k-md\:text-sm { font-size: var(--kreati-font-size-sm); line-height: var(--kreati-line-height-sm); }
   .k-md\:text-base { font-size: var(--kreati-font-size-base); line-height: var(--kreati-line-height-base); }
   .k-md\:text-lg { font-size: var(--kreati-font-size-lg); line-height: var(--kreati-line-height-lg); }
   .k-md\:text-xl { font-size: var(--kreati-font-size-xl); line-height: var(--kreati-line-height-xl); }
-  .k-md\:text-xxl { font-size: var(--kreati-font-size-xxl); line-height: var(--kreati-line-height-xxl); }
+  .k-md\:text-2xl { font-size: var(--kreati-font-size-2xl); line-height: var(--kreati-line-height-2xl); }
+  .k-md\:text-3xl { font-size: var(--kreati-font-size-3xl); line-height: var(--kreati-line-height-3xl); }
+  .k-md\:text-4xl { font-size: var(--kreati-font-size-4xl); line-height: var(--kreati-line-height-4xl); }
+  .k-md\:text-5xl { font-size: var(--kreati-font-size-5xl); line-height: var(--kreati-line-height-5xl); }
   .k-md\:text-left { text-align: left; }
   .k-md\:text-center { text-align: center; }
   .k-md\:text-right { text-align: right; }
@@ -335,7 +409,6 @@
 
 /* ─── Responsive: lg (1024px) ─────────────────────────────────────── */
 @media (min-width: 1024px) {
-  /* Flex */
   .k-lg\:flex { display: flex; }
   .k-lg\:inline-flex { display: inline-flex; }
   .k-lg\:flex-row { flex-direction: row; }
@@ -354,8 +427,6 @@
   .k-lg\:items-end { align-items: flex-end; }
   .k-lg\:items-center { align-items: center; }
   .k-lg\:items-stretch { align-items: stretch; }
-
-  /* Grid */
   .k-lg\:grid { display: grid; }
   .k-lg\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
   .k-lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -364,15 +435,35 @@
   .k-lg\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .k-lg\:grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .k-lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .k-lg\:grid-rows-1 { grid-template-rows: repeat(1, minmax(0, 1fr)); }
+  .k-lg\:grid-rows-2 { grid-template-rows: repeat(2, minmax(0, 1fr)); }
+  .k-lg\:grid-rows-3 { grid-template-rows: repeat(3, minmax(0, 1fr)); }
+  .k-lg\:grid-rows-4 { grid-template-rows: repeat(4, minmax(0, 1fr)); }
+  .k-lg\:grid-rows-5 { grid-template-rows: repeat(5, minmax(0, 1fr)); }
+  .k-lg\:grid-rows-6 { grid-template-rows: repeat(6, minmax(0, 1fr)); }
   .k-lg\:col-span-1 { grid-column: span 1 / span 1; }
   .k-lg\:col-span-2 { grid-column: span 2 / span 2; }
   .k-lg\:col-span-3 { grid-column: span 3 / span 3; }
   .k-lg\:col-span-4 { grid-column: span 4 / span 4; }
+  .k-lg\:col-span-5 { grid-column: span 5 / span 5; }
   .k-lg\:col-span-6 { grid-column: span 6 / span 6; }
+  .k-lg\:col-span-7 { grid-column: span 7 / span 7; }
+  .k-lg\:col-span-8 { grid-column: span 8 / span 8; }
+  .k-lg\:col-span-9 { grid-column: span 9 / span 9; }
+  .k-lg\:col-span-10 { grid-column: span 10 / span 10; }
+  .k-lg\:col-span-11 { grid-column: span 11 / span 11; }
   .k-lg\:col-span-12 { grid-column: span 12 / span 12; }
   .k-lg\:col-span-full { grid-column: 1 / -1; }
-
-  /* Gap */
+  .k-lg\:row-span-1 { grid-row: span 1 / span 1; }
+  .k-lg\:row-span-2 { grid-row: span 2 / span 2; }
+  .k-lg\:row-span-3 { grid-row: span 3 / span 3; }
+  .k-lg\:row-span-4 { grid-row: span 4 / span 4; }
+  .k-lg\:row-span-5 { grid-row: span 5 / span 5; }
+  .k-lg\:row-span-6 { grid-row: span 6 / span 6; }
+  .k-lg\:row-span-full { grid-row: 1 / -1; }
+  .k-lg\:order-first { order: -9999; }
+  .k-lg\:order-last { order: 9999; }
+  .k-lg\:order-none { order: 0; }
   .k-lg\:gap-0 { gap: var(--kreati-space-0); }
   .k-lg\:gap-1 { gap: var(--kreati-space-1); }
   .k-lg\:gap-2 { gap: var(--kreati-space-2); }
@@ -380,13 +471,14 @@
   .k-lg\:gap-4 { gap: var(--kreati-space-4); }
   .k-lg\:gap-6 { gap: var(--kreati-space-6); }
   .k-lg\:gap-8 { gap: var(--kreati-space-8); }
-
-  /* Typography */
   .k-lg\:text-sm { font-size: var(--kreati-font-size-sm); line-height: var(--kreati-line-height-sm); }
   .k-lg\:text-base { font-size: var(--kreati-font-size-base); line-height: var(--kreati-line-height-base); }
   .k-lg\:text-lg { font-size: var(--kreati-font-size-lg); line-height: var(--kreati-line-height-lg); }
   .k-lg\:text-xl { font-size: var(--kreati-font-size-xl); line-height: var(--kreati-line-height-xl); }
-  .k-lg\:text-xxl { font-size: var(--kreati-font-size-xxl); line-height: var(--kreati-line-height-xxl); }
+  .k-lg\:text-2xl { font-size: var(--kreati-font-size-2xl); line-height: var(--kreati-line-height-2xl); }
+  .k-lg\:text-3xl { font-size: var(--kreati-font-size-3xl); line-height: var(--kreati-line-height-3xl); }
+  .k-lg\:text-4xl { font-size: var(--kreati-font-size-4xl); line-height: var(--kreati-line-height-4xl); }
+  .k-lg\:text-5xl { font-size: var(--kreati-font-size-5xl); line-height: var(--kreati-line-height-5xl); }
   .k-lg\:text-left { text-align: left; }
   .k-lg\:text-center { text-align: center; }
   .k-lg\:text-right { text-align: right; }
@@ -395,15 +487,23 @@
 /* ─── Responsive: xl (1280px) ─────────────────────────────────────── */
 @media (min-width: 1280px) {
   .k-xl\:flex { display: flex; }
+  .k-xl\:inline-flex { display: inline-flex; }
   .k-xl\:flex-row { flex-direction: row; }
   .k-xl\:flex-col { flex-direction: column; }
+  .k-xl\:flex-row-reverse { flex-direction: row-reverse; }
+  .k-xl\:flex-col-reverse { flex-direction: column-reverse; }
+  .k-xl\:flex-wrap { flex-wrap: wrap; }
+  .k-xl\:flex-nowrap { flex-wrap: nowrap; }
   .k-xl\:justify-start { justify-content: flex-start; }
   .k-xl\:justify-end { justify-content: flex-end; }
   .k-xl\:justify-center { justify-content: center; }
   .k-xl\:justify-between { justify-content: space-between; }
+  .k-xl\:justify-around { justify-content: space-around; }
+  .k-xl\:justify-evenly { justify-content: space-evenly; }
+  .k-xl\:items-start { align-items: flex-start; }
+  .k-xl\:items-end { align-items: flex-end; }
   .k-xl\:items-center { align-items: center; }
   .k-xl\:items-stretch { align-items: stretch; }
-
   .k-xl\:grid { display: grid; }
   .k-xl\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
   .k-xl\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -412,13 +512,53 @@
   .k-xl\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .k-xl\:grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .k-xl\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .k-xl\:grid-rows-1 { grid-template-rows: repeat(1, minmax(0, 1fr)); }
+  .k-xl\:grid-rows-2 { grid-template-rows: repeat(2, minmax(0, 1fr)); }
+  .k-xl\:grid-rows-3 { grid-template-rows: repeat(3, minmax(0, 1fr)); }
+  .k-xl\:grid-rows-4 { grid-template-rows: repeat(4, minmax(0, 1fr)); }
+  .k-xl\:grid-rows-5 { grid-template-rows: repeat(5, minmax(0, 1fr)); }
+  .k-xl\:grid-rows-6 { grid-template-rows: repeat(6, minmax(0, 1fr)); }
+  .k-xl\:col-span-1 { grid-column: span 1 / span 1; }
+  .k-xl\:col-span-2 { grid-column: span 2 / span 2; }
+  .k-xl\:col-span-3 { grid-column: span 3 / span 3; }
+  .k-xl\:col-span-4 { grid-column: span 4 / span 4; }
+  .k-xl\:col-span-5 { grid-column: span 5 / span 5; }
+  .k-xl\:col-span-6 { grid-column: span 6 / span 6; }
+  .k-xl\:col-span-7 { grid-column: span 7 / span 7; }
+  .k-xl\:col-span-8 { grid-column: span 8 / span 8; }
+  .k-xl\:col-span-9 { grid-column: span 9 / span 9; }
+  .k-xl\:col-span-10 { grid-column: span 10 / span 10; }
+  .k-xl\:col-span-11 { grid-column: span 11 / span 11; }
+  .k-xl\:col-span-12 { grid-column: span 12 / span 12; }
   .k-xl\:col-span-full { grid-column: 1 / -1; }
-
+  .k-xl\:row-span-1 { grid-row: span 1 / span 1; }
+  .k-xl\:row-span-2 { grid-row: span 2 / span 2; }
+  .k-xl\:row-span-3 { grid-row: span 3 / span 3; }
+  .k-xl\:row-span-4 { grid-row: span 4 / span 4; }
+  .k-xl\:row-span-5 { grid-row: span 5 / span 5; }
+  .k-xl\:row-span-6 { grid-row: span 6 / span 6; }
+  .k-xl\:row-span-full { grid-row: 1 / -1; }
+  .k-xl\:order-first { order: -9999; }
+  .k-xl\:order-last { order: 9999; }
+  .k-xl\:order-none { order: 0; }
   .k-xl\:gap-0 { gap: var(--kreati-space-0); }
+  .k-xl\:gap-1 { gap: var(--kreati-space-1); }
   .k-xl\:gap-2 { gap: var(--kreati-space-2); }
+  .k-xl\:gap-3 { gap: var(--kreati-space-3); }
   .k-xl\:gap-4 { gap: var(--kreati-space-4); }
   .k-xl\:gap-6 { gap: var(--kreati-space-6); }
   .k-xl\:gap-8 { gap: var(--kreati-space-8); }
+  .k-xl\:text-sm { font-size: var(--kreati-font-size-sm); line-height: var(--kreati-line-height-sm); }
+  .k-xl\:text-base { font-size: var(--kreati-font-size-base); line-height: var(--kreati-line-height-base); }
+  .k-xl\:text-lg { font-size: var(--kreati-font-size-lg); line-height: var(--kreati-line-height-lg); }
+  .k-xl\:text-xl { font-size: var(--kreati-font-size-xl); line-height: var(--kreati-line-height-xl); }
+  .k-xl\:text-2xl { font-size: var(--kreati-font-size-2xl); line-height: var(--kreati-line-height-2xl); }
+  .k-xl\:text-3xl { font-size: var(--kreati-font-size-3xl); line-height: var(--kreati-line-height-3xl); }
+  .k-xl\:text-4xl { font-size: var(--kreati-font-size-4xl); line-height: var(--kreati-line-height-4xl); }
+  .k-xl\:text-5xl { font-size: var(--kreati-font-size-5xl); line-height: var(--kreati-line-height-5xl); }
+  .k-xl\:text-left { text-align: left; }
+  .k-xl\:text-center { text-align: center; }
+  .k-xl\:text-right { text-align: right; }
 }
 
 /* ─── Padding ─────────────────────────────────────────────────────── */

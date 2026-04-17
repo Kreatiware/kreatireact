@@ -26,6 +26,7 @@
 .k-tag--warning   { background: var(--kreati-severity-warning-light); color: var(--kreati-severity-warning); }
 .k-tag--help      { background: var(--kreati-severity-help-light); color: var(--kreati-severity-help); }
 .k-tag--danger    { background: var(--kreati-severity-danger-light); color: var(--kreati-severity-danger); }
+.k-tag--accent    { background: var(--kreati-severity-accent-light); color: var(--kreati-severity-accent); }
 
 .k-tag__icon { display: inline-flex; flex-shrink: 0; }
 
@@ -40,8 +41,8 @@
   cursor: pointer;
   opacity: 0.6;
   border-radius: var(--kreati-radius-full);
-  width: 14px;
-  height: 14px;
+  width: 0.875rem;
+  height: 0.875rem;
   transition: opacity 0.15s ease;
 }
 
