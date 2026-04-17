@@ -1,6 +1,6 @@
 {
   "name": "@kreatiware/layout",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Sistema de utilities CSS: Flex, Grid, Spacing y Tipografia",
   "main": "dist/index.css",
   "style": "dist/index.css",

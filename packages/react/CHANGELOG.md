@@ -1,5 +1,12 @@
 # @kreatiware/react
 
+## 0.13.0
+
+### Minor Changes
+
+- ee13222: feat(react): add themes, fix datatable
+- 010f83d: feat(react): new build
+
 ## 0.12.1
 
 ### Patch Changes

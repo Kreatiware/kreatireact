@@ -1,5 +1,11 @@
 # @kreatiware/layout
 
+## 0.5.0
+
+### Minor Changes
+
+- 0c7edb2: feat(layout): add all clases base
+
 ## 0.4.1
 
 ### Patch Changes
