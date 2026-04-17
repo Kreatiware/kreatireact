@@ -3,10 +3,6 @@ import '../../../packages/react/src/styles/variables.css';
 import '../../../packages/react/src/styles/reset.css';
 import '../../../packages/react/src/themes/all.css';
 import '../../../packages/layout/src/index.css';
-import '../../../packages/react/src/components/NavigationBar.css';
-import '../../../packages/react/src/components/Badge.css';
-import '../../../packages/react/src/components/Button.css';
-import '../../../packages/react/src/components/HeroSection.css';
 
 const preview: Preview = {
   parameters: {

@@ -136,10 +136,10 @@ export const ContainerReference: Story = {
   render: () => (
     <Table title="Container" rows={[
       ['k-container', 'width: 100%; margin: 0 auto; padding: 0 var(--kreati-space-4)'],
-      ['k-container-sm', 'max-width: var(--kreati-max-width-sm) [640px]'],
-      ['k-container-md', 'max-width: var(--kreati-max-width-md) [768px]'],
-      ['k-container-lg', 'max-width: var(--kreati-max-width-lg) [1024px]'],
-      ['k-container-xl', 'max-width: var(--kreati-max-width-xl) [1280px]'],
+      ['k-container-sm', 'max-width: var(--kreati-max-width-sm) [40rem]'],
+      ['k-container-md', 'max-width: var(--kreati-max-width-md) [48rem]'],
+      ['k-container-lg', 'max-width: var(--kreati-max-width-lg) [64rem]'],
+      ['k-container-xl', 'max-width: var(--kreati-max-width-xl) [75rem]'],
     ]} />
   ),
 };

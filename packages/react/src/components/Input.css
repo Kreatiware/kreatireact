@@ -52,6 +52,24 @@
   color: var(--kreati-gray-400);
 }
 
+/* ============================================
+   Autofill — override browser yellow background
+   ============================================ */
+.k-input__native:-webkit-autofill,
+.k-input__native:-webkit-autofill:hover,
+.k-input__native:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--kreati-gray-900);
+  -webkit-box-shadow: 0 0 0 0 transparent inset;
+  background-color: transparent !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+/* Propagate autofill tint to the container so there is no inner rectangle */
+.k-input__fieldset:has(.k-input__native:-webkit-autofill),
+.k-input__container:has(.k-input__native:-webkit-autofill) {
+  background-color: var(--kreati-autofill-bg, rgb(232, 240, 254));
+}
+
 /* In floating mode, hide placeholder when label is in resting position (not focused, no value) */
 .k-input__fieldset .k-input__native:not(:focus)::placeholder {
   color: transparent;

@@ -40,6 +40,7 @@ export default defineConfig({
           'react-dom': 'ReactDOM',
           '@kreatiware/icons': 'KreatiIcons',
         },
+        banner: '"use client";',
       },
     },
   },

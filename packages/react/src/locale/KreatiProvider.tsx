@@ -100,6 +100,7 @@ export const KreatiProvider: React.FC<KreatiProviderProps> = ({
       common: { ...en.common, ...locale.common },
       itemPicker: { ...en.itemPicker, ...locale.itemPicker },
       dataTable: { ...en.dataTable, ...locale.dataTable },
+      emptyState: { ...en.emptyState, ...locale.emptyState },
     };
   }, [locale]);
 

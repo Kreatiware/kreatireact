@@ -136,3 +136,73 @@ export const AutoFlow: Story = {
     </div>
   ),
 };
+
+export const GridRows: Story = {
+  name: 'Grid Rows',
+  render: () => (
+    <div>
+      <Section>
+        <Label>.k-grid .k-grid-cols-3 .k-grid-rows-2 .k-gap-2 (explicit 3x2 grid)</Label>
+        <div className="k-grid k-grid-cols-3 k-grid-rows-2 k-gap-2">
+          {Array.from({ length: 6 }, (_, i) => <Cell key={i}>{i + 1}</Cell>)}
+        </div>
+      </Section>
+      <Section>
+        <Label>Bento layout: grid-cols-4 grid-rows-3 with row-spans</Label>
+        <div className="k-grid k-grid-cols-4 k-grid-rows-3 k-gap-2" style={{ height: 300 }}>
+          <div className="k-col-span-2 k-row-span-2" style={{ background: 'var(--kreati-severity-primary)', color: 'var(--kreati-white)', padding: 'var(--kreati-space-3)', borderRadius: 'var(--kreati-radius-sm)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 'var(--kreati-font-size-sm)' }}>Featured (2x2)</div>
+          <Cell>A</Cell>
+          <Cell>B</Cell>
+          <Cell>C</Cell>
+          <Cell>D</Cell>
+          <Cell span="k-col-span-2">Wide (span-2)</Cell>
+        </div>
+      </Section>
+    </div>
+  ),
+};
+
+export const PlaceUtilities: Story = {
+  name: 'Place Items / Content',
+  render: () => (
+    <div>
+      <Section>
+        <Label>.k-grid .k-grid-cols-3 .k-place-items-center (all items centered)</Label>
+        <div className="k-grid k-grid-cols-3 k-gap-2 k-place-items-center" style={{ height: 150, border: '1px dashed var(--kreati-gray-300)', borderRadius: 'var(--kreati-radius-sm)' }}>
+          <Cell>A</Cell>
+          <Cell>B</Cell>
+          <Cell>C</Cell>
+        </div>
+      </Section>
+      <Section>
+        <Label>.k-place-content-center (whole grid centered in container)</Label>
+        <div className="k-grid k-grid-cols-2 k-gap-2 k-place-content-center" style={{ height: 200, border: '1px dashed var(--kreati-gray-300)', borderRadius: 'var(--kreati-radius-sm)' }}>
+          <Cell>A</Cell>
+          <Cell>B</Cell>
+        </div>
+      </Section>
+    </div>
+  ),
+};
+
+export const Order: Story = {
+  render: () => (
+    <div>
+      <Section>
+        <Label>.k-order-last / .k-order-first (reorder items)</Label>
+        <div className="k-flex k-gap-2">
+          <div className="k-order-last" style={{ background: 'var(--kreati-severity-danger)', color: 'var(--kreati-white)', padding: 'var(--kreati-space-3)', borderRadius: 'var(--kreati-radius-sm)', fontSize: 'var(--kreati-font-size-xs)' }}>1st in DOM, order-last</div>
+          <Cell>2nd</Cell>
+          <div className="k-order-first" style={{ background: 'var(--kreati-severity-success)', color: 'var(--kreati-white)', padding: 'var(--kreati-space-3)', borderRadius: 'var(--kreati-radius-sm)', fontSize: 'var(--kreati-font-size-xs)' }}>3rd in DOM, order-first</div>
+        </div>
+      </Section>
+      <Section>
+        <Label>Responsive: sidebar left on desktop, below content on mobile</Label>
+        <div className="k-flex k-flex-col md:k-flex-row k-gap-2">
+          <div className="k-order-last md:k-order-first" style={{ background: 'var(--kreati-gray-100)', padding: 'var(--kreati-space-4)', borderRadius: 'var(--kreati-radius-sm)', minWidth: 120, fontSize: 'var(--kreati-font-size-xs)' }}>Sidebar</div>
+          <div style={{ flex: 1, background: 'var(--kreati-severity-primary-light)', padding: 'var(--kreati-space-4)', borderRadius: 'var(--kreati-radius-sm)', fontSize: 'var(--kreati-font-size-xs)' }}>Main Content</div>
+        </div>
+      </Section>
+    </div>
+  ),
+};

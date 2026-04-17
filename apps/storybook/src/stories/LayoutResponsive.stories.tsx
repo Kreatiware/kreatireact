@@ -7,7 +7,7 @@ const meta = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'Responsive utilities with breakpoint prefixes: sm: (640px), md: (768px), lg: (1024px), xl: (1280px). Resize the browser to see changes.',
+        component: 'Responsive utilities with breakpoint prefixes: sm: (40rem), md: (48rem), lg: (64rem), xl: (80rem). Resize the browser to see changes.',
       },
     },
   },
@@ -117,4 +117,77 @@ export const CardLayout: Story = {
       </div>
     </Section>
   ),
+};
+
+export const ResponsiveOrder: Story = {
+  name: 'Responsive Order',
+  render: () => (
+    <div style={{ marginBottom: 'var(--kreati-space-8)' }}>
+      <Label>Sidebar last on mobile, first on md+ (.k-order-last .md:k-order-first)</Label>
+      <div className="k-flex k-flex-col md:k-flex-row k-gap-3">
+        <div className="k-order-last md:k-order-first" style={{ background: 'var(--kreati-gray-100)', padding: 'var(--kreati-space-4)', borderRadius: 'var(--kreati-radius-sm)', minWidth: 150, fontFamily: 'var(--kreati-font-family)', fontSize: 'var(--kreati-font-size-xs)' }}>
+          Sidebar (order-last on mobile, order-first on md+)
+        </div>
+        <div style={{ flex: 1, background: 'var(--kreati-severity-primary-light)', padding: 'var(--kreati-space-4)', borderRadius: 'var(--kreati-radius-sm)', fontFamily: 'var(--kreati-font-family)', fontSize: 'var(--kreati-font-size-xs)' }}>
+          Main Content
+        </div>
+      </div>
+    </div>
+  ),
+};
+
+export const ResponsiveGridRows: Story = {
+  name: 'Responsive Grid Rows',
+  render: () => (
+    <div>
+      <Label>1 col on mobile, 2x3 bento on md+ (.k-grid-cols-1 .md:k-grid-cols-2 .md:k-grid-rows-3)</Label>
+      <div className="k-grid k-grid-cols-1 md:k-grid-cols-2 md:k-grid-rows-3 k-gap-3" style={{ height: 300 }}>
+        <Cell color="var(--kreati-severity-primary)">1</Cell>
+        <div className="md:k-row-span-2" style={{ background: 'var(--kreati-severity-accent)', color: 'var(--kreati-severity-accent-text)', padding: 'var(--kreati-space-3)', borderRadius: 'var(--kreati-radius-sm)', fontFamily: 'var(--kreati-font-family)', fontSize: 'var(--kreati-font-size-xs)', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          Featured (row-span-2 on md+)
+        </div>
+        <Cell color="var(--kreati-severity-info)">3</Cell>
+        <Cell color="var(--kreati-severity-success)">4</Cell>
+      </div>
+    </div>
+  ),
+};
+
+export const BreakpointParity: Story = {
+  name: 'Breakpoint Parity',
+  render: () => {
+    const features = [
+      'flex, inline-flex, direction, wrap, justify, align',
+      'grid, grid-cols 1-12, grid-rows 1-6',
+      'col-span 1-12+full, row-span 1-6+full',
+      'order-first, order-last, order-none',
+      'gap 0-8',
+      'text sm-5xl, text-left/center/right',
+    ];
+    return (
+      <div>
+        <Label>All 4 breakpoints (sm, md, lg, xl) have identical feature coverage:</Label>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'var(--kreati-font-family)', fontSize: 'var(--kreati-font-size-xs)' }}>
+          <thead>
+            <tr>
+              <th style={{ textAlign: 'left', padding: 'var(--kreati-space-2)', borderBottom: '2px solid var(--kreati-gray-200)' }}>Feature</th>
+              {['sm', 'md', 'lg', 'xl'].map((bp) => (
+                <th key={bp} style={{ textAlign: 'center', padding: 'var(--kreati-space-2)', borderBottom: '2px solid var(--kreati-gray-200)' }}>{bp}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {features.map((f) => (
+              <tr key={f}>
+                <td style={{ padding: 'var(--kreati-space-2)', borderBottom: '1px solid var(--kreati-gray-100)' }}>{f}</td>
+                {['sm', 'md', 'lg', 'xl'].map((bp) => (
+                  <td key={bp} style={{ textAlign: 'center', padding: 'var(--kreati-space-2)', borderBottom: '1px solid var(--kreati-gray-100)', color: 'var(--kreati-severity-success)' }}>Yes</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  },
 };

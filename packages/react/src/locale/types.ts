@@ -66,6 +66,13 @@ export interface KreatiLocale {
     filterOptions: string;
     increment: string;
     decrement: string;
+    carousel: string;
+    previous: string;
+    next: string;
+    page: string;
+    copy: string;
+    copied: string;
+    code: string;
   };
   /** Message component */
   message: {
@@ -78,6 +85,11 @@ export interface KreatiLocale {
   /** Dial component */
   dial: {
     ariaLabel: string;
+  };
+  /** EmptyState component */
+  emptyState: {
+    title: string;
+    description: string;
   };
   /** Rating component */
   rating: {

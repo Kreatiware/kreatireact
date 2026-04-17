@@ -392,6 +392,16 @@
   --kreati-tooltip-arrow-size: 0.3125rem;
   --kreati-tooltip-transition-duration: 0.15s;
 
+  /* ─── Component Tokens — Carousel ────────────────────────────────────── */
+  --kreati-carousel-transition-duration: 0.3s;
+
+  /* ─── Component Tokens — SegmentedControl ───────────────────────────── */
+  --kreati-segmented-track-padding: var(--kreati-space-1);
+  --kreati-segmented-slim-padding: 0.125rem;
+
+  /* ─── Component Tokens — Input Autofill ────────────────────────────── */
+  --kreati-autofill-bg: rgb(232, 240, 254);
+
   /* ─── Component Tokens — ScrollArea ──────────────────────────────────── */
   --kreati-scroll-size-sm: 0.375rem;
   --kreati-scroll-size-md: 0.5rem;
@@ -651,4 +661,26 @@
   --kreati-timeline-connector-color: var(--kreati-gray-200);
   --kreati-timeline-gap: var(--kreati-space-3);
   --kreati-timeline-item-spacing: var(--kreati-space-6);
+
+  /* ─── Component Tokens — CodeBlock ─────────────────────────────────── */
+  --kreati-code-bg: var(--kreati-gray-900);
+  --kreati-code-color: var(--kreati-gray-100);
+  --kreati-code-header-bg: var(--kreati-gray-800);
+  --kreati-code-header-color: var(--kreati-gray-400);
+  --kreati-code-line-number-color: var(--kreati-gray-600);
+  --kreati-code-radius: var(--kreati-radius-md);
+  --kreati-code-font-size: var(--kreati-font-size-xs);
+  --kreati-code-line-height: var(--kreati-preset-code-line-height);
+  --kreati-code-keyword: #c678dd;
+  --kreati-code-string: #98c379;
+  --kreati-code-number: #d19a66;
+  --kreati-code-comment: #5c6370;
+  --kreati-code-tag: #e06c75;
+  --kreati-code-attr: #d19a66;
+  --kreati-code-attr-value: #98c379;
+  --kreati-code-property: #e06c75;
+  --kreati-code-selector: #e06c75;
+  --kreati-code-function: #61afef;
+  --kreati-code-operator: #56b6c2;
+  --kreati-code-punctuation: var(--kreati-gray-500);
 }

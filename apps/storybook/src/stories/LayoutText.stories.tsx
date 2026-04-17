@@ -123,3 +123,65 @@ export const ScreenReaderOnly: Story = {
     </div>
   ),
 };
+
+export const FontSizeClasses: Story = {
+  name: 'Font Size Classes',
+  render: () => (
+    <div>
+      {['xxs', 'xs', 'sm', 'base', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl'].map((s) => (
+        <div key={s} style={{ marginBottom: 'var(--kreati-space-2)', display: 'flex', alignItems: 'baseline', gap: 'var(--kreati-space-4)' }}>
+          <code style={{ ...base, fontSize: 'var(--kreati-font-size-xxs)', color: 'var(--kreati-gray-400)', fontFamily: 'var(--kreati-font-family-mono)', minWidth: 100 }}>.k-text-{s}</code>
+          <span className={`k-text-${s}`}>The quick brown fox</span>
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+export const FontFamilyClasses: Story = {
+  name: 'Font Family Classes',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--kreati-space-4)' }}>
+      {[
+        { cls: 'k-font-display', label: '.k-font-display (Raleway)' },
+        { cls: 'k-font-body', label: '.k-font-body (Inter)' },
+        { cls: 'k-font-mono', label: '.k-font-mono (JetBrains Mono)' },
+      ].map(({ cls, label: l }) => (
+        <div key={cls}>
+          <code style={{ fontSize: 'var(--kreati-font-size-xxs)', color: 'var(--kreati-gray-400)', fontFamily: 'var(--kreati-font-family-mono)' }}>{l}</code>
+          <div className={`${cls} k-text-xl`} style={{ marginTop: 'var(--kreati-space-1)' }}>
+            The quick brown fox jumps over the lazy dog — 0123456789
+          </div>
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+export const FontWeightClasses: Story = {
+  name: 'Font Weight Classes',
+  render: () => (
+    <div>
+      {['light', 'regular', 'medium', 'semibold', 'bold', 'extrabold'].map((w) => (
+        <div key={w} style={{ marginBottom: 'var(--kreati-space-2)', display: 'flex', alignItems: 'baseline', gap: 'var(--kreati-space-4)' }}>
+          <code style={{ ...base, fontSize: 'var(--kreati-font-size-xxs)', color: 'var(--kreati-gray-400)', fontFamily: 'var(--kreati-font-family-mono)', minWidth: 120 }}>.k-font-{w}</code>
+          <span className={`k-font-${w} k-text-lg`}>The quick brown fox</span>
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+export const TrackingClasses: Story = {
+  name: 'Tracking Classes',
+  render: () => (
+    <div>
+      {['tighter', 'tight', 'normal', 'wide', 'wider', 'widest'].map((t) => (
+        <div key={t} style={{ marginBottom: 'var(--kreati-space-2)', display: 'flex', alignItems: 'baseline', gap: 'var(--kreati-space-4)' }}>
+          <code style={{ ...base, fontSize: 'var(--kreati-font-size-xxs)', color: 'var(--kreati-gray-400)', fontFamily: 'var(--kreati-font-family-mono)', minWidth: 130 }}>.k-tracking-{t}</code>
+          <span className={`k-tracking-${t} k-text-base ${t === 'widest' ? 'k-uppercase' : ''}`}>The quick brown fox</span>
+        </div>
+      ))}
+    </div>
+  ),
+};

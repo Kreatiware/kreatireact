@@ -1107,15 +1107,15 @@
 .k-border-gray-400 { border-color: var(--kreati-gray-400); }
 
 /* ─── Auto-fit / Auto-fill Grids ──────────────────────────────────── */
-.k-grid-auto-fit-xs { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
-.k-grid-auto-fit-sm { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-.k-grid-auto-fit-md { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-.k-grid-auto-fit-lg { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.k-grid-auto-fit-xs { grid-template-columns: repeat(auto-fit, minmax(9.375rem, 1fr)); }
+.k-grid-auto-fit-sm { grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr)); }
+.k-grid-auto-fit-md { grid-template-columns: repeat(auto-fit, minmax(15.625rem, 1fr)); }
+.k-grid-auto-fit-lg { grid-template-columns: repeat(auto-fit, minmax(18.75rem, 1fr)); }
 
-.k-grid-auto-fill-xs { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
-.k-grid-auto-fill-sm { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
-.k-grid-auto-fill-md { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
-.k-grid-auto-fill-lg { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+.k-grid-auto-fill-xs { grid-template-columns: repeat(auto-fill, minmax(9.375rem, 1fr)); }
+.k-grid-auto-fill-sm { grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr)); }
+.k-grid-auto-fill-md { grid-template-columns: repeat(auto-fill, minmax(15.625rem, 1fr)); }
+.k-grid-auto-fill-lg { grid-template-columns: repeat(auto-fill, minmax(18.75rem, 1fr)); }
 
 /* ─── CSS Columns (Masonry) ───────────────────────────────────────── */
 .k-columns-1 { columns: 1; }

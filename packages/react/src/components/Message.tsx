@@ -44,6 +44,7 @@ const SEVERITY_ICONS: Record<MessageSeverity, string> = {
   warning: EXCLAMATION_TRIANGLE_PATH,
   help: HELP_CIRCLE_PATH,
   danger: TIMES_PATH,
+  accent: INFO_CIRCLE_PATH,
 };
 
 const iconSvg = (path: string) => (

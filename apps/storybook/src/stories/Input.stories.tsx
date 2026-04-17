@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Input } from '../../../../packages/react/src/components/Input';
+import { InputMask } from '../../../../packages/react/src/components/InputMask';
 import { FieldWrapper } from '../../../../packages/react/src/components/FieldWrapper';
 import { Check, ArrowRight, Times, Icon } from '../../../../packages/icons/src';
 
@@ -256,6 +257,62 @@ export const DecimalSeparator: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, width: 320, paddingTop: 12 }}>
       <Input label="Dot (default)" type="number" size="md" step="0.01" helperText="Type 3.14" />
       <Input label="Comma" type="number" size="md" decimalSeparator="," helperText="Type 3,14 — only digits and comma allowed" />
+    </div>
+  ),
+};
+
+export const BrowserAutofill: Story = {
+  name: 'Browser autofill',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32, paddingTop: 12 }}>
+      <style>{`
+        .k-autofill-broken .k-input__native {
+          background-color: rgb(232, 240, 254) !important;
+          transition: none !important;
+        }
+        .k-autofill-fixed .k-input__native {
+          background-color: transparent !important;
+        }
+        .k-autofill-fixed .k-input__fieldset,
+        .k-autofill-fixed .k-input__container {
+          background-color: var(--kreati-autofill-bg);
+        }
+      `}</style>
+
+      <p style={{ fontSize: 'var(--kreati-font-size-xs)', color: 'var(--kreati-gray-500)', margin: 0, maxWidth: 640 }}>
+        Left: Chrome autofill without fix (blue rectangle only on the inner input).
+        Center: with fix (entire fieldset takes the autofill color).
+        Right: normal inputs.
+      </p>
+
+      <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap' }}>
+        <div className="k-autofill-broken" style={{ display: 'flex', flexDirection: 'column', gap: 20, width: 280 }}>
+          <strong style={{ fontSize: 'var(--kreati-font-size-sm)', color: 'var(--kreati-severity-danger)' }}>Broken (no fix)</strong>
+          <Input label="Username" defaultValue="[name]" />
+          <Input label="Email" type="email" defaultValue="[email]" />
+          <Input label="Password" type="password" defaultValue="secret123" />
+          <Input label="Stacked" defaultValue="[name]" variant="stacked" />
+          <InputMask label="Phone" mask="(999) 999-9999" defaultValue="(555) 123-4567" />
+        </div>
+
+        <div className="k-autofill-fixed" style={{ display: 'flex', flexDirection: 'column', gap: 20, width: 280 }}>
+          <strong style={{ fontSize: 'var(--kreati-font-size-sm)', color: 'var(--kreati-severity-success)' }}>Fixed (propagated)</strong>
+          <Input label="Username" defaultValue="[name]" />
+          <Input label="Email" type="email" defaultValue="[email]" />
+          <Input label="Password" type="password" defaultValue="secret123" />
+          <Input label="Stacked" defaultValue="[name]" variant="stacked" />
+          <InputMask label="Phone" mask="(999) 999-9999" defaultValue="(555) 123-4567" />
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20, width: 280 }}>
+          <strong style={{ fontSize: 'var(--kreati-font-size-sm)', color: 'var(--kreati-gray-500)' }}>Normal</strong>
+          <Input label="Username" defaultValue="[name]" />
+          <Input label="Email" type="email" defaultValue="[email]" />
+          <Input label="Password" type="password" defaultValue="secret123" />
+          <Input label="Stacked" defaultValue="[name]" variant="stacked" />
+          <InputMask label="Phone" mask="(999) 999-9999" defaultValue="(555) 123-4567" />
+        </div>
+      </div>
     </div>
   ),
 };

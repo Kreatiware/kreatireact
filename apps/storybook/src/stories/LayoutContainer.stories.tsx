@@ -28,22 +28,22 @@ export const Containers: Story = {
     <div style={{ fontFamily: 'var(--kreati-font-family)' }}>
       <div style={{ background: 'var(--kreati-gray-100)', padding: 'var(--kreati-space-4)', marginBottom: 'var(--kreati-space-4)' }}>
         <div className="k-container k-container-sm">
-          <Box>.k-container.k-container-sm (max-width: 640px)</Box>
+          <Box>.k-container.k-container-sm (max-width: 40rem)</Box>
         </div>
       </div>
       <div style={{ background: 'var(--kreati-gray-100)', padding: 'var(--kreati-space-4)', marginBottom: 'var(--kreati-space-4)' }}>
         <div className="k-container k-container-md">
-          <Box>.k-container.k-container-md (max-width: 768px)</Box>
+          <Box>.k-container.k-container-md (max-width: 48rem)</Box>
         </div>
       </div>
       <div style={{ background: 'var(--kreati-gray-100)', padding: 'var(--kreati-space-4)', marginBottom: 'var(--kreati-space-4)' }}>
         <div className="k-container k-container-lg">
-          <Box>.k-container.k-container-lg (max-width: 1024px)</Box>
+          <Box>.k-container.k-container-lg (max-width: 64rem)</Box>
         </div>
       </div>
       <div style={{ background: 'var(--kreati-gray-100)', padding: 'var(--kreati-space-4)' }}>
         <div className="k-container k-container-xl">
-          <Box>.k-container.k-container-xl (max-width: 1280px)</Box>
+          <Box>.k-container.k-container-xl (max-width: 75rem)</Box>
         </div>
       </div>
     </div>

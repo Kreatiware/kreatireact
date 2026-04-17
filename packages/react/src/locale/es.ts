@@ -44,6 +44,13 @@ export const es: KreatiLocale = {
     filterOptions: 'Filtrar opciones',
     increment: 'Incrementar',
     decrement: 'Decrementar',
+    carousel: 'Carrusel',
+    previous: 'Anterior',
+    next: 'Siguiente',
+    page: 'Pagina',
+    copy: 'Copiar',
+    copied: 'Copiado',
+    code: 'Codigo',
   },
   slider: {
     rangeMin: 'minimo',
@@ -69,6 +76,10 @@ export const es: KreatiLocale = {
   },
   dial: {
     ariaLabel: 'Dial',
+  },
+  emptyState: {
+    title: 'Sin datos',
+    description: 'No hay elementos para mostrar.',
   },
   rating: {
     ariaLabel: 'Calificacion',
