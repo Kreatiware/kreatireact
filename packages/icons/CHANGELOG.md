@@ -1,5 +1,11 @@
 # @kreatiware/icons
 
+## 0.11.0
+
+### Minor Changes
+
+- 633b501: feat(all): add carousel, empy state, hooks, segmented controls, fixes in general
+
 ## 0.10.1
 
 ### Patch Changes

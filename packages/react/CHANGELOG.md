@@ -1,5 +1,12 @@
 # @kreatiware/react
 
+## 0.14.0
+
+### Minor Changes
+
+- 633b501: feat(all): add carousel, empy state, hooks, segmented controls, fixes in general
+- acbb84a: fix(react+layout): update desing patterns and fixes
+
 ## 0.13.0
 
 ### Minor Changes
