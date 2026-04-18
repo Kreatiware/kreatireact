@@ -1,5 +1,11 @@
 # @kreatiware/icons
 
+## 0.12.0
+
+### Minor Changes
+
+- 2e94590: add text Editor inicial config, fix on inputs and select sizes poopover
+
 ## 0.11.0
 
 ### Minor Changes
