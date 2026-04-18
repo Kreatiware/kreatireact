@@ -491,6 +491,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
           onFilterChange={handleFilterChange}
           onKeyDown={handleKeyDown}
           dropdownId={dropdownId}
+          size={size}
         />
       </div>,
       document.body,

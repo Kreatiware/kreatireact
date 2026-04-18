@@ -81,6 +81,17 @@ export const es: KreatiLocale = {
     title: 'Sin datos',
     description: 'No hay elementos para mostrar.',
   },
+  textEditor: {
+    toolbar: 'Formato',
+    unorderedList: 'Lista con vinetas',
+    orderedList: 'Lista numerada',
+    undo: 'Deshacer (Ctrl+Z)',
+    redo: 'Rehacer (Ctrl+Y)',
+    insertLink: 'Insertar',
+    removeLink: 'Eliminar',
+    linkLabel: 'Etiqueta',
+    linkLabelPlaceholder: 'Texto visible (opcional)',
+  },
   rating: {
     ariaLabel: 'Calificacion',
     clear: 'Limpiar calificacion',

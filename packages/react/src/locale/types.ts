@@ -91,6 +91,18 @@ export interface KreatiLocale {
     title: string;
     description: string;
   };
+  /** TextEditor component */
+  textEditor: {
+    toolbar: string;
+    unorderedList: string;
+    orderedList: string;
+    undo: string;
+    redo: string;
+    insertLink: string;
+    removeLink: string;
+    linkLabel: string;
+    linkLabelPlaceholder: string;
+  };
   /** Rating component */
   rating: {
     ariaLabel: string;

@@ -38,6 +38,8 @@ export interface SelectDropdownProps {
   onKeyDown: (e: React.KeyboardEvent) => void;
   dropdownId: string;
   autoFocusFilter?: boolean;
+  /** Size variant for font scaling */
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
 import { SEARCH_PATH } from './iconPaths';
@@ -65,6 +67,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
   onKeyDown,
   dropdownId,
   autoFocusFilter = true,
+  size = 'md',
 }) => {
   const listRef = useRef<HTMLDivElement>(null);
   const filterRef = useRef<HTMLInputElement>(null);
@@ -204,7 +207,7 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
   };
 
   return (
-    <div className={`${base}__dropdown`} role="listbox" id={dropdownId}>
+    <div className={`${base}__dropdown ${base}__container--${size}`} role="listbox" id={dropdownId}>
       {filterBar}
       {renderOptions()}
     </div>

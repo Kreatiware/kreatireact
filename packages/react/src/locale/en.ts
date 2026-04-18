@@ -81,6 +81,17 @@ export const en: KreatiLocale = {
     title: 'No data',
     description: 'There are no items to display.',
   },
+  textEditor: {
+    toolbar: 'Formatting',
+    unorderedList: 'Bullet list',
+    orderedList: 'Numbered list',
+    undo: 'Undo (Ctrl+Z)',
+    redo: 'Redo (Ctrl+Y)',
+    insertLink: 'Insert',
+    removeLink: 'Remove',
+    linkLabel: 'Label',
+    linkLabelPlaceholder: 'Display text (optional)',
+  },
   rating: {
     ariaLabel: 'Rating',
     clear: 'Clear rating',

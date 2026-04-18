@@ -108,3 +108,54 @@ export const PRINT_PATH = 'M19,8H5c-1.66,0-3,1.34-3,3v6h4v4h12v-4h4v-6c0-1.66-1.
 
 /** @author ai — Pending designer review */
 export const GRIP_VERTICAL_PATH = 'M8,6h2v12H8Zm6,0h2v12H14Z';
+
+/** @author ai — Pending designer review */
+export const BOLD_PATH = 'M15.6,11.79c.97-.73,1.6-1.86,1.6-3.14,0-2.21-1.79-4-4-4H7v14h7.04c2.09,0,3.71-1.7,3.71-3.79,0-1.52-.86-2.82-2.15-3.07ZM10,7.5h3c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-3v-3Zm3.5,9H10v-3h3.5c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5Z';
+
+/** @author ai — Pending designer review */
+export const ITALIC_PATH = 'M10,4v3h2.21l-3.42,8H6v3h8v-3H11.79l3.42-8H18V4H10Z';
+
+/** @author ai — Pending designer review */
+export const UNDERLINE_PATH = 'M12,17c3.31,0,6-2.69,6-6V3H15.5v8c0,1.93-1.57,3.5-3.5,3.5S8.5,12.93,8.5,11V3H6v8c0,3.31,2.69,6,6,6Zm-7,2v2H19v-2H5Z';
+
+/** @author ai — Pending designer review */
+export const STRIKETHROUGH_PATH = 'M10,19h4v-3H10v3ZM5,4v3h5v3h4V7h5V4H5ZM3,14h18v-2H3v2Z';
+
+/** @author ai — Pending designer review */
+export const HEADING_1_PATH = 'M11,7h2v10H11v-4H5v4H3V7H5v4h6V7Zm6.57,2l-2,2H17v6h2V7h-1.43Z';
+
+/** @author ai — Pending designer review */
+export const HEADING_2_PATH = 'M9,7h2v10H9v-4H3v4H1V7H3v4h6V7Zm8,4c1.1,0,2-.9,2-2s-.9-2-2-2H14v2h3v2h-1c-1.66,0-3,1.34-3,3v2h6v-2H16c0-1.1.9-2,2-2h-1Z';
+
+/** @author ai — Pending designer review */
+export const HEADING_3_PATH = 'M9,7h2v10H9v-4H3v4H1V7H3v4h6V7Zm8,4c1.1,0,2-.9,2-2s-.9-2-2-2H14v2h3v1H15v2h2v1H14v2h3c1.1,0,2-.9,2-2s-.9-2-2-2Z';
+
+/** @author ai — Pending designer review */
+export const LIST_UNORDERED_PATH = 'M4,10.5c-.83,0-1.5.67-1.5,1.5s.67,1.5,1.5,1.5,1.5-.67,1.5-1.5-.67-1.5-1.5-1.5Zm0-6c-.83,0-1.5.67-1.5,1.5s.67,1.5,1.5,1.5,1.5-.67,1.5-1.5-.67-1.5-1.5-1.5Zm0,12c-.83,0-1.5.68-1.5,1.5s.68,1.5,1.5,1.5,1.5-.68,1.5-1.5-.67-1.5-1.5-1.5ZM8,19h14v-2H8v2Zm0-6h14v-2H8v2ZM8,5v2h14V5H8Z';
+
+/** @author ai — Pending designer review */
+export const LIST_ORDERED_PATH = 'M2,17h2v.5H3v1h1v.5H2v1h3v-4H2v1Zm1-9h1V4H2v1h1v3Zm-1,3h1.8L2,13.1v.9h3v-1H3.2L5,10.9V10H2v1Zm5-6v2h14V5H7Zm0,14h14v-2H7v2Zm0-6h14v-2H7v2Z';
+
+/** @author ai — Pending designer review */
+export const LINK_PATH = 'M3.9,12c0-1.71,1.39-3.1,3.1-3.1h4V7H7c-2.76,0-5,2.24-5,5s2.24,5,5,5h4v-1.9H7c-1.71,0-3.1-1.39-3.1-3.1ZM8,13h8v-2H8v2Zm9-6h-4v1.9h4c1.71,0,3.1,1.39,3.1,3.1s-1.39,3.1-3.1,3.1h-4V17h4c2.76,0,5-2.24,5-5s-2.24-5-5-5Z';
+
+/** @author ai — Pending designer review */
+export const CODE_PATH = 'M9.4,16.6L4.8,12l4.6-4.6L8,6l-6,6,6,6,1.4-1.4Zm5.2,0L19.2,12l-4.6-4.6L16,6l6,6-6,6-1.4-1.4Z';
+
+/** @author ai — Pending designer review */
+export const BLOCKQUOTE_PATH = 'M6,17h3l2-4V7H5v6h3L6,17Zm8,0h3l2-4V7H13v6h3l-2,4Z';
+
+/** @author ai — Pending designer review */
+export const UNDO_PATH = 'M12.5,8c-2.65,0-5.05,1.04-6.83,2.73L2.5,7.56v8.94h8.94l-3.18-3.18c1.33-1.33,3.17-2.15,5.24-2.15,3.03,0,5.61,1.81,6.76,4.41l2.24-.93c-1.52-3.44-4.93-5.83-8.99-5.83Z';
+
+/** @author ai — Pending designer review */
+export const REDO_PATH = 'M18.33,10.73c-1.78-1.69-4.18-2.73-6.83-2.73-4.06,0-7.47,2.39-8.99,5.83l2.24.93c1.15-2.6,3.73-4.41,6.76-4.41,2.07,0,3.91.82,5.24,2.15l-3.18,3.18h8.94V6.74l-3.17,3.18Z';
+
+/** Text color icon (A with colored underline) @author ai — Pending designer review */
+export const TEXT_COLOR_PATH = 'M11,2 L5.5,18 H8.2 L9.5,14 H14.5 L15.8,18 H18.5 L13,2 H11 Z M10.2,12 L12,6.5 L13.8,12 H10.2 Z';
+
+/** Background/highlight color icon (paint bucket) @author ai — Pending designer review */
+export const BG_COLOR_PATH = 'M16.56,8.94L8.32,0.7,6.91,2.11l2.3,2.3L3.91,9.72a1.5,1.5,0,0,0,0,2.12l5.66,5.66a1.5,1.5,0,0,0,2.12,0l4.87-4.87a1.5,1.5,0,0,0,0-2.12ZM5.21,10.78,10.57,5.42l5.36,5.36H5.21ZM19,17.5c0,1.38-1.12,2.5-2.5,2.5S14,18.88,14,17.5c0-1.04,1.5-3.29,2.14-4.18.2-.27.52-.27.72,0C17.5,14.21,19,16.46,19,17.5Z';
+
+/** Font family icon (Aa) @author ai — Pending designer review */
+export const FONT_FAMILY_PATH = 'M9.93,13.5H4.07L3,17H1L5.8,3H8.2L13,17H11L9.93,13.5ZM4.64,11.5H9.36L7,4.5,4.64,11.5ZM18.5,8C16.57,8,15,9.57,15,11.5V17H17V15.74A3.48,3.48,0,0,0,22,12.5,3.5,3.5,0,0,0,18.5,8Zm0,5A1.5,1.5,0,1,1,20,11.5,1.5,1.5,0,0,1,18.5,13Z';

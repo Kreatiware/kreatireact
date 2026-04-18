@@ -54,6 +54,17 @@ import {
   Folder,
   File,
   Share,
+  Bold,
+  Italic,
+  Underline,
+  Strikethrough,
+  ListUnordered,
+  ListOrdered,
+  Link,
+  CodeInline,
+  Blockquote,
+  Undo,
+  Redo,
 } from './icons';
 import type { IconProps } from './icons';
 
@@ -113,6 +124,17 @@ const ICON_MAP: Record<string, React.FC<IconProps>> = {
   folder: Folder,
   file: File,
   share: Share,
+  bold: Bold,
+  italic: Italic,
+  underline: Underline,
+  strikethrough: Strikethrough,
+  'list-unordered': ListUnordered,
+  'list-ordered': ListOrdered,
+  link: Link,
+  'code-inline': CodeInline,
+  blockquote: Blockquote,
+  undo: Undo,
+  redo: Redo,
 };
 
 export interface IconResolverProps extends IconProps {

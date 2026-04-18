@@ -87,7 +87,7 @@
   width: 0;
   overflow: hidden;
   transition: width 0.2s ease-in-out;
-  font-size: 0.0.0625rem;
+  font-size: 0.0625rem;
   line-height: 0;
   max-height: 0.1875rem;
 }
@@ -397,6 +397,13 @@
 .k-multiselect__option--focused {
   background-color: var(--kreati-select-option-hover-bg);
 }
+
+/* Option font sizes per size */
+.k-multiselect__container--xs .k-multiselect__option { font-size: var(--kreati-font-size-xxs); padding: var(--kreati-space-1) var(--kreati-space-2); }
+.k-multiselect__container--sm .k-multiselect__option { font-size: var(--kreati-font-size-xs); padding: var(--kreati-space-1) var(--kreati-space-3); }
+.k-multiselect__container--md .k-multiselect__option { font-size: var(--kreati-font-size-sm); }
+.k-multiselect__container--lg .k-multiselect__option { font-size: var(--kreati-font-size-base); padding: var(--kreati-space-3) var(--kreati-space-3); }
+.k-multiselect__container--xl .k-multiselect__option { font-size: var(--kreati-font-size-md); padding: var(--kreati-space-3) var(--kreati-space-4); }
 
 .k-multiselect__option--selected {
   background-color: var(--kreati-select-option-active-bg);

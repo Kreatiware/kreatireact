@@ -101,6 +101,7 @@ export const KreatiProvider: React.FC<KreatiProviderProps> = ({
       itemPicker: { ...en.itemPicker, ...locale.itemPicker },
       dataTable: { ...en.dataTable, ...locale.dataTable },
       emptyState: { ...en.emptyState, ...locale.emptyState },
+      textEditor: { ...en.textEditor, ...locale.textEditor },
     };
   }, [locale]);
 

@@ -299,7 +299,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
         className={`${base}__dropdown-portal ${overlayPositioned ? `${base}__dropdown-portal--visible` : ''}`}
         style={{ position: 'fixed', top: overlayCoords.top, left: overlayCoords.left, minWidth: overlayCoords.minWidth, zIndex: childZ }}
       >
-      <div className={`${base}__dropdown`} role="listbox" aria-multiselectable="true" id={dropdownId}>
+      <div className={`${base}__dropdown ${base}__container--${size}`} role="listbox" aria-multiselectable="true" id={dropdownId}>
         {filterable && (
           <div className={`${base}__filter`}>
             <svg className={`${base}__filter-icon`} width={14} height={14} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={SEARCH_PATH} /></svg>

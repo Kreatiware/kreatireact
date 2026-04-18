@@ -65,6 +65,17 @@ export {
   Folder,
   File,
   Share,
+  Bold,
+  Italic,
+  Underline,
+  Strikethrough,
+  ListUnordered,
+  ListOrdered,
+  Link,
+  CodeInline,
+  Blockquote,
+  Undo,
+  Redo,
   // Deprecated aliases
   Menu,
 } from './icons';
