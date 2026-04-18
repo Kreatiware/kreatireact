@@ -65,6 +65,9 @@ import {
   Blockquote,
   Undo,
   Redo,
+  TextColor,
+  BgColor,
+  FontFamily,
 } from './icons';
 import type { IconProps } from './icons';
 
@@ -135,6 +138,9 @@ const ICON_MAP: Record<string, React.FC<IconProps>> = {
   blockquote: Blockquote,
   undo: Undo,
   redo: Redo,
+  'text-color': TextColor,
+  'bg-color': BgColor,
+  'font-family': FontFamily,
 };
 
 export interface IconResolverProps extends IconProps {

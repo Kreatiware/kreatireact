@@ -6,6 +6,7 @@ const meta = {
   component: CodeBlock,
   parameters: { layout: 'padded' },
   tags: ['autodocs'],
+  args: { code: '' },
 } satisfies Meta<typeof CodeBlock>;
 
 export default meta;

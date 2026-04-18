@@ -73,6 +73,8 @@ export interface KreatiLocale {
     copy: string;
     copied: string;
     code: string;
+    showPassword: string;
+    hidePassword: string;
   };
   /** Message component */
   message: {
@@ -94,10 +96,26 @@ export interface KreatiLocale {
   /** TextEditor component */
   textEditor: {
     toolbar: string;
+    bold: string;
+    italic: string;
+    underline: string;
+    strikethrough: string;
     unorderedList: string;
     orderedList: string;
+    link: string;
+    code: string;
+    blockquote: string;
     undo: string;
     redo: string;
+    textStyle: string;
+    fontSize: string;
+    fontFamily: string;
+    textColor: string;
+    bgColor: string;
+    paragraph: string;
+    heading1: string;
+    heading2: string;
+    heading3: string;
     insertLink: string;
     removeLink: string;
     linkLabel: string;

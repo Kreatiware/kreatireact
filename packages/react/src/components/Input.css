@@ -129,6 +129,31 @@
 }
 
 /* ============================================
+   Password toggle
+   ============================================ */
+.k-input__password-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--kreati-gray-400);
+  cursor: pointer;
+  padding: 0 var(--kreati-space-2);
+  flex-shrink: 0;
+  transition: color var(--kreati-transition-fast);
+}
+
+.k-input__password-toggle:hover:not(:disabled) {
+  color: var(--kreati-gray-700);
+}
+
+.k-input__password-toggle:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
    Icons
    ============================================ */
 .k-input__icon {

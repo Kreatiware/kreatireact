@@ -634,20 +634,24 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
     const overLimit = maxChars !== undefined && charCount > maxChars;
 
     const LABELS: Record<string, string> = {
-      bold: 'Bold (Ctrl+B)', italic: 'Italic (Ctrl+I)', underline: 'Underline (Ctrl+U)',
-      strikethrough: 'Strikethrough',
+      bold: locale?.textEditor?.bold || 'Bold (Ctrl+B)',
+      italic: locale?.textEditor?.italic || 'Italic (Ctrl+I)',
+      underline: locale?.textEditor?.underline || 'Underline (Ctrl+U)',
+      strikethrough: locale?.textEditor?.strikethrough || 'Strikethrough',
       ul: locale?.textEditor?.unorderedList || 'Bullet list',
       ol: locale?.textEditor?.orderedList || 'Numbered list',
-      link: 'Link (Ctrl+K)', code: 'Code', blockquote: 'Blockquote',
+      link: locale?.textEditor?.link || 'Link (Ctrl+K)',
+      code: locale?.textEditor?.code || 'Code',
+      blockquote: locale?.textEditor?.blockquote || 'Blockquote',
       undo: locale?.textEditor?.undo || 'Undo (Ctrl+Z)',
       redo: locale?.textEditor?.redo || 'Redo (Ctrl+Y)',
     };
 
     const HEADING_OPTIONS = [
-      { label: 'Paragraph', value: 'p' },
-      { label: 'Heading 1', value: 'h1' },
-      { label: 'Heading 2', value: 'h2' },
-      { label: 'Heading 3', value: 'h3' },
+      { label: locale?.textEditor?.paragraph || 'Paragraph', value: 'p' },
+      { label: locale?.textEditor?.heading1 || 'Heading 1', value: 'h1' },
+      { label: locale?.textEditor?.heading2 || 'Heading 2', value: 'h2' },
+      { label: locale?.textEditor?.heading3 || 'Heading 3', value: 'h3' },
     ];
 
     const currentHeading = activeFormats.has('h1') ? 'h1' : activeFormats.has('h2') ? 'h2' : activeFormats.has('h3') ? 'h3' : 'p';
@@ -752,7 +756,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                       onClick={() => { savedRange.current = saveSelection(); setHeadingOpen((p) => !p); }}
                       onMouseDown={(e) => e.preventDefault()}
                       disabled={disabled}
-                      aria-label="Text style"
+                      aria-label={locale?.textEditor?.textStyle || 'Text style'}
                     >
                       <span className="k-te__select-label">{headingLabel}</span>
                       <svg className="k-te__select-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
@@ -802,7 +806,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                       onClick={() => { savedRange.current = saveSelection(); setFontSizeOpen((p) => !p); }}
                       onMouseDown={(e) => e.preventDefault()}
                       disabled={disabled}
-                      aria-label="Font size"
+                      aria-label={locale?.textEditor?.fontSize || 'Font size'}
                     >
                       <span className="k-te__select-label">{fsLabel}</span>
                       <svg className="k-te__select-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
@@ -853,7 +857,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                       onClick={() => { savedRange.current = saveSelection(); setFontFamilyOpen((p) => !p); }}
                       onMouseDown={(e) => e.preventDefault()}
                       disabled={disabled}
-                      aria-label="Font family"
+                      aria-label={locale?.textEditor?.fontFamily || 'Font family'}
                     >
                       <span className="k-te__select-label">{ffLabel}</span>
                       <svg className="k-te__select-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
@@ -872,7 +876,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                     className="k-te__btn k-te__btn--color"
                     onClick={() => { savedRange.current = saveSelection(); setTextColorOpen((p) => !p); }}
                     onMouseDown={(e) => e.preventDefault()}
-                    aria-label="Text color"
+                    aria-label={locale?.textEditor?.textColor || 'Text color'}
                     disabled={disabled}
                   >
                     {iconSvg(TEXT_COLOR_PATH)}
@@ -880,7 +884,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                   </button>
                 );
                 const wrappedTc = showTooltips && !textColorOpen
-                  ? <Tooltip key="tc-tip" content="Text color" position="top">{tcBtn}</Tooltip>
+                  ? <Tooltip key="tc-tip" content={locale?.textEditor?.textColor || 'Text color'} position="top">{tcBtn}</Tooltip>
                   : tcBtn;
                 return (
                   <Popover
@@ -924,7 +928,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                     className="k-te__btn k-te__btn--color"
                     onClick={() => { savedRange.current = saveSelection(); setBgColorOpen((p) => !p); }}
                     onMouseDown={(e) => e.preventDefault()}
-                    aria-label="Background color"
+                    aria-label={locale?.textEditor?.bgColor || 'Highlight color'}
                     disabled={disabled}
                   >
                     {iconSvg(BG_COLOR_PATH)}
@@ -932,7 +936,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                   </button>
                 );
                 const wrappedBg = showTooltips && !bgColorOpen
-                  ? <Tooltip key="bg-tip" content="Highlight color" position="top">{bgBtn}</Tooltip>
+                  ? <Tooltip key="bg-tip" content={locale?.textEditor?.bgColor || 'Highlight color'} position="top">{bgBtn}</Tooltip>
                   : bgBtn;
                 return (
                   <Popover

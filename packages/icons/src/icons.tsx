@@ -1011,3 +1011,33 @@ export const Redo: React.FC<IconProps> = ({ size = 24, color = 'currentColor', c
     <path d="M18.33,10.73c-1.78-1.69-4.18-2.73-6.83-2.73-4.06,0-7.47,2.39-8.99,5.83l2.24.93c1.15-2.6,3.73-4.41,6.76-4.41,2.07,0,3.91.82,5.24,2.15l-3.18,3.18h8.94V6.74l-3.17,3.18Z" />
   </svg>
 );
+
+/**
+ * TextColor icon — text color formatting (A with colored underline)
+ * @author ai — Pending designer review
+ */
+export const TextColor: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M11,2 L5.5,18 H8.2 L9.5,14 H14.5 L15.8,18 H18.5 L13,2 H11 Z M10.2,12 L12,6.5 L13.8,12 H10.2 Z" />
+  </svg>
+);
+
+/**
+ * BgColor icon — background/highlight color (paint bucket)
+ * @author ai — Pending designer review
+ */
+export const BgColor: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M16.56,8.94L8.32,0.7,6.91,2.11l2.3,2.3L3.91,9.72a1.5,1.5,0,0,0,0,2.12l5.66,5.66a1.5,1.5,0,0,0,2.12,0l4.87-4.87a1.5,1.5,0,0,0,0-2.12ZM5.21,10.78,10.57,5.42l5.36,5.36H5.21ZM19,17.5c0,1.38-1.12,2.5-2.5,2.5S14,18.88,14,17.5c0-1.04,1.5-3.29,2.14-4.18.2-.27.52-.27.72,0C17.5,14.21,19,16.46,19,17.5Z" />
+  </svg>
+);
+
+/**
+ * FontFamily icon — font family selector (Aa)
+ * @author ai — Pending designer review
+ */
+export const FontFamily: React.FC<IconProps> = ({ size = 24, color = 'currentColor', className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color} className={className} aria-hidden="true">
+    <path d="M9.93,13.5H4.07L3,17H1L5.8,3H8.2L13,17H11L9.93,13.5ZM4.64,11.5H9.36L7,4.5,4.64,11.5ZM18.5,8C16.57,8,15,9.57,15,11.5V17H17V15.74A3.48,3.48,0,0,0,22,12.5,3.5,3.5,0,0,0,18.5,8Zm0,5A1.5,1.5,0,1,1,20,11.5,1.5,1.5,0,0,1,18.5,13Z" />
+  </svg>
+);

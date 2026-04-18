@@ -9,6 +9,7 @@ const meta = {
   component: SegmentedControl,
   parameters: { layout: 'centered' },
   tags: ['autodocs'],
+  args: { options: [] },
 } satisfies Meta<typeof SegmentedControl>;
 
 export default meta;

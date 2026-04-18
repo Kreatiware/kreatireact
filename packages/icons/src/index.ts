@@ -76,6 +76,9 @@ export {
   Blockquote,
   Undo,
   Redo,
+  TextColor,
+  BgColor,
+  FontFamily,
   // Deprecated aliases
   Menu,
 } from './icons';

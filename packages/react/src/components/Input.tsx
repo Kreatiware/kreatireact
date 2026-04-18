@@ -1,8 +1,8 @@
-import React, { forwardRef, useId, useRef, useCallback, useImperativeHandle } from 'react';
+import React, { forwardRef, useId, useRef, useState, useCallback, useImperativeHandle } from 'react';
 import { FieldWrapper } from './FieldWrapper';
 import { Tooltip } from './Tooltip';
 import { useKreatiLocale } from '../locale';
-import { CHEVRON_UP_PATH, CHEVRON_DOWN_PATH } from './iconPaths';
+import { CHEVRON_UP_PATH, CHEVRON_DOWN_PATH, EYE_PATH, EYE_OFF_PATH } from './iconPaths';
 import './Input.css';
 
 export interface InputProps {
@@ -155,10 +155,30 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const errorMessage = typeof error === 'boolean' ? undefined : error;
     const isFloating = variant === 'floating';
     const isNumber = type === 'number';
+    const isPassword = type === 'password';
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const base = 'k-input';
     const useCommaSeparator = isNumber && decimalSeparator === ',';
-    const resolvedType = useCommaSeparator ? 'text' : type;
+    const resolvedType = isPassword ? (passwordVisible ? 'text' : 'password') : useCommaSeparator ? 'text' : type;
     const resolvedInputMode = useCommaSeparator ? 'decimal' as const : undefined;
     const showCustomSteppers = isNumber && !hideSteppers && !useCommaSeparator;
+
+    const passwordToggle = isPassword ? (
+      <button
+        type="button"
+        className={`${base}__password-toggle`}
+        onClick={() => setPasswordVisible((v) => !v)}
+        tabIndex={-1}
+        aria-label={passwordVisible
+          ? (kreatiLocale.common.hidePassword || 'Hide password')
+          : (kreatiLocale.common.showPassword || 'Show password')}
+        disabled={disabled}
+      >
+        <svg width={16} height={16} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d={passwordVisible ? EYE_OFF_PATH : EYE_PATH} />
+        </svg>
+      </button>
+    ) : null;
 
     const commaPattern = /^-?\d*,?\d*$/;
 
@@ -188,7 +208,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const hasLabel = !!label;
     const hasWrapper = !isFloating && !!(label || helperText || errorMessage);
-    const base = 'k-input';
 
     const helperId = `${inputId}-helper`;
     const errorId = `${inputId}-error`;
@@ -309,6 +328,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {iconLeft && renderIcon(iconLeft, iconLeftTooltip, 'left')}
             {nativeInput}
             {iconRight && renderIcon(iconRight, iconRightTooltip, 'right')}
+            {passwordToggle}
             {stepperButtons}
           </div>
           {hasLabel && (
@@ -364,6 +384,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {iconLeft && renderIcon(iconLeft, iconLeftTooltip, 'left')}
         {nativeInput}
         {iconRight && renderIcon(iconRight, iconRightTooltip, 'right')}
+        {passwordToggle}
         {stepperButtons}
       </div>
     );

@@ -12,6 +12,9 @@ import {
   Eye, EyeOff, Mail, Lock, Phone, Clock, Sort,
   Bell, BellOff, Refresh, ExternalLink, CheckCircle,
   Home, Settings, Grid, ListIcon, ImageIcon, Folder, File, Share,
+  Bold, Italic, Underline, Strikethrough,
+  ListUnordered, ListOrdered, Link, CodeInline, Blockquote,
+  Undo, Redo, TextColor, BgColor, FontFamily,
   KreatiIcon,
 } from '../../../../packages/icons/src';
 import type { IconProps } from '../../../../packages/icons/src';
@@ -29,6 +32,9 @@ const AllIcons: Record<string, React.FC<IconProps>> = {
   Folder, File, Upload, Download, Share,
   Filter, Sort, Refresh, ExternalLink,
   Pencil, Trash, Copy, Print, EllipsisV, GripVertical,
+  Bold, Italic, Underline, Strikethrough,
+  ListUnordered, ListOrdered, Link, CodeInline, Blockquote,
+  Undo, Redo, TextColor, BgColor, FontFamily,
 };
 
 const IconShowcase: React.FC<{ size: number; color: string }> = ({ size, color }) => (
