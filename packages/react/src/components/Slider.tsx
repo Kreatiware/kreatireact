@@ -1,7 +1,16 @@
-import React, { forwardRef, useId, useRef, useState, useCallback, useImperativeHandle, useMemo, useEffect } from 'react';
-import { useKreatiLocale } from '../locale';
-import { FieldWrapper } from './FieldWrapper';
-import './Slider.css';
+import React, {
+  forwardRef,
+  useId,
+  useRef,
+  useState,
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useEffect,
+} from "react";
+import { useKreatiLocale } from "../locale";
+import { FieldWrapper } from "./FieldWrapper";
+import "./Slider.css";
 
 /** Mark position on the slider track */
 export interface SliderMark {
@@ -29,11 +38,11 @@ export interface SliderProps {
   /** Enable range mode with two thumbs */
   range?: boolean;
   /** Orientation */
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: "horizontal" | "vertical";
   /** Mark positions on the track */
   marks?: SliderMark[];
   /** When to show the value tooltip */
-  showTooltip?: 'always' | 'hover' | 'never';
+  showTooltip?: "always" | "hover" | "never";
   /** Custom format for the tooltip value */
   tooltipFormat?: (value: number) => string;
   /**
@@ -60,9 +69,9 @@ export interface SliderProps {
    */
   trackTemplate?: (startPercent: number, endPercent: number) => React.ReactNode;
   /** Visual variant for label/error/helper */
-  variant?: 'stacked';
+  variant?: "stacked";
   /** Component size */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Label text */
   label?: string;
   /** Helper text */
@@ -72,7 +81,15 @@ export interface SliderProps {
   /** Success state */
   success?: boolean;
   /** Helper severity */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  helperSeverity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Disabled state */
   disabled?: boolean;
   /** Read-only state */
@@ -119,18 +136,42 @@ export interface SliderProps {
 export const Slider = forwardRef<HTMLDivElement, SliderProps>(
   (
     {
-      value: controlledValue, defaultValue, onChange, onChangeEnd,
-      min = 0, max = 100, step = 1, range = false,
-      orientation = 'horizontal', marks, showTooltip = 'hover',
-      tooltipFormat, thumbTemplate, markTemplate, trackTemplate,
-      variant = 'stacked', size = 'md',
-      label, helperText, error, success = false, helperSeverity,
-      disabled = false, readOnly = false, required = false, fullWidth = false,
-      maxWidth, minWidth, width, height,
-      name, onBlur, className = '',
+      value: controlledValue,
+      defaultValue,
+      onChange,
+      onChangeEnd,
+      min = 0,
+      max = 100,
+      step = 1,
+      range = false,
+      orientation = "horizontal",
+      marks,
+      showTooltip = "hover",
+      tooltipFormat,
+      thumbTemplate,
+      markTemplate,
+      trackTemplate,
+      variant = "stacked",
+      size = "md",
+      label,
+      helperText,
+      error,
+      success = false,
+      helperSeverity,
+      disabled = false,
+      readOnly = false,
+      required = false,
+      fullWidth = false,
+      maxWidth,
+      minWidth,
+      width,
+      height,
+      name,
+      onBlur,
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const autoId = useId();
     const sliderId = name || autoId;
@@ -141,98 +182,135 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
     const kreatiLocale = useKreatiLocale();
 
     const isControlled = controlledValue !== undefined;
-    const [internalValue, setInternalValue] = useState<number | [number, number]>(
-      defaultValue ?? (range ? [min, min] : min),
-    );
+    const [internalValue, setInternalValue] = useState<
+      number | [number, number]
+    >(defaultValue ?? (range ? [min, min] : min));
     const val = isControlled ? controlledValue! : internalValue;
 
     const [dragging, setDragging] = useState<number | null>(null);
     const [hoveredThumb, setHoveredThumb] = useState<number | null>(null);
 
-    const isHorizontal = orientation === 'horizontal';
+    const isHorizontal = orientation === "horizontal";
     const hasError = !!error;
-    const errorMessage = typeof error === 'boolean' ? undefined : error;
-    const base = 'k-slider';
+    const errorMessage = typeof error === "boolean" ? undefined : error;
+    const base = "k-slider";
 
     const helperId = `${sliderId}-helper`;
     const errorId = `${sliderId}-error`;
-    const describedBy = [hasError && errorId, (helperText) && helperId].filter(Boolean).join(' ') || undefined;
+    const describedBy =
+      [hasError && errorId, helperText && helperId].filter(Boolean).join(" ") ||
+      undefined;
 
     const getValues = useCallback((): [number, number] => {
       if (range && Array.isArray(val)) return val as [number, number];
-      const v = typeof val === 'number' ? val : (val as [number, number])[0];
+      const v = typeof val === "number" ? val : (val as [number, number])[0];
       return [min, v];
     }, [val, range, min]);
 
-    const snap = useCallback((v: number): number => {
-      if (step <= 0) return Math.max(min, Math.min(max, v));
-      const snapped = Math.round((v - min) / step) * step + min;
-      return Math.max(min, Math.min(max, parseFloat(snapped.toFixed(10))));
-    }, [min, max, step]);
+    const snap = useCallback(
+      (v: number): number => {
+        if (step <= 0) return Math.max(min, Math.min(max, v));
+        const snapped = Math.round((v - min) / step) * step + min;
+        return Math.max(min, Math.min(max, parseFloat(snapped.toFixed(10))));
+      },
+      [min, max, step]
+    );
 
-    const toPercent = useCallback((v: number): number => {
-      if (max === min) return 0;
-      return ((v - min) / (max - min)) * 100;
-    }, [min, max]);
+    const toPercent = useCallback(
+      (v: number): number => {
+        if (max === min) return 0;
+        return ((v - min) / (max - min)) * 100;
+      },
+      [min, max]
+    );
 
-    const fromPosition = useCallback((clientX: number, clientY: number): number => {
-      const rect = trackRef.current?.getBoundingClientRect();
-      if (!rect) return min;
-      let ratio: number;
-      if (isHorizontal) {
-        ratio = (clientX - rect.left) / rect.width;
-      } else {
-        ratio = 1 - (clientY - rect.top) / rect.height;
-      }
-      ratio = Math.max(0, Math.min(1, ratio));
-      return snap(min + ratio * (max - min));
-    }, [min, max, isHorizontal, snap]);
-
-    const updateValue = useCallback((next: number | [number, number]) => {
-      if (!isControlled) setInternalValue(next);
-      onChange?.(next);
-    }, [isControlled, onChange]);
-
-    const setThumbValue = useCallback((thumbIndex: number, newVal: number) => {
-      if (readOnly) return;
-      if (range) {
-        const [lo, hi] = getValues();
-        if (thumbIndex === 0) {
-          updateValue([Math.min(newVal, hi), hi]);
+    const fromPosition = useCallback(
+      (clientX: number, clientY: number): number => {
+        const rect = trackRef.current?.getBoundingClientRect();
+        if (!rect) return min;
+        let ratio: number;
+        if (isHorizontal) {
+          ratio = (clientX - rect.left) / rect.width;
         } else {
-          updateValue([lo, Math.max(newVal, lo)]);
+          ratio = 1 - (clientY - rect.top) / rect.height;
         }
-      } else {
-        updateValue(newVal);
-      }
-    }, [range, getValues, updateValue, readOnly]);
+        ratio = Math.max(0, Math.min(1, ratio));
+        return snap(min + ratio * (max - min));
+      },
+      [min, max, isHorizontal, snap]
+    );
 
-    const closestThumb = useCallback((v: number): number => {
-      if (!range) return 0;
-      const [lo, hi] = getValues();
-      return Math.abs(v - lo) <= Math.abs(v - hi) ? 0 : 1;
-    }, [range, getValues]);
+    const updateValue = useCallback(
+      (next: number | [number, number]) => {
+        if (!isControlled) setInternalValue(next);
+        onChange?.(next);
+      },
+      [isControlled, onChange]
+    );
 
-    const handleTrackClick = useCallback((e: React.MouseEvent | React.TouchEvent) => {
-      if (disabled || readOnly) return;
-      const { clientX, clientY } = 'touches' in e ? e.touches[0] : e;
-      const v = fromPosition(clientX, clientY);
-      const idx = closestThumb(v);
-      setThumbValue(idx, v);
-      onChangeEnd?.(range ? (idx === 0 ? [v, getValues()[1]] : [getValues()[0], v]) : v);
-    }, [disabled, readOnly, fromPosition, closestThumb, setThumbValue, onChangeEnd, range, getValues]);
+    const setThumbValue = useCallback(
+      (thumbIndex: number, newVal: number) => {
+        if (readOnly) return;
+        if (range) {
+          const [lo, hi] = getValues();
+          if (thumbIndex === 0) {
+            updateValue([Math.min(newVal, hi), hi]);
+          } else {
+            updateValue([lo, Math.max(newVal, lo)]);
+          }
+        } else {
+          updateValue(newVal);
+        }
+      },
+      [range, getValues, updateValue, readOnly]
+    );
 
-    const handleDragStart = useCallback((thumbIndex: number) => (e: React.MouseEvent | React.TouchEvent) => {
-      if (disabled || readOnly) return;
-      e.preventDefault();
-      setDragging(thumbIndex);
-    }, [disabled, readOnly]);
+    const closestThumb = useCallback(
+      (v: number): number => {
+        if (!range) return 0;
+        const [lo, hi] = getValues();
+        return Math.abs(v - lo) <= Math.abs(v - hi) ? 0 : 1;
+      },
+      [range, getValues]
+    );
+
+    const handleTrackClick = useCallback(
+      (e: React.MouseEvent | React.TouchEvent) => {
+        if (disabled || readOnly) return;
+        const { clientX, clientY } = "touches" in e ? e.touches[0] : e;
+        const v = fromPosition(clientX, clientY);
+        const idx = closestThumb(v);
+        setThumbValue(idx, v);
+        onChangeEnd?.(
+          range ? (idx === 0 ? [v, getValues()[1]] : [getValues()[0], v]) : v
+        );
+      },
+      [
+        disabled,
+        readOnly,
+        fromPosition,
+        closestThumb,
+        setThumbValue,
+        onChangeEnd,
+        range,
+        getValues,
+      ]
+    );
+
+    const handleDragStart = useCallback(
+      (thumbIndex: number) => (e: React.MouseEvent | React.TouchEvent) => {
+        if (disabled || readOnly) return;
+        e.preventDefault();
+        setDragging(thumbIndex);
+      },
+      [disabled, readOnly]
+    );
 
     useEffect(() => {
       if (dragging === null) return;
 
       const handleMove = (e: MouseEvent | TouchEvent) => {
-        const { clientX, clientY } = 'touches' in e ? e.touches[0] : e;
+        const { clientX, clientY } = "touches" in e ? e.touches[0] : e;
         const v = fromPosition(clientX, clientY);
         setThumbValue(dragging, v);
       };
@@ -243,49 +321,96 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
         onBlur?.();
       };
 
-      window.addEventListener('mousemove', handleMove);
-      window.addEventListener('mouseup', handleUp);
-      window.addEventListener('touchmove', handleMove, { passive: false });
-      window.addEventListener('touchend', handleUp);
+      window.addEventListener("mousemove", handleMove);
+      window.addEventListener("mouseup", handleUp);
+      window.addEventListener("touchmove", handleMove, { passive: false });
+      window.addEventListener("touchend", handleUp);
       return () => {
-        window.removeEventListener('mousemove', handleMove);
-        window.removeEventListener('mouseup', handleUp);
-        window.removeEventListener('touchmove', handleMove);
-        window.removeEventListener('touchend', handleUp);
+        window.removeEventListener("mousemove", handleMove);
+        window.removeEventListener("mouseup", handleUp);
+        window.removeEventListener("touchmove", handleMove);
+        window.removeEventListener("touchend", handleUp);
       };
     }, [dragging, fromPosition, setThumbValue, onChangeEnd, onBlur, val]);
 
-    const handleKeyDown = useCallback((thumbIndex: number) => (e: React.KeyboardEvent) => {
-      if (disabled || readOnly) return;
-      const [lo, hi] = getValues();
-      const current = thumbIndex === 0 && range ? lo : (range ? hi : (typeof val === 'number' ? val : lo));
-      const s = step || 1;
-      const bigStep = (max - min) / 10;
-      let next = current;
+    const handleKeyDown = useCallback(
+      (thumbIndex: number) => (e: React.KeyboardEvent) => {
+        if (disabled || readOnly) return;
+        const [lo, hi] = getValues();
+        const current =
+          thumbIndex === 0 && range
+            ? lo
+            : range
+              ? hi
+              : typeof val === "number"
+                ? val
+                : lo;
+        const s = step || 1;
+        const bigStep = (max - min) / 10;
+        let next = current;
 
-      switch (e.key) {
-        case 'ArrowRight': case 'ArrowUp': e.preventDefault(); next = snap(current + s); break;
-        case 'ArrowLeft': case 'ArrowDown': e.preventDefault(); next = snap(current - s); break;
-        case 'PageUp': e.preventDefault(); next = snap(current + bigStep); break;
-        case 'PageDown': e.preventDefault(); next = snap(current - bigStep); break;
-        case 'Home': e.preventDefault(); next = min; break;
-        case 'End': e.preventDefault(); next = max; break;
-        default: return;
-      }
+        switch (e.key) {
+          case "ArrowRight":
+          case "ArrowUp":
+            e.preventDefault();
+            next = snap(current + s);
+            break;
+          case "ArrowLeft":
+          case "ArrowDown":
+            e.preventDefault();
+            next = snap(current - s);
+            break;
+          case "PageUp":
+            e.preventDefault();
+            next = snap(current + bigStep);
+            break;
+          case "PageDown":
+            e.preventDefault();
+            next = snap(current - bigStep);
+            break;
+          case "Home":
+            e.preventDefault();
+            next = min;
+            break;
+          case "End":
+            e.preventDefault();
+            next = max;
+            break;
+          default:
+            return;
+        }
 
-      setThumbValue(thumbIndex, next);
-      onChangeEnd?.(range ? (thumbIndex === 0 ? [next, hi] : [lo, next]) : next);
-    }, [disabled, readOnly, getValues, range, val, step, min, max, snap, setThumbValue, onChangeEnd]);
+        setThumbValue(thumbIndex, next);
+        onChangeEnd?.(
+          range ? (thumbIndex === 0 ? [next, hi] : [lo, next]) : next
+        );
+      },
+      [
+        disabled,
+        readOnly,
+        getValues,
+        range,
+        val,
+        step,
+        min,
+        max,
+        snap,
+        setThumbValue,
+        onChangeEnd,
+      ]
+    );
 
     const [lo, hi] = getValues();
     const loPercent = toPercent(range ? lo : min);
-    const hiPercent = toPercent(range ? hi : (typeof val === 'number' ? val : hi));
+    const hiPercent = toPercent(
+      range ? hi : typeof val === "number" ? val : hi
+    );
 
     const formatValue = tooltipFormat || ((v: number) => String(v));
 
     const isTooltipVisible = (idx: number) => {
-      if (showTooltip === 'always') return true;
-      if (showTooltip === 'never') return false;
+      if (showTooltip === "always") return true;
+      if (showTooltip === "never") return false;
       return dragging === idx || hoveredThumb === idx;
     };
 
@@ -298,7 +423,9 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
       !hasError && success && `${base}--success`,
       fullWidth && `${base}--full-width`,
       className,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     const containerStyle = useMemo((): React.CSSProperties | undefined => {
       const s: React.CSSProperties = {};
@@ -309,7 +436,11 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
       return Object.keys(s).length ? s : undefined;
     }, [maxWidth, minWidth, width, height]);
 
-    const renderThumb = (thumbIndex: number, thumbValue: number, percent: number) => {
+    const renderThumb = (
+      thumbIndex: number,
+      thumbValue: number,
+      percent: number
+    ) => {
       const posStyle: React.CSSProperties = isHorizontal
         ? { left: `${percent}%` }
         : { bottom: `${percent}%` };
@@ -319,7 +450,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
       return (
         <div
           key={thumbIndex}
-          className={`${base}__thumb ${thumbTemplate ? `${base}__thumb--custom` : ''}`}
+          className={`${base}__thumb ${thumbTemplate ? `${base}__thumb--custom` : ""}`}
           role="slider"
           tabIndex={disabled ? -1 : 0}
           aria-valuenow={thumbValue}
@@ -329,7 +460,11 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
           aria-orientation={orientation}
           aria-disabled={disabled || undefined}
           aria-readonly={readOnly || undefined}
-          aria-label={label ? `${label}${range ? ` ${thumbIndex === 0 ? kreatiLocale.slider.rangeMin : kreatiLocale.slider.rangeMax}` : ''}` : undefined}
+          aria-label={
+            label
+              ? `${label}${range ? ` ${thumbIndex === 0 ? kreatiLocale.slider.rangeMin : kreatiLocale.slider.rangeMax}` : ""}`
+              : undefined
+          }
           aria-describedby={describedBy}
           style={posStyle}
           onMouseDown={handleDragStart(thumbIndex)}
@@ -340,8 +475,10 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
           onBlur={dragging === null ? onBlur : undefined}
         >
           {thumbTemplate ? thumbTemplate(thumbValue, thumbIndex) : null}
-          {showTooltip !== 'never' && (
-            <div className={`${base}__tooltip ${tooltipVisible ? `${base}__tooltip--visible` : ''}`}>
+          {showTooltip !== "never" && (
+            <div
+              className={`${base}__tooltip ${tooltipVisible ? `${base}__tooltip--visible` : ""}`}
+            >
               {formatValue(thumbValue)}
             </div>
           )}
@@ -355,7 +492,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
 
     const isMarkActive = (markValue: number): boolean => {
       if (range) return markValue >= lo && markValue <= hi;
-      return markValue <= (typeof val === 'number' ? val : hi);
+      return markValue <= (typeof val === "number" ? val : hi);
     };
 
     const hasWrapper = !!(label || helperText || errorMessage);
@@ -364,7 +501,9 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
       <input
         type="hidden"
         name={name}
-        value={range ? `${lo},${hi}` : String(typeof val === 'number' ? val : lo)}
+        value={
+          range ? `${lo},${hi}` : String(typeof val === "number" ? val : lo)
+        }
       />
     ) : null;
 
@@ -383,11 +522,15 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
             )}
           </div>
           {range && renderThumb(0, lo, loPercent)}
-          {renderThumb(range ? 1 : 0, range ? hi : (typeof val === 'number' ? val : hi), hiPercent)}
+          {renderThumb(
+            range ? 1 : 0,
+            range ? hi : typeof val === "number" ? val : hi,
+            hiPercent
+          )}
         </div>
         {marks && marks.length > 0 && (
           <div className={`${base}__marks`}>
-            {marks.map((mark) => {
+            {marks.map(mark => {
               const active = isMarkActive(mark.value);
               const pos = toPercent(mark.value);
               const posStyle: React.CSSProperties = isHorizontal
@@ -396,16 +539,28 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
 
               if (markTemplate) {
                 return (
-                  <div key={mark.value} className={`${base}__mark`} style={posStyle}>
+                  <div
+                    key={mark.value}
+                    className={`${base}__mark`}
+                    style={posStyle}
+                  >
                     {markTemplate(mark, active)}
                   </div>
                 );
               }
 
               return (
-                <div key={mark.value} className={`${base}__mark`} style={posStyle}>
-                  <span className={`${base}__mark-dot ${active ? `${base}__mark-dot--active` : ''}`} />
-                  {mark.label && <span className={`${base}__mark-label`}>{mark.label}</span>}
+                <div
+                  key={mark.value}
+                  className={`${base}__mark`}
+                  style={posStyle}
+                >
+                  <span
+                    className={`${base}__mark-dot ${active ? `${base}__mark-dot--active` : ""}`}
+                  />
+                  {mark.label && (
+                    <span className={`${base}__mark-label`}>{mark.label}</span>
+                  )}
                 </div>
               );
             })}
@@ -434,7 +589,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
         {sliderEl}
       </FieldWrapper>
     );
-  },
+  }
 );
 
-Slider.displayName = 'Slider';
+Slider.displayName = "Slider";

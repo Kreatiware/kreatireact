@@ -1,15 +1,24 @@
-import React, { forwardRef, useId, useRef, useState, useCallback, useEffect, useMemo, useImperativeHandle } from 'react';
-import { createPortal } from 'react-dom';
-import { SelectDropdown } from './SelectDropdown';
-import type { SelectOption, SelectGroup } from './SelectDropdown';
-import { FieldWrapper } from './FieldWrapper';
-import { useKreatiLocale } from '../locale';
-import { useOverlayPosition } from './useOverlayPosition';
-import { useLayerZIndex } from './LayerContext';
-import { CHEVRON_DOWN_PATH, TIMES_PATH } from './iconPaths';
-import './Select.css';
+import React, {
+  forwardRef,
+  useId,
+  useRef,
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+  useImperativeHandle,
+} from "react";
+import { createPortal } from "react-dom";
+import { SelectDropdown } from "./SelectDropdown";
+import type { SelectOption, SelectGroup } from "./SelectDropdown";
+import { FieldWrapper } from "./FieldWrapper";
+import { useKreatiLocale } from "../locale";
+import { useOverlayPosition } from "./useOverlayPosition";
+import { useLayerZIndex } from "./LayerContext";
+import { CHEVRON_DOWN_PATH, TIMES_PATH } from "./iconPaths";
+import "./Select.css";
 
-export type { SelectOption, SelectGroup } from './SelectDropdown';
+export type { SelectOption, SelectGroup } from "./SelectDropdown";
 
 export interface SelectProps {
   /** Array of selectable options */
@@ -21,11 +30,14 @@ export interface SelectProps {
   /** Default selected value (uncontrolled) */
   defaultValue?: string | number | null;
   /** Fires when selection changes */
-  onChange?: (value: string | number | null, option: SelectOption | null) => void;
+  onChange?: (
+    value: string | number | null,
+    option: SelectOption | null
+  ) => void;
   /** Visual variant: floating (label on border) or stacked (label above) */
-  variant?: 'floating' | 'stacked';
+  variant?: "floating" | "stacked";
   /** Component size — matches Input/Button sizes */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Label text */
   label?: string;
   /** Placeholder when no value is selected */
@@ -45,7 +57,10 @@ export interface SelectProps {
   /** Custom render for the selected value display */
   selectedTemplate?: (option: SelectOption) => React.ReactNode;
   /** Custom render for each option in the dropdown */
-  optionTemplate?: (option: SelectOption, state: { selected: boolean; focused: boolean; disabled: boolean }) => React.ReactNode;
+  optionTemplate?: (
+    option: SelectOption,
+    state: { selected: boolean; focused: boolean; disabled: boolean }
+  ) => React.ReactNode;
   /** Custom render for group headers */
   groupTemplate?: (group: SelectGroup) => React.ReactNode;
   /** Placeholder for the filter input inside the dropdown */
@@ -59,7 +74,15 @@ export interface SelectProps {
   /** Success state */
   success?: boolean;
   /** Helper text severity color */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  helperSeverity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Disabled state */
   disabled?: boolean;
   /** Read-only state */
@@ -112,8 +135,8 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       value: controlledValue,
       defaultValue,
       onChange,
-      variant = 'floating',
-      size = 'md',
+      variant = "floating",
+      size = "md",
       label,
       placeholder,
       editable = false,
@@ -136,14 +159,14 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       required = false,
       fullWidth = false,
       name,
-      className = '',
+      className = "",
       style,
       onOpen,
       onClose,
       onInputChange,
       onBlur,
     },
-    ref,
+    ref
   ) => {
     const autoId = useId();
     const selectId = name || autoId;
@@ -155,39 +178,42 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     useImperativeHandle(ref, () => wrapperRef.current as HTMLDivElement);
 
     const isControlled = controlledValue !== undefined;
-    const [internalValue, setInternalValue] = useState<string | number | null>(defaultValue ?? null);
+    const [internalValue, setInternalValue] = useState<string | number | null>(
+      defaultValue ?? null
+    );
     const selectedValue = isControlled ? controlledValue : internalValue;
 
     const [open, setOpen] = useState(false);
-    const [filter, setFilter] = useState('');
-    const [editableText, setEditableText] = useState('');
+    const [filter, setFilter] = useState("");
+    const [editableText, setEditableText] = useState("");
     const [focusedIndex, setFocusedIndex] = useState(-1);
     const [userNavigated, setUserNavigated] = useState(false);
 
-    const { coords: overlayCoords, positioned: overlayPositioned } = useOverlayPosition(
-      triggerRef as React.RefObject<HTMLElement>,
-      panelRef as React.RefObject<HTMLElement>,
-      open,
-    );
+    const { coords: overlayCoords, positioned: overlayPositioned } =
+      useOverlayPosition(
+        triggerRef as React.RefObject<HTMLElement>,
+        panelRef as React.RefObject<HTMLElement>,
+        open
+      );
     const { child: childZ } = useLayerZIndex();
 
     const locale = useKreatiLocale();
     const hasError = !!error;
-    const errorMessage = typeof error === 'boolean' ? undefined : error;
-    const isFloating = variant === 'floating';
+    const errorMessage = typeof error === "boolean" ? undefined : error;
+    const isFloating = variant === "floating";
     const hasLabel = !!label;
     const hasWrapper = !isFloating && !!(label || helperText || errorMessage);
-    const base = 'k-select';
+    const base = "k-select";
 
     const selectedOption = useMemo(
-      () => options.find((o) => o.value === selectedValue) ?? null,
-      [options, selectedValue],
+      () => options.find(o => o.value === selectedValue) ?? null,
+      [options, selectedValue]
     );
 
     const filteredOptions = useMemo(() => {
       if (!filterable || !filter) return options;
       const lower = filter.toLowerCase();
-      return options.filter((o) => o.label.toLowerCase().includes(lower));
+      return options.filter(o => o.label.toLowerCase().includes(lower));
     }, [options, filter, filterable]);
 
     const handleFilterChange = useCallback((f: string) => {
@@ -197,136 +223,217 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 
     const helperId = `${selectId}-helper`;
     const errorId = `${selectId}-error`;
-    const describedBy = [hasError && errorId, helperId].filter(Boolean).join(' ') || undefined;
+    const describedBy =
+      [hasError && errorId, helperId].filter(Boolean).join(" ") || undefined;
 
-    const hasValue = selectedValue !== null && selectedValue !== undefined && selectedValue !== '';
-    const displayText = selectedOption ? selectedOption.label : (editable && hasValue ? String(selectedValue) : '');
+    const hasValue =
+      selectedValue !== null &&
+      selectedValue !== undefined &&
+      selectedValue !== "";
+    const displayText = selectedOption
+      ? selectedOption.label
+      : editable && hasValue
+        ? String(selectedValue)
+        : "";
 
     const openDropdown = useCallback(() => {
       if (disabled || readOnly || open) return;
       setOpen(true);
-      setFocusedIndex(selectedOption ? filteredOptions.findIndex((o) => o.value === selectedValue) : 0);
+      setFocusedIndex(
+        selectedOption
+          ? filteredOptions.findIndex(o => o.value === selectedValue)
+          : 0
+      );
       setUserNavigated(false);
       onOpen?.();
-    }, [disabled, readOnly, open, selectedOption, filteredOptions, selectedValue, onOpen]);
+    }, [
+      disabled,
+      readOnly,
+      open,
+      selectedOption,
+      filteredOptions,
+      selectedValue,
+      onOpen,
+    ]);
 
-    const closeDropdown = useCallback((commitEditable = true) => {
-      if (!open) return;
-      if (editable && commitEditable && editableText.trim()) {
-        const match = options.find((o) => o.label.toLowerCase() === editableText.trim().toLowerCase());
-        if (match) {
-          if (!isControlled) setInternalValue(match.value);
-          onChange?.(match.value, match);
-        } else {
-          if (!isControlled) setInternalValue(editableText.trim());
-          onChange?.(editableText.trim(), null);
+    const closeDropdown = useCallback(
+      (commitEditable = true) => {
+        if (!open) return;
+        if (editable && commitEditable && editableText.trim()) {
+          const match = options.find(
+            o => o.label.toLowerCase() === editableText.trim().toLowerCase()
+          );
+          if (match) {
+            if (!isControlled) setInternalValue(match.value);
+            onChange?.(match.value, match);
+          } else {
+            if (!isControlled) setInternalValue(editableText.trim());
+            onChange?.(editableText.trim(), null);
+          }
         }
-      }
-      setOpen(false);
-      setFilter('');
-      setFocusedIndex(-1);
-      setEditableText('');
-      setUserNavigated(false);
-      onClose?.();
-      onBlur?.();
-    }, [open, editable, editableText, options, isControlled, onChange, onClose, onBlur]);
+        setOpen(false);
+        setFilter("");
+        setFocusedIndex(-1);
+        setEditableText("");
+        setUserNavigated(false);
+        onClose?.();
+        onBlur?.();
+      },
+      [
+        open,
+        editable,
+        editableText,
+        options,
+        isControlled,
+        onChange,
+        onClose,
+        onBlur,
+      ]
+    );
 
-    const selectOption = useCallback((option: SelectOption) => {
-      if (!isControlled) setInternalValue(option.value);
-      onChange?.(option.value, option);
-      setFilter('');
-      closeDropdown(false);
-      triggerRef.current?.focus();
-    }, [isControlled, onChange, closeDropdown]);
+    const selectOption = useCallback(
+      (option: SelectOption) => {
+        if (!isControlled) setInternalValue(option.value);
+        onChange?.(option.value, option);
+        setFilter("");
+        closeDropdown(false);
+        triggerRef.current?.focus();
+      },
+      [isControlled, onChange, closeDropdown]
+    );
 
-    const clearValue = useCallback((e: React.MouseEvent) => {
-      e.stopPropagation();
-      if (!isControlled) setInternalValue(null);
-      onChange?.(null, null);
-      setFilter('');
-      setEditableText('');
-      triggerRef.current?.focus();
-    }, [isControlled, onChange]);
+    const clearValue = useCallback(
+      (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!isControlled) setInternalValue(null);
+        onChange?.(null, null);
+        setFilter("");
+        setEditableText("");
+        triggerRef.current?.focus();
+      },
+      [isControlled, onChange]
+    );
 
     const handleTriggerClick = useCallback(() => {
       if (open) closeDropdown(true);
       else openDropdown();
     }, [open, openDropdown, closeDropdown]);
 
-    const handleEditableChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-      const val = e.target.value;
-      setEditableText(val);
-      onInputChange?.(val);
-      if (!open) openDropdown();
-    }, [open, openDropdown, onInputChange]);
+    const handleEditableChange = useCallback(
+      (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = e.target.value;
+        setEditableText(val);
+        onInputChange?.(val);
+        if (!open) openDropdown();
+      },
+      [open, openDropdown, onInputChange]
+    );
 
-    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-      if (disabled || readOnly) return;
+    const handleKeyDown = useCallback(
+      (e: React.KeyboardEvent) => {
+        if (disabled || readOnly) return;
 
-      switch (e.key) {
-        case 'ArrowDown': {
-          e.preventDefault();
-          if (!open) { openDropdown(); return; }
-          setUserNavigated(true);
-          setFocusedIndex((prev) => {
-            let next = prev + 1;
-            while (next < filteredOptions.length && filteredOptions[next].disabled) next++;
-            return next < filteredOptions.length ? next : prev;
-          });
-          break;
-        }
-        case 'ArrowUp': {
-          e.preventDefault();
-          if (!open) { openDropdown(); return; }
-          setUserNavigated(true);
-          setFocusedIndex((prev) => {
-            let next = prev - 1;
-            while (next >= 0 && filteredOptions[next].disabled) next--;
-            return next >= 0 ? next : prev;
-          });
-          break;
-        }
-        case 'Enter': {
-          e.preventDefault();
-          if (open && (!editable || userNavigated) && focusedIndex >= 0 && focusedIndex < filteredOptions.length) {
-            selectOption(filteredOptions[focusedIndex]);
-          } else if (open && editable) {
-            closeDropdown();
-          } else if (!open) {
-            openDropdown();
-          }
-          break;
-        }
-        case ' ': {
-          if (!editable) {
+        switch (e.key) {
+          case "ArrowDown": {
             e.preventDefault();
-            if (open && focusedIndex >= 0 && focusedIndex < filteredOptions.length) {
+            if (!open) {
+              openDropdown();
+              return;
+            }
+            setUserNavigated(true);
+            setFocusedIndex(prev => {
+              let next = prev + 1;
+              while (
+                next < filteredOptions.length &&
+                filteredOptions[next].disabled
+              )
+                next++;
+              return next < filteredOptions.length ? next : prev;
+            });
+            break;
+          }
+          case "ArrowUp": {
+            e.preventDefault();
+            if (!open) {
+              openDropdown();
+              return;
+            }
+            setUserNavigated(true);
+            setFocusedIndex(prev => {
+              let next = prev - 1;
+              while (next >= 0 && filteredOptions[next].disabled) next--;
+              return next >= 0 ? next : prev;
+            });
+            break;
+          }
+          case "Enter": {
+            e.preventDefault();
+            if (
+              open &&
+              (!editable || userNavigated) &&
+              focusedIndex >= 0 &&
+              focusedIndex < filteredOptions.length
+            ) {
               selectOption(filteredOptions[focusedIndex]);
+            } else if (open && editable) {
+              closeDropdown();
             } else if (!open) {
               openDropdown();
             }
+            break;
           }
-          break;
+          case " ": {
+            if (!editable) {
+              e.preventDefault();
+              if (
+                open &&
+                focusedIndex >= 0 &&
+                focusedIndex < filteredOptions.length
+              ) {
+                selectOption(filteredOptions[focusedIndex]);
+              } else if (!open) {
+                openDropdown();
+              }
+            }
+            break;
+          }
+          case "Escape": {
+            e.preventDefault();
+            closeDropdown();
+            break;
+          }
+          case "Tab": {
+            closeDropdown();
+            break;
+          }
+          case "Home": {
+            if (open) {
+              e.preventDefault();
+              setFocusedIndex(0);
+            }
+            break;
+          }
+          case "End": {
+            if (open) {
+              e.preventDefault();
+              setFocusedIndex(filteredOptions.length - 1);
+            }
+            break;
+          }
         }
-        case 'Escape': {
-          e.preventDefault();
-          closeDropdown();
-          break;
-        }
-        case 'Tab': {
-          closeDropdown();
-          break;
-        }
-        case 'Home': {
-          if (open) { e.preventDefault(); setFocusedIndex(0); }
-          break;
-        }
-        case 'End': {
-          if (open) { e.preventDefault(); setFocusedIndex(filteredOptions.length - 1); }
-          break;
-        }
-      }
-    }, [disabled, readOnly, open, focusedIndex, filteredOptions, editable, openDropdown, closeDropdown, selectOption]);
+      },
+      [
+        disabled,
+        readOnly,
+        open,
+        focusedIndex,
+        filteredOptions,
+        editable,
+        openDropdown,
+        closeDropdown,
+        selectOption,
+      ]
+    );
 
     useEffect(() => {
       if (!open) return;
@@ -335,8 +442,8 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
         if (panelRef.current?.contains(e.target as Node)) return;
         closeDropdown();
       };
-      document.addEventListener('mousedown', onClickOutside);
-      return () => document.removeEventListener('mousedown', onClickOutside);
+      document.addEventListener("mousedown", onClickOutside);
+      return () => document.removeEventListener("mousedown", onClickOutside);
     }, [open, closeDropdown]);
 
     useEffect(() => {
@@ -344,13 +451,25 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     }, [open, editable]);
 
     const chevronIcon = dropdownIcon || (
-      <svg width={14} height={14} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <svg
+        width={14}
+        height={14}
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+      >
         <path d={CHEVRON_DOWN_PATH} />
       </svg>
     );
 
     const clearIcon = (
-      <svg width={12} height={12} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <svg
+        width={12}
+        height={12}
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+      >
         <path d={TIMES_PATH} />
       </svg>
     );
@@ -360,17 +479,25 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
         ref={inputRef}
         className={`${base}__input`}
         value={open ? editableText : displayText}
-        placeholder={hasValue && !open ? undefined : (placeholder || (hasLabel && isFloating ? ' ' : undefined))}
+        placeholder={
+          hasValue && !open
+            ? undefined
+            : placeholder || (hasLabel && isFloating ? " " : undefined)
+        }
         onChange={handleEditableChange}
         disabled={disabled}
         readOnly={readOnly}
         tabIndex={-1}
       />
     ) : (
-      <span className={`${base}__value ${!hasValue ? `${base}__value--placeholder` : ''}`}>
+      <span
+        className={`${base}__value ${!hasValue ? `${base}__value--placeholder` : ""}`}
+      >
         {hasValue && selectedOption
-          ? (selectedTemplate ? selectedTemplate(selectedOption) : displayText)
-          : (placeholder || (hasLabel && isFloating ? '\u00A0' : ''))}
+          ? selectedTemplate
+            ? selectedTemplate(selectedOption)
+            : displayText
+          : placeholder || (hasLabel && isFloating ? "\u00A0" : "")}
       </span>
     );
 
@@ -384,16 +511,20 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       open && `${base}__trigger--open`,
       fullWidth && `${base}__trigger--full-width`,
       iconLeft && `${base}__trigger--has-icon-left`,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     const wrapperClasses = [
       base,
       `${base}--${variant}`,
       fullWidth && `${base}--full-width`,
       className,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
-    const legendText = hasLabel ? `${label}${required ? ' *' : ''}` : '';
+    const legendText = hasLabel ? `${label}${required ? " *" : ""}` : "";
 
     const triggerEl = isFloating ? (
       <fieldset
@@ -412,7 +543,11 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
         aria-required={required || undefined}
         aria-invalid={hasError || undefined}
         aria-describedby={describedBy}
-        aria-activedescendant={open && focusedIndex >= 0 ? `${dropdownId}-opt-${focusedIndex}` : undefined}
+        aria-activedescendant={
+          open && focusedIndex >= 0
+            ? `${dropdownId}-opt-${focusedIndex}`
+            : undefined
+        }
       >
         {hasLabel && (
           <legend className={`${base}__legend`}>
@@ -420,21 +555,43 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
           </legend>
         )}
         <div className={`${base}__trigger-inner`}>
-          {iconLeft && <span className={`${base}__icon ${base}__icon--left`} aria-hidden="true">{iconLeft}</span>}
+          {iconLeft && (
+            <span
+              className={`${base}__icon ${base}__icon--left`}
+              aria-hidden="true"
+            >
+              {iconLeft}
+            </span>
+          )}
           {triggerContent}
           {clearable && hasValue && !disabled && !readOnly && (
-            <button type="button" className={`${base}__clear`} onClick={clearValue} tabIndex={-1} aria-label={locale.select.clearLabel}>
+            <button
+              type="button"
+              className={`${base}__clear`}
+              onClick={clearValue}
+              tabIndex={-1}
+              aria-label={locale.select.clearLabel}
+            >
               {clearIcon}
             </button>
           )}
-          <span className={`${base}__chevron ${open ? `${base}__chevron--open` : ''}`} aria-hidden="true">
+          <span
+            className={`${base}__chevron ${open ? `${base}__chevron--open` : ""}`}
+            aria-hidden="true"
+          >
             {chevronIcon}
           </span>
         </div>
         {hasLabel && (
-          <label className={`${base}__floating-label ${hasValue || open ? `${base}__floating-label--active` : ''}`}>
+          <label
+            className={`${base}__floating-label ${hasValue || open ? `${base}__floating-label--active` : ""}`}
+          >
             {label}
-            {required && <span className={`${base}__floating-required`} aria-hidden="true">*</span>}
+            {required && (
+              <span className={`${base}__floating-required`} aria-hidden="true">
+                *
+              </span>
+            )}
           </label>
         )}
       </fieldset>
@@ -454,48 +611,78 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
         aria-required={required || undefined}
         aria-invalid={hasError || undefined}
         aria-describedby={describedBy}
-        aria-activedescendant={open && focusedIndex >= 0 ? `${dropdownId}-opt-${focusedIndex}` : undefined}
+        aria-activedescendant={
+          open && focusedIndex >= 0
+            ? `${dropdownId}-opt-${focusedIndex}`
+            : undefined
+        }
       >
-        {iconLeft && <span className={`${base}__icon ${base}__icon--left`} aria-hidden="true">{iconLeft}</span>}
+        {iconLeft && (
+          <span
+            className={`${base}__icon ${base}__icon--left`}
+            aria-hidden="true"
+          >
+            {iconLeft}
+          </span>
+        )}
         {triggerContent}
         {clearable && hasValue && !disabled && !readOnly && (
-          <button type="button" className={`${base}__clear`} onClick={clearValue} tabIndex={-1} aria-label={locale.select.clearLabel}>
+          <button
+            type="button"
+            className={`${base}__clear`}
+            onClick={clearValue}
+            tabIndex={-1}
+            aria-label={locale.select.clearLabel}
+          >
             {clearIcon}
           </button>
         )}
-        <span className={`${base}__chevron ${open ? `${base}__chevron--open` : ''}`} aria-hidden="true">
+        <span
+          className={`${base}__chevron ${open ? `${base}__chevron--open` : ""}`}
+          aria-hidden="true"
+        >
           {chevronIcon}
         </span>
       </div>
     );
 
-    const dropdownPanel = open ? createPortal(
-      <div
-        ref={panelRef}
-        className={`${base}__dropdown-portal ${overlayPositioned ? `${base}__dropdown-portal--visible` : ''}`}
-        style={{ position: 'fixed', top: overlayCoords.top, left: overlayCoords.left, minWidth: overlayCoords.minWidth, zIndex: childZ }}
-      >
-        <SelectDropdown
-          options={filteredOptions}
-          groups={groups}
-          value={selectedValue}
-          filterable={filterable}
-          filterPlaceholder={filterPlaceholder || locale.select.filterPlaceholder}
-          focusedIndex={focusedIndex}
-          virtualScroll={virtualScroll}
-          optionTemplate={optionTemplate}
-          groupTemplate={groupTemplate}
-          emptyMessage={emptyMessage || locale.select.emptyMessage}
-          onSelect={selectOption}
-          onMouseEnterOption={setFocusedIndex}
-          onFilterChange={handleFilterChange}
-          onKeyDown={handleKeyDown}
-          dropdownId={dropdownId}
-          size={size}
-        />
-      </div>,
-      document.body,
-    ) : null;
+    const dropdownPanel = open
+      ? createPortal(
+          <div
+            ref={panelRef}
+            className={`${base}__dropdown-portal ${overlayPositioned ? `${base}__dropdown-portal--visible` : ""}`}
+            style={{
+              position: "fixed",
+              top: overlayCoords.top,
+              left: overlayCoords.left,
+              minWidth: overlayCoords.minWidth,
+              zIndex: childZ,
+            }}
+          >
+            <SelectDropdown
+              options={filteredOptions}
+              groups={groups}
+              value={selectedValue}
+              filterable={filterable}
+              filterPlaceholder={
+                filterPlaceholder || locale.select.filterPlaceholder
+              }
+              focusedIndex={focusedIndex}
+              virtualScroll={virtualScroll}
+              optionTemplate={optionTemplate}
+              groupTemplate={groupTemplate}
+              emptyMessage={emptyMessage || locale.select.emptyMessage}
+              onSelect={selectOption}
+              onMouseEnterOption={setFocusedIndex}
+              onFilterChange={handleFilterChange}
+              onKeyDown={handleKeyDown}
+              dropdownId={dropdownId}
+              size={size}
+            />
+          </div>,
+          document.body
+        )
+      : null;
 
     /* -- Floating variant -- */
     if (isFloating) {
@@ -506,20 +693,26 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
           </div>
           {dropdownPanel}
           {hasError && errorMessage && (
-            <span className={`${base}__error`} id={errorId} role="alert">{errorMessage}</span>
+            <span className={`${base}__error`} id={errorId} role="alert">
+              {errorMessage}
+            </span>
           )}
           {helperText && (
             <span
               className={[
                 `${base}__helper`,
                 helperSeverity && `${base}__helper--${helperSeverity}`,
-              ].filter(Boolean).join(' ')}
+              ]
+                .filter(Boolean)
+                .join(" ")}
               id={helperId}
             >
               {helperText}
             </span>
           )}
-          {name && <input type="hidden" name={name} value={selectedValue ?? ''} />}
+          {name && (
+            <input type="hidden" name={name} value={selectedValue ?? ""} />
+          )}
         </div>
       );
     }
@@ -536,7 +729,9 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
         <div ref={wrapperRef} className={wrapperClasses}>
           {containerEl}
           {dropdownPanel}
-          {name && <input type="hidden" name={name} value={selectedValue ?? ''} />}
+          {name && (
+            <input type="hidden" name={name} value={selectedValue ?? ""} />
+          )}
         </div>
       );
     }
@@ -558,10 +753,12 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
           {containerEl}
         </FieldWrapper>
         {dropdownPanel}
-        {name && <input type="hidden" name={name} value={selectedValue ?? ''} />}
+        {name && (
+          <input type="hidden" name={name} value={selectedValue ?? ""} />
+        )}
       </div>
     );
-  },
+  }
 );
 
-Select.displayName = 'Select';
+Select.displayName = "Select";

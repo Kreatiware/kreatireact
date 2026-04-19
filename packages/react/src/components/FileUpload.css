@@ -6,7 +6,10 @@
   font-family: var(--kreati-font-family);
 }
 
-.k-file-upload--disabled { opacity: 0.5; pointer-events: none; }
+.k-file-upload--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
 
 /* ─── FileUpload — Dropzone ──────────────────────────────────────── */
 
@@ -21,7 +24,9 @@
   border-radius: var(--kreati-radius-lg);
   background: var(--kreati-gray-50);
   cursor: pointer;
-  transition: border-color var(--kreati-transition-fast), background var(--kreati-transition-fast);
+  transition:
+    border-color var(--kreati-transition-fast),
+    background var(--kreati-transition-fast);
   text-align: center;
 }
 
@@ -126,6 +131,10 @@
 /* ─── FileUpload — Reduced motion ────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
-  .k-file-upload__dropzone { transition: none; }
-  .k-file-upload__file-remove { transition: none; }
+  .k-file-upload__dropzone {
+    transition: none;
+  }
+  .k-file-upload__file-remove {
+    transition: none;
+  }
 }

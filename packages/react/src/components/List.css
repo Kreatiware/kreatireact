@@ -118,7 +118,19 @@
 /* ============================================
    List — Sizes
    ============================================ */
-.k-list--xs .k-list__item { padding: var(--kreati-space-1) var(--kreati-space-2); font-size: var(--kreati-font-size-xxs); }
-.k-list--sm .k-list__item { padding: var(--kreati-space-1) var(--kreati-space-3); font-size: var(--kreati-font-size-xs); }
-.k-list--lg .k-list__item { padding: var(--kreati-space-3) var(--kreati-space-3); font-size: var(--kreati-font-size-base); }
-.k-list--xl .k-list__item { padding: var(--kreati-space-3) var(--kreati-space-4); font-size: var(--kreati-font-size-md); }
+.k-list--xs .k-list__item {
+  padding: var(--kreati-space-1) var(--kreati-space-2);
+  font-size: var(--kreati-font-size-xxs);
+}
+.k-list--sm .k-list__item {
+  padding: var(--kreati-space-1) var(--kreati-space-3);
+  font-size: var(--kreati-font-size-xs);
+}
+.k-list--lg .k-list__item {
+  padding: var(--kreati-space-3) var(--kreati-space-3);
+  font-size: var(--kreati-font-size-base);
+}
+.k-list--xl .k-list__item {
+  padding: var(--kreati-space-3) var(--kreati-space-4);
+  font-size: var(--kreati-font-size-md);
+}

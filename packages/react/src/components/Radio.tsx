@@ -1,5 +1,11 @@
-import React, { forwardRef, useId, useRef, useState, useImperativeHandle } from 'react';
-import './Radio.css';
+import React, {
+  forwardRef,
+  useId,
+  useRef,
+  useState,
+  useImperativeHandle,
+} from "react";
+import "./Radio.css";
 
 export interface RadioProps {
   /** Checked state (controlled) */
@@ -11,9 +17,9 @@ export interface RadioProps {
   /** Label text next to the radio */
   label?: React.ReactNode;
   /** Label position relative to the circle */
-  labelPosition?: 'left' | 'right';
+  labelPosition?: "left" | "right";
   /** Component size */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Custom content rendered inside the circle when checked — replaces the default dot */
   checkedTemplate?: React.ReactNode;
   /** Custom content rendered inside the circle when unchecked — empty by default */
@@ -25,7 +31,15 @@ export interface RadioProps {
   /** Success state — applies success border color */
   success?: boolean;
   /** Severity color for the helper text */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  helperSeverity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Disabled state */
   disabled?: boolean;
   /** Read-only state */
@@ -66,8 +80,8 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
       defaultChecked,
       value,
       label,
-      labelPosition = 'right',
-      size = 'md',
+      labelPosition = "right",
+      size = "md",
       checkedTemplate,
       uncheckedTemplate,
       helperText,
@@ -80,30 +94,37 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
       name,
       onChange,
       onBlur,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const autoId = useId();
-    const inputId = `${name || autoId}-${value ?? 'radio'}`;
+    const inputId = `${name || autoId}-${value ?? "radio"}`;
     const innerRef = useRef<HTMLInputElement>(null);
     useImperativeHandle(ref, () => innerRef.current as HTMLInputElement);
 
     const isControlled = controlledChecked !== undefined;
-    const [internalChecked, setInternalChecked] = useState(defaultChecked ?? false);
+    const [internalChecked, setInternalChecked] = useState(
+      defaultChecked ?? false
+    );
     const isChecked = isControlled ? controlledChecked : internalChecked;
 
     const hasError = !!error;
-    const errorMessage = typeof error === 'boolean' ? undefined : error;
-    const base = 'k-radio';
+    const errorMessage = typeof error === "boolean" ? undefined : error;
+    const base = "k-radio";
 
     const helperId = `${inputId}-helper`;
     const errorId = `${inputId}-error`;
-    const describedBy = [hasError && errorId, helperText && helperId].filter(Boolean).join(' ') || undefined;
+    const describedBy =
+      [hasError && errorId, helperText && helperId].filter(Boolean).join(" ") ||
+      undefined;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (readOnly) { e.preventDefault(); return; }
+      if (readOnly) {
+        e.preventDefault();
+        return;
+      }
       if (!isControlled) setInternalChecked(e.target.checked);
       onChange?.(e);
     };
@@ -130,7 +151,9 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
       hasError && isChecked && `${base}__circle--error-active`,
       hasError && !isChecked && `${base}__circle--error`,
       disabled && `${base}__circle--disabled`,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     const wrapperClasses = [
       base,
@@ -138,12 +161,18 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
       disabled && `${base}--disabled`,
       readOnly && `${base}--readonly`,
       className,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     const labelEl = label ? (
       <span className={`${base}__label ${base}__label--${size}`}>
         {label}
-        {required && <span className={`${base}__required`} aria-hidden="true">*</span>}
+        {required && (
+          <span className={`${base}__required`} aria-hidden="true">
+            *
+          </span>
+        )}
       </span>
     ) : null;
 
@@ -167,20 +196,22 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
             aria-describedby={describedBy}
             aria-required={required || undefined}
           />
-          <span className={circleClasses}>
-            {renderContent()}
-          </span>
+          <span className={circleClasses}>{renderContent()}</span>
           {labelEl}
         </label>
         {hasError && errorMessage && (
-          <span className={`${base}__error`} id={errorId} role="alert">{errorMessage}</span>
+          <span className={`${base}__error`} id={errorId} role="alert">
+            {errorMessage}
+          </span>
         )}
         {helperText && (
           <span
             className={[
               `${base}__helper`,
               helperSeverity && `${base}__helper--${helperSeverity}`,
-            ].filter(Boolean).join(' ')}
+            ]
+              .filter(Boolean)
+              .join(" ")}
             id={helperId}
           >
             {helperText}
@@ -188,7 +219,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
         )}
       </div>
     );
-  },
+  }
 );
 
-Radio.displayName = 'Radio';
+Radio.displayName = "Radio";

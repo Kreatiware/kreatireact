@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 /**
  * Base menu item interface for all menu and navigation components.
@@ -14,7 +14,7 @@ export interface MenuItem {
   /** URL for navigation */
   url?: string;
   /** Link target — '_blank' opens in new tab */
-  target?: '_blank' | '_self';
+  target?: "_blank" | "_self";
   /** Nested submenu items */
   items?: MenuItem[];
   /** Whether this submenu is expanded (controlled) */
@@ -32,7 +32,7 @@ export interface MenuItem {
   /** Arbitrary data attached to the item */
   data?: Record<string, unknown>;
   /** Position of submenu relative to this item (overrides component default) */
-  submenuPosition?: 'right' | 'left' | 'top' | 'bottom';
+  submenuPosition?: "right" | "left" | "top" | "bottom";
   /** Additional CSS class name */
   className?: string;
   /** Inline styles */

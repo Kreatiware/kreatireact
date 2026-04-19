@@ -84,14 +84,54 @@
 
 /* ═══ SIZE OVERRIDE via CSS variable ═════════════════════════════════ */
 
-.k-btn-group--xs > .k-button { height: var(--kreati-btn-height-xs); padding: var(--kreati-btn-padding-xs); font-size: var(--kreati-font-size-xxs); }
-.k-btn-group--sm > .k-button { height: var(--kreati-btn-height-sm); padding: var(--kreati-btn-padding-sm); font-size: var(--kreati-font-size-xs); }
-.k-btn-group--md > .k-button { height: var(--kreati-btn-height-md); padding: var(--kreati-btn-padding-md); font-size: var(--kreati-font-size-sm); }
-.k-btn-group--lg > .k-button { height: var(--kreati-btn-height-lg); padding: var(--kreati-btn-padding-lg); font-size: var(--kreati-font-size-base); }
-.k-btn-group--xl > .k-button { height: var(--kreati-btn-height-xl); padding: var(--kreati-btn-padding-xl); font-size: var(--kreati-font-size-md); }
+.k-btn-group--xs > .k-button {
+  height: var(--kreati-btn-height-xs);
+  padding: var(--kreati-btn-padding-xs);
+  font-size: var(--kreati-font-size-xxs);
+}
+.k-btn-group--sm > .k-button {
+  height: var(--kreati-btn-height-sm);
+  padding: var(--kreati-btn-padding-sm);
+  font-size: var(--kreati-font-size-xs);
+}
+.k-btn-group--md > .k-button {
+  height: var(--kreati-btn-height-md);
+  padding: var(--kreati-btn-padding-md);
+  font-size: var(--kreati-font-size-sm);
+}
+.k-btn-group--lg > .k-button {
+  height: var(--kreati-btn-height-lg);
+  padding: var(--kreati-btn-padding-lg);
+  font-size: var(--kreati-font-size-base);
+}
+.k-btn-group--xl > .k-button {
+  height: var(--kreati-btn-height-xl);
+  padding: var(--kreati-btn-padding-xl);
+  font-size: var(--kreati-font-size-md);
+}
 
-.k-btn-group--xs > .k-toggle-btn { height: var(--kreati-btn-height-xs); padding: var(--kreati-btn-padding-xs); font-size: var(--kreati-font-size-xxs); }
-.k-btn-group--sm > .k-toggle-btn { height: var(--kreati-btn-height-sm); padding: var(--kreati-btn-padding-sm); font-size: var(--kreati-font-size-xs); }
-.k-btn-group--md > .k-toggle-btn { height: var(--kreati-btn-height-md); padding: var(--kreati-btn-padding-md); font-size: var(--kreati-font-size-sm); }
-.k-btn-group--lg > .k-toggle-btn { height: var(--kreati-btn-height-lg); padding: var(--kreati-btn-padding-lg); font-size: var(--kreati-font-size-base); }
-.k-btn-group--xl > .k-toggle-btn { height: var(--kreati-btn-height-xl); padding: var(--kreati-btn-padding-xl); font-size: var(--kreati-font-size-md); }
+.k-btn-group--xs > .k-toggle-btn {
+  height: var(--kreati-btn-height-xs);
+  padding: var(--kreati-btn-padding-xs);
+  font-size: var(--kreati-font-size-xxs);
+}
+.k-btn-group--sm > .k-toggle-btn {
+  height: var(--kreati-btn-height-sm);
+  padding: var(--kreati-btn-padding-sm);
+  font-size: var(--kreati-font-size-xs);
+}
+.k-btn-group--md > .k-toggle-btn {
+  height: var(--kreati-btn-height-md);
+  padding: var(--kreati-btn-padding-md);
+  font-size: var(--kreati-font-size-sm);
+}
+.k-btn-group--lg > .k-toggle-btn {
+  height: var(--kreati-btn-height-lg);
+  padding: var(--kreati-btn-padding-lg);
+  font-size: var(--kreati-font-size-base);
+}
+.k-btn-group--xl > .k-toggle-btn {
+  height: var(--kreati-btn-height-xl);
+  padding: var(--kreati-btn-padding-xl);
+  font-size: var(--kreati-font-size-md);
+}

@@ -1,6 +1,13 @@
-import React, { forwardRef, useState, useCallback, useRef, useEffect, useImperativeHandle } from 'react';
-import { createPortal } from 'react-dom';
-import './Image.css';
+import React, {
+  forwardRef,
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  useImperativeHandle,
+} from "react";
+import { createPortal } from "react-dom";
+import "./Image.css";
 
 export interface ImageProps {
   /** Image source URL */
@@ -18,7 +25,7 @@ export interface ImageProps {
   /** Lazy loading */
   lazy?: boolean;
   /** Object-fit CSS property */
-  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+  objectFit?: "cover" | "contain" | "fill" | "none" | "scale-down";
   /** Border radius — uses Kreati radius tokens */
   rounded?: boolean;
   /** Additional CSS class names */
@@ -27,7 +34,7 @@ export interface ImageProps {
   style?: React.CSSProperties;
 }
 
-const base = 'k-image';
+const base = "k-image";
 
 /**
  * Image component with lazy loading, fallback, and preview overlay.
@@ -55,41 +62,54 @@ export const Image = forwardRef<HTMLDivElement, ImageProps>(
       lazy = false,
       objectFit,
       rounded = false,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const elRef = useRef<HTMLDivElement>(null);
     useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
 
-    const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>('loading');
+    const [status, setStatus] = useState<"loading" | "loaded" | "error">(
+      "loading"
+    );
     const [showPreview, setShowPreview] = useState(false);
 
-    const handleLoad = useCallback(() => setStatus('loaded'), []);
-    const handleError = useCallback(() => setStatus('error'), []);
+    const handleLoad = useCallback(() => setStatus("loaded"), []);
+    const handleError = useCallback(() => setStatus("error"), []);
 
-    useEffect(() => { setStatus('loading'); }, [src]);
+    useEffect(() => {
+      setStatus("loading");
+    }, [src]);
 
     useEffect(() => {
       if (!showPreview) return;
-      const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setShowPreview(false); };
-      document.addEventListener('keydown', handler);
-      return () => document.removeEventListener('keydown', handler);
+      const handler = (e: KeyboardEvent) => {
+        if (e.key === "Escape") setShowPreview(false);
+      };
+      document.addEventListener("keydown", handler);
+      return () => document.removeEventListener("keydown", handler);
     }, [showPreview]);
 
-    const cls = [base, preview && `${base}--preview`, className].filter(Boolean).join(' ');
+    const cls = [base, preview && `${base}--preview`, className]
+      .filter(Boolean)
+      .join(" ");
     const imgStyle: React.CSSProperties = {
       objectFit,
-      borderRadius: rounded ? 'var(--kreati-radius-full)' : undefined,
+      borderRadius: rounded ? "var(--kreati-radius-full)" : undefined,
       width: width ?? undefined,
       height: height ?? undefined,
     };
 
     return (
       <div ref={elRef} className={cls} style={{ ...style, width, height }}>
-        {status === 'error' ? (
-          <div className={`${base}__fallback`} style={{ borderRadius: rounded ? 'var(--kreati-radius-full)' : undefined }}>
+        {status === "error" ? (
+          <div
+            className={`${base}__fallback`}
+            style={{
+              borderRadius: rounded ? "var(--kreati-radius-full)" : undefined,
+            }}
+          >
             {fallback ?? alt}
           </div>
         ) : (
@@ -97,11 +117,15 @@ export const Image = forwardRef<HTMLDivElement, ImageProps>(
             className={`${base}__img ${base}__img--${status}`}
             src={src}
             alt={alt}
-            loading={lazy ? 'lazy' : undefined}
+            loading={lazy ? "lazy" : undefined}
             style={imgStyle}
             onLoad={handleLoad}
             onError={handleError}
-            onClick={preview && status === 'loaded' ? () => setShowPreview(true) : undefined}
+            onClick={
+              preview && status === "loaded"
+                ? () => setShowPreview(true)
+                : undefined
+            }
           />
         )}
         {showPreview &&
@@ -114,11 +138,11 @@ export const Image = forwardRef<HTMLDivElement, ImageProps>(
             >
               <img src={src} alt={alt} />
             </div>,
-            document.body,
+            document.body
           )}
       </div>
     );
-  },
+  }
 );
 
-Image.displayName = 'Image';
+Image.displayName = "Image";

@@ -18,22 +18,54 @@
 /* ============================================
    Message — Severities
    ============================================ */
-.k-message--primary   { background: var(--kreati-severity-primary-light); color: var(--kreati-severity-primary); }
-.k-message--secondary { background: var(--kreati-severity-secondary-light); color: var(--kreati-severity-secondary); }
-.k-message--success   { background: var(--kreati-severity-success-light); color: var(--kreati-severity-success); }
-.k-message--info      { background: var(--kreati-severity-info-light); color: var(--kreati-severity-info); }
-.k-message--warning   { background: var(--kreati-severity-warning-light); color: var(--kreati-severity-warning); }
-.k-message--help      { background: var(--kreati-severity-help-light); color: var(--kreati-severity-help); }
-.k-message--danger    { background: var(--kreati-severity-danger-light); color: var(--kreati-severity-danger); }
-.k-message--accent    { background: var(--kreati-severity-accent-light); color: var(--kreati-severity-accent); }
+.k-message--primary {
+  background: var(--kreati-severity-primary-light);
+  color: var(--kreati-severity-primary);
+}
+.k-message--secondary {
+  background: var(--kreati-severity-secondary-light);
+  color: var(--kreati-severity-secondary);
+}
+.k-message--success {
+  background: var(--kreati-severity-success-light);
+  color: var(--kreati-severity-success);
+}
+.k-message--info {
+  background: var(--kreati-severity-info-light);
+  color: var(--kreati-severity-info);
+}
+.k-message--warning {
+  background: var(--kreati-severity-warning-light);
+  color: var(--kreati-severity-warning);
+}
+.k-message--help {
+  background: var(--kreati-severity-help-light);
+  color: var(--kreati-severity-help);
+}
+.k-message--danger {
+  background: var(--kreati-severity-danger-light);
+  color: var(--kreati-severity-danger);
+}
+.k-message--accent {
+  background: var(--kreati-severity-accent-light);
+  color: var(--kreati-severity-accent);
+}
 
 /* ============================================
    Message — Border accent
    ============================================ */
-.k-message--border-left   { border-left: var(--kreati-message-border-width) solid currentColor; }
-.k-message--border-right  { border-right: var(--kreati-message-border-width) solid currentColor; }
-.k-message--border-top    { border-top: var(--kreati-message-border-width) solid currentColor; }
-.k-message--border-bottom { border-bottom: var(--kreati-message-border-width) solid currentColor; }
+.k-message--border-left {
+  border-left: var(--kreati-message-border-width) solid currentColor;
+}
+.k-message--border-right {
+  border-right: var(--kreati-message-border-width) solid currentColor;
+}
+.k-message--border-top {
+  border-top: var(--kreati-message-border-width) solid currentColor;
+}
+.k-message--border-bottom {
+  border-bottom: var(--kreati-message-border-width) solid currentColor;
+}
 
 /* ============================================
    Message — Icon
@@ -68,7 +100,9 @@
   color: currentColor;
   cursor: pointer;
   opacity: 0.6;
-  transition: opacity 0.15s ease, background 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    background 0.15s ease;
 }
 
 .k-message__close:hover {
@@ -86,13 +120,25 @@
    Message — Animations
    ============================================ */
 @keyframes k-message-enter {
-  from { opacity: 0; transform: translateY(-0.5rem); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes k-message-exit {
-  from { opacity: 1; transform: translateY(0); }
-  to   { opacity: 0; transform: translateY(-0.5rem); }
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
 }
 
 .k-message--exit {

@@ -6,9 +6,20 @@
   position: fixed;
   min-width: var(--kreati-contextmenu-min-width, 11.25rem);
   background: var(--kreati-contextmenu-bg, var(--kreati-white, #ffffff));
-  border: 1px solid var(--kreati-contextmenu-border-color, var(--kreati-gray-200, #e5e7eb));
-  border-radius: var(--kreati-contextmenu-radius, var(--kreati-radius-md, 0.5rem));
-  box-shadow: var(--kreati-contextmenu-shadow, var(--kreati-shadow-lg, 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1)));
+  border: 1px solid
+    var(--kreati-contextmenu-border-color, var(--kreati-gray-200, #e5e7eb));
+  border-radius: var(
+    --kreati-contextmenu-radius,
+    var(--kreati-radius-md, 0.5rem)
+  );
+  box-shadow: var(
+    --kreati-contextmenu-shadow,
+    var(
+      --kreati-shadow-lg,
+      0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -4px rgba(0, 0, 0, 0.1)
+    )
+  );
   padding: var(--kreati-contextmenu-padding, var(--kreati-space-1, 0.25rem));
   animation: k-contextmenu-in var(--kreati-contextmenu-transition, 0.12s ease);
 }
@@ -23,18 +34,33 @@
   width: 100%;
   max-height: 70vh;
   overflow-y: auto;
-  border-radius: var(--kreati-contextmenu-radius, var(--kreati-radius-md, 0.5rem)) var(--kreati-contextmenu-radius, var(--kreati-radius-md, 0.5rem)) 0 0;
-  animation: k-contextmenu-slide-up var(--kreati-contextmenu-transition, 0.2s ease);
+  border-radius: var(
+      --kreati-contextmenu-radius,
+      var(--kreati-radius-md, 0.5rem)
+    )
+    var(--kreati-contextmenu-radius, var(--kreati-radius-md, 0.5rem)) 0 0;
+  animation: k-contextmenu-slide-up
+    var(--kreati-contextmenu-transition, 0.2s ease);
 }
 
 @keyframes k-contextmenu-in {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes k-contextmenu-slide-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 .k-contextmenu__item-wrapper {
@@ -46,39 +72,62 @@
   align-items: center;
   gap: var(--kreati-contextmenu-item-gap, var(--kreati-space-2, 0.5rem));
   width: 100%;
-  padding: var(--kreati-contextmenu-item-padding, var(--kreati-space-2, 0.5rem) var(--kreati-space-3, 0.75rem));
+  padding: var(
+    --kreati-contextmenu-item-padding,
+    var(--kreati-space-2, 0.5rem) var(--kreati-space-3, 0.75rem)
+  );
   border: none;
   background: none;
   cursor: pointer;
   font-family: var(--kreati-font-family);
-  font-size: var(--kreati-contextmenu-font-size, var(--kreati-font-size-sm, 0.875rem));
+  font-size: var(
+    --kreati-contextmenu-font-size,
+    var(--kreati-font-size-sm, 0.875rem)
+  );
   color: var(--kreati-contextmenu-color, var(--kreati-gray-700, #374151));
   text-align: left;
-  border-radius: var(--kreati-contextmenu-item-radius, var(--kreati-radius-sm, 0.25rem));
-  transition: background var(--kreati-contextmenu-transition, 0.12s ease),
-              color var(--kreati-contextmenu-transition, 0.12s ease);
+  border-radius: var(
+    --kreati-contextmenu-item-radius,
+    var(--kreati-radius-sm, 0.25rem)
+  );
+  transition:
+    background var(--kreati-contextmenu-transition, 0.12s ease),
+    color var(--kreati-contextmenu-transition, 0.12s ease);
   white-space: nowrap;
 }
 
 .k-contextmenu__item:hover:not(:disabled) {
-  background: var(--kreati-contextmenu-hover-bg, var(--kreati-gray-100, #f3f4f6));
+  background: var(
+    --kreati-contextmenu-hover-bg,
+    var(--kreati-gray-100, #f3f4f6)
+  );
   color: var(--kreati-contextmenu-hover-color, var(--kreati-primary-500));
 }
 
 .k-contextmenu__item--open,
 .k-contextmenu__item--open:hover {
-  background: var(--kreati-contextmenu-active-bg, var(--kreati-primary-50, #e0f2fe));
+  background: var(
+    --kreati-contextmenu-active-bg,
+    var(--kreati-primary-50, #e0f2fe)
+  );
   color: var(--kreati-contextmenu-active-color, var(--kreati-primary-500));
-  font-weight: var(--kreati-contextmenu-active-font-weight, var(--kreati-font-weight-semibold));
+  font-weight: var(
+    --kreati-contextmenu-active-font-weight,
+    var(--kreati-font-weight-semibold)
+  );
 }
 
 .k-contextmenu__item:focus-visible {
-  outline: 2px solid var(--kreati-contextmenu-focus-color, var(--kreati-primary-500));
+  outline: 2px solid
+    var(--kreati-contextmenu-focus-color, var(--kreati-primary-500));
   outline-offset: -0.125rem;
 }
 
 .k-contextmenu__item--disabled {
-  color: var(--kreati-contextmenu-disabled-color, var(--kreati-gray-300, #d1d5db));
+  color: var(
+    --kreati-contextmenu-disabled-color,
+    var(--kreati-gray-300, #d1d5db)
+  );
   cursor: not-allowed;
   opacity: var(--kreati-contextmenu-disabled-opacity, 0.6);
 }
@@ -110,8 +159,12 @@
 
 .k-contextmenu__separator {
   border: none;
-  border-top: 1px solid var(--kreati-contextmenu-separator-color, var(--kreati-gray-200, #e5e7eb));
-  margin: var(--kreati-contextmenu-separator-margin, var(--kreati-space-1, 0.25rem) 0);
+  border-top: 1px solid
+    var(--kreati-contextmenu-separator-color, var(--kreati-gray-200, #e5e7eb));
+  margin: var(
+    --kreati-contextmenu-separator-margin,
+    var(--kreati-space-1, 0.25rem) 0
+  );
 }
 
 /* Desktop: submenu floats to the right */
@@ -119,9 +172,20 @@
   position: absolute;
   min-width: var(--kreati-contextmenu-min-width, 11.25rem);
   background: var(--kreati-contextmenu-bg, var(--kreati-white, #ffffff));
-  border: 1px solid var(--kreati-contextmenu-border-color, var(--kreati-gray-200, #e5e7eb));
-  border-radius: var(--kreati-contextmenu-radius, var(--kreati-radius-md, 0.5rem));
-  box-shadow: var(--kreati-contextmenu-shadow, var(--kreati-shadow-lg, 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1)));
+  border: 1px solid
+    var(--kreati-contextmenu-border-color, var(--kreati-gray-200, #e5e7eb));
+  border-radius: var(
+    --kreati-contextmenu-radius,
+    var(--kreati-radius-md, 0.5rem)
+  );
+  box-shadow: var(
+    --kreati-contextmenu-shadow,
+    var(
+      --kreati-shadow-lg,
+      0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -4px rgba(0, 0, 0, 0.1)
+    )
+  );
   padding: var(--kreati-contextmenu-padding, var(--kreati-space-1, 0.25rem));
   animation: k-contextmenu-in var(--kreati-contextmenu-transition, 0.12s ease);
   z-index: 1;
@@ -151,7 +215,13 @@
 
 /* Mobile: larger touch targets */
 .k-contextmenu__panel--mobile .k-contextmenu__item {
-  padding: var(--kreati-contextmenu-item-padding-mobile, var(--kreati-space-3, 0.75rem) var(--kreati-space-4, 1rem));
-  font-size: var(--kreati-contextmenu-font-size-mobile, var(--kreati-font-size-base, 1rem));
+  padding: var(
+    --kreati-contextmenu-item-padding-mobile,
+    var(--kreati-space-3, 0.75rem) var(--kreati-space-4, 1rem)
+  );
+  font-size: var(
+    --kreati-contextmenu-font-size-mobile,
+    var(--kreati-font-size-base, 1rem)
+  );
   white-space: normal;
 }

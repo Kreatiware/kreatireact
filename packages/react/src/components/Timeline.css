@@ -31,7 +31,7 @@
 
 .k-timeline__connector::before,
 .k-timeline__connector::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -51,8 +51,12 @@
   height: var(--kreati-timeline-item-spacing);
 }
 
-.k-timeline__connector--first::before { display: none; }
-.k-timeline__connector--last::after { display: none; }
+.k-timeline__connector--first::before {
+  display: none;
+}
+.k-timeline__connector--last::after {
+  display: none;
+}
 
 /* ─── Marker ─────────────────────────────────────────────────────── */
 

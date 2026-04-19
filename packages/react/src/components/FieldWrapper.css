@@ -64,36 +64,80 @@
 /* ============================================
    Helper — Severity colors
    ============================================ */
-.k-field__helper--primary   { color: var(--kreati-severity-primary); }
-.k-field__helper--secondary { color: var(--kreati-severity-secondary); }
-.k-field__helper--success   { color: var(--kreati-severity-success); }
-.k-field__helper--info      { color: var(--kreati-severity-info); }
-.k-field__helper--warning   { color: var(--kreati-severity-warning); }
-.k-field__helper--help      { color: var(--kreati-severity-help); }
-.k-field__helper--danger    { color: var(--kreati-severity-danger); }
+.k-field__helper--primary {
+  color: var(--kreati-severity-primary);
+}
+.k-field__helper--secondary {
+  color: var(--kreati-severity-secondary);
+}
+.k-field__helper--success {
+  color: var(--kreati-severity-success);
+}
+.k-field__helper--info {
+  color: var(--kreati-severity-info);
+}
+.k-field__helper--warning {
+  color: var(--kreati-severity-warning);
+}
+.k-field__helper--help {
+  color: var(--kreati-severity-help);
+}
+.k-field__helper--danger {
+  color: var(--kreati-severity-danger);
+}
 
 /* ============================================
    Sizes — label, error & helper font
    ============================================ */
-.k-field--xs .k-field__label  { font-size: var(--kreati-font-size-xxs); }
-.k-field--xs .k-field__error  { font-size: var(--kreati-font-size-xxs); }
-.k-field--xs .k-field__helper { font-size: var(--kreati-font-size-xxs); }
+.k-field--xs .k-field__label {
+  font-size: var(--kreati-font-size-xxs);
+}
+.k-field--xs .k-field__error {
+  font-size: var(--kreati-font-size-xxs);
+}
+.k-field--xs .k-field__helper {
+  font-size: var(--kreati-font-size-xxs);
+}
 
-.k-field--sm .k-field__label  { font-size: var(--kreati-font-size-xs); }
-.k-field--sm .k-field__error  { font-size: var(--kreati-font-size-xxs); }
-.k-field--sm .k-field__helper { font-size: var(--kreati-font-size-xxs); }
+.k-field--sm .k-field__label {
+  font-size: var(--kreati-font-size-xs);
+}
+.k-field--sm .k-field__error {
+  font-size: var(--kreati-font-size-xxs);
+}
+.k-field--sm .k-field__helper {
+  font-size: var(--kreati-font-size-xxs);
+}
 
-.k-field--md .k-field__label  { font-size: var(--kreati-font-size-sm); }
-.k-field--md .k-field__error  { font-size: var(--kreati-font-size-xs); }
-.k-field--md .k-field__helper { font-size: var(--kreati-font-size-xs); }
+.k-field--md .k-field__label {
+  font-size: var(--kreati-font-size-sm);
+}
+.k-field--md .k-field__error {
+  font-size: var(--kreati-font-size-xs);
+}
+.k-field--md .k-field__helper {
+  font-size: var(--kreati-font-size-xs);
+}
 
-.k-field--lg .k-field__label  { font-size: var(--kreati-font-size-base); }
-.k-field--lg .k-field__error  { font-size: var(--kreati-font-size-sm); }
-.k-field--lg .k-field__helper { font-size: var(--kreati-font-size-sm); }
+.k-field--lg .k-field__label {
+  font-size: var(--kreati-font-size-base);
+}
+.k-field--lg .k-field__error {
+  font-size: var(--kreati-font-size-sm);
+}
+.k-field--lg .k-field__helper {
+  font-size: var(--kreati-font-size-sm);
+}
 
-.k-field--xl .k-field__label  { font-size: var(--kreati-font-size-md); }
-.k-field--xl .k-field__error  { font-size: var(--kreati-font-size-sm); }
-.k-field--xl .k-field__helper { font-size: var(--kreati-font-size-sm); }
+.k-field--xl .k-field__label {
+  font-size: var(--kreati-font-size-md);
+}
+.k-field--xl .k-field__error {
+  font-size: var(--kreati-font-size-sm);
+}
+.k-field--xl .k-field__helper {
+  font-size: var(--kreati-font-size-sm);
+}
 
 /* ============================================
    States

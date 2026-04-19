@@ -1,17 +1,29 @@
-import React, { forwardRef, useId, useRef, useState, useCallback, useImperativeHandle } from 'react';
-import { FieldWrapper } from './FieldWrapper';
-import { Tooltip } from './Tooltip';
-import { useKreatiLocale } from '../locale';
-import { CHEVRON_UP_PATH, CHEVRON_DOWN_PATH, EYE_PATH, EYE_OFF_PATH } from './iconPaths';
-import './Input.css';
+import React, {
+  forwardRef,
+  useId,
+  useRef,
+  useState,
+  useCallback,
+  useImperativeHandle,
+} from "react";
+import { FieldWrapper } from "./FieldWrapper";
+import { Tooltip } from "./Tooltip";
+import { useKreatiLocale } from "../locale";
+import {
+  CHEVRON_UP_PATH,
+  CHEVRON_DOWN_PATH,
+  EYE_PATH,
+  EYE_OFF_PATH,
+} from "./iconPaths";
+import "./Input.css";
 
 export interface InputProps {
   /** Input type */
-  type?: 'text' | 'password' | 'email' | 'number' | 'search' | 'tel' | 'url';
+  type?: "text" | "password" | "email" | "number" | "search" | "tel" | "url";
   /** Input size — matches Button sizes for visual consistency */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Visual variant: floating (label floats on border) or stacked (label above) */
-  variant?: 'floating' | 'stacked';
+  variant?: "floating" | "stacked";
   /** Label text */
   label?: string;
   /** Placeholder text */
@@ -27,7 +39,15 @@ export interface InputProps {
   /** Applies success border and helper color */
   success?: boolean;
   /** Severity color for the helper text */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  helperSeverity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Icon rendered inside the input on the left */
   iconLeft?: React.ReactNode;
   /** Icon rendered inside the input on the right */
@@ -39,7 +59,7 @@ export interface InputProps {
   /** Tooltip text for the input container */
   tooltip?: string;
   /** Tooltip position for the input container */
-  tooltipPosition?: 'top' | 'bottom' | 'left' | 'right';
+  tooltipPosition?: "top" | "bottom" | "left" | "right";
   /** Background color for the outer wrapper */
   background?: string;
   /** Background color for the input field only */
@@ -69,7 +89,7 @@ export interface InputProps {
   /** Hides the native stepper arrows on number inputs — when false, renders custom ChevronUp/ChevronDown buttons instead of native ones */
   hideSteppers?: boolean;
   /** Decimal separator for number inputs — uses text+inputMode internally when set to comma */
-  decimalSeparator?: '.' | ',';
+  decimalSeparator?: "." | ",";
   /** Change handler */
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   /** Focus handler */
@@ -104,9 +124,9 @@ export interface InputProps {
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
-      type = 'text',
-      size = 'md',
-      variant = 'floating',
+      type = "text",
+      size = "md",
+      variant = "floating",
       label,
       placeholder,
       value,
@@ -120,7 +140,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       iconLeftTooltip,
       iconRightTooltip,
       tooltip,
-      tooltipPosition = 'top',
+      tooltipPosition = "top",
       background,
       inputBackground,
       color,
@@ -140,10 +160,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       onFocus,
       onBlur,
       onKeyDown,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const autoId = useId();
     const inputId = name || autoId;
@@ -152,29 +172,45 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const kreatiLocale = useKreatiLocale();
     const hasError = !!error;
-    const errorMessage = typeof error === 'boolean' ? undefined : error;
-    const isFloating = variant === 'floating';
-    const isNumber = type === 'number';
-    const isPassword = type === 'password';
+    const errorMessage = typeof error === "boolean" ? undefined : error;
+    const isFloating = variant === "floating";
+    const isNumber = type === "number";
+    const isPassword = type === "password";
     const [passwordVisible, setPasswordVisible] = useState(false);
-    const base = 'k-input';
-    const useCommaSeparator = isNumber && decimalSeparator === ',';
-    const resolvedType = isPassword ? (passwordVisible ? 'text' : 'password') : useCommaSeparator ? 'text' : type;
-    const resolvedInputMode = useCommaSeparator ? 'decimal' as const : undefined;
+    const base = "k-input";
+    const useCommaSeparator = isNumber && decimalSeparator === ",";
+    const resolvedType = isPassword
+      ? passwordVisible
+        ? "text"
+        : "password"
+      : useCommaSeparator
+        ? "text"
+        : type;
+    const resolvedInputMode = useCommaSeparator
+      ? ("decimal" as const)
+      : undefined;
     const showCustomSteppers = isNumber && !hideSteppers && !useCommaSeparator;
 
     const passwordToggle = isPassword ? (
       <button
         type="button"
         className={`${base}__password-toggle`}
-        onClick={() => setPasswordVisible((v) => !v)}
+        onClick={() => setPasswordVisible(v => !v)}
         tabIndex={-1}
-        aria-label={passwordVisible
-          ? (kreatiLocale.common.hidePassword || 'Hide password')
-          : (kreatiLocale.common.showPassword || 'Show password')}
+        aria-label={
+          passwordVisible
+            ? kreatiLocale.common.hidePassword || "Hide password"
+            : kreatiLocale.common.showPassword || "Show password"
+        }
         disabled={disabled}
       >
-        <svg width={16} height={16} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <svg
+          width={16}
+          height={16}
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+        >
           <path d={passwordVisible ? EYE_OFF_PATH : EYE_PATH} />
         </svg>
       </button>
@@ -188,30 +224,42 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           const ev = e.nativeEvent as InputEvent;
           if (!ev.data) return;
           const { selectionStart, selectionEnd, value: cur } = input;
-          const next = cur.slice(0, selectionStart ?? 0) + ev.data + cur.slice(selectionEnd ?? 0);
+          const next =
+            cur.slice(0, selectionStart ?? 0) +
+            ev.data +
+            cur.slice(selectionEnd ?? 0);
           if (!commaPattern.test(next)) e.preventDefault();
         }
       : undefined;
 
-    const handleStepper = useCallback((direction: 1 | -1) => {
-      const el = innerRef.current;
-      if (!el || disabled || readOnly) return;
-      const s = Number(step) || 1;
-      const current = Number(el.value) || 0;
-      let next = current + s * direction;
-      if (min !== undefined && next < Number(min)) next = Number(min);
-      if (max !== undefined && next > Number(max)) next = Number(max);
-      const nativeSet = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
-      nativeSet?.call(el, String(next));
-      el.dispatchEvent(new Event('input', { bubbles: true }));
-    }, [disabled, readOnly, step, min, max]);
+    const handleStepper = useCallback(
+      (direction: 1 | -1) => {
+        const el = innerRef.current;
+        if (!el || disabled || readOnly) return;
+        const s = Number(step) || 1;
+        const current = Number(el.value) || 0;
+        let next = current + s * direction;
+        if (min !== undefined && next < Number(min)) next = Number(min);
+        if (max !== undefined && next > Number(max)) next = Number(max);
+        const nativeSet = Object.getOwnPropertyDescriptor(
+          HTMLInputElement.prototype,
+          "value"
+        )?.set;
+        nativeSet?.call(el, String(next));
+        el.dispatchEvent(new Event("input", { bubbles: true }));
+      },
+      [disabled, readOnly, step, min, max]
+    );
 
     const hasLabel = !!label;
     const hasWrapper = !isFloating && !!(label || helperText || errorMessage);
 
     const helperId = `${inputId}-helper`;
     const errorId = `${inputId}-error`;
-    const describedBy = [hasError && errorId, (hasWrapper || isFloating) && helperId].filter(Boolean).join(' ') || undefined;
+    const describedBy =
+      [hasError && errorId, (hasWrapper || isFloating) && helperId]
+        .filter(Boolean)
+        .join(" ") || undefined;
 
     const bgStyle = (() => {
       const s: React.CSSProperties = {};
@@ -219,15 +267,30 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       if (color) s.color = color;
       return Object.keys(s).length ? s : undefined;
     })();
-    const wrapperBgStyle = background ? { backgroundColor: background } as React.CSSProperties : undefined;
+    const wrapperBgStyle = background
+      ? ({ backgroundColor: background } as React.CSSProperties)
+      : undefined;
 
-    const renderIcon = (icon: React.ReactNode, tooltipText?: string, side?: 'left' | 'right') => {
+    const renderIcon = (
+      icon: React.ReactNode,
+      tooltipText?: string,
+      side?: "left" | "right"
+    ) => {
       const iconEl = (
-        <span className={`${base}__icon ${base}__icon--${side}`} aria-hidden="true">
+        <span
+          className={`${base}__icon ${base}__icon--${side}`}
+          aria-hidden="true"
+        >
           {icon}
         </span>
       );
-      return tooltipText ? <Tooltip content={tooltipText} position="top">{iconEl}</Tooltip> : iconEl;
+      return tooltipText ? (
+        <Tooltip content={tooltipText} position="top">
+          {iconEl}
+        </Tooltip>
+      ) : (
+        iconEl
+      );
     };
 
     const stepperButtons = showCustomSteppers ? (
@@ -240,7 +303,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           aria-label={kreatiLocale.common.increment}
           disabled={disabled}
         >
-          <svg width={10} height={10} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <svg
+            width={10}
+            height={10}
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
             <path d={CHEVRON_UP_PATH} />
           </svg>
         </button>
@@ -252,7 +321,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           aria-label={kreatiLocale.common.decrement}
           disabled={disabled}
         >
-          <svg width={10} height={10} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <svg
+            width={10}
+            height={10}
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
             <path d={CHEVRON_DOWN_PATH} />
           </svg>
         </button>
@@ -265,11 +340,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         id={inputId}
         className={[
           `${base}__native`,
-          (hideSteppers || showCustomSteppers) && `${base}__native--no-steppers`,
-        ].filter(Boolean).join(' ')}
+          (hideSteppers || showCustomSteppers) &&
+            `${base}__native--no-steppers`,
+        ]
+          .filter(Boolean)
+          .join(" ")}
         type={resolvedType}
         inputMode={resolvedInputMode}
-        placeholder={isFloating && hasLabel ? (placeholder || ' ') : placeholder}
+        placeholder={isFloating && hasLabel ? placeholder || " " : placeholder}
         value={value}
         defaultValue={defaultValue}
         disabled={disabled}
@@ -306,56 +384,79 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         className,
       ]
         .filter(Boolean)
-        .join(' ');
+        .join(" ");
 
       const wrapperClasses = [
         `${base}__floating-wrapper`,
         fullWidth && `${base}__floating-wrapper--full-width`,
       ]
         .filter(Boolean)
-        .join(' ');
+        .join(" ");
 
-      const legendText = hasLabel ? `${label}${required ? ' *' : ''}` : '';
+      const legendText = hasLabel ? `${label}${required ? " *" : ""}` : "";
 
       const fieldsetEl = (
-        <fieldset className={fieldsetClasses} disabled={disabled} style={bgStyle}>
+        <fieldset
+          className={fieldsetClasses}
+          disabled={disabled}
+          style={bgStyle}
+        >
           {hasLabel && (
             <legend className={`${base}__legend`}>
               <span className={`${base}__legend-text`}>{legendText}</span>
             </legend>
           )}
           <div className={`${base}__fieldset-inner`}>
-            {iconLeft && renderIcon(iconLeft, iconLeftTooltip, 'left')}
+            {iconLeft && renderIcon(iconLeft, iconLeftTooltip, "left")}
             {nativeInput}
-            {iconRight && renderIcon(iconRight, iconRightTooltip, 'right')}
+            {iconRight && renderIcon(iconRight, iconRightTooltip, "right")}
             {passwordToggle}
             {stepperButtons}
           </div>
           {hasLabel && (
             <label className={`${base}__floating-label`} htmlFor={inputId}>
               {label}
-              {required && <span className={`${base}__floating-required`} aria-hidden="true">*</span>}
+              {required && (
+                <span
+                  className={`${base}__floating-required`}
+                  aria-hidden="true"
+                >
+                  *
+                </span>
+              )}
             </label>
           )}
         </fieldset>
       );
 
-      const inputElement = tooltip
-        ? <Tooltip content={tooltip} position={tooltipPosition}>{fieldsetEl}</Tooltip>
-        : fieldsetEl;
+      const inputElement = tooltip ? (
+        <Tooltip content={tooltip} position={tooltipPosition}>
+          {fieldsetEl}
+        </Tooltip>
+      ) : (
+        fieldsetEl
+      );
 
       return (
         <div className={wrapperClasses} style={wrapperBgStyle}>
           {inputElement}
           {hasError && errorMessage && (
-            <span className={`${base}__floating-error`} id={errorId} role="alert">{errorMessage}</span>
+            <span
+              className={`${base}__floating-error`}
+              id={errorId}
+              role="alert"
+            >
+              {errorMessage}
+            </span>
           )}
           {helperText && (
             <span
               className={[
                 `${base}__floating-helper`,
                 helperSeverity && `${base}__floating-helper--${helperSeverity}`,
-              ].filter(Boolean).join(' ')}
+              ]
+                .filter(Boolean)
+                .join(" ")}
               id={helperId}
             >
               {helperText}
@@ -377,21 +478,25 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       className,
     ]
       .filter(Boolean)
-      .join(' ');
+      .join(" ");
 
     const containerEl = (
       <div className={containerClasses} style={bgStyle}>
-        {iconLeft && renderIcon(iconLeft, iconLeftTooltip, 'left')}
+        {iconLeft && renderIcon(iconLeft, iconLeftTooltip, "left")}
         {nativeInput}
-        {iconRight && renderIcon(iconRight, iconRightTooltip, 'right')}
+        {iconRight && renderIcon(iconRight, iconRightTooltip, "right")}
         {passwordToggle}
         {stepperButtons}
       </div>
     );
 
-    const inputElement = tooltip
-      ? <Tooltip content={tooltip} position={tooltipPosition}>{containerEl}</Tooltip>
-      : containerEl;
+    const inputElement = tooltip ? (
+      <Tooltip content={tooltip} position={tooltipPosition}>
+        {containerEl}
+      </Tooltip>
+    ) : (
+      containerEl
+    );
 
     if (!hasWrapper) return inputElement;
 
@@ -412,7 +517,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {inputElement}
       </FieldWrapper>
     );
-  },
+  }
 );
 
-Input.displayName = 'Input';
+Input.displayName = "Input";

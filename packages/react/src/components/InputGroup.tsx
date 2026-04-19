@@ -1,6 +1,6 @@
-import React, { forwardRef, useRef, useImperativeHandle } from 'react';
-import { FieldWrapper } from './FieldWrapper';
-import './InputGroup.css';
+import React, { forwardRef, useRef, useImperativeHandle } from "react";
+import { FieldWrapper } from "./FieldWrapper";
+import "./InputGroup.css";
 
 export interface InputGroupProps {
   /** Content before the input (text, icon, or button) */
@@ -16,9 +16,17 @@ export interface InputGroupProps {
   /** Success state — syncs addon border color */
   success?: boolean;
   /** Helper text severity */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  helperSeverity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Component size */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Required indicator */
   required?: boolean;
   /** Disabled state */
@@ -33,7 +41,7 @@ export interface InputGroupProps {
   children: React.ReactNode;
 }
 
-const base = 'k-input-group';
+const base = "k-input-group";
 
 /**
  * InputGroup component for combining inputs with addons.
@@ -53,17 +61,35 @@ const base = 'k-input-group';
  * ```
  */
 export const InputGroup = forwardRef<HTMLDivElement, InputGroupProps>(
-  ({ prefix, suffix, label, helperText, error, success, helperSeverity, size, required, disabled, fullWidth, className = '', style, children }, ref) => {
+  (
+    {
+      prefix,
+      suffix,
+      label,
+      helperText,
+      error,
+      success,
+      helperSeverity,
+      size,
+      required,
+      disabled,
+      fullWidth,
+      className = "",
+      style,
+      children,
+    },
+    ref
+  ) => {
     const elRef = useRef<HTMLDivElement>(null);
     useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
 
     const hasError = !!error;
-    const errorMessage = typeof error === 'boolean' ? undefined : error;
+    const errorMessage = typeof error === "boolean" ? undefined : error;
 
     const isButtonAddon = (node: React.ReactNode): boolean => {
       if (!React.isValidElement(node)) return false;
       const type = node.type as { displayName?: string };
-      return type?.displayName === 'Button';
+      return type?.displayName === "Button";
     };
 
     const groupCls = [
@@ -71,31 +97,52 @@ export const InputGroup = forwardRef<HTMLDivElement, InputGroupProps>(
       hasError && `${base}__row--error`,
       !hasError && success && `${base}__row--success`,
       disabled && `${base}__row--disabled`,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     const row = (
       <div className={groupCls} role="group" aria-label={label}>
         {prefix && (
-          <span className={`${base}__addon ${base}__addon--prefix${isButtonAddon(prefix) ? ` ${base}__addon--button` : ''}`} aria-hidden={!isButtonAddon(prefix) || undefined}>
+          <span
+            className={`${base}__addon ${base}__addon--prefix${isButtonAddon(prefix) ? ` ${base}__addon--button` : ""}`}
+            aria-hidden={!isButtonAddon(prefix) || undefined}
+          >
             {prefix}
           </span>
         )}
-        <div className={`${base}__input${prefix ? ` ${base}__input--has-prefix` : ''}${suffix ? ` ${base}__input--has-suffix` : ''}`}>
+        <div
+          className={`${base}__input${prefix ? ` ${base}__input--has-prefix` : ""}${suffix ? ` ${base}__input--has-suffix` : ""}`}
+        >
           {children}
         </div>
         {suffix && (
-          <span className={`${base}__addon ${base}__addon--suffix${isButtonAddon(suffix) ? ` ${base}__addon--button` : ''}`} aria-hidden={!isButtonAddon(suffix) || undefined}>
+          <span
+            className={`${base}__addon ${base}__addon--suffix${isButtonAddon(suffix) ? ` ${base}__addon--button` : ""}`}
+            aria-hidden={!isButtonAddon(suffix) || undefined}
+          >
             {suffix}
           </span>
         )}
       </div>
     );
 
-    const wrapperCls = [base, fullWidth && `${base}--full-width`, size && `${base}--${size}`, className].filter(Boolean).join(' ');
+    const wrapperCls = [
+      base,
+      fullWidth && `${base}--full-width`,
+      size && `${base}--${size}`,
+      className,
+    ]
+      .filter(Boolean)
+      .join(" ");
     const hasWrapper = !!(label || helperText || errorMessage || required);
 
     if (!hasWrapper) {
-      return <div ref={elRef} className={wrapperCls} style={style}>{row}</div>;
+      return (
+        <div ref={elRef} className={wrapperCls} style={style}>
+          {row}
+        </div>
+      );
     }
 
     return (
@@ -115,7 +162,7 @@ export const InputGroup = forwardRef<HTMLDivElement, InputGroupProps>(
         </FieldWrapper>
       </div>
     );
-  },
+  }
 );
 
-InputGroup.displayName = 'InputGroup';
+InputGroup.displayName = "InputGroup";

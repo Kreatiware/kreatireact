@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
-import { resolve } from 'path';
+import { defineConfig } from "vite";
+import dts from "vite-plugin-dts";
+import { resolve } from "path";
 
 export default defineConfig({
   plugins: [
@@ -10,16 +10,16 @@ export default defineConfig({
   ],
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      name: 'KreatiIcons',
-      formats: ['es', 'umd'],
-      fileName: format => `index.${format === 'es' ? 'esm' : format}.js`,
+      entry: resolve(__dirname, "src/index.ts"),
+      name: "KreatiIcons",
+      formats: ["es", "umd"],
+      fileName: format => `index.${format === "es" ? "esm" : format}.js`,
     },
     rollupOptions: {
-      external: ['react'],
+      external: ["react"],
       output: {
         globals: {
-          react: 'React',
+          react: "React",
         },
         banner: '"use client";',
       },

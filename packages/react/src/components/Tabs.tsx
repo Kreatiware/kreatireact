@@ -1,8 +1,14 @@
-import React, { forwardRef, useState, useCallback, Children, isValidElement } from 'react';
-import { TabMenu } from './TabMenu';
-import type { TabMenuProps } from './TabMenu';
-import type { MenuItem } from '../types/navigation';
-import './Tabs.css';
+import React, {
+  forwardRef,
+  useState,
+  useCallback,
+  Children,
+  isValidElement,
+} from "react";
+import { TabMenu } from "./TabMenu";
+import type { TabMenuProps } from "./TabMenu";
+import type { MenuItem } from "../types/navigation";
+import "./Tabs.css";
 
 /**
  * Props for the TabPanel component
@@ -40,10 +46,10 @@ export interface TabPanelProps {
  * ```
  */
 export const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
-  (_props, _ref) => null,
+  (_props, _ref) => null
 );
 
-TabPanel.displayName = 'TabPanel';
+TabPanel.displayName = "TabPanel";
 
 /**
  * Props for the Tabs component
@@ -56,7 +62,7 @@ export interface TabsProps {
   /** Callback when active tab changes */
   onTabChange?: (key: string) => void;
   /** Props forwarded to the internal TabMenu component */
-  tabMenuProps?: Omit<TabMenuProps, 'items' | 'activeKey' | 'onTabChange'>;
+  tabMenuProps?: Omit<TabMenuProps, "items" | "activeKey" | "onTabChange">;
   /** TabPanel children */
   children: React.ReactNode;
   /** Additional CSS class name */
@@ -83,43 +89,60 @@ export interface TabsProps {
  * ```
  */
 export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
-  ({ activeKey: controlledKey, defaultActiveKey, onTabChange, tabMenuProps, children, className = '', style }, ref) => {
+  (
+    {
+      activeKey: controlledKey,
+      defaultActiveKey,
+      onTabChange,
+      tabMenuProps,
+      children,
+      className = "",
+      style,
+    },
+    ref
+  ) => {
     const panels = Children.toArray(children).filter(
       (child): child is React.ReactElement<TabPanelProps> =>
-        isValidElement(child) && (child.type as { displayName?: string }).displayName === 'TabPanel',
+        isValidElement(child) &&
+        (child.type as { displayName?: string }).displayName === "TabPanel"
     );
 
     const firstKey = panels[0]?.props.tabKey;
     const isControlled = controlledKey !== undefined;
-    const [internalKey, setInternalKey] = useState(defaultActiveKey ?? firstKey);
+    const [internalKey, setInternalKey] = useState(
+      defaultActiveKey ?? firstKey
+    );
     const activeTabKey = isControlled ? controlledKey : internalKey;
 
-    const handleChange = useCallback((key: string) => {
-      if (!isControlled) setInternalKey(key);
-      onTabChange?.(key);
-    }, [isControlled, onTabChange]);
+    const handleChange = useCallback(
+      (key: string) => {
+        if (!isControlled) setInternalKey(key);
+        onTabChange?.(key);
+      },
+      [isControlled, onTabChange]
+    );
 
-    const items: MenuItem[] = panels.map((p) => ({
+    const items: MenuItem[] = panels.map(p => ({
       key: p.props.tabKey,
       label: p.props.header,
       icon: p.props.icon,
       disabled: p.props.disabled,
     }));
 
-    const activePanel = panels.find((p) => p.props.tabKey === activeTabKey);
-    const classes = ['k-tabs', className].filter(Boolean).join(' ');
+    const activePanel = panels.find(p => p.props.tabKey === activeTabKey);
+    const classes = ["k-tabs", className].filter(Boolean).join(" ");
 
     return (
       <div ref={ref} className={classes} style={style}>
         <TabMenu
           items={items}
           activeKey={activeTabKey}
-          onTabChange={(key) => handleChange(key)}
+          onTabChange={key => handleChange(key)}
           {...tabMenuProps}
         />
         {activePanel && (
           <div
-            className={`k-tabs__panels ${activePanel.props.className ?? ''}`}
+            className={`k-tabs__panels ${activePanel.props.className ?? ""}`}
             style={activePanel.props.style}
             role="tabpanel"
             id={`k-tabmenu-panel-${activeTabKey}`}
@@ -130,7 +153,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
         )}
       </div>
     );
-  },
+  }
 );
 
-Tabs.displayName = 'Tabs';
+Tabs.displayName = "Tabs";

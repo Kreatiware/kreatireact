@@ -1,4 +1,4 @@
-import { useSyncExternalStore, useCallback } from 'react';
+import { useSyncExternalStore, useCallback } from "react";
 
 /**
  * Hook that tracks a CSS media query match state.
@@ -17,10 +17,10 @@ export const useMediaQuery = (query: string): boolean => {
   const subscribe = useCallback(
     (cb: () => void) => {
       const mql = window.matchMedia(query);
-      mql.addEventListener('change', cb);
-      return () => mql.removeEventListener('change', cb);
+      mql.addEventListener("change", cb);
+      return () => mql.removeEventListener("change", cb);
     },
-    [query],
+    [query]
   );
 
   const getSnapshot = () => window.matchMedia(query).matches;

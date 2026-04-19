@@ -56,7 +56,10 @@
   border-radius: var(--kreati-radius-full);
   font-size: var(--kreati-font-size-sm);
   font-weight: var(--kreati-font-weight-semibold);
-  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
   background: var(--kreati-stepper-pending-bg, var(--kreati-gray-200));
   color: var(--kreati-stepper-pending-color, var(--kreati-gray-500));
 }
@@ -98,7 +101,10 @@
 }
 
 .k-stepper__connector--completed {
-  background: var(--kreati-stepper-connector-active-bg, var(--kreati-primary-500));
+  background: var(
+    --kreati-stepper-connector-active-bg,
+    var(--kreati-primary-500)
+  );
 }
 
 /* ─── Label bottom: connector aligns with indicators ── */
@@ -112,7 +118,8 @@
   width: 0.125rem;
   height: var(--kreati-space-6);
   min-width: unset;
-  margin: var(--kreati-space-1) 0 var(--kreati-space-1) calc(var(--kreati-stepper-indicator-size, 2rem) / 2 - 0.0625rem);
+  margin: var(--kreati-space-1) 0 var(--kreati-space-1)
+    calc(var(--kreati-stepper-indicator-size, 2rem) / 2 - 0.0625rem);
 }
 
 /* ─── Content panel ───────────────────────────── */

@@ -1,9 +1,16 @@
-import React, { forwardRef, useState, useCallback } from 'react';
-import './CodeBlock.css';
-import { useKreatiLocale } from '../locale';
-import { COPY_PATH, CHECK_PATH } from './iconPaths';
+import React, { forwardRef, useState, useCallback } from "react";
+import "./CodeBlock.css";
+import { useKreatiLocale } from "../locale";
+import { COPY_PATH, CHECK_PATH } from "./iconPaths";
 
-export type CodeLanguage = 'javascript' | 'typescript' | 'css' | 'html' | 'json' | 'bash' | 'plain';
+export type CodeLanguage =
+  | "javascript"
+  | "typescript"
+  | "css"
+  | "html"
+  | "json"
+  | "bash"
+  | "plain";
 
 export interface CodeBlockProps {
   /** Code string to display */
@@ -29,7 +36,20 @@ export interface CodeBlockProps {
 }
 
 /* ─── Token types ──────────────────────────────────────────────────── */
-type TokenType = 'keyword' | 'string' | 'number' | 'comment' | 'tag' | 'attr' | 'attr-value' | 'property' | 'selector' | 'function' | 'operator' | 'punctuation' | 'plain';
+type TokenType =
+  | "keyword"
+  | "string"
+  | "number"
+  | "comment"
+  | "tag"
+  | "attr"
+  | "attr-value"
+  | "property"
+  | "selector"
+  | "function"
+  | "operator"
+  | "punctuation"
+  | "plain";
 
 interface Token {
   type: TokenType;
@@ -37,45 +57,54 @@ interface Token {
 }
 
 /* ─── Tokenizers ───────────────────────────────────────────────────── */
-const JS_KEYWORDS = /\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|this|class|extends|import|export|from|default|async|await|try|catch|finally|throw|typeof|instanceof|in|of|void|delete|yield|super|static|get|set|null|undefined|true|false)\b/;
-const TS_KEYWORDS = /\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|this|class|extends|import|export|from|default|async|await|try|catch|finally|throw|typeof|instanceof|in|of|void|delete|yield|super|static|get|set|null|undefined|true|false|type|interface|enum|implements|declare|as|is|keyof|readonly|abstract|namespace|module|never|unknown|any|string|number|boolean|symbol|bigint)\b/;
+const JS_KEYWORDS =
+  /\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|this|class|extends|import|export|from|default|async|await|try|catch|finally|throw|typeof|instanceof|in|of|void|delete|yield|super|static|get|set|null|undefined|true|false)\b/;
+const TS_KEYWORDS =
+  /\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|this|class|extends|import|export|from|default|async|await|try|catch|finally|throw|typeof|instanceof|in|of|void|delete|yield|super|static|get|set|null|undefined|true|false|type|interface|enum|implements|declare|as|is|keyof|readonly|abstract|namespace|module|never|unknown|any|string|number|boolean|symbol|bigint)\b/;
 const CSS_KEYWORDS = /\b(important|inherit|initial|unset|none|auto|normal)\b/;
-const BASH_KEYWORDS = /\b(if|then|else|elif|fi|for|while|do|done|case|esac|function|return|in|select|until|echo|exit|export|source|alias|cd|ls|grep|sed|awk|cat|rm|cp|mv|mkdir|chmod|chown|sudo|apt|npm|npx|node|git|docker)\b/;
+const BASH_KEYWORDS =
+  /\b(if|then|else|elif|fi|for|while|do|done|case|esac|function|return|in|select|until|echo|exit|export|source|alias|cd|ls|grep|sed|awk|cat|rm|cp|mv|mkdir|chmod|chown|sudo|apt|npm|npx|node|git|docker)\b/;
 
 const tokenizeJS = (code: string, keywords: RegExp): Token[] => {
   const tokens: Token[] = [];
   let i = 0;
   while (i < code.length) {
     // Line comments
-    if (code[i] === '/' && code[i + 1] === '/') {
-      const end = code.indexOf('\n', i);
+    if (code[i] === "/" && code[i + 1] === "/") {
+      const end = code.indexOf("\n", i);
       const slice = end === -1 ? code.slice(i) : code.slice(i, end);
-      tokens.push({ type: 'comment', value: slice });
+      tokens.push({ type: "comment", value: slice });
       i += slice.length;
       continue;
     }
     // Block comments
-    if (code[i] === '/' && code[i + 1] === '*') {
-      const end = code.indexOf('*/', i + 2);
+    if (code[i] === "/" && code[i + 1] === "*") {
+      const end = code.indexOf("*/", i + 2);
       const slice = end === -1 ? code.slice(i) : code.slice(i, end + 2);
-      tokens.push({ type: 'comment', value: slice });
+      tokens.push({ type: "comment", value: slice });
       i += slice.length;
       continue;
     }
     // Strings
-    if (code[i] === '"' || code[i] === "'" || code[i] === '`') {
+    if (code[i] === '"' || code[i] === "'" || code[i] === "`") {
       const q = code[i];
       let j = i + 1;
-      while (j < code.length && code[j] !== q) { if (code[j] === '\\') j++; j++; }
-      tokens.push({ type: 'string', value: code.slice(i, j + 1) });
+      while (j < code.length && code[j] !== q) {
+        if (code[j] === "\\") j++;
+        j++;
+      }
+      tokens.push({ type: "string", value: code.slice(i, j + 1) });
       i = j + 1;
       continue;
     }
     // Numbers
-    if (/\d/.test(code[i]) && (i === 0 || /[\s,;:=+\-*/([\]{}<>!&|^~?]/.test(code[i - 1]))) {
+    if (
+      /\d/.test(code[i]) &&
+      (i === 0 || /[\s,;:=+\-*/([\]{}<>!&|^~?]/.test(code[i - 1]))
+    ) {
       let j = i;
       while (j < code.length && /[\d.xXa-fA-FeEn_]/.test(code[j])) j++;
-      tokens.push({ type: 'number', value: code.slice(i, j) });
+      tokens.push({ type: "number", value: code.slice(i, j) });
       i = j;
       continue;
     }
@@ -85,11 +114,11 @@ const tokenizeJS = (code: string, keywords: RegExp): Token[] => {
       while (j < code.length && /[a-zA-Z0-9_$]/.test(code[j])) j++;
       const word = code.slice(i, j);
       if (keywords.test(word)) {
-        tokens.push({ type: 'keyword', value: word });
-      } else if (j < code.length && code[j] === '(') {
-        tokens.push({ type: 'function', value: word });
+        tokens.push({ type: "keyword", value: word });
+      } else if (j < code.length && code[j] === "(") {
+        tokens.push({ type: "function", value: word });
       } else {
-        tokens.push({ type: 'plain', value: word });
+        tokens.push({ type: "plain", value: word });
       }
       i = j;
       continue;
@@ -98,20 +127,24 @@ const tokenizeJS = (code: string, keywords: RegExp): Token[] => {
     if (/[=+\-*/<>!&|^~?%]/.test(code[i])) {
       let j = i;
       while (j < code.length && /[=+\-*/<>!&|^~?%]/.test(code[j])) j++;
-      tokens.push({ type: 'operator', value: code.slice(i, j) });
+      tokens.push({ type: "operator", value: code.slice(i, j) });
       i = j;
       continue;
     }
     // Punctuation
     if (/[{}()[\];:.,@#]/.test(code[i])) {
-      tokens.push({ type: 'punctuation', value: code[i] });
+      tokens.push({ type: "punctuation", value: code[i] });
       i++;
       continue;
     }
     // Whitespace / other
     let j = i;
-    while (j < code.length && !/[a-zA-Z0-9_$"'`/=+\-*<>!&|^~?%{}()[\];:.,@#]/.test(code[j])) j++;
-    tokens.push({ type: 'plain', value: code.slice(i, j || i + 1) });
+    while (
+      j < code.length &&
+      !/[a-zA-Z0-9_$"'`/=+\-*<>!&|^~?%{}()[\];:.,@#]/.test(code[j])
+    )
+      j++;
+    tokens.push({ type: "plain", value: code.slice(i, j || i + 1) });
     i = j || i + 1;
   }
   return tokens;
@@ -122,10 +155,10 @@ const tokenizeCSS = (code: string): Token[] => {
   let i = 0;
   while (i < code.length) {
     // Comments
-    if (code[i] === '/' && code[i + 1] === '*') {
-      const end = code.indexOf('*/', i + 2);
+    if (code[i] === "/" && code[i + 1] === "*") {
+      const end = code.indexOf("*/", i + 2);
       const slice = end === -1 ? code.slice(i) : code.slice(i, end + 2);
-      tokens.push({ type: 'comment', value: slice });
+      tokens.push({ type: "comment", value: slice });
       i += slice.length;
       continue;
     }
@@ -133,8 +166,11 @@ const tokenizeCSS = (code: string): Token[] => {
     if (code[i] === '"' || code[i] === "'") {
       const q = code[i];
       let j = i + 1;
-      while (j < code.length && code[j] !== q) { if (code[j] === '\\') j++; j++; }
-      tokens.push({ type: 'string', value: code.slice(i, j + 1) });
+      while (j < code.length && code[j] !== q) {
+        if (code[j] === "\\") j++;
+        j++;
+      }
+      tokens.push({ type: "string", value: code.slice(i, j + 1) });
       i = j + 1;
       continue;
     }
@@ -142,7 +178,7 @@ const tokenizeCSS = (code: string): Token[] => {
     if (/\d/.test(code[i])) {
       let j = i;
       while (j < code.length && /[\d.%a-zA-Z]/.test(code[j])) j++;
-      tokens.push({ type: 'number', value: code.slice(i, j) });
+      tokens.push({ type: "number", value: code.slice(i, j) });
       i = j;
       continue;
     }
@@ -153,26 +189,26 @@ const tokenizeCSS = (code: string): Token[] => {
       const word = code.slice(i, j);
       // Look ahead for colon = property
       let k = j;
-      while (k < code.length && code[k] === ' ') k++;
-      if (code[k] === ':' && code[k + 1] !== ':') {
-        tokens.push({ type: 'property', value: word });
+      while (k < code.length && code[k] === " ") k++;
+      if (code[k] === ":" && code[k + 1] !== ":") {
+        tokens.push({ type: "property", value: word });
       } else if (CSS_KEYWORDS.test(word)) {
-        tokens.push({ type: 'keyword', value: word });
+        tokens.push({ type: "keyword", value: word });
       } else {
-        tokens.push({ type: 'selector', value: word });
+        tokens.push({ type: "selector", value: word });
       }
       i = j;
       continue;
     }
     // Punctuation
     if (/[{}();:,.]/.test(code[i])) {
-      tokens.push({ type: 'punctuation', value: code[i] });
+      tokens.push({ type: "punctuation", value: code[i] });
       i++;
       continue;
     }
     let j = i;
-    while (j < code.length && !/[a-zA-Z0-9_"'`/{};:,.()\-]/.test(code[j])) j++;
-    tokens.push({ type: 'plain', value: code.slice(i, j || i + 1) });
+    while (j < code.length && !/[a-zA-Z0-9_"'`/{};:,.()-]/.test(code[j])) j++;
+    tokens.push({ type: "plain", value: code.slice(i, j || i + 1) });
     i = j || i + 1;
   }
   return tokens;
@@ -183,33 +219,33 @@ const tokenizeHTML = (code: string): Token[] => {
   let i = 0;
   while (i < code.length) {
     // Comments
-    if (code.slice(i, i + 4) === '<!--') {
-      const end = code.indexOf('-->', i + 4);
+    if (code.slice(i, i + 4) === "<!--") {
+      const end = code.indexOf("-->", i + 4);
       const slice = end === -1 ? code.slice(i) : code.slice(i, end + 3);
-      tokens.push({ type: 'comment', value: slice });
+      tokens.push({ type: "comment", value: slice });
       i += slice.length;
       continue;
     }
     // Tags
-    if (code[i] === '<') {
+    if (code[i] === "<") {
       // Closing or opening tag name
       let j = i + 1;
-      if (code[j] === '/') j++;
+      if (code[j] === "/") j++;
       const nameStart = j;
       while (j < code.length && /[a-zA-Z0-9-]/.test(code[j])) j++;
       if (j > nameStart) {
-        tokens.push({ type: 'punctuation', value: code.slice(i, nameStart) });
-        tokens.push({ type: 'tag', value: code.slice(nameStart, j) });
+        tokens.push({ type: "punctuation", value: code.slice(i, nameStart) });
+        tokens.push({ type: "tag", value: code.slice(nameStart, j) });
         // Attributes
-        while (j < code.length && code[j] !== '>') {
+        while (j < code.length && code[j] !== ">") {
           if (/[a-zA-Z_-]/.test(code[j])) {
             const as = j;
             while (j < code.length && /[a-zA-Z0-9_-]/.test(code[j])) j++;
-            tokens.push({ type: 'attr', value: code.slice(as, j) });
+            tokens.push({ type: "attr", value: code.slice(as, j) });
             continue;
           }
-          if (code[j] === '=') {
-            tokens.push({ type: 'operator', value: '=' });
+          if (code[j] === "=") {
+            tokens.push({ type: "operator", value: "=" });
             j++;
             continue;
           }
@@ -217,18 +253,18 @@ const tokenizeHTML = (code: string): Token[] => {
             const q = code[j];
             let k = j + 1;
             while (k < code.length && code[k] !== q) k++;
-            tokens.push({ type: 'attr-value', value: code.slice(j, k + 1) });
+            tokens.push({ type: "attr-value", value: code.slice(j, k + 1) });
             j = k + 1;
             continue;
           }
-          tokens.push({ type: 'plain', value: code[j] });
+          tokens.push({ type: "plain", value: code[j] });
           j++;
         }
-        if (code[j] === '>') {
-          if (code[j - 1] === '/') {
-            tokens.push({ type: 'punctuation', value: '/>' });
+        if (code[j] === ">") {
+          if (code[j - 1] === "/") {
+            tokens.push({ type: "punctuation", value: "/>" });
           } else {
-            tokens.push({ type: 'punctuation', value: '>' });
+            tokens.push({ type: "punctuation", value: ">" });
           }
           j++;
         }
@@ -238,12 +274,12 @@ const tokenizeHTML = (code: string): Token[] => {
     }
     // Text content
     let j = i;
-    while (j < code.length && code[j] !== '<') j++;
+    while (j < code.length && code[j] !== "<") j++;
     if (j > i) {
-      tokens.push({ type: 'plain', value: code.slice(i, j) });
+      tokens.push({ type: "plain", value: code.slice(i, j) });
       i = j;
     } else {
-      tokens.push({ type: 'plain', value: code[i] });
+      tokens.push({ type: "plain", value: code[i] });
       i++;
     }
   }
@@ -257,21 +293,27 @@ const tokenizeJSON = (code: string): Token[] => {
     // Strings (keys and values)
     if (code[i] === '"') {
       let j = i + 1;
-      while (j < code.length && code[j] !== '"') { if (code[j] === '\\') j++; j++; }
+      while (j < code.length && code[j] !== '"') {
+        if (code[j] === "\\") j++;
+        j++;
+      }
       const str = code.slice(i, j + 1);
       // Look ahead: if followed by colon, it's a property key
       let k = j + 1;
-      while (k < code.length && code[k] === ' ') k++;
-      tokens.push({ type: code[k] === ':' ? 'property' : 'string', value: str });
+      while (k < code.length && code[k] === " ") k++;
+      tokens.push({
+        type: code[k] === ":" ? "property" : "string",
+        value: str,
+      });
       i = j + 1;
       continue;
     }
     // Numbers
     if (/[-\d]/.test(code[i])) {
       let j = i;
-      if (code[j] === '-') j++;
-      while (j < code.length && /[\d.eE+\-]/.test(code[j])) j++;
-      tokens.push({ type: 'number', value: code.slice(i, j) });
+      if (code[j] === "-") j++;
+      while (j < code.length && /[\d.eE+-]/.test(code[j])) j++;
+      tokens.push({ type: "number", value: code.slice(i, j) });
       i = j;
       continue;
     }
@@ -280,18 +322,18 @@ const tokenizeJSON = (code: string): Token[] => {
       const rest = code.slice(i);
       const m = rest.match(/^(true|false|null)\b/);
       if (m) {
-        tokens.push({ type: 'keyword', value: m[1] });
+        tokens.push({ type: "keyword", value: m[1] });
         i += m[1].length;
         continue;
       }
     }
     // Punctuation
     if (/[{}[\]:,]/.test(code[i])) {
-      tokens.push({ type: 'punctuation', value: code[i] });
+      tokens.push({ type: "punctuation", value: code[i] });
       i++;
       continue;
     }
-    tokens.push({ type: 'plain', value: code[i] });
+    tokens.push({ type: "plain", value: code[i] });
     i++;
   }
   return tokens;
@@ -299,18 +341,31 @@ const tokenizeJSON = (code: string): Token[] => {
 
 const tokenize = (code: string, language: CodeLanguage): Token[] => {
   switch (language) {
-    case 'javascript': return tokenizeJS(code, JS_KEYWORDS);
-    case 'typescript': return tokenizeJS(code, TS_KEYWORDS);
-    case 'css': return tokenizeCSS(code);
-    case 'html': return tokenizeHTML(code);
-    case 'json': return tokenizeJSON(code);
-    case 'bash': return tokenizeJS(code, BASH_KEYWORDS);
-    default: return [{ type: 'plain', value: code }];
+    case "javascript":
+      return tokenizeJS(code, JS_KEYWORDS);
+    case "typescript":
+      return tokenizeJS(code, TS_KEYWORDS);
+    case "css":
+      return tokenizeCSS(code);
+    case "html":
+      return tokenizeHTML(code);
+    case "json":
+      return tokenizeJSON(code);
+    case "bash":
+      return tokenizeJS(code, BASH_KEYWORDS);
+    default:
+      return [{ type: "plain", value: code }];
   }
 };
 
 const iconSvg = (path: string) => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
     <path d={path} />
   </svg>
 );
@@ -333,7 +388,7 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
   (
     {
       code,
-      language = 'plain',
+      language = "plain",
       title,
       showLineNumbers = true,
       showCopy = true,
@@ -343,7 +398,7 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
       className,
       style,
     },
-    ref,
+    ref
   ) => {
     const locale = useKreatiLocale();
     const [copied, setCopied] = useState(false);
@@ -356,7 +411,7 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
     }, [code]);
 
     const tokens = tokenize(code, language);
-    const lines = code.split('\n');
+    const lines = code.split("\n");
     const highlightSet = highlightLines ? new Set(highlightLines) : null;
 
     // Build token spans grouped by line
@@ -369,10 +424,17 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
         const ln = lineIndex + 1;
         const highlighted = highlightSet?.has(ln);
         result.push(
-          <div key={ln} className={`k-code__line ${highlighted ? 'k-code__line--highlighted' : ''}`}>
-            {showLineNumbers && <span className="k-code__line-number">{ln}</span>}
-            <span className="k-code__line-content">{currentLine.length > 0 ? currentLine : ' '}</span>
-          </div>,
+          <div
+            key={ln}
+            className={`k-code__line ${highlighted ? "k-code__line--highlighted" : ""}`}
+          >
+            {showLineNumbers && (
+              <span className="k-code__line-number">{ln}</span>
+            )}
+            <span className="k-code__line-content">
+              {currentLine.length > 0 ? currentLine : " "}
+            </span>
+          </div>
         );
         currentLine = [];
         lineIndex++;
@@ -380,14 +442,21 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
 
       let tokenKey = 0;
       for (const token of tokens) {
-        const parts = token.value.split('\n');
+        const parts = token.value.split("\n");
         for (let p = 0; p < parts.length; p++) {
           if (p > 0) pushLine();
           if (parts[p]) {
             currentLine.push(
-              token.type === 'plain'
-                ? <span key={tokenKey++}>{parts[p]}</span>
-                : <span key={tokenKey++} className={`k-code__token--${token.type}`}>{parts[p]}</span>,
+              token.type === "plain" ? (
+                <span key={tokenKey++}>{parts[p]}</span>
+              ) : (
+                <span
+                  key={tokenKey++}
+                  className={`k-code__token--${token.type}`}
+                >
+                  {parts[p]}
+                </span>
+              )
             );
           }
         }
@@ -402,10 +471,10 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
     return (
       <div
         ref={ref}
-        className={`k-code ${className || ''}`}
+        className={`k-code ${className || ""}`}
         style={style}
         role="region"
-        aria-label={title || (locale?.common?.code || 'Code')}
+        aria-label={title || locale?.common?.code || "Code"}
       >
         {showHeader && (
           <div className="k-code__header">
@@ -414,26 +483,34 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
             {showCopy && (
               <button
                 type="button"
-                className={`k-code__copy ${copied ? 'k-code__copy--copied' : ''}`}
+                className={`k-code__copy ${copied ? "k-code__copy--copied" : ""}`}
                 onClick={handleCopy}
-                aria-label={copied ? (locale?.common?.copied || 'Copied') : (locale?.common?.copy || 'Copy')}
+                aria-label={
+                  copied
+                    ? locale?.common?.copied || "Copied"
+                    : locale?.common?.copy || "Copy"
+                }
               >
                 {iconSvg(copied ? CHECK_PATH : COPY_PATH)}
-                <span className="k-code__copy-text">{copied ? (locale?.common?.copied || 'Copied') : (locale?.common?.copy || 'Copy')}</span>
+                <span className="k-code__copy-text">
+                  {copied
+                    ? locale?.common?.copied || "Copied"
+                    : locale?.common?.copy || "Copy"}
+                </span>
               </button>
             )}
           </div>
         )}
         <pre
-          className={`k-code__pre ${wordWrap ? 'k-code__pre--wrap' : ''}`}
-          style={maxHeight ? { maxHeight, overflow: 'auto' } : undefined}
+          className={`k-code__pre ${wordWrap ? "k-code__pre--wrap" : ""}`}
+          style={maxHeight ? { maxHeight, overflow: "auto" } : undefined}
           tabIndex={0}
         >
           <code className="k-code__content">{renderTokens()}</code>
         </pre>
       </div>
     );
-  },
+  }
 );
 
-CodeBlock.displayName = 'CodeBlock';
+CodeBlock.displayName = "CodeBlock";

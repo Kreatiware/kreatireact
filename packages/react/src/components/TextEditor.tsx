@@ -1,18 +1,34 @@
-import React, { forwardRef, useRef, useState, useCallback, useEffect, useId } from 'react';
-import './TextEditor.css';
-import { Tooltip } from './Tooltip';
-import { Popover } from './Popover';
-import { Input } from './Input';
-import { Button } from './Button';
-import { FieldWrapper } from './FieldWrapper';
-import { useKreatiLocale } from '../locale';
+import React, {
+  forwardRef,
+  useRef,
+  useState,
+  useCallback,
+  useEffect,
+  useId,
+} from "react";
+import "./TextEditor.css";
+import { Tooltip } from "./Tooltip";
+import { Popover } from "./Popover";
+import { Input } from "./Input";
+import { Button } from "./Button";
+import { FieldWrapper } from "./FieldWrapper";
+import { useKreatiLocale } from "../locale";
 import {
-  BOLD_PATH, ITALIC_PATH, UNDERLINE_PATH, STRIKETHROUGH_PATH,
-  LIST_UNORDERED_PATH, LIST_ORDERED_PATH,
-  LINK_PATH, CODE_PATH, BLOCKQUOTE_PATH,
-  UNDO_PATH, REDO_PATH,
-  TEXT_COLOR_PATH, BG_COLOR_PATH, FONT_FAMILY_PATH,
-} from './iconPaths';
+  BOLD_PATH,
+  ITALIC_PATH,
+  UNDERLINE_PATH,
+  STRIKETHROUGH_PATH,
+  LIST_UNORDERED_PATH,
+  LIST_ORDERED_PATH,
+  LINK_PATH,
+  CODE_PATH,
+  BLOCKQUOTE_PATH,
+  UNDO_PATH,
+  REDO_PATH,
+  TEXT_COLOR_PATH,
+  BG_COLOR_PATH,
+  FONT_FAMILY_PATH,
+} from "./iconPaths";
 
 export interface TextEditorProps {
   /** HTML content (controlled) */
@@ -26,7 +42,25 @@ export interface TextEditorProps {
   /** Placeholder text when empty */
   placeholder?: string;
   /** Toolbar actions to show. Default: all */
-  toolbar?: Array<'bold' | 'italic' | 'underline' | 'strikethrough' | 'heading' | 'fontSize' | 'fontFamily' | 'textColor' | 'bgColor' | 'ul' | 'ol' | 'link' | 'code' | 'blockquote' | 'undo' | 'redo' | '|'>;
+  toolbar?: Array<
+    | "bold"
+    | "italic"
+    | "underline"
+    | "strikethrough"
+    | "heading"
+    | "fontSize"
+    | "fontFamily"
+    | "textColor"
+    | "bgColor"
+    | "ul"
+    | "ol"
+    | "link"
+    | "code"
+    | "blockquote"
+    | "undo"
+    | "redo"
+    | "|"
+  >;
   /** Show tooltips on toolbar buttons. Default: true */
   showTooltips?: boolean;
   /** Label text */
@@ -42,7 +76,15 @@ export interface TextEditorProps {
   /** Helper text below the editor */
   helperText?: React.ReactNode;
   /** Helper text severity color */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  helperSeverity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Required indicator */
   required?: boolean;
   /** Full width mode */
@@ -65,55 +107,96 @@ export interface TextEditorProps {
   style?: React.CSSProperties;
 }
 
-const DEFAULT_TOOLBAR: TextEditorProps['toolbar'] = [
-  'bold', 'italic', 'underline', 'strikethrough', '|',
-  'fontSize', '|',
-  'textColor', 'bgColor', '|',
-  'ul', 'ol', '|',
-  'link', 'code', 'blockquote', '|',
-  'undo', 'redo',
+const DEFAULT_TOOLBAR: TextEditorProps["toolbar"] = [
+  "bold",
+  "italic",
+  "underline",
+  "strikethrough",
+  "|",
+  "fontSize",
+  "|",
+  "textColor",
+  "bgColor",
+  "|",
+  "ul",
+  "ol",
+  "|",
+  "link",
+  "code",
+  "blockquote",
+  "|",
+  "undo",
+  "redo",
 ];
 
 const INLINE_ICONS: Record<string, string> = {
-  bold: BOLD_PATH, italic: ITALIC_PATH, underline: UNDERLINE_PATH,
-  strikethrough: STRIKETHROUGH_PATH, ul: LIST_UNORDERED_PATH, ol: LIST_ORDERED_PATH,
-  link: LINK_PATH, code: CODE_PATH, blockquote: BLOCKQUOTE_PATH,
-  undo: UNDO_PATH, redo: REDO_PATH,
+  bold: BOLD_PATH,
+  italic: ITALIC_PATH,
+  underline: UNDERLINE_PATH,
+  strikethrough: STRIKETHROUGH_PATH,
+  ul: LIST_UNORDERED_PATH,
+  ol: LIST_ORDERED_PATH,
+  link: LINK_PATH,
+  code: CODE_PATH,
+  blockquote: BLOCKQUOTE_PATH,
+  undo: UNDO_PATH,
+  redo: REDO_PATH,
 };
 
 const INLINE_TAGS: Record<string, string[]> = {
-  bold: ['STRONG', 'B'],
-  italic: ['EM', 'I'],
-  underline: ['U'],
-  strikethrough: ['S', 'STRIKE', 'DEL'],
-  code: ['CODE'],
+  bold: ["STRONG", "B"],
+  italic: ["EM", "I"],
+  underline: ["U"],
+  strikethrough: ["S", "STRIKE", "DEL"],
+  code: ["CODE"],
 };
 
 const FONT_SIZES = [10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 48];
 
 const FONT_FAMILIES = [
-  { label: 'Inter', value: 'var(--kreati-font-family-body)' },
-  { label: 'Raleway', value: 'var(--kreati-font-family-display)' },
-  { label: 'JetBrains Mono', value: 'var(--kreati-font-family-mono)' },
+  { label: "Inter", value: "var(--kreati-font-family-body)" },
+  { label: "Raleway", value: "var(--kreati-font-family-display)" },
+  { label: "JetBrains Mono", value: "var(--kreati-font-family-mono)" },
 ];
 
 const COLOR_PALETTE = [
-  '#000000', '#434343', '#666666', '#999999', '#cccccc', '#ffffff',
-  '#ef4444', '#f97316', '#f59e0b', '#eab308', '#84cc16', '#22c55e',
-  '#10b981', '#14b8a6', '#06b6d4', '#0ea5e9', '#3b82f6', '#6366f1',
-  '#8b5cf6', '#a855f7', '#d946ef', '#ec4899', '#f43f5e', '#0f78a5',
+  "#000000",
+  "#434343",
+  "#666666",
+  "#999999",
+  "#cccccc",
+  "#ffffff",
+  "#ef4444",
+  "#f97316",
+  "#f59e0b",
+  "#eab308",
+  "#84cc16",
+  "#22c55e",
+  "#10b981",
+  "#14b8a6",
+  "#06b6d4",
+  "#0ea5e9",
+  "#3b82f6",
+  "#6366f1",
+  "#8b5cf6",
+  "#a855f7",
+  "#d946ef",
+  "#ec4899",
+  "#f43f5e",
+  "#0f78a5",
 ];
 
 /** Wrap selection in a styled span, or insert empty styled span if collapsed */
 const wrapStyle = (styleProp: string, value: string, editorEl: HTMLElement) => {
   const sel = window.getSelection();
-  if (!sel || sel.rangeCount === 0 || !isInside(sel.anchorNode, editorEl)) return;
+  if (!sel || sel.rangeCount === 0 || !isInside(sel.anchorNode, editorEl))
+    return;
 
   if (sel.isCollapsed) {
     // Insert zero-width span so next typed text gets the style
-    const span = document.createElement('span');
+    const span = document.createElement("span");
     span.style.setProperty(styleProp, value);
-    span.textContent = '\u200B';
+    span.textContent = "\u200B";
     sel.getRangeAt(0).insertNode(span);
     const r = document.createRange();
     r.setStart(span.firstChild!, 1);
@@ -124,7 +207,7 @@ const wrapStyle = (styleProp: string, value: string, editorEl: HTMLElement) => {
   }
 
   const range = sel.getRangeAt(0);
-  const span = document.createElement('span');
+  const span = document.createElement("span");
   span.style.setProperty(styleProp, value);
   try {
     range.surroundContents(span);
@@ -140,19 +223,29 @@ const wrapStyle = (styleProp: string, value: string, editorEl: HTMLElement) => {
 };
 
 const applyFontSize = (size: string, editorEl: HTMLElement) => {
-  wrapStyle('font-size', size, editorEl);
+  wrapStyle("font-size", size, editorEl);
 };
 
 const applyFontFamily = (family: string, editorEl: HTMLElement) => {
-  wrapStyle('font-family', family, editorEl);
+  wrapStyle("font-family", family, editorEl);
 };
 
-const applyColor = (color: string, prop: 'color' | 'background-color', editorEl: HTMLElement) => {
+const applyColor = (
+  color: string,
+  prop: "color" | "background-color",
+  editorEl: HTMLElement
+) => {
   wrapStyle(prop, color, editorEl);
 };
 
 const iconSvg = (path: string) => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
     <path d={path} />
   </svg>
 );
@@ -171,12 +264,21 @@ const restoreSelection = (range: Range | null) => {
 };
 
 const isInside = (node: Node | null, editor: HTMLElement): boolean => {
-  while (node) { if (node === editor) return true; node = node.parentNode; }
+  while (node) {
+    if (node === editor) return true;
+    node = node.parentNode;
+  }
   return false;
 };
 
-const findAncestor = (node: Node | null, tags: string[], editor: HTMLElement): HTMLElement | null => {
-  let el = (node?.nodeType === Node.TEXT_NODE ? node.parentElement : node) as HTMLElement | null;
+const findAncestor = (
+  node: Node | null,
+  tags: string[],
+  editor: HTMLElement
+): HTMLElement | null => {
+  let el = (
+    node?.nodeType === Node.TEXT_NODE ? node.parentElement : node
+  ) as HTMLElement | null;
   while (el && el !== editor) {
     if (tags.includes(el.tagName)) return el;
     el = el.parentElement;
@@ -184,14 +286,23 @@ const findAncestor = (node: Node | null, tags: string[], editor: HTMLElement): H
   return null;
 };
 
-const wrapInline = (tagName: string, matchTags: string[], editorEl: HTMLElement) => {
+const wrapInline = (
+  tagName: string,
+  matchTags: string[],
+  editorEl: HTMLElement
+) => {
   const sel = window.getSelection();
-  if (!sel || sel.rangeCount === 0 || !isInside(sel.anchorNode, editorEl)) return;
+  if (!sel || sel.rangeCount === 0 || !isInside(sel.anchorNode, editorEl))
+    return;
 
   const range = sel.getRangeAt(0);
 
   // Check if already wrapped — unwrap
-  const existing = findAncestor(range.commonAncestorContainer, matchTags, editorEl);
+  const existing = findAncestor(
+    range.commonAncestorContainer,
+    matchTags,
+    editorEl
+  );
   if (existing) {
     if (sel.isCollapsed) {
       // Move cursor out of the wrapper
@@ -211,7 +322,7 @@ const wrapInline = (tagName: string, matchTags: string[], editorEl: HTMLElement)
   // Collapsed: insert empty wrapper and place cursor inside
   if (sel.isCollapsed) {
     const wrapper = document.createElement(tagName);
-    wrapper.appendChild(document.createTextNode('\u200B'));
+    wrapper.appendChild(document.createTextNode("\u200B"));
     range.insertNode(wrapper);
     const nr = document.createRange();
     nr.setStart(wrapper.firstChild!, 1);
@@ -236,24 +347,33 @@ const wrapInline = (tagName: string, matchTags: string[], editorEl: HTMLElement)
 };
 
 const getBlockParent = (node: Node, editorEl: HTMLElement): HTMLElement => {
-  let el = (node.nodeType === Node.TEXT_NODE ? node.parentElement : node) as HTMLElement;
-  while (el && el.parentElement && el.parentElement !== editorEl) el = el.parentElement;
+  let el = (
+    node.nodeType === Node.TEXT_NODE ? node.parentElement : node
+  ) as HTMLElement;
+  while (el && el.parentElement && el.parentElement !== editorEl)
+    el = el.parentElement;
   return el;
 };
 
 const setBlockTag = (tagName: string, editorEl: HTMLElement) => {
   const sel = window.getSelection();
-  if (!sel || sel.rangeCount === 0 || !isInside(sel.anchorNode, editorEl)) return;
+  if (!sel || sel.rangeCount === 0 || !isInside(sel.anchorNode, editorEl))
+    return;
 
   // Find the block-level parent (direct child of editor)
   let block = sel.anchorNode as HTMLElement;
   if (block.nodeType === Node.TEXT_NODE) block = block.parentElement!;
-  while (block && block !== editorEl && block.parentElement && block.parentElement !== editorEl) {
+  while (
+    block &&
+    block !== editorEl &&
+    block.parentElement &&
+    block.parentElement !== editorEl
+  ) {
     block = block.parentElement;
   }
   // If cursor is on loose text directly in editor, wrap it first
   if (!block || block === editorEl) {
-    const p = document.createElement('p');
+    const p = document.createElement("p");
     while (editorEl.firstChild) p.appendChild(editorEl.firstChild);
     editorEl.appendChild(p);
     block = p;
@@ -261,7 +381,7 @@ const setBlockTag = (tagName: string, editorEl: HTMLElement) => {
 
   if (block.tagName === tagName) {
     // Toggle off: convert back to P
-    const p = document.createElement('P');
+    const p = document.createElement("P");
     while (block.firstChild) p.appendChild(block.firstChild);
     block.parentNode?.replaceChild(p, block);
     return;
@@ -283,18 +403,19 @@ const selectNodeContents = (node: Node) => {
 
 const toggleList = (listTag: string, editorEl: HTMLElement) => {
   const sel = window.getSelection();
-  if (!sel || sel.rangeCount === 0 || !isInside(sel.anchorNode, editorEl)) return;
+  if (!sel || sel.rangeCount === 0 || !isInside(sel.anchorNode, editorEl))
+    return;
 
   let node = sel.anchorNode as HTMLElement;
   if (node.nodeType === Node.TEXT_NODE) node = node.parentElement!;
 
-  const existingList = node.closest('ul, ol') as HTMLElement | null;
+  const existingList = node.closest("ul, ol") as HTMLElement | null;
   if (existingList && editorEl.contains(existingList)) {
     if (existingList.tagName === listTag) {
       const frag = document.createDocumentFragment();
-      Array.from(existingList.children).forEach((child) => {
-        if (child.tagName === 'LI') {
-          const p = document.createElement('p');
+      Array.from(existingList.children).forEach(child => {
+        if (child.tagName === "LI") {
+          const p = document.createElement("p");
           while (child.firstChild) p.appendChild(child.firstChild);
           frag.appendChild(p);
         }
@@ -304,7 +425,8 @@ const toggleList = (listTag: string, editorEl: HTMLElement) => {
       if (first) selectNodeContents(first);
     } else {
       const newList = document.createElement(listTag);
-      while (existingList.firstChild) newList.appendChild(existingList.firstChild);
+      while (existingList.firstChild)
+        newList.appendChild(existingList.firstChild);
       existingList.parentNode?.replaceChild(newList, existingList);
       if (newList.firstChild) selectNodeContents(newList.firstChild);
     }
@@ -314,14 +436,18 @@ const toggleList = (listTag: string, editorEl: HTMLElement) => {
   const range = sel.getRangeAt(0);
   const blocks: HTMLElement[] = [];
   const walker = document.createTreeWalker(editorEl, NodeFilter.SHOW_ELEMENT, {
-    acceptNode: (n) => {
+    acceptNode: n => {
       const el = n as HTMLElement;
-      if (el.parentElement === editorEl && range.intersectsNode(el)) return NodeFilter.FILTER_ACCEPT;
+      if (el.parentElement === editorEl && range.intersectsNode(el))
+        return NodeFilter.FILTER_ACCEPT;
       return NodeFilter.FILTER_SKIP;
     },
   });
   let cur = walker.nextNode();
-  while (cur) { blocks.push(cur as HTMLElement); cur = walker.nextNode(); }
+  while (cur) {
+    blocks.push(cur as HTMLElement);
+    cur = walker.nextNode();
+  }
   if (blocks.length === 0) {
     const b = getBlockParent(sel.anchorNode!, editorEl);
     if (b && editorEl.contains(b)) blocks.push(b);
@@ -329,8 +455,8 @@ const toggleList = (listTag: string, editorEl: HTMLElement) => {
   if (blocks.length === 0) return;
 
   const list = document.createElement(listTag);
-  blocks.forEach((b) => {
-    const li = document.createElement('li');
+  blocks.forEach(b => {
+    const li = document.createElement("li");
     while (b.firstChild) li.appendChild(b.firstChild);
     list.appendChild(li);
   });
@@ -381,7 +507,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
       required = false,
       fullWidth = false,
       maxHeight,
-      minHeight = '10rem',
+      minHeight = "10rem",
       resizable = false,
       showCharCount = false,
       maxChars,
@@ -389,7 +515,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
       className,
       style,
     },
-    ref,
+    ref
   ) => {
     const autoId = useId();
     const locale = useKreatiLocale();
@@ -397,14 +523,14 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
     const savedRange = useRef<Range | null>(null);
     const isControlled = value !== undefined;
     const hasError = !!error;
-    const errorMessage = typeof error === 'boolean' ? undefined : error;
+    const errorMessage = typeof error === "boolean" ? undefined : error;
     const [activeFormats, setActiveFormats] = useState<Set<string>>(new Set());
-    const [currentFontSize, setCurrentFontSize] = useState('14px');
-    const [currentFont, setCurrentFont] = useState('');
-    const [currentTextColor, setCurrentTextColor] = useState('');
-    const [currentBgColor, setCurrentBgColor] = useState('');
-    const [linkUrl, setLinkUrl] = useState('https://');
-    const [linkLabel, setLinkLabel] = useState('');
+    const [currentFontSize, setCurrentFontSize] = useState("14px");
+    const [currentFont, setCurrentFont] = useState("");
+    const [currentTextColor, setCurrentTextColor] = useState("");
+    const [currentBgColor, setCurrentBgColor] = useState("");
+    const [linkUrl, setLinkUrl] = useState("https://");
+    const [linkLabel, setLinkLabel] = useState("");
     const [linkOpen, setLinkOpen] = useState(false);
     const [textColorOpen, setTextColorOpen] = useState(false);
     const [bgColorOpen, setBgColorOpen] = useState(false);
@@ -458,7 +584,11 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
     }, [onChange]);
 
     useEffect(() => {
-      if (isControlled && editorRef.current && editorRef.current.innerHTML !== value) {
+      if (
+        isControlled &&
+        editorRef.current &&
+        editorRef.current.innerHTML !== value
+      ) {
         editorRef.current.innerHTML = value;
       }
     }, [value, isControlled]);
@@ -472,19 +602,24 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
         // Initialize history
         pushHistory();
       }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const emitChange = useCallback(() => {
       if (!editorRef.current) return;
-      if (editorRef.current.innerHTML === '' || editorRef.current.innerHTML === '<br>') {
-        editorRef.current.innerHTML = '<p><br></p>';
+      if (
+        editorRef.current.innerHTML === "" ||
+        editorRef.current.innerHTML === "<br>"
+      ) {
+        editorRef.current.innerHTML = "<p><br></p>";
       }
       // Clean empty block elements (leftover from heading/block changes)
-      editorRef.current.querySelectorAll(':scope > h1, :scope > h2, :scope > h3, :scope > h4').forEach((el) => {
-        const text = el.textContent?.trim();
-        if (!text) el.remove();
-      });
+      editorRef.current
+        .querySelectorAll(":scope > h1, :scope > h2, :scope > h3, :scope > h4")
+        .forEach(el => {
+          const text = el.textContent?.trim();
+          if (!text) el.remove();
+        });
       setCharCount(editorRef.current.textContent?.length ?? 0);
       pushHistory();
       onChange?.(editorRef.current.innerHTML);
@@ -492,84 +627,119 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
 
     const updateActiveFormats = useCallback(() => {
       const sel = window.getSelection();
-      if (!sel || sel.rangeCount === 0) { setActiveFormats(new Set()); return; }
+      if (!sel || sel.rangeCount === 0) {
+        setActiveFormats(new Set());
+        return;
+      }
       const formats = new Set<string>();
       let node = sel.anchorNode as HTMLElement | null;
       if (node?.nodeType === Node.TEXT_NODE) node = node.parentElement;
       while (node && node !== editorRef.current) {
         const tag = node.tagName;
-        if (tag === 'STRONG' || tag === 'B') formats.add('bold');
-        if (tag === 'EM' || tag === 'I') formats.add('italic');
-        if (tag === 'U') formats.add('underline');
-        if (tag === 'S' || tag === 'STRIKE' || tag === 'DEL') formats.add('strikethrough');
-        if (tag === 'CODE') formats.add('code');
-        if (tag === 'H1' || tag === 'H2' || tag === 'H3') formats.add(tag.toLowerCase());
-        if (tag === 'UL') formats.add('ul');
-        if (tag === 'OL') formats.add('ol');
-        if (tag === 'BLOCKQUOTE') formats.add('blockquote');
-        if (tag === 'A') formats.add('link');
+        if (tag === "STRONG" || tag === "B") formats.add("bold");
+        if (tag === "EM" || tag === "I") formats.add("italic");
+        if (tag === "U") formats.add("underline");
+        if (tag === "S" || tag === "STRIKE" || tag === "DEL")
+          formats.add("strikethrough");
+        if (tag === "CODE") formats.add("code");
+        if (tag === "H1" || tag === "H2" || tag === "H3")
+          formats.add(tag.toLowerCase());
+        if (tag === "UL") formats.add("ul");
+        if (tag === "OL") formats.add("ol");
+        if (tag === "BLOCKQUOTE") formats.add("blockquote");
+        if (tag === "A") formats.add("link");
         node = node.parentElement;
       }
       setActiveFormats(formats);
       // Detect inline styles from cursor position
       let styleNode = sel.anchorNode as HTMLElement | null;
-      if (styleNode?.nodeType === Node.TEXT_NODE) styleNode = styleNode.parentElement;
-      let detectedFs = '';
-      let detectedFont = '';
-      let detectedColor = '';
-      let detectedBg = '';
+      if (styleNode?.nodeType === Node.TEXT_NODE)
+        styleNode = styleNode.parentElement;
+      let detectedFs = "";
+      let detectedFont = "";
+      let detectedColor = "";
+      let detectedBg = "";
       while (styleNode && styleNode !== editorRef.current) {
         if (!detectedFs) {
           const fs = styleNode.style?.fontSize;
           if (fs) detectedFs = fs;
         }
-        if (!detectedFont && styleNode.style?.fontFamily) detectedFont = styleNode.style.fontFamily;
-        if (!detectedColor && styleNode.style?.color) detectedColor = styleNode.style.color;
-        if (!detectedBg && styleNode.style?.backgroundColor) detectedBg = styleNode.style.backgroundColor;
+        if (!detectedFont && styleNode.style?.fontFamily)
+          detectedFont = styleNode.style.fontFamily;
+        if (!detectedColor && styleNode.style?.color)
+          detectedColor = styleNode.style.color;
+        if (!detectedBg && styleNode.style?.backgroundColor)
+          detectedBg = styleNode.style.backgroundColor;
         styleNode = styleNode.parentElement;
       }
-      setCurrentFontSize(detectedFs || '14px');
+      setCurrentFontSize(detectedFs || "14px");
       setCurrentFont(detectedFont);
       setCurrentTextColor(detectedColor);
       setCurrentBgColor(detectedBg);
     }, []);
 
-    const handleAction = useCallback((action: string) => {
-      if (disabled || readOnly) return;
-      ensureEditorFocus();
+    const handleAction = useCallback(
+      (action: string) => {
+        if (disabled || readOnly) return;
+        ensureEditorFocus();
 
-      if (action === 'undo') { handleUndo(); return; }
-      if (action === 'redo') { handleRedo(); return; }
+        if (action === "undo") {
+          handleUndo();
+          return;
+        }
+        if (action === "redo") {
+          handleRedo();
+          return;
+        }
 
-      if (INLINE_TAGS[action]) {
-        wrapInline(INLINE_TAGS[action][0], INLINE_TAGS[action], editorRef.current!);
-      } else if (action === 'blockquote') {
-        setBlockTag('BLOCKQUOTE', editorRef.current!);
-      } else if (action === 'ul') {
-        toggleList('UL', editorRef.current!);
-      } else if (action === 'ol') {
-        toggleList('OL', editorRef.current!);
-      } else if (action.startsWith('h')) {
-        setBlockTag(action.toUpperCase(), editorRef.current!);
-      }
+        if (INLINE_TAGS[action]) {
+          wrapInline(
+            INLINE_TAGS[action][0],
+            INLINE_TAGS[action],
+            editorRef.current!
+          );
+        } else if (action === "blockquote") {
+          setBlockTag("BLOCKQUOTE", editorRef.current!);
+        } else if (action === "ul") {
+          toggleList("UL", editorRef.current!);
+        } else if (action === "ol") {
+          toggleList("OL", editorRef.current!);
+        } else if (action.startsWith("h")) {
+          setBlockTag(action.toUpperCase(), editorRef.current!);
+        }
 
-      emitChange();
-      savedRange.current = saveSelection();
-      updateActiveFormats();
-    }, [disabled, readOnly, emitChange, updateActiveFormats, handleUndo, handleRedo]);
+        emitChange();
+        savedRange.current = saveSelection();
+        updateActiveFormats();
+      },
+      [
+        disabled,
+        readOnly,
+        emitChange,
+        updateActiveFormats,
+        handleUndo,
+        handleRedo,
+      ]
+    );
 
     const handleLink = useCallback(() => {
-      if (!linkUrl || linkUrl === 'https://') { setLinkOpen(false); return; }
+      if (!linkUrl || linkUrl === "https://") {
+        setLinkOpen(false);
+        return;
+      }
       ensureEditorFocus();
 
       const sel = window.getSelection();
-      if (!sel || sel.rangeCount === 0) { setLinkOpen(false); return; }
+      if (!sel || sel.rangeCount === 0) {
+        setLinkOpen(false);
+        return;
+      }
       const range = sel.getRangeAt(0);
 
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = linkUrl;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
 
       const text = linkLabel.trim() || range.toString() || linkUrl;
 
@@ -590,8 +760,8 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
       sel.addRange(after);
 
       setLinkOpen(false);
-      setLinkUrl('https://');
-      setLinkLabel('');
+      setLinkUrl("https://");
+      setLinkLabel("");
       emitChange();
     }, [linkUrl, linkLabel, emitChange]);
 
@@ -601,7 +771,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
       if (sel && sel.rangeCount > 0) {
         let n = sel.anchorNode as HTMLElement;
         if (n.nodeType === Node.TEXT_NODE) n = n.parentElement!;
-        const a = n.closest('a');
+        const a = n.closest("a");
         if (a && editorRef.current?.contains(a)) {
           const frag = document.createDocumentFragment();
           while (a.firstChild) frag.appendChild(a.firstChild);
@@ -615,46 +785,65 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
     const openLinkPopover = useCallback(() => {
       savedRange.current = saveSelection();
       const sel = window.getSelection();
-      const selectedText = sel && !sel.isCollapsed ? sel.toString() : '';
+      const selectedText = sel && !sel.isCollapsed ? sel.toString() : "";
       setLinkLabel(selectedText);
-      setLinkUrl('https://');
+      setLinkUrl("https://");
       setLinkOpen(true);
     }, []);
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
       const mod = e.ctrlKey || e.metaKey;
-      if (mod && e.key === 'b') { e.preventDefault(); handleAction('bold'); }
-      else if (mod && e.key === 'i') { e.preventDefault(); handleAction('italic'); }
-      else if (mod && e.key === 'u') { e.preventDefault(); handleAction('underline'); }
-      else if (mod && e.key === 'k') { e.preventDefault(); openLinkPopover(); }
-      else if (mod && e.key === 'z' && !e.shiftKey) { e.preventDefault(); handleUndo(); }
-      else if (mod && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) { e.preventDefault(); handleRedo(); }
+      if (mod && e.key === "b") {
+        e.preventDefault();
+        handleAction("bold");
+      } else if (mod && e.key === "i") {
+        e.preventDefault();
+        handleAction("italic");
+      } else if (mod && e.key === "u") {
+        e.preventDefault();
+        handleAction("underline");
+      } else if (mod && e.key === "k") {
+        e.preventDefault();
+        openLinkPopover();
+      } else if (mod && e.key === "z" && !e.shiftKey) {
+        e.preventDefault();
+        handleUndo();
+      } else if (mod && (e.key === "y" || (e.key === "z" && e.shiftKey))) {
+        e.preventDefault();
+        handleRedo();
+      }
     };
 
     const overLimit = maxChars !== undefined && charCount > maxChars;
 
     const LABELS: Record<string, string> = {
-      bold: locale?.textEditor?.bold || 'Bold (Ctrl+B)',
-      italic: locale?.textEditor?.italic || 'Italic (Ctrl+I)',
-      underline: locale?.textEditor?.underline || 'Underline (Ctrl+U)',
-      strikethrough: locale?.textEditor?.strikethrough || 'Strikethrough',
-      ul: locale?.textEditor?.unorderedList || 'Bullet list',
-      ol: locale?.textEditor?.orderedList || 'Numbered list',
-      link: locale?.textEditor?.link || 'Link (Ctrl+K)',
-      code: locale?.textEditor?.code || 'Code',
-      blockquote: locale?.textEditor?.blockquote || 'Blockquote',
-      undo: locale?.textEditor?.undo || 'Undo (Ctrl+Z)',
-      redo: locale?.textEditor?.redo || 'Redo (Ctrl+Y)',
+      bold: locale?.textEditor?.bold || "Bold (Ctrl+B)",
+      italic: locale?.textEditor?.italic || "Italic (Ctrl+I)",
+      underline: locale?.textEditor?.underline || "Underline (Ctrl+U)",
+      strikethrough: locale?.textEditor?.strikethrough || "Strikethrough",
+      ul: locale?.textEditor?.unorderedList || "Bullet list",
+      ol: locale?.textEditor?.orderedList || "Numbered list",
+      link: locale?.textEditor?.link || "Link (Ctrl+K)",
+      code: locale?.textEditor?.code || "Code",
+      blockquote: locale?.textEditor?.blockquote || "Blockquote",
+      undo: locale?.textEditor?.undo || "Undo (Ctrl+Z)",
+      redo: locale?.textEditor?.redo || "Redo (Ctrl+Y)",
     };
 
     const HEADING_OPTIONS = [
-      { label: locale?.textEditor?.paragraph || 'Paragraph', value: 'p' },
-      { label: locale?.textEditor?.heading1 || 'Heading 1', value: 'h1' },
-      { label: locale?.textEditor?.heading2 || 'Heading 2', value: 'h2' },
-      { label: locale?.textEditor?.heading3 || 'Heading 3', value: 'h3' },
+      { label: locale?.textEditor?.paragraph || "Paragraph", value: "p" },
+      { label: locale?.textEditor?.heading1 || "Heading 1", value: "h1" },
+      { label: locale?.textEditor?.heading2 || "Heading 2", value: "h2" },
+      { label: locale?.textEditor?.heading3 || "Heading 3", value: "h3" },
     ];
 
-    const currentHeading = activeFormats.has('h1') ? 'h1' : activeFormats.has('h2') ? 'h2' : activeFormats.has('h3') ? 'h3' : 'p';
+    const currentHeading = activeFormats.has("h1")
+      ? "h1"
+      : activeFormats.has("h2")
+        ? "h2"
+        : activeFormats.has("h3")
+          ? "h3"
+          : "p";
 
     /** Ensure editor has focus and a valid selection/cursor */
     const ensureEditorFocus = useCallback(() => {
@@ -675,14 +864,18 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
       }
     }, []);
 
-    const renderToolbarBtn = (action: string, iconPath: string, isActive: boolean) => {
+    const renderToolbarBtn = (
+      action: string,
+      iconPath: string,
+      isActive: boolean
+    ) => {
       const btn = (
         <button
           key={action}
           type="button"
-          className={`k-te__btn ${isActive ? 'k-te__btn--active' : ''}`}
+          className={`k-te__btn ${isActive ? "k-te__btn--active" : ""}`}
           onClick={() => handleAction(action)}
-          onMouseDown={(e) => e.preventDefault()}
+          onMouseDown={e => e.preventDefault()}
           aria-label={LABELS[action] || action}
           aria-pressed={isActive}
           disabled={disabled}
@@ -691,28 +884,47 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
         </button>
       );
       if (!showTooltips) return btn;
-      return <Tooltip key={action} content={LABELS[action] || action} position="top">{btn}</Tooltip>;
+      return (
+        <Tooltip key={action} content={LABELS[action] || action} position="top">
+          {btn}
+        </Tooltip>
+      );
     };
 
     const editorContent = (
       <div
         className={[
-          'k-te',
-          disabled && 'k-te--disabled',
-          readOnly && 'k-te--readonly',
-          hasError && 'k-te--error',
-          !hasError && success && 'k-te--success',
-          resizable && 'k-te--resizable',
-          fullWidth && 'k-te--full-width',
-        ].filter(Boolean).join(' ')}
+          "k-te",
+          disabled && "k-te--disabled",
+          readOnly && "k-te--readonly",
+          hasError && "k-te--error",
+          !hasError && success && "k-te--success",
+          resizable && "k-te--resizable",
+          fullWidth && "k-te--full-width",
+        ]
+          .filter(Boolean)
+          .join(" ")}
       >
         {!readOnly && (
-          <div className="k-te__toolbar" role="toolbar" aria-label={locale?.textEditor?.toolbar || 'Formatting'}>
+          <div
+            className="k-te__toolbar"
+            role="toolbar"
+            aria-label={locale?.textEditor?.toolbar || "Formatting"}
+          >
             {(toolbar ?? DEFAULT_TOOLBAR).map((action, i) => {
-              if (action === '|') return <div key={`sep-${i}`} className="k-te__separator" aria-hidden="true" />;
+              if (action === "|")
+                return (
+                  <div
+                    key={`sep-${i}`}
+                    className="k-te__separator"
+                    aria-hidden="true"
+                  />
+                );
 
-              if (action === 'heading') {
-                const headingLabel = HEADING_OPTIONS.find((o) => o.value === currentHeading)?.label || 'Paragraph';
+              if (action === "heading") {
+                const headingLabel =
+                  HEADING_OPTIONS.find(o => o.value === currentHeading)
+                    ?.label || "Paragraph";
                 return (
                   <Popover
                     key="heading-pop"
@@ -723,20 +935,32 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                     closeOnEscape
                     content={
                       <div className="k-te__dropdown">
-                        {HEADING_OPTIONS.map((o) => (
+                        {HEADING_OPTIONS.map(o => (
                           <button
                             key={o.value}
                             type="button"
-                            className={`k-te__dropdown-item ${o.value === currentHeading ? 'k-te__dropdown-item--active' : ''}`}
-                            onMouseDown={(e) => e.preventDefault()}
+                            className={`k-te__dropdown-item ${o.value === currentHeading ? "k-te__dropdown-item--active" : ""}`}
+                            onMouseDown={e => e.preventDefault()}
                             onClick={() => {
                               ensureEditorFocus();
                               const val = o.value;
-                              if (val === 'p') {
-                                if (currentHeading !== 'p') setBlockTag(currentHeading.toUpperCase(), editorRef.current!);
+                              if (val === "p") {
+                                if (currentHeading !== "p")
+                                  setBlockTag(
+                                    currentHeading.toUpperCase(),
+                                    editorRef.current!
+                                  );
                               } else {
-                                if (currentHeading !== 'p') setBlockTag(currentHeading.toUpperCase(), editorRef.current!);
-                                if (val !== currentHeading) setBlockTag(val.toUpperCase(), editorRef.current!);
+                                if (currentHeading !== "p")
+                                  setBlockTag(
+                                    currentHeading.toUpperCase(),
+                                    editorRef.current!
+                                  );
+                                if (val !== currentHeading)
+                                  setBlockTag(
+                                    val.toUpperCase(),
+                                    editorRef.current!
+                                  );
                               }
                               emitChange();
                               savedRange.current = saveSelection();
@@ -753,22 +977,40 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                     <button
                       type="button"
                       className="k-te__select-btn"
-                      onClick={() => { savedRange.current = saveSelection(); setHeadingOpen((p) => !p); }}
-                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => {
+                        savedRange.current = saveSelection();
+                        setHeadingOpen(p => !p);
+                      }}
+                      onMouseDown={e => e.preventDefault()}
                       disabled={disabled}
-                      aria-label={locale?.textEditor?.textStyle || 'Text style'}
+                      aria-label={locale?.textEditor?.textStyle || "Text style"}
                     >
                       <span className="k-te__select-label">{headingLabel}</span>
-                      <svg className="k-te__select-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
-                        <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      <svg
+                        className="k-te__select-chevron"
+                        width="10"
+                        height="6"
+                        viewBox="0 0 10 6"
+                        fill="none"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M1 1l4 4 4-4"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </button>
                   </Popover>
                 );
               }
 
-              if (action === 'fontSize') {
-                const fsLabel = currentFontSize ? currentFontSize.replace('px', '') : '14';
+              if (action === "fontSize") {
+                const fsLabel = currentFontSize
+                  ? currentFontSize.replace("px", "")
+                  : "14";
                 return (
                   <Popover
                     key="fontSize-pop"
@@ -779,12 +1021,12 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                     closeOnEscape
                     content={
                       <div className="k-te__dropdown k-te__dropdown--scroll">
-                        {FONT_SIZES.map((s) => (
+                        {FONT_SIZES.map(s => (
                           <button
                             key={s}
                             type="button"
-                            className={`k-te__dropdown-item ${currentFontSize === `${s}px` ? 'k-te__dropdown-item--active' : ''}`}
-                            onMouseDown={(e) => e.preventDefault()}
+                            className={`k-te__dropdown-item ${currentFontSize === `${s}px` ? "k-te__dropdown-item--active" : ""}`}
+                            onMouseDown={e => e.preventDefault()}
                             onClick={() => {
                               ensureEditorFocus();
                               applyFontSize(`${s}px`, editorRef.current!);
@@ -803,22 +1045,40 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                     <button
                       type="button"
                       className="k-te__select-btn"
-                      onClick={() => { savedRange.current = saveSelection(); setFontSizeOpen((p) => !p); }}
-                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => {
+                        savedRange.current = saveSelection();
+                        setFontSizeOpen(p => !p);
+                      }}
+                      onMouseDown={e => e.preventDefault()}
                       disabled={disabled}
-                      aria-label={locale?.textEditor?.fontSize || 'Font size'}
+                      aria-label={locale?.textEditor?.fontSize || "Font size"}
                     >
                       <span className="k-te__select-label">{fsLabel}</span>
-                      <svg className="k-te__select-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
-                        <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      <svg
+                        className="k-te__select-chevron"
+                        width="10"
+                        height="6"
+                        viewBox="0 0 10 6"
+                        fill="none"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M1 1l4 4 4-4"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </button>
                   </Popover>
                 );
               }
 
-              if (action === 'fontFamily') {
-                const ffLabel = FONT_FAMILIES.find((f) => f.value === currentFont)?.label || 'Inter';
+              if (action === "fontFamily") {
+                const ffLabel =
+                  FONT_FAMILIES.find(f => f.value === currentFont)?.label ||
+                  "Inter";
                 return (
                   <Popover
                     key="fontFamily-pop"
@@ -829,13 +1089,13 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                     closeOnEscape
                     content={
                       <div className="k-te__dropdown">
-                        {FONT_FAMILIES.map((f) => (
+                        {FONT_FAMILIES.map(f => (
                           <button
                             key={f.label}
                             type="button"
-                            className={`k-te__dropdown-item ${currentFont === f.value ? 'k-te__dropdown-item--active' : ''}`}
+                            className={`k-te__dropdown-item ${currentFont === f.value ? "k-te__dropdown-item--active" : ""}`}
                             style={{ fontFamily: f.value }}
-                            onMouseDown={(e) => e.preventDefault()}
+                            onMouseDown={e => e.preventDefault()}
                             onClick={() => {
                               ensureEditorFocus();
                               applyFontFamily(f.value, editorRef.current!);
@@ -854,38 +1114,74 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                     <button
                       type="button"
                       className="k-te__select-btn"
-                      onClick={() => { savedRange.current = saveSelection(); setFontFamilyOpen((p) => !p); }}
-                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => {
+                        savedRange.current = saveSelection();
+                        setFontFamilyOpen(p => !p);
+                      }}
+                      onMouseDown={e => e.preventDefault()}
                       disabled={disabled}
-                      aria-label={locale?.textEditor?.fontFamily || 'Font family'}
+                      aria-label={
+                        locale?.textEditor?.fontFamily || "Font family"
+                      }
                     >
                       <span className="k-te__select-label">{ffLabel}</span>
-                      <svg className="k-te__select-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true">
-                        <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      <svg
+                        className="k-te__select-chevron"
+                        width="10"
+                        height="6"
+                        viewBox="0 0 10 6"
+                        fill="none"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M1 1l4 4 4-4"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </button>
                   </Popover>
                 );
               }
 
-              if (action === 'textColor') {
+              if (action === "textColor") {
                 const tcBtn = (
                   <button
                     key="textColor"
                     type="button"
                     className="k-te__btn k-te__btn--color"
-                    onClick={() => { savedRange.current = saveSelection(); setTextColorOpen((p) => !p); }}
-                    onMouseDown={(e) => e.preventDefault()}
-                    aria-label={locale?.textEditor?.textColor || 'Text color'}
+                    onClick={() => {
+                      savedRange.current = saveSelection();
+                      setTextColorOpen(p => !p);
+                    }}
+                    onMouseDown={e => e.preventDefault()}
+                    aria-label={locale?.textEditor?.textColor || "Text color"}
                     disabled={disabled}
                   >
                     {iconSvg(TEXT_COLOR_PATH)}
-                    <span className="k-te__color-bar" style={{ backgroundColor: currentTextColor || 'var(--kreati-gray-900)' }} />
+                    <span
+                      className="k-te__color-bar"
+                      style={{
+                        backgroundColor:
+                          currentTextColor || "var(--kreati-gray-900)",
+                      }}
+                    />
                   </button>
                 );
-                const wrappedTc = showTooltips && !textColorOpen
-                  ? <Tooltip key="tc-tip" content={locale?.textEditor?.textColor || 'Text color'} position="top">{tcBtn}</Tooltip>
-                  : tcBtn;
+                const wrappedTc =
+                  showTooltips && !textColorOpen ? (
+                    <Tooltip
+                      key="tc-tip"
+                      content={locale?.textEditor?.textColor || "Text color"}
+                      position="top"
+                    >
+                      {tcBtn}
+                    </Tooltip>
+                  ) : (
+                    tcBtn
+                  );
                 return (
                   <Popover
                     key="tc-pop"
@@ -896,7 +1192,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                     closeOnEscape
                     content={
                       <div className="k-te__color-palette">
-                        {COLOR_PALETTE.map((c) => (
+                        {COLOR_PALETTE.map(c => (
                           <button
                             key={c}
                             type="button"
@@ -905,7 +1201,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                             aria-label={c}
                             onClick={() => {
                               ensureEditorFocus();
-                              applyColor(c, 'color', editorRef.current!);
+                              applyColor(c, "color", editorRef.current!);
                               emitChange();
                               savedRange.current = saveSelection();
                               setTextColorOpen(false);
@@ -920,24 +1216,43 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                 );
               }
 
-              if (action === 'bgColor') {
+              if (action === "bgColor") {
                 const bgBtn = (
                   <button
                     key="bgColor"
                     type="button"
                     className="k-te__btn k-te__btn--color"
-                    onClick={() => { savedRange.current = saveSelection(); setBgColorOpen((p) => !p); }}
-                    onMouseDown={(e) => e.preventDefault()}
-                    aria-label={locale?.textEditor?.bgColor || 'Highlight color'}
+                    onClick={() => {
+                      savedRange.current = saveSelection();
+                      setBgColorOpen(p => !p);
+                    }}
+                    onMouseDown={e => e.preventDefault()}
+                    aria-label={
+                      locale?.textEditor?.bgColor || "Highlight color"
+                    }
                     disabled={disabled}
                   >
                     {iconSvg(BG_COLOR_PATH)}
-                    <span className="k-te__color-bar" style={{ backgroundColor: currentBgColor || 'transparent' }} />
+                    <span
+                      className="k-te__color-bar"
+                      style={{
+                        backgroundColor: currentBgColor || "transparent",
+                      }}
+                    />
                   </button>
                 );
-                const wrappedBg = showTooltips && !bgColorOpen
-                  ? <Tooltip key="bg-tip" content={locale?.textEditor?.bgColor || 'Highlight color'} position="top">{bgBtn}</Tooltip>
-                  : bgBtn;
+                const wrappedBg =
+                  showTooltips && !bgColorOpen ? (
+                    <Tooltip
+                      key="bg-tip"
+                      content={locale?.textEditor?.bgColor || "Highlight color"}
+                      position="top"
+                    >
+                      {bgBtn}
+                    </Tooltip>
+                  ) : (
+                    bgBtn
+                  );
                 return (
                   <Popover
                     key="bg-pop"
@@ -948,7 +1263,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                     closeOnEscape
                     content={
                       <div className="k-te__color-palette">
-                        {COLOR_PALETTE.map((c) => (
+                        {COLOR_PALETTE.map(c => (
                           <button
                             key={c}
                             type="button"
@@ -957,7 +1272,11 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                             aria-label={c}
                             onClick={() => {
                               ensureEditorFocus();
-                              applyColor(c, 'background-color', editorRef.current!);
+                              applyColor(
+                                c,
+                                "background-color",
+                                editorRef.current!
+                              );
                               emitChange();
                               savedRange.current = saveSelection();
                               setBgColorOpen(false);
@@ -972,25 +1291,34 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                 );
               }
 
-              if (action === 'link') {
+              if (action === "link") {
                 const linkBtn = (
                   <button
                     key="link"
                     type="button"
-                    className={`k-te__btn ${activeFormats.has('link') ? 'k-te__btn--active' : ''}`}
+                    className={`k-te__btn ${activeFormats.has("link") ? "k-te__btn--active" : ""}`}
                     onClick={openLinkPopover}
-                    onMouseDown={(e) => e.preventDefault()}
+                    onMouseDown={e => e.preventDefault()}
                     aria-label={LABELS.link}
-                    aria-pressed={activeFormats.has('link')}
+                    aria-pressed={activeFormats.has("link")}
                     disabled={disabled}
                   >
                     {iconSvg(LINK_PATH)}
                   </button>
                 );
 
-                const wrappedBtn = showTooltips && !linkOpen
-                  ? <Tooltip key="link-tip" content={LABELS.link} position="top">{linkBtn}</Tooltip>
-                  : linkBtn;
+                const wrappedBtn =
+                  showTooltips && !linkOpen ? (
+                    <Tooltip
+                      key="link-tip"
+                      content={LABELS.link}
+                      position="top"
+                    >
+                      {linkBtn}
+                    </Tooltip>
+                  ) : (
+                    linkBtn
+                  );
 
                 return (
                   <Popover
@@ -1003,25 +1331,48 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                     content={
                       <div className="k-te__link-popover">
                         <Input
-                          label={locale?.textEditor?.linkLabel || 'Label'}
+                          label={locale?.textEditor?.linkLabel || "Label"}
                           size="sm"
                           value={linkLabel}
-                          onChange={(e) => setLinkLabel((e.target as HTMLInputElement).value)}
+                          onChange={e =>
+                            setLinkLabel((e.target as HTMLInputElement).value)
+                          }
                           fullWidth
-                          placeholder={locale?.textEditor?.linkLabelPlaceholder || 'Display text (optional)'}
+                          placeholder={
+                            locale?.textEditor?.linkLabelPlaceholder ||
+                            "Display text (optional)"
+                          }
                         />
                         <Input
                           label="URL"
                           size="sm"
                           value={linkUrl}
-                          onChange={(e) => setLinkUrl((e.target as HTMLInputElement).value)}
-                          onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleLink(); } }}
+                          onChange={e =>
+                            setLinkUrl((e.target as HTMLInputElement).value)
+                          }
+                          onKeyDown={e => {
+                            if (e.key === "Enter") {
+                              e.preventDefault();
+                              handleLink();
+                            }
+                          }}
                           fullWidth
                         />
                         <div className="k-te__link-actions">
-                          <Button label={locale?.textEditor?.insertLink || 'Insert'} size="sm" buttonType="filled" onClick={handleLink} />
-                          {activeFormats.has('link') && (
-                            <Button label={locale?.textEditor?.removeLink || 'Remove'} size="sm" buttonType="outlined" severity="danger" onClick={handleRemoveLink} />
+                          <Button
+                            label={locale?.textEditor?.insertLink || "Insert"}
+                            size="sm"
+                            buttonType="filled"
+                            onClick={handleLink}
+                          />
+                          {activeFormats.has("link") && (
+                            <Button
+                              label={locale?.textEditor?.removeLink || "Remove"}
+                              size="sm"
+                              buttonType="outlined"
+                              severity="danger"
+                              onClick={handleRemoveLink}
+                            />
                           )}
                         </div>
                       </div>
@@ -1032,15 +1383,16 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
                 );
               }
 
-              return renderToolbarBtn(action, INLINE_ICONS[action], activeFormats.has(action));
+              return renderToolbarBtn(
+                action,
+                INLINE_ICONS[action],
+                activeFormats.has(action)
+              );
             })}
           </div>
         )}
 
-        <div
-          className="k-te__editor-wrapper"
-          style={{ maxHeight, minHeight }}
-        >
+        <div className="k-te__editor-wrapper" style={{ maxHeight, minHeight }}>
           <div
             ref={editorRef}
             className="k-te__editor"
@@ -1054,19 +1406,34 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
             suppressContentEditableWarning
             onInput={emitChange}
             onKeyDown={handleKeyDown}
-            onSelect={() => { savedRange.current = saveSelection(); updateActiveFormats(); }}
-            onBlur={() => { savedRange.current = saveSelection(); onBlur?.(); }}
+            onSelect={() => {
+              savedRange.current = saveSelection();
+              updateActiveFormats();
+            }}
+            onBlur={() => {
+              savedRange.current = saveSelection();
+              onBlur?.();
+            }}
           />
         </div>
 
         {(showCharCount || name) && (
           <div className="k-te__footer">
             {showCharCount && (
-              <span className={`k-te__char-count ${overLimit ? 'k-te__char-count--over' : ''}`}>
-                {charCount}{maxChars !== undefined ? ` / ${maxChars}` : ''}
+              <span
+                className={`k-te__char-count ${overLimit ? "k-te__char-count--over" : ""}`}
+              >
+                {charCount}
+                {maxChars !== undefined ? ` / ${maxChars}` : ""}
               </span>
             )}
-            {name && <input type="hidden" name={name} value={editorRef.current?.innerHTML ?? ''} />}
+            {name && (
+              <input
+                type="hidden"
+                name={name}
+                value={editorRef.current?.innerHTML ?? ""}
+              />
+            )}
           </div>
         )}
       </div>
@@ -1092,8 +1459,12 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
       );
     }
 
-    return <div ref={ref} className={className} style={style}>{editorContent}</div>;
-  },
+    return (
+      <div ref={ref} className={className} style={style}>
+        {editorContent}
+      </div>
+    );
+  }
 );
 
-TextEditor.displayName = 'TextEditor';
+TextEditor.displayName = "TextEditor";

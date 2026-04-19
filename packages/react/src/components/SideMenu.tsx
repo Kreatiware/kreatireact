@@ -1,8 +1,8 @@
-import React, { forwardRef, useState, useCallback } from 'react';
-import './SideMenu.css';
-import { MenuItem } from '../types/navigation';
-import { renderMenuIcon } from './resolveIcon';
-import { CHEVRON_DOWN_PATH } from './iconPaths';
+import React, { forwardRef, useState, useCallback } from "react";
+import "./SideMenu.css";
+import { MenuItem } from "../types/navigation";
+import { renderMenuIcon } from "./resolveIcon";
+import { CHEVRON_DOWN_PATH } from "./iconPaths";
 
 /**
  * Props for the SideMenu component
@@ -19,9 +19,13 @@ export interface SideMenuProps {
   /** Whether to allow multiple submenus open at once */
   multiple?: boolean;
   /** Position of the expand/collapse icon for parent items */
-  iconPosition?: 'start' | 'end';
+  iconPosition?: "start" | "end";
   /** Custom template for rendering parent items (items with children) */
-  headerTemplate?: (item: MenuItem, isExpanded: boolean, toggle: () => void) => React.ReactNode;
+  headerTemplate?: (
+    item: MenuItem,
+    isExpanded: boolean,
+    toggle: () => void
+  ) => React.ReactNode;
   /** Enable expand/collapse animation */
   animated?: boolean;
   /** Additional CSS class name */
@@ -61,15 +65,15 @@ export const SideMenu = forwardRef<HTMLElement, SideMenuProps>(
       onItemSelect,
       disabled = false,
       multiple = false,
-      iconPosition = 'end',
+      iconPosition = "end",
       headerTemplate,
       animated = true,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
-    const base = 'k-sidemenu';
+    const base = "k-sidemenu";
     const [expandedKeys, setExpandedKeys] = useState<Set<string>>(() => {
       const initial = new Set<string>();
       const findExpanded = (menuItems: MenuItem[]) => {
@@ -84,11 +88,11 @@ export const SideMenu = forwardRef<HTMLElement, SideMenuProps>(
 
     const classes = [base, disabled && `${base}--disabled`, className]
       .filter(Boolean)
-      .join(' ');
+      .join(" ");
 
     const toggleExpand = useCallback(
       (key: string) => {
-        setExpandedKeys((prev) => {
+        setExpandedKeys(prev => {
           const next = new Set(prev);
           if (prev.has(key)) {
             // Collapse: remove this key and all descendant keys
@@ -142,7 +146,7 @@ export const SideMenu = forwardRef<HTMLElement, SideMenuProps>(
           return next;
         });
       },
-      [multiple, items],
+      [multiple, items]
     );
 
     const handleSelect = useCallback(
@@ -154,35 +158,35 @@ export const SideMenu = forwardRef<HTMLElement, SideMenuProps>(
         }
         if (item.command) item.command(item);
         if (item.url) {
-          if (item.target === '_blank') {
-            window.open(item.url, '_blank', 'noopener');
+          if (item.target === "_blank") {
+            window.open(item.url, "_blank", "noopener");
           } else {
             window.location.href = item.url;
           }
         }
         onItemSelect?.(item.key, item);
       },
-      [disabled, onItemSelect, toggleExpand],
+      [disabled, onItemSelect, toggleExpand]
     );
 
     const handleKeyDown = useCallback(
       (item: MenuItem, e: React.KeyboardEvent) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+        if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           handleSelect(item);
         }
         if (item.items && item.items.length > 0) {
-          if (e.key === 'ArrowRight' && !expandedKeys.has(item.key)) {
+          if (e.key === "ArrowRight" && !expandedKeys.has(item.key)) {
             e.preventDefault();
             toggleExpand(item.key);
           }
-          if (e.key === 'ArrowLeft' && expandedKeys.has(item.key)) {
+          if (e.key === "ArrowLeft" && expandedKeys.has(item.key)) {
             e.preventDefault();
             toggleExpand(item.key);
           }
         }
       },
-      [handleSelect, expandedKeys, toggleExpand],
+      [handleSelect, expandedKeys, toggleExpand]
     );
 
     const renderItem = (item: MenuItem, depth: number): React.ReactNode => {
@@ -193,7 +197,9 @@ export const SideMenu = forwardRef<HTMLElement, SideMenuProps>(
       }
 
       if (item.template) {
-        return <React.Fragment key={item.key}>{item.template(item)}</React.Fragment>;
+        return (
+          <React.Fragment key={item.key}>{item.template(item)}</React.Fragment>
+        );
       }
 
       const hasChildren = item.items && item.items.length > 0;
@@ -207,8 +213,11 @@ export const SideMenu = forwardRef<HTMLElement, SideMenuProps>(
           <li key={item.key} role="none">
             {headerTemplate(item, isExpanded, toggleItem)}
             {isExpanded && (
-              <ul className={`${base}__submenu ${animated ? `${base}__submenu--animated` : ''}`} role="group">
-                {item.items!.map((child) => renderItem(child, depth + 1))}
+              <ul
+                className={`${base}__submenu ${animated ? `${base}__submenu--animated` : ""}`}
+                role="group"
+              >
+                {item.items!.map(child => renderItem(child, depth + 1))}
               </ul>
             )}
           </li>
@@ -224,11 +233,11 @@ export const SideMenu = forwardRef<HTMLElement, SideMenuProps>(
         item.className,
       ]
         .filter(Boolean)
-        .join(' ');
+        .join(" ");
 
       const arrow = hasChildren && (
         <span
-          className={`${base}__arrow ${isExpanded ? `${base}__arrow--open` : ''}`}
+          className={`${base}__arrow ${isExpanded ? `${base}__arrow--open` : ""}`}
           aria-hidden="true"
         >
           <svg width={16} height={16} viewBox="0 0 24 24" fill="currentColor">
@@ -243,27 +252,30 @@ export const SideMenu = forwardRef<HTMLElement, SideMenuProps>(
             type="button"
             role="treeitem"
             className={itemClasses}
-            style={{ ...item.style, paddingLeft: `${(depth * 16) + 12}px` }}
+            style={{ ...item.style, paddingLeft: `${depth * 16 + 12}px` }}
             tabIndex={isDisabled ? -1 : 0}
             aria-expanded={hasChildren ? isExpanded : undefined}
             aria-selected={isActive}
             aria-disabled={isDisabled || undefined}
             disabled={isDisabled}
             onClick={toggleItem}
-            onKeyDown={(e) => handleKeyDown(item, e)}
+            onKeyDown={e => handleKeyDown(item, e)}
           >
-            {iconPosition === 'start' && arrow}
+            {iconPosition === "start" && arrow}
             {item.icon && (
               <span className={`${base}__icon`} aria-hidden="true">
                 {renderMenuIcon(item.icon)}
               </span>
             )}
             <span className={`${base}__label`}>{item.label}</span>
-            {iconPosition === 'end' && arrow}
+            {iconPosition === "end" && arrow}
           </button>
           {hasChildren && isExpanded && (
-            <ul className={`${base}__submenu ${animated ? `${base}__submenu--animated` : ''}`} role="group">
-              {item.items!.map((child) => renderItem(child, depth + 1))}
+            <ul
+              className={`${base}__submenu ${animated ? `${base}__submenu--animated` : ""}`}
+              role="group"
+            >
+              {item.items!.map(child => renderItem(child, depth + 1))}
             </ul>
           )}
         </li>
@@ -273,11 +285,11 @@ export const SideMenu = forwardRef<HTMLElement, SideMenuProps>(
     return (
       <nav ref={ref} className={classes} style={style} aria-label="Side menu">
         <ul className={`${base}__list`} role="tree">
-          {items.map((item) => renderItem(item, 0))}
+          {items.map(item => renderItem(item, 0))}
         </ul>
       </nav>
     );
-  },
+  }
 );
 
-SideMenu.displayName = 'SideMenu';
+SideMenu.displayName = "SideMenu";

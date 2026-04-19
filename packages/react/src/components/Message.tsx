@@ -1,10 +1,31 @@
-import React, { forwardRef, useState, useEffect, useCallback, useRef, useImperativeHandle } from 'react';
-import { CHECK_PATH, TIMES_PATH, INFO_CIRCLE_PATH, EXCLAMATION_TRIANGLE_PATH, HELP_CIRCLE_PATH } from './iconPaths';
-import { useKreatiLocale } from '../locale';
-import './Message.css';
+import React, {
+  forwardRef,
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useImperativeHandle,
+} from "react";
+import {
+  CHECK_PATH,
+  TIMES_PATH,
+  INFO_CIRCLE_PATH,
+  EXCLAMATION_TRIANGLE_PATH,
+  HELP_CIRCLE_PATH,
+} from "./iconPaths";
+import { useKreatiLocale } from "../locale";
+import "./Message.css";
 
 /** Severity types for Message */
-export type MessageSeverity = 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+export type MessageSeverity =
+  | "primary"
+  | "secondary"
+  | "success"
+  | "info"
+  | "warning"
+  | "help"
+  | "danger"
+  | "accent";
 
 export interface MessageProps {
   /** Visual severity — determines background, border, and default icon */
@@ -20,14 +41,17 @@ export interface MessageProps {
   /** Auto-dismiss duration in milliseconds (requires sticky=false) */
   life?: number;
   /** Thick colored border position */
-  borderPosition?: 'left' | 'top' | 'right' | 'bottom' | false;
+  borderPosition?: "left" | "top" | "right" | "bottom" | false;
   /**
    * Custom render replacing the entire message content.
    *
    * @param props - Object with severity, onClose callback
    * @returns ReactNode to render as the message body
    */
-  contentTemplate?: (props: { severity: MessageSeverity; onClose: () => void }) => React.ReactNode;
+  contentTemplate?: (props: {
+    severity: MessageSeverity;
+    onClose: () => void;
+  }) => React.ReactNode;
   /** Callback when message is closed */
   onClose?: () => void;
   /** Additional CSS class names */
@@ -48,7 +72,13 @@ const SEVERITY_ICONS: Record<MessageSeverity, string> = {
 };
 
 const iconSvg = (path: string) => (
-  <svg width={18} height={18} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+  <svg
+    width={18}
+    height={18}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
     <path d={path} />
   </svg>
 );
@@ -72,7 +102,7 @@ const iconSvg = (path: string) => (
 export const Message = forwardRef<HTMLDivElement, MessageProps>(
   (
     {
-      severity = 'info',
+      severity = "info",
       children,
       icon = false,
       closable = false,
@@ -81,10 +111,10 @@ export const Message = forwardRef<HTMLDivElement, MessageProps>(
       borderPosition = false,
       contentTemplate,
       onClose,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const elRef = useRef<HTMLDivElement>(null);
     useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
@@ -92,7 +122,7 @@ export const Message = forwardRef<HTMLDivElement, MessageProps>(
     const locale = useKreatiLocale();
     const [visible, setVisible] = useState(true);
     const [exiting, setExiting] = useState(false);
-    const base = 'k-message';
+    const base = "k-message";
 
     const handleClose = useCallback(() => {
       setExiting(true);
@@ -113,7 +143,8 @@ export const Message = forwardRef<HTMLDivElement, MessageProps>(
 
     if (!visible) return null;
 
-    const resolvedIcon = icon === true ? iconSvg(SEVERITY_ICONS[severity]) : icon || null;
+    const resolvedIcon =
+      icon === true ? iconSvg(SEVERITY_ICONS[severity]) : icon || null;
 
     const classes = [
       base,
@@ -121,7 +152,9 @@ export const Message = forwardRef<HTMLDivElement, MessageProps>(
       borderPosition && `${base}--border-${borderPosition}`,
       exiting && `${base}--exit`,
       className,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     return (
       <div
@@ -132,9 +165,13 @@ export const Message = forwardRef<HTMLDivElement, MessageProps>(
         aria-live="polite"
         onAnimationEnd={handleAnimationEnd}
       >
-        {contentTemplate ? contentTemplate({ severity, onClose: handleClose }) : (
+        {contentTemplate ? (
+          contentTemplate({ severity, onClose: handleClose })
+        ) : (
           <>
-            {resolvedIcon && <span className={`${base}__icon`}>{resolvedIcon}</span>}
+            {resolvedIcon && (
+              <span className={`${base}__icon`}>{resolvedIcon}</span>
+            )}
             <span className={`${base}__text`}>{children}</span>
             {closable && (
               <button
@@ -150,7 +187,7 @@ export const Message = forwardRef<HTMLDivElement, MessageProps>(
         )}
       </div>
     );
-  },
+  }
 );
 
-Message.displayName = 'Message';
+Message.displayName = "Message";

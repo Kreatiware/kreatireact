@@ -1,7 +1,15 @@
-import React, { forwardRef, useId, useRef, useState, useCallback, useImperativeHandle, useEffect } from 'react';
-import { useKreatiLocale } from '../locale';
-import { FieldWrapper } from './FieldWrapper';
-import './Dial.css';
+import React, {
+  forwardRef,
+  useId,
+  useRef,
+  useState,
+  useCallback,
+  useImperativeHandle,
+  useEffect,
+} from "react";
+import { useKreatiLocale } from "../locale";
+import { FieldWrapper } from "./FieldWrapper";
+import "./Dial.css";
 
 export interface DialProps {
   /** Current value (controlled) */
@@ -64,9 +72,13 @@ export interface DialProps {
    * @param props - Object with x, y coordinates and current value
    * @returns ReactNode (SVG elements) to render as the thumb
    */
-  thumbTemplate?: (props: { x: number; y: number; value: number }) => React.ReactNode;
+  thumbTemplate?: (props: {
+    x: number;
+    y: number;
+    value: number;
+  }) => React.ReactNode;
   /** Component size */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Label text */
   label?: string;
   /** Helper text */
@@ -76,7 +88,15 @@ export interface DialProps {
   /** Success state */
   success?: boolean;
   /** Helper severity */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  helperSeverity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Disabled state */
   disabled?: boolean;
   /** Read-only state */
@@ -103,8 +123,12 @@ const polarToXY = (angleDeg: number, r: number): [number, number] => {
   return [CENTER + r * Math.cos(rad), CENTER + r * Math.sin(rad)];
 };
 
-const describeArc = (r: number, startAngle: number, endAngle: number): string => {
-  if (endAngle <= startAngle) return '';
+const describeArc = (
+  r: number,
+  startAngle: number,
+  endAngle: number
+): string => {
+  if (endAngle <= startAngle) return "";
   const [sx, sy] = polarToXY(startAngle, r);
   const [ex, ey] = polarToXY(endAngle, r);
   const largeArc = endAngle - startAngle > 180 ? 1 : 0;
@@ -149,7 +173,7 @@ export const Dial = forwardRef<HTMLDivElement, DialProps>(
       valueTemplate,
       trackTemplate,
       thumbTemplate,
-      size = 'md',
+      size = "md",
       label,
       helperText,
       error,
@@ -160,10 +184,10 @@ export const Dial = forwardRef<HTMLDivElement, DialProps>(
       required = false,
       name,
       onBlur,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const autoId = useId();
     const dialId = name || autoId;
@@ -178,88 +202,116 @@ export const Dial = forwardRef<HTMLDivElement, DialProps>(
     const [dragging, setDragging] = useState(false);
 
     const hasError = !!error;
-    const errorMessage = typeof error === 'boolean' ? undefined : error;
-    const base = 'k-dial';
+    const errorMessage = typeof error === "boolean" ? undefined : error;
+    const base = "k-dial";
     const hasCustomSize = width !== undefined || height !== undefined;
 
     const resolvedStroke = strokeWidth ?? 10;
     const radius = (VIEW - resolvedStroke) / 2;
     const percent = max === min ? 0 : ((val - min) / (max - min)) * 100;
 
-    const snap = useCallback((v: number): number => {
-      if (step <= 0) return Math.max(min, Math.min(max, v));
-      const snapped = Math.round((v - min) / step) * step + min;
-      return Math.max(min, Math.min(max, parseFloat(snapped.toFixed(10))));
-    }, [min, max, step]);
+    const snap = useCallback(
+      (v: number): number => {
+        if (step <= 0) return Math.max(min, Math.min(max, v));
+        const snapped = Math.round((v - min) / step) * step + min;
+        return Math.max(min, Math.min(max, parseFloat(snapped.toFixed(10))));
+      },
+      [min, max, step]
+    );
 
-    const valueToAngle = useCallback((v: number): number => {
-      if (max === min) return ARC_START;
-      return ARC_START + ((v - min) / (max - min)) * ARC_SPAN;
-    }, [min, max]);
+    const valueToAngle = useCallback(
+      (v: number): number => {
+        if (max === min) return ARC_START;
+        return ARC_START + ((v - min) / (max - min)) * ARC_SPAN;
+      },
+      [min, max]
+    );
 
-    const angleToValue = useCallback((angleDeg: number): number => {
-      let a = angleDeg - ARC_START;
-      if (a < 0) a += 360;
-      if (a > ARC_SPAN) a = a > ARC_SPAN + (360 - ARC_SPAN) / 2 ? 0 : ARC_SPAN;
-      return snap(min + (a / ARC_SPAN) * (max - min));
-    }, [min, max, snap]);
+    const angleToValue = useCallback(
+      (angleDeg: number): number => {
+        let a = angleDeg - ARC_START;
+        if (a < 0) a += 360;
+        if (a > ARC_SPAN)
+          a = a > ARC_SPAN + (360 - ARC_SPAN) / 2 ? 0 : ARC_SPAN;
+        return snap(min + (a / ARC_SPAN) * (max - min));
+      },
+      [min, max, snap]
+    );
 
-    const updateValue = useCallback((next: number) => {
-      if (readOnly) return;
-      if (!isControlled) setInternalValue(next);
-      onChange?.(next);
-    }, [isControlled, onChange, readOnly]);
+    const updateValue = useCallback(
+      (next: number) => {
+        if (readOnly) return;
+        if (!isControlled) setInternalValue(next);
+        onChange?.(next);
+      },
+      [isControlled, onChange, readOnly]
+    );
 
-    const getAngleFromEvent = useCallback((clientX: number, clientY: number): number => {
-      const svg = svgRef.current;
-      if (!svg) return 0;
-      const rect = svg.getBoundingClientRect();
-      const dx = clientX - (rect.left + rect.width / 2);
-      const dy = clientY - (rect.top + rect.height / 2);
-      let angle = (Math.atan2(dy, dx) * 180) / Math.PI;
-      if (angle < 0) angle += 360;
-      return angle;
-    }, []);
+    const getAngleFromEvent = useCallback(
+      (clientX: number, clientY: number): number => {
+        const svg = svgRef.current;
+        if (!svg) return 0;
+        const rect = svg.getBoundingClientRect();
+        const dx = clientX - (rect.left + rect.width / 2);
+        const dy = clientY - (rect.top + rect.height / 2);
+        let angle = (Math.atan2(dy, dx) * 180) / Math.PI;
+        if (angle < 0) angle += 360;
+        return angle;
+      },
+      []
+    );
 
-    const handleInteraction = useCallback((clientX: number, clientY: number) => {
-      if (disabled || readOnly) return;
-      updateValue(angleToValue(getAngleFromEvent(clientX, clientY)));
-    }, [disabled, readOnly, getAngleFromEvent, angleToValue, updateValue]);
+    const handleInteraction = useCallback(
+      (clientX: number, clientY: number) => {
+        if (disabled || readOnly) return;
+        updateValue(angleToValue(getAngleFromEvent(clientX, clientY)));
+      },
+      [disabled, readOnly, getAngleFromEvent, angleToValue, updateValue]
+    );
 
-    const handleMouseDown = useCallback((e: React.MouseEvent) => {
-      if (disabled || readOnly) return;
-      e.preventDefault();
-      setDragging(true);
-      handleInteraction(e.clientX, e.clientY);
-    }, [disabled, readOnly, handleInteraction]);
+    const handleMouseDown = useCallback(
+      (e: React.MouseEvent) => {
+        if (disabled || readOnly) return;
+        e.preventDefault();
+        setDragging(true);
+        handleInteraction(e.clientX, e.clientY);
+      },
+      [disabled, readOnly, handleInteraction]
+    );
 
-    const handleTouchStart = useCallback((e: React.TouchEvent) => {
-      if (disabled || readOnly) return;
-      e.preventDefault();
-      setDragging(true);
-      handleInteraction(e.touches[0].clientX, e.touches[0].clientY);
-    }, [disabled, readOnly, handleInteraction]);
+    const handleTouchStart = useCallback(
+      (e: React.TouchEvent) => {
+        if (disabled || readOnly) return;
+        e.preventDefault();
+        setDragging(true);
+        handleInteraction(e.touches[0].clientX, e.touches[0].clientY);
+      },
+      [disabled, readOnly, handleInteraction]
+    );
 
-    const handleWheel = useCallback((e: WheelEvent) => {
-      if (disabled || readOnly || !scrollable) return;
-      e.preventDefault();
-      const s = step || 1;
-      const direction = e.deltaY < 0 ? 1 : -1;
-      updateValue(snap(val + direction * s));
-    }, [disabled, readOnly, scrollable, step, val, snap, updateValue]);
+    const handleWheel = useCallback(
+      (e: WheelEvent) => {
+        if (disabled || readOnly || !scrollable) return;
+        e.preventDefault();
+        const s = step || 1;
+        const direction = e.deltaY < 0 ? 1 : -1;
+        updateValue(snap(val + direction * s));
+      },
+      [disabled, readOnly, scrollable, step, val, snap, updateValue]
+    );
 
     useEffect(() => {
       if (!scrollable) return;
       const el = svgRef.current;
       if (!el) return;
-      el.addEventListener('wheel', handleWheel, { passive: false });
-      return () => el.removeEventListener('wheel', handleWheel);
+      el.addEventListener("wheel", handleWheel, { passive: false });
+      return () => el.removeEventListener("wheel", handleWheel);
     }, [scrollable, handleWheel]);
 
     useEffect(() => {
       if (!dragging) return;
       const handleMove = (e: MouseEvent | TouchEvent) => {
-        const { clientX, clientY } = 'touches' in e ? e.touches[0] : e;
+        const { clientX, clientY } = "touches" in e ? e.touches[0] : e;
         handleInteraction(clientX, clientY);
       };
       const handleUp = () => {
@@ -267,35 +319,59 @@ export const Dial = forwardRef<HTMLDivElement, DialProps>(
         onChangeEnd?.(val);
         onBlur?.();
       };
-      window.addEventListener('mousemove', handleMove);
-      window.addEventListener('mouseup', handleUp);
-      window.addEventListener('touchmove', handleMove, { passive: false });
-      window.addEventListener('touchend', handleUp);
+      window.addEventListener("mousemove", handleMove);
+      window.addEventListener("mouseup", handleUp);
+      window.addEventListener("touchmove", handleMove, { passive: false });
+      window.addEventListener("touchend", handleUp);
       return () => {
-        window.removeEventListener('mousemove', handleMove);
-        window.removeEventListener('mouseup', handleUp);
-        window.removeEventListener('touchmove', handleMove);
-        window.removeEventListener('touchend', handleUp);
+        window.removeEventListener("mousemove", handleMove);
+        window.removeEventListener("mouseup", handleUp);
+        window.removeEventListener("touchmove", handleMove);
+        window.removeEventListener("touchend", handleUp);
       };
     }, [dragging, handleInteraction, onChangeEnd, onBlur, val]);
 
-    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-      if (disabled || readOnly) return;
-      const s = step || 1;
-      const bigStep = (max - min) / 10;
-      let next = val;
-      switch (e.key) {
-        case 'ArrowRight': case 'ArrowUp': e.preventDefault(); next = snap(val + s); break;
-        case 'ArrowLeft': case 'ArrowDown': e.preventDefault(); next = snap(val - s); break;
-        case 'PageUp': e.preventDefault(); next = snap(val + bigStep); break;
-        case 'PageDown': e.preventDefault(); next = snap(val - bigStep); break;
-        case 'Home': e.preventDefault(); next = min; break;
-        case 'End': e.preventDefault(); next = max; break;
-        default: return;
-      }
-      updateValue(next);
-      onChangeEnd?.(next);
-    }, [disabled, readOnly, val, step, min, max, snap, updateValue, onChangeEnd]);
+    const handleKeyDown = useCallback(
+      (e: React.KeyboardEvent) => {
+        if (disabled || readOnly) return;
+        const s = step || 1;
+        const bigStep = (max - min) / 10;
+        let next = val;
+        switch (e.key) {
+          case "ArrowRight":
+          case "ArrowUp":
+            e.preventDefault();
+            next = snap(val + s);
+            break;
+          case "ArrowLeft":
+          case "ArrowDown":
+            e.preventDefault();
+            next = snap(val - s);
+            break;
+          case "PageUp":
+            e.preventDefault();
+            next = snap(val + bigStep);
+            break;
+          case "PageDown":
+            e.preventDefault();
+            next = snap(val - bigStep);
+            break;
+          case "Home":
+            e.preventDefault();
+            next = min;
+            break;
+          case "End":
+            e.preventDefault();
+            next = max;
+            break;
+          default:
+            return;
+        }
+        updateValue(next);
+        onChangeEnd?.(next);
+      },
+      [disabled, readOnly, val, step, min, max, snap, updateValue, onChangeEnd]
+    );
 
     // Arc geometry
     const endAngle = valueToAngle(val);
@@ -305,7 +381,9 @@ export const Dial = forwardRef<HTMLDivElement, DialProps>(
     const hasZeroCrossing = min < 0 && max > 0;
     const zeroAngle = hasZeroCrossing ? valueToAngle(0) : ARC_START;
     const valuePath = hasZeroCrossing
-      ? (val >= 0 ? describeArc(radius, zeroAngle, endAngle) : describeArc(radius, endAngle, zeroAngle))
+      ? val >= 0
+        ? describeArc(radius, zeroAngle, endAngle)
+        : describeArc(radius, endAngle, zeroAngle)
       : describeArc(radius, ARC_START, endAngle);
 
     const [thumbX, thumbY] = polarToXY(endAngle, radius);
@@ -317,7 +395,9 @@ export const Dial = forwardRef<HTMLDivElement, DialProps>(
 
     const helperId = `${dialId}-helper`;
     const errorId = `${dialId}-error`;
-    const describedBy = [hasError && errorId, helperText && helperId].filter(Boolean).join(' ') || undefined;
+    const describedBy =
+      [hasError && errorId, helperText && helperId].filter(Boolean).join(" ") ||
+      undefined;
 
     const displayText = valueTemplate ? undefined : String(val);
     const ariaText = valueTemplate ? String(val) : displayText;
@@ -329,15 +409,21 @@ export const Dial = forwardRef<HTMLDivElement, DialProps>(
       hasError && `${base}--error`,
       !hasError && success && `${base}--success`,
       className,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     const containerStyle: React.CSSProperties | undefined = hasCustomSize
       ? { width, height: height ?? width }
       : undefined;
 
-    const svgStyle = valueColor || rangeColor
-      ? { '--k-dial-value-color': valueColor, '--k-dial-range-color': rangeColor } as React.CSSProperties
-      : undefined;
+    const svgStyle =
+      valueColor || rangeColor
+        ? ({
+            "--k-dial-value-color": valueColor,
+            "--k-dial-range-color": rangeColor,
+          } as React.CSSProperties)
+        : undefined;
 
     const dialEl = (
       <div ref={wrapperRef} className={containerClasses} style={containerStyle}>
@@ -364,22 +450,67 @@ export const Dial = forwardRef<HTMLDivElement, DialProps>(
             style={svgStyle}
           >
             {trackTemplate ? (
-              trackTemplate({ radius, strokeWidth: resolvedStroke, rangePath, valuePath, center: CENTER, viewBox: VIEW, percent })
+              trackTemplate({
+                radius,
+                strokeWidth: resolvedStroke,
+                rangePath,
+                valuePath,
+                center: CENTER,
+                viewBox: VIEW,
+                percent,
+              })
             ) : (
               <>
-                <path className={`${base}__range`} d={rangePath} fill="none" strokeWidth={resolvedStroke} strokeLinecap="round" />
-                {valuePath && <path className={`${base}__value`} d={valuePath} fill="none" strokeWidth={resolvedStroke} strokeLinecap="round" />}
+                <path
+                  className={`${base}__range`}
+                  d={rangePath}
+                  fill="none"
+                  strokeWidth={resolvedStroke}
+                  strokeLinecap="round"
+                />
+                {valuePath && (
+                  <path
+                    className={`${base}__value`}
+                    d={valuePath}
+                    fill="none"
+                    strokeWidth={resolvedStroke}
+                    strokeLinecap="round"
+                  />
+                )}
               </>
             )}
-            {thumbTemplate && thumbTemplate({ x: thumbX, y: thumbY, value: val })}
+            {thumbTemplate &&
+              thumbTemplate({ x: thumbX, y: thumbY, value: val })}
             {showMinMax && (
               <>
-                <text className={`${base}__min-max`} x={minEX} y={minEY + minMaxYOffset} textAnchor="start">{min}</text>
-                <text className={`${base}__min-max`} x={maxEX} y={maxEY + minMaxYOffset} textAnchor="end">{max}</text>
+                <text
+                  className={`${base}__min-max`}
+                  x={minEX}
+                  y={minEY + minMaxYOffset}
+                  textAnchor="start"
+                >
+                  {min}
+                </text>
+                <text
+                  className={`${base}__min-max`}
+                  x={maxEX}
+                  y={maxEY + minMaxYOffset}
+                  textAnchor="end"
+                >
+                  {max}
+                </text>
               </>
             )}
             {showValue && !valueTemplate && (
-              <text className={`${base}__text`} x={CENTER} y={CENTER} textAnchor="middle" dominantBaseline="central">{displayText}</text>
+              <text
+                className={`${base}__text`}
+                x={CENTER}
+                y={CENTER}
+                textAnchor="middle"
+                dominantBaseline="central"
+              >
+                {displayText}
+              </text>
             )}
           </svg>
           {showValue && valueTemplate && (
@@ -408,7 +539,7 @@ export const Dial = forwardRef<HTMLDivElement, DialProps>(
         {dialEl}
       </FieldWrapper>
     );
-  },
+  }
 );
 
-Dial.displayName = 'Dial';
+Dial.displayName = "Dial";

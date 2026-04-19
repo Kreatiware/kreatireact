@@ -21,17 +21,42 @@
 /* ============================================
    Sizes — default variant
    ============================================ */
-.k-input__container--xs { height: var(--kreati-input-height-xs); padding: var(--kreati-input-padding-xs); }
-.k-input__container--sm { height: var(--kreati-input-height-sm); padding: var(--kreati-input-padding-sm); }
-.k-input__container--md { height: var(--kreati-input-height-md); padding: var(--kreati-input-padding-md); }
-.k-input__container--lg { height: var(--kreati-input-height-lg); padding: var(--kreati-input-padding-lg); }
-.k-input__container--xl { height: var(--kreati-input-height-xl); padding: var(--kreati-input-padding-xl); }
+.k-input__container--xs {
+  height: var(--kreati-input-height-xs);
+  padding: var(--kreati-input-padding-xs);
+}
+.k-input__container--sm {
+  height: var(--kreati-input-height-sm);
+  padding: var(--kreati-input-padding-sm);
+}
+.k-input__container--md {
+  height: var(--kreati-input-height-md);
+  padding: var(--kreati-input-padding-md);
+}
+.k-input__container--lg {
+  height: var(--kreati-input-height-lg);
+  padding: var(--kreati-input-padding-lg);
+}
+.k-input__container--xl {
+  height: var(--kreati-input-height-xl);
+  padding: var(--kreati-input-padding-xl);
+}
 
-.k-input__container--xs .k-input__native { font-size: var(--kreati-font-size-xxs); }
-.k-input__container--sm .k-input__native { font-size: var(--kreati-font-size-xs); }
-.k-input__container--md .k-input__native { font-size: var(--kreati-font-size-sm); }
-.k-input__container--lg .k-input__native { font-size: var(--kreati-font-size-base); }
-.k-input__container--xl .k-input__native { font-size: var(--kreati-font-size-md); }
+.k-input__container--xs .k-input__native {
+  font-size: var(--kreati-font-size-xxs);
+}
+.k-input__container--sm .k-input__native {
+  font-size: var(--kreati-font-size-xs);
+}
+.k-input__container--md .k-input__native {
+  font-size: var(--kreati-font-size-sm);
+}
+.k-input__container--lg .k-input__native {
+  font-size: var(--kreati-font-size-base);
+}
+.k-input__container--xl .k-input__native {
+  font-size: var(--kreati-font-size-md);
+}
 
 /* ============================================
    Native input
@@ -177,19 +202,26 @@
 /* ============================================
    Default — Hover (only when NOT focused)
    ============================================ */
-.k-input__container:hover:not(:focus-within):not(.k-input__container--disabled):not(.k-input__container--readonly):not(.k-input__container--error):not(.k-input__container--success) {
+.k-input__container:hover:not(:focus-within):not(
+    .k-input__container--disabled
+  ):not(.k-input__container--readonly):not(.k-input__container--error):not(
+    .k-input__container--success
+  ) {
   border-color: var(--kreati-gray-400);
 }
 
 /* ============================================
    Default — Focus (always wins over hover)
    ============================================ */
-.k-input__container:focus-within:not(.k-input__container--disabled):not(.k-input__container--readonly) {
+.k-input__container:focus-within:not(.k-input__container--disabled):not(
+    .k-input__container--readonly
+  ) {
   border-color: var(--kreati-severity-primary);
   box-shadow: 0 0 0 2px var(--kreati-severity-primary-light);
 }
 
-.k-input__container:focus-within:not(.k-input__container--disabled) .k-input__icon {
+.k-input__container:focus-within:not(.k-input__container--disabled)
+  .k-input__icon {
   color: var(--kreati-severity-primary);
 }
 
@@ -198,7 +230,8 @@
   box-shadow: 0 0 0 2px var(--kreati-severity-danger-light);
 }
 
-.k-input__container--error:focus-within:not(.k-input__container--disabled) .k-input__icon {
+.k-input__container--error:focus-within:not(.k-input__container--disabled)
+  .k-input__icon {
   color: var(--kreati-severity-danger);
 }
 
@@ -207,24 +240,42 @@
   box-shadow: 0 0 0 2px var(--kreati-severity-success-light);
 }
 
-.k-input__container--success:focus-within:not(.k-input__container--disabled) .k-input__icon {
+.k-input__container--success:focus-within:not(.k-input__container--disabled)
+  .k-input__icon {
   color: var(--kreati-severity-success);
 }
 
 /* ============================================
    Default — Error / Success / Disabled / Readonly
    ============================================ */
-.k-input__container--error { border-color: var(--kreati-severity-danger); }
-.k-input__container--error .k-input__icon { color: var(--kreati-severity-danger); }
+.k-input__container--error {
+  border-color: var(--kreati-severity-danger);
+}
+.k-input__container--error .k-input__icon {
+  color: var(--kreati-severity-danger);
+}
 
-.k-input__container--success { border-color: var(--kreati-severity-success); }
-.k-input__container--success .k-input__icon { color: var(--kreati-severity-success); }
+.k-input__container--success {
+  border-color: var(--kreati-severity-success);
+}
+.k-input__container--success .k-input__icon {
+  color: var(--kreati-severity-success);
+}
 
-.k-input__container--disabled { opacity: 0.4; cursor: not-allowed; }
-.k-input__container--disabled .k-input__native { cursor: not-allowed; }
+.k-input__container--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.k-input__container--disabled .k-input__native {
+  cursor: not-allowed;
+}
 
-.k-input__container--readonly { background-color: var(--kreati-gray-50); }
-.k-input__container--readonly .k-input__native { cursor: default; }
+.k-input__container--readonly {
+  background-color: var(--kreati-gray-50);
+}
+.k-input__container--readonly .k-input__native {
+  cursor: default;
+}
 
 /* ============================================
    Floating — Fieldset (replaces container)
@@ -272,7 +323,8 @@
 
 /* Expand legend notch when focused or has value */
 .k-input__fieldset:focus-within > .k-input__legend,
-.k-input__fieldset:has(.k-input__native:not(:placeholder-shown)) > .k-input__legend {
+.k-input__fieldset:has(.k-input__native:not(:placeholder-shown))
+  > .k-input__legend {
   width: auto;
 }
 
@@ -288,23 +340,53 @@
 /* ============================================
    Floating — Sizes
    ============================================ */
-.k-input__fieldset--xs { height: var(--kreati-input-height-xs); }
-.k-input__fieldset--sm { height: var(--kreati-input-height-sm); }
-.k-input__fieldset--md { height: var(--kreati-input-height-md); }
-.k-input__fieldset--lg { height: var(--kreati-input-height-lg); }
-.k-input__fieldset--xl { height: var(--kreati-input-height-xl); }
+.k-input__fieldset--xs {
+  height: var(--kreati-input-height-xs);
+}
+.k-input__fieldset--sm {
+  height: var(--kreati-input-height-sm);
+}
+.k-input__fieldset--md {
+  height: var(--kreati-input-height-md);
+}
+.k-input__fieldset--lg {
+  height: var(--kreati-input-height-lg);
+}
+.k-input__fieldset--xl {
+  height: var(--kreati-input-height-xl);
+}
 
-.k-input__fieldset--xs .k-input__fieldset-inner { padding: var(--kreati-input-padding-xs); }
-.k-input__fieldset--sm .k-input__fieldset-inner { padding: var(--kreati-input-padding-sm); }
-.k-input__fieldset--md .k-input__fieldset-inner { padding: var(--kreati-input-padding-md); }
-.k-input__fieldset--lg .k-input__fieldset-inner { padding: var(--kreati-input-padding-lg); }
-.k-input__fieldset--xl .k-input__fieldset-inner { padding: var(--kreati-input-padding-xl); }
+.k-input__fieldset--xs .k-input__fieldset-inner {
+  padding: var(--kreati-input-padding-xs);
+}
+.k-input__fieldset--sm .k-input__fieldset-inner {
+  padding: var(--kreati-input-padding-sm);
+}
+.k-input__fieldset--md .k-input__fieldset-inner {
+  padding: var(--kreati-input-padding-md);
+}
+.k-input__fieldset--lg .k-input__fieldset-inner {
+  padding: var(--kreati-input-padding-lg);
+}
+.k-input__fieldset--xl .k-input__fieldset-inner {
+  padding: var(--kreati-input-padding-xl);
+}
 
-.k-input__fieldset--xs .k-input__native { font-size: var(--kreati-font-size-xxs); }
-.k-input__fieldset--sm .k-input__native { font-size: var(--kreati-font-size-xs); }
-.k-input__fieldset--md .k-input__native { font-size: var(--kreati-font-size-sm); }
-.k-input__fieldset--lg .k-input__native { font-size: var(--kreati-font-size-base); }
-.k-input__fieldset--xl .k-input__native { font-size: var(--kreati-font-size-md); }
+.k-input__fieldset--xs .k-input__native {
+  font-size: var(--kreati-font-size-xxs);
+}
+.k-input__fieldset--sm .k-input__native {
+  font-size: var(--kreati-font-size-xs);
+}
+.k-input__fieldset--md .k-input__native {
+  font-size: var(--kreati-font-size-sm);
+}
+.k-input__fieldset--lg .k-input__native {
+  font-size: var(--kreati-font-size-base);
+}
+.k-input__fieldset--xl .k-input__native {
+  font-size: var(--kreati-font-size-md);
+}
 
 /* ============================================
    Floating — Label (absolute, animates up)
@@ -340,7 +422,8 @@
 
 /* Float up — reset left to legend position, sit on the border */
 .k-input__fieldset:focus-within .k-input__floating-label,
-.k-input__fieldset:has(.k-input__native:not(:placeholder-shown)) .k-input__floating-label {
+.k-input__fieldset:has(.k-input__native:not(:placeholder-shown))
+  .k-input__floating-label {
   top: 0;
   left: var(--kreati-space-2);
   padding-left: 0.125rem;
@@ -351,43 +434,74 @@
 }
 
 /* Floating label sizes — resting */
-.k-input__fieldset--xs .k-input__floating-label { font-size: var(--kreati-font-size-xxs); }
-.k-input__fieldset--sm .k-input__floating-label { font-size: var(--kreati-font-size-xs); }
-.k-input__fieldset--md .k-input__floating-label { font-size: var(--kreati-font-size-sm); }
-.k-input__fieldset--lg .k-input__floating-label { font-size: var(--kreati-font-size-base); }
-.k-input__fieldset--xl .k-input__floating-label { font-size: var(--kreati-font-size-md); }
+.k-input__fieldset--xs .k-input__floating-label {
+  font-size: var(--kreati-font-size-xxs);
+}
+.k-input__fieldset--sm .k-input__floating-label {
+  font-size: var(--kreati-font-size-xs);
+}
+.k-input__fieldset--md .k-input__floating-label {
+  font-size: var(--kreati-font-size-sm);
+}
+.k-input__fieldset--lg .k-input__floating-label {
+  font-size: var(--kreati-font-size-base);
+}
+.k-input__fieldset--xl .k-input__floating-label {
+  font-size: var(--kreati-font-size-md);
+}
 
 /* Legend text sizes — must match label × scale(0.75) */
-.k-input__fieldset--xs .k-input__legend-text { font-size: calc(var(--kreati-font-size-xxs) * 0.75); }
-.k-input__fieldset--sm .k-input__legend-text { font-size: calc(var(--kreati-font-size-xs) * 0.75); }
-.k-input__fieldset--md .k-input__legend-text { font-size: calc(var(--kreati-font-size-sm) * 0.75); }
-.k-input__fieldset--lg .k-input__legend-text { font-size: calc(var(--kreati-font-size-base) * 0.75); }
-.k-input__fieldset--xl .k-input__legend-text { font-size: calc(var(--kreati-font-size-md) * 0.75); }
+.k-input__fieldset--xs .k-input__legend-text {
+  font-size: calc(var(--kreati-font-size-xxs) * 0.75);
+}
+.k-input__fieldset--sm .k-input__legend-text {
+  font-size: calc(var(--kreati-font-size-xs) * 0.75);
+}
+.k-input__fieldset--md .k-input__legend-text {
+  font-size: calc(var(--kreati-font-size-sm) * 0.75);
+}
+.k-input__fieldset--lg .k-input__legend-text {
+  font-size: calc(var(--kreati-font-size-base) * 0.75);
+}
+.k-input__fieldset--xl .k-input__legend-text {
+  font-size: calc(var(--kreati-font-size-md) * 0.75);
+}
 
 /* ============================================
    Floating — Hover (only when NOT focused)
    ============================================ */
-.k-input__fieldset:hover:not(:focus-within):not(.k-input__fieldset--disabled):not(.k-input__fieldset--readonly):not(.k-input__fieldset--error):not(.k-input__fieldset--success) {
+.k-input__fieldset:hover:not(:focus-within):not(
+    .k-input__fieldset--disabled
+  ):not(.k-input__fieldset--readonly):not(.k-input__fieldset--error):not(
+    .k-input__fieldset--success
+  ) {
   border-color: var(--kreati-gray-400);
 }
 
 /* ============================================
    Floating — Focus
    ============================================ */
-.k-input__fieldset:focus-within:not(.k-input__fieldset--disabled):not(.k-input__fieldset--readonly) {
+.k-input__fieldset:focus-within:not(.k-input__fieldset--disabled):not(
+    .k-input__fieldset--readonly
+  ) {
   border-color: var(--kreati-severity-primary);
   border-width: 0.1875rem;
 }
 
-.k-input__fieldset:focus-within:not(.k-input__fieldset--disabled) .k-input__icon {
+.k-input__fieldset:focus-within:not(.k-input__fieldset--disabled)
+  .k-input__icon {
   color: var(--kreati-severity-primary);
 }
 
 /* ============================================
    Floating — Error
    ============================================ */
-.k-input__fieldset--error { border-color: var(--kreati-severity-danger); }
-.k-input__fieldset--error .k-input__icon { color: var(--kreati-severity-danger); }
+.k-input__fieldset--error {
+  border-color: var(--kreati-severity-danger);
+}
+.k-input__fieldset--error .k-input__icon {
+  color: var(--kreati-severity-danger);
+}
 
 .k-input__fieldset--error:focus-within {
   border-color: var(--kreati-severity-danger);
@@ -395,15 +509,20 @@
 }
 
 .k-input__fieldset--error:focus-within .k-input__floating-label,
-.k-input__fieldset--error:has(.k-input__native:not(:placeholder-shown)) .k-input__floating-label {
+.k-input__fieldset--error:has(.k-input__native:not(:placeholder-shown))
+  .k-input__floating-label {
   color: var(--kreati-severity-danger);
 }
 
 /* ============================================
    Floating — Success
    ============================================ */
-.k-input__fieldset--success { border-color: var(--kreati-severity-success); }
-.k-input__fieldset--success .k-input__icon { color: var(--kreati-severity-success); }
+.k-input__fieldset--success {
+  border-color: var(--kreati-severity-success);
+}
+.k-input__fieldset--success .k-input__icon {
+  color: var(--kreati-severity-success);
+}
 
 .k-input__fieldset--success:focus-within {
   border-color: var(--kreati-severity-success);
@@ -411,19 +530,30 @@
 }
 
 .k-input__fieldset--success:focus-within .k-input__floating-label,
-.k-input__fieldset--success:has(.k-input__native:not(:placeholder-shown)) .k-input__floating-label {
+.k-input__fieldset--success:has(.k-input__native:not(:placeholder-shown))
+  .k-input__floating-label {
   color: var(--kreati-severity-success);
 }
 
 /* ============================================
    Floating — Disabled / Readonly
    ============================================ */
-.k-input__fieldset--disabled { opacity: 0.4; }
-.k-input__fieldset--disabled .k-input__native { cursor: not-allowed; }
-.k-input__fieldset--disabled .k-input__floating-label { color: var(--kreati-gray-300); }
+.k-input__fieldset--disabled {
+  opacity: 0.4;
+}
+.k-input__fieldset--disabled .k-input__native {
+  cursor: not-allowed;
+}
+.k-input__fieldset--disabled .k-input__floating-label {
+  color: var(--kreati-gray-300);
+}
 
-.k-input__fieldset--readonly { background-color: var(--kreati-gray-50); }
-.k-input__fieldset--readonly .k-input__native { cursor: default; }
+.k-input__fieldset--readonly {
+  background-color: var(--kreati-gray-50);
+}
+.k-input__fieldset--readonly .k-input__native {
+  cursor: default;
+}
 
 /* ============================================
    Floating — Wrapper for bottom text
@@ -455,10 +585,24 @@
   padding-left: var(--kreati-space-2);
 }
 
-.k-input__floating-helper--primary   { color: var(--kreati-severity-primary); }
-.k-input__floating-helper--secondary { color: var(--kreati-severity-secondary); }
-.k-input__floating-helper--success   { color: var(--kreati-severity-success); }
-.k-input__floating-helper--info      { color: var(--kreati-severity-info); }
-.k-input__floating-helper--warning   { color: var(--kreati-severity-warning); }
-.k-input__floating-helper--help      { color: var(--kreati-severity-help); }
-.k-input__floating-helper--danger    { color: var(--kreati-severity-danger); }
+.k-input__floating-helper--primary {
+  color: var(--kreati-severity-primary);
+}
+.k-input__floating-helper--secondary {
+  color: var(--kreati-severity-secondary);
+}
+.k-input__floating-helper--success {
+  color: var(--kreati-severity-success);
+}
+.k-input__floating-helper--info {
+  color: var(--kreati-severity-info);
+}
+.k-input__floating-helper--warning {
+  color: var(--kreati-severity-warning);
+}
+.k-input__floating-helper--help {
+  color: var(--kreati-severity-help);
+}
+.k-input__floating-helper--danger {
+  color: var(--kreati-severity-danger);
+}

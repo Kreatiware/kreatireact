@@ -1,7 +1,13 @@
-import React, { forwardRef, useRef, useState, useCallback, useEffect } from 'react';
-import './DockMenu.css';
-import { MenuItem } from '../types/navigation';
-import { renderMenuIcon } from './resolveIcon';
+import React, {
+  forwardRef,
+  useRef,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
+import "./DockMenu.css";
+import { MenuItem } from "../types/navigation";
+import { renderMenuIcon } from "./resolveIcon";
 
 /**
  * Props for the DockMenu component
@@ -10,7 +16,7 @@ export interface DockMenuProps {
   /** Array of menu items */
   items: MenuItem[];
   /** Position of the dock */
-  position?: 'bottom' | 'top' | 'left' | 'right';
+  position?: "bottom" | "top" | "left" | "right";
   /** Base icon size in pixels */
   iconSize?: number;
   /** Maximum magnified size in pixels */
@@ -56,7 +62,7 @@ export const DockMenu = forwardRef<HTMLDivElement, DockMenuProps>(
   (
     {
       items,
-      position = 'bottom',
+      position = "bottom",
       iconSize = 56,
       maxIconSize = 84,
       magnifyRange = 180,
@@ -64,26 +70,28 @@ export const DockMenu = forwardRef<HTMLDivElement, DockMenuProps>(
       showLabels = true,
       onItemSelect,
       disabled = false,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
-    const base = 'k-dock';
+    const base = "k-dock";
     const dockRef = useRef<HTMLDivElement>(null);
     const [scales, setScales] = useState<number[]>([]);
     const [hoveredKey, setHoveredKey] = useState<string | null>(null);
     const [focusedIndex, setFocusedIndex] = useState(-1);
 
-    const visibleItems = items.filter((i) => i.visible !== false);
-    const isVertical = position === 'left' || position === 'right';
+    const visibleItems = items.filter(i => i.visible !== false);
+    const isVertical = position === "left" || position === "right";
 
     const classes = [
       base,
       `${base}--${position}`,
       disabled && `${base}--disabled`,
       className,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     const calcScales = useCallback(
       (mousePos: number) => {
@@ -91,21 +99,24 @@ export const DockMenu = forwardRef<HTMLDivElement, DockMenuProps>(
         const items = dockRef.current.querySelectorAll(`.${base}__item`);
         const newScales: number[] = [];
 
-        items.forEach((el) => {
+        items.forEach(el => {
           const rect = el.getBoundingClientRect();
           const center = isVertical
             ? rect.top + rect.height / 2
             : rect.left + rect.width / 2;
           const distance = Math.abs(mousePos - center);
-          const scale = distance < magnifyRange
-            ? 1 + ((maxIconSize - iconSize) / iconSize) * (1 - distance / magnifyRange)
-            : 1;
+          const scale =
+            distance < magnifyRange
+              ? 1 +
+                ((maxIconSize - iconSize) / iconSize) *
+                  (1 - distance / magnifyRange)
+              : 1;
           newScales.push(scale);
         });
 
         setScales(newScales);
       },
-      [magnify, iconSize, maxIconSize, magnifyRange, isVertical],
+      [magnify, iconSize, maxIconSize, magnifyRange, isVertical]
     );
 
     const handleMouseMove = useCallback(
@@ -115,8 +126,8 @@ export const DockMenu = forwardRef<HTMLDivElement, DockMenuProps>(
         const itemEls = dockRef.current.querySelectorAll(`.${base}__item`);
         const newScales: number[] = [];
 
-        itemEls.forEach((el) => {
-          const isItemDisabled = (el as HTMLElement).hasAttribute('disabled');
+        itemEls.forEach(el => {
+          const isItemDisabled = (el as HTMLElement).hasAttribute("disabled");
           if (isItemDisabled) {
             newScales.push(1);
             return;
@@ -137,15 +148,18 @@ export const DockMenu = forwardRef<HTMLDivElement, DockMenuProps>(
           }
 
           const distance = Math.abs(mousePos - center);
-          const scale = distance < magnifyRange
-            ? 1 + ((maxIconSize - iconSize) / iconSize) * Math.cos((distance / magnifyRange) * (Math.PI / 2))
-            : 1;
+          const scale =
+            distance < magnifyRange
+              ? 1 +
+                ((maxIconSize - iconSize) / iconSize) *
+                  Math.cos((distance / magnifyRange) * (Math.PI / 2))
+              : 1;
           newScales.push(scale);
         });
 
         setScales(newScales);
       },
-      [magnify, iconSize, maxIconSize, magnifyRange, isVertical],
+      [magnify, iconSize, maxIconSize, magnifyRange, isVertical]
     );
 
     const handleMouseLeave = useCallback(() => {
@@ -158,87 +172,119 @@ export const DockMenu = forwardRef<HTMLDivElement, DockMenuProps>(
         if (disabled || item.disabled) return;
         if (item.command) item.command(item);
         if (item.url) {
-          if (item.target === '_blank') window.open(item.url, '_blank', 'noopener');
+          if (item.target === "_blank")
+            window.open(item.url, "_blank", "noopener");
           else window.location.href = item.url;
         }
         onItemSelect?.(item.key, item);
       },
-      [disabled, onItemSelect],
+      [disabled, onItemSelect]
     );
 
     const handleKeyDown = useCallback(
       (e: React.KeyboardEvent) => {
-        const navigable = visibleItems.filter((i) => !i.separator && !i.disabled);
+        const navigable = visibleItems.filter(i => !i.separator && !i.disabled);
         if (navigable.length === 0) return;
 
         const nextKey = isVertical
-          ? (e.key === 'ArrowDown' ? 1 : e.key === 'ArrowUp' ? -1 : 0)
-          : (e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0);
+          ? e.key === "ArrowDown"
+            ? 1
+            : e.key === "ArrowUp"
+              ? -1
+              : 0
+          : e.key === "ArrowRight"
+            ? 1
+            : e.key === "ArrowLeft"
+              ? -1
+              : 0;
 
-        if (e.key === 'Home') {
+        if (e.key === "Home") {
           e.preventDefault();
           setFocusedIndex(0);
-        } else if (e.key === 'End') {
+        } else if (e.key === "End") {
           e.preventDefault();
           setFocusedIndex(navigable.length - 1);
         } else if (nextKey !== 0) {
           e.preventDefault();
-          setFocusedIndex((prev) => {
+          setFocusedIndex(prev => {
             const next = prev + nextKey;
             if (next < 0) return navigable.length - 1;
             if (next >= navigable.length) return 0;
             return next;
           });
-        } else if (e.key === 'Enter' || e.key === ' ') {
+        } else if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           if (focusedIndex >= 0 && focusedIndex < navigable.length) {
             handleSelect(navigable[focusedIndex]);
           }
         }
       },
-      [visibleItems, isVertical, focusedIndex, handleSelect],
+      [visibleItems, isVertical, focusedIndex, handleSelect]
     );
 
     useEffect(() => {
       if (focusedIndex < 0 || !dockRef.current) return;
-      const navigable = visibleItems.filter((i) => !i.separator && !i.disabled);
+      const navigable = visibleItems.filter(i => !i.separator && !i.disabled);
       if (focusedIndex >= navigable.length) return;
       const key = navigable[focusedIndex].key;
-      const el = dockRef.current.querySelector(`[data-dock-key="${key}"]`) as HTMLElement;
+      const el = dockRef.current.querySelector(
+        `[data-dock-key="${key}"]`
+      ) as HTMLElement;
       el?.focus();
     }, [focusedIndex, visibleItems]);
 
     let itemIndex = 0;
 
-    const labelPosition = position === 'bottom' ? 'top'
-      : position === 'top' ? 'bottom'
-      : position === 'left' ? 'right'
-      : 'left';
+    const labelPosition =
+      position === "bottom"
+        ? "top"
+        : position === "top"
+          ? "bottom"
+          : position === "left"
+            ? "right"
+            : "left";
 
     return (
       <div
-        ref={(el) => {
-          (dockRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
-          if (typeof ref === 'function') ref(el);
-          else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = el;
+        ref={el => {
+          (dockRef as React.MutableRefObject<HTMLDivElement | null>).current =
+            el;
+          if (typeof ref === "function") ref(el);
+          else if (ref)
+            (ref as React.MutableRefObject<HTMLDivElement | null>).current = el;
         }}
         className={classes}
-        style={{ ...style, '--kreati-dock-glass-height': `${iconSize + 20}px` } as React.CSSProperties}
+        style={
+          {
+            ...style,
+            "--kreati-dock-glass-height": `${iconSize + 20}px`,
+          } as React.CSSProperties
+        }
         role="toolbar"
         aria-label="Dock"
-        aria-orientation={isVertical ? 'vertical' : 'horizontal'}
+        aria-orientation={isVertical ? "vertical" : "horizontal"}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         onKeyDown={handleKeyDown}
       >
         <div className={`${base}__track`}>
-          {visibleItems.map((item) => {
+          {visibleItems.map(item => {
             if (item.separator) {
-              return <div key={item.key} className={`${base}__separator`} role="separator" />;
+              return (
+                <div
+                  key={item.key}
+                  className={`${base}__separator`}
+                  role="separator"
+                />
+              );
             }
 
             if (item.template) {
-              return <React.Fragment key={item.key}>{item.template(item)}</React.Fragment>;
+              return (
+                <React.Fragment key={item.key}>
+                  {item.template(item)}
+                </React.Fragment>
+              );
             }
 
             const idx = itemIndex++;
@@ -251,7 +297,9 @@ export const DockMenu = forwardRef<HTMLDivElement, DockMenuProps>(
               `${base}__item`,
               isDisabled && `${base}__item--disabled`,
               item.className,
-            ].filter(Boolean).join(' ');
+            ]
+              .filter(Boolean)
+              .join(" ");
 
             return (
               <button
@@ -275,11 +323,18 @@ export const DockMenu = forwardRef<HTMLDivElement, DockMenuProps>(
                 onFocus={() => setHoveredKey(item.key)}
                 onBlur={() => setHoveredKey(null)}
               >
-                <span className={`${base}__icon`} style={{ fontSize: size * 0.6 }}>
-                  {item.icon ? renderMenuIcon(item.icon, Math.round(size * 0.6)) : null}
+                <span
+                  className={`${base}__icon`}
+                  style={{ fontSize: size * 0.6 }}
+                >
+                  {item.icon
+                    ? renderMenuIcon(item.icon, Math.round(size * 0.6))
+                    : null}
                 </span>
                 {showLabels && item.label && isHovered && (
-                  <span className={`${base}__label ${base}__label--${labelPosition}`}>
+                  <span
+                    className={`${base}__label ${base}__label--${labelPosition}`}
+                  >
                     {item.label}
                   </span>
                 )}
@@ -289,7 +344,7 @@ export const DockMenu = forwardRef<HTMLDivElement, DockMenuProps>(
         </div>
       </div>
     );
-  },
+  }
 );
 
-DockMenu.displayName = 'DockMenu';
+DockMenu.displayName = "DockMenu";

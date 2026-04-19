@@ -1,13 +1,20 @@
-import React, { forwardRef, useId, useRef, useEffect, useCallback, useImperativeHandle } from 'react';
-import { FieldWrapper } from './FieldWrapper';
-import { Tooltip } from './Tooltip';
-import './Textarea.css';
+import React, {
+  forwardRef,
+  useId,
+  useRef,
+  useEffect,
+  useCallback,
+  useImperativeHandle,
+} from "react";
+import { FieldWrapper } from "./FieldWrapper";
+import { Tooltip } from "./Tooltip";
+import "./Textarea.css";
 
 export interface TextareaProps {
   /** Textarea size — matches Input/Button sizes for visual consistency */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Visual variant: floating (label floats on border) or stacked (label above) */
-  variant?: 'floating' | 'stacked';
+  variant?: "floating" | "stacked";
   /** Label text */
   label?: string;
   /** Placeholder text */
@@ -25,7 +32,7 @@ export interface TextareaProps {
   /** Maximum rows when autoSize is enabled (scrolls after) */
   maxRows?: number;
   /** CSS resize behavior */
-  resize?: 'none' | 'vertical' | 'horizontal' | 'both';
+  resize?: "none" | "vertical" | "horizontal" | "both";
   /** Helper text displayed below the textarea */
   helperText?: React.ReactNode;
   /** Error message or boolean — applies error styling */
@@ -33,7 +40,15 @@ export interface TextareaProps {
   /** Applies success border and helper color */
   success?: boolean;
   /** Severity color for the helper text */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  helperSeverity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Icon rendered inside on the left */
   iconLeft?: React.ReactNode;
   /** Icon rendered inside on the right */
@@ -45,7 +60,7 @@ export interface TextareaProps {
   /** Tooltip text for the container */
   tooltip?: string;
   /** Tooltip position */
-  tooltipPosition?: 'top' | 'bottom' | 'left' | 'right';
+  tooltipPosition?: "top" | "bottom" | "left" | "right";
   /** Background color for the outer wrapper */
   background?: string;
   /** Background color for the textarea field only */
@@ -103,8 +118,8 @@ export interface TextareaProps {
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
     {
-      size = 'md',
-      variant = 'floating',
+      size = "md",
+      variant = "floating",
       label,
       placeholder,
       value,
@@ -113,7 +128,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       autoSize = false,
       minRows,
       maxRows,
-      resize = 'vertical',
+      resize = "vertical",
       helperText,
       error,
       success = false,
@@ -123,7 +138,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       iconLeftTooltip,
       iconRightTooltip,
       tooltip,
-      tooltipPosition = 'top',
+      tooltipPosition = "top",
       background,
       inputBackground,
       color,
@@ -138,10 +153,10 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       onFocus,
       onBlur,
       onKeyDown,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const autoId = useId();
     const textareaId = name || autoId;
@@ -149,15 +164,18 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     useImperativeHandle(ref, () => innerRef.current as HTMLTextAreaElement);
 
     const hasError = !!error;
-    const errorMessage = typeof error === 'boolean' ? undefined : error;
-    const isFloating = variant === 'floating';
+    const errorMessage = typeof error === "boolean" ? undefined : error;
+    const isFloating = variant === "floating";
     const hasLabel = !!label;
     const hasWrapper = !isFloating && !!(label || helperText || errorMessage);
-    const base = 'k-textarea';
+    const base = "k-textarea";
 
     const helperId = `${textareaId}-helper`;
     const errorId = `${textareaId}-error`;
-    const describedBy = [hasError && errorId, (hasWrapper || isFloating) && helperId].filter(Boolean).join(' ') || undefined;
+    const describedBy =
+      [hasError && errorId, (hasWrapper || isFloating) && helperId]
+        .filter(Boolean)
+        .join(" ") || undefined;
 
     const bgStyle = (() => {
       const s: React.CSSProperties = {};
@@ -165,11 +183,19 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       if (color) s.color = color;
       return Object.keys(s).length ? s : undefined;
     })();
-    const wrapperBgStyle = background ? { backgroundColor: background } as React.CSSProperties : undefined;
+    const wrapperBgStyle = background
+      ? ({ backgroundColor: background } as React.CSSProperties)
+      : undefined;
 
     /** Calculate line-height in px based on size for autoSize */
     const getLineHeight = useCallback(() => {
-      const map: Record<string, number> = { xs: 16, sm: 18, md: 20, lg: 24, xl: 28 };
+      const map: Record<string, number> = {
+        xs: 16,
+        sm: 18,
+        md: 20,
+        lg: 24,
+        xl: 28,
+      };
       return map[size] || 20;
     }, [size]);
 
@@ -182,14 +208,14 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       const minH = minRows ? minRows * lineHeight : undefined;
       const maxH = maxRows ? maxRows * lineHeight : undefined;
 
-      el.style.height = 'auto';
+      el.style.height = "auto";
       let newHeight = el.scrollHeight;
 
       if (minH && newHeight < minH) newHeight = minH;
       if (maxH && newHeight > maxH) newHeight = maxH;
 
       el.style.height = `${newHeight}px`;
-      el.style.overflowY = maxH && el.scrollHeight > maxH ? 'auto' : 'hidden';
+      el.style.overflowY = maxH && el.scrollHeight > maxH ? "auto" : "hidden";
     }, [autoSize, minRows, maxRows, getLineHeight]);
 
     useEffect(() => {
@@ -201,28 +227,46 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       onChange?.(e);
     };
 
-    const currentLength = (value ?? innerRef.current?.value ?? defaultValue ?? '').toString().length;
+    const currentLength = (
+      value ??
+      innerRef.current?.value ??
+      defaultValue ??
+      ""
+    ).toString().length;
 
-    const renderIcon = (icon: React.ReactNode, tooltipText?: string, side?: 'left' | 'right') => {
+    const renderIcon = (
+      icon: React.ReactNode,
+      tooltipText?: string,
+      side?: "left" | "right"
+    ) => {
       const iconEl = (
-        <span className={`${base}__icon ${base}__icon--${side}`} aria-hidden="true">
+        <span
+          className={`${base}__icon ${base}__icon--${side}`}
+          aria-hidden="true"
+        >
           {icon}
         </span>
       );
-      return tooltipText ? <Tooltip content={tooltipText} position="top">{iconEl}</Tooltip> : iconEl;
+      return tooltipText ? (
+        <Tooltip content={tooltipText} position="top">
+          {iconEl}
+        </Tooltip>
+      ) : (
+        iconEl
+      );
     };
 
-    const resizeStyle = autoSize ? 'none' : resize;
+    const resizeStyle = autoSize ? "none" : resize;
 
     const nativeTextarea = (
       <textarea
         ref={innerRef}
         id={textareaId}
         className={`${base}__native`}
-        placeholder={isFloating && hasLabel ? ' ' : placeholder}
+        placeholder={isFloating && hasLabel ? " " : placeholder}
         value={value}
         defaultValue={defaultValue}
-        rows={autoSize ? (minRows || rows) : rows}
+        rows={autoSize ? minRows || rows : rows}
         disabled={disabled}
         readOnly={readOnly}
         required={required}
@@ -239,11 +283,14 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       />
     );
 
-    const countEl = showCount && maxLength ? (
-      <span className={`${base}__count`}>{currentLength}/{maxLength}</span>
-    ) : showCount ? (
-      <span className={`${base}__count`}>{currentLength}</span>
-    ) : null;
+    const countEl =
+      showCount && maxLength ? (
+        <span className={`${base}__count`}>
+          {currentLength}/{maxLength}
+        </span>
+      ) : showCount ? (
+        <span className={`${base}__count`}>{currentLength}</span>
+      ) : null;
 
     /* ── Floating variant ── */
     if (isFloating) {
@@ -259,55 +306,78 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         className,
       ]
         .filter(Boolean)
-        .join(' ');
+        .join(" ");
 
       const floatWrapperClasses = [
         `${base}__floating-wrapper`,
         fullWidth && `${base}__floating-wrapper--full-width`,
       ]
         .filter(Boolean)
-        .join(' ');
+        .join(" ");
 
-      const legendText = hasLabel ? `${label}${required ? ' *' : ''}` : '';
+      const legendText = hasLabel ? `${label}${required ? " *" : ""}` : "";
 
       const fieldsetEl = (
-        <fieldset className={fieldsetClasses} disabled={disabled} style={bgStyle}>
+        <fieldset
+          className={fieldsetClasses}
+          disabled={disabled}
+          style={bgStyle}
+        >
           {hasLabel && (
             <legend className={`${base}__legend`}>
               <span className={`${base}__legend-text`}>{legendText}</span>
             </legend>
           )}
           <div className={`${base}__fieldset-inner`}>
-            {iconLeft && renderIcon(iconLeft, iconLeftTooltip, 'left')}
+            {iconLeft && renderIcon(iconLeft, iconLeftTooltip, "left")}
             {nativeTextarea}
-            {iconRight && renderIcon(iconRight, iconRightTooltip, 'right')}
+            {iconRight && renderIcon(iconRight, iconRightTooltip, "right")}
           </div>
           {hasLabel && (
             <label className={`${base}__floating-label`} htmlFor={textareaId}>
               {label}
-              {required && <span className={`${base}__floating-required`} aria-hidden="true">*</span>}
+              {required && (
+                <span
+                  className={`${base}__floating-required`}
+                  aria-hidden="true"
+                >
+                  *
+                </span>
+              )}
             </label>
           )}
         </fieldset>
       );
 
-      const inputElement = tooltip
-        ? <Tooltip content={tooltip} position={tooltipPosition}>{fieldsetEl}</Tooltip>
-        : fieldsetEl;
+      const inputElement = tooltip ? (
+        <Tooltip content={tooltip} position={tooltipPosition}>
+          {fieldsetEl}
+        </Tooltip>
+      ) : (
+        fieldsetEl
+      );
 
       return (
         <div className={floatWrapperClasses} style={wrapperBgStyle}>
           {inputElement}
           {countEl}
           {hasError && errorMessage && (
-            <span className={`${base}__floating-error`} id={errorId} role="alert">{errorMessage}</span>
+            <span
+              className={`${base}__floating-error`}
+              id={errorId}
+              role="alert"
+            >
+              {errorMessage}
+            </span>
           )}
           {helperText && (
             <span
               className={[
                 `${base}__floating-helper`,
                 helperSeverity && `${base}__floating-helper--${helperSeverity}`,
-              ].filter(Boolean).join(' ')}
+              ]
+                .filter(Boolean)
+                .join(" ")}
               id={helperId}
             >
               {helperText}
@@ -329,19 +399,23 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       className,
     ]
       .filter(Boolean)
-      .join(' ');
+      .join(" ");
 
     const containerEl = (
       <div className={containerClasses} style={bgStyle}>
-        {iconLeft && renderIcon(iconLeft, iconLeftTooltip, 'left')}
+        {iconLeft && renderIcon(iconLeft, iconLeftTooltip, "left")}
         {nativeTextarea}
-        {iconRight && renderIcon(iconRight, iconRightTooltip, 'right')}
+        {iconRight && renderIcon(iconRight, iconRightTooltip, "right")}
       </div>
     );
 
-    const inputElement = tooltip
-      ? <Tooltip content={tooltip} position={tooltipPosition}>{containerEl}</Tooltip>
-      : containerEl;
+    const inputElement = tooltip ? (
+      <Tooltip content={tooltip} position={tooltipPosition}>
+        {containerEl}
+      </Tooltip>
+    ) : (
+      containerEl
+    );
 
     if (!hasWrapper && !countEl) return inputElement;
 
@@ -372,7 +446,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         {countEl}
       </FieldWrapper>
     );
-  },
+  }
 );
 
-Textarea.displayName = 'Textarea';
+Textarea.displayName = "Textarea";

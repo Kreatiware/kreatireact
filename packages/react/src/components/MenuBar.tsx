@@ -1,11 +1,21 @@
-import React, { forwardRef, useState, useCallback, useRef, useEffect } from 'react';
-import './MenuBar.css';
-import { MenuItem } from '../types/navigation';
-import { renderMenuIcon } from './resolveIcon';
-import { CHEVRON_DOWN_PATH, CHEVRON_UP_PATH, HAMBURGER_RECTS } from './iconPaths';
-import { ContextMenu } from './ContextMenu';
-import { Drawer } from './Drawer';
-import { SideMenu } from './SideMenu';
+import React, {
+  forwardRef,
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+} from "react";
+import "./MenuBar.css";
+import { MenuItem } from "../types/navigation";
+import { renderMenuIcon } from "./resolveIcon";
+import {
+  CHEVRON_DOWN_PATH,
+  CHEVRON_UP_PATH,
+  HAMBURGER_RECTS,
+} from "./iconPaths";
+import { ContextMenu } from "./ContextMenu";
+import { Drawer } from "./Drawer";
+import { SideMenu } from "./SideMenu";
 
 /**
  * Props for the MenuBar component
@@ -14,9 +24,9 @@ export interface MenuBarProps {
   /** Array of top-level menu items */
   items: MenuItem[];
   /** Orientation of the menu bar */
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: "horizontal" | "vertical";
   /** Variant for vertical orientation — default opens submenus as floating panels, panel/tree expand inline */
-  variant?: 'default' | 'panel' | 'tree';
+  variant?: "default" | "panel" | "tree";
   /** Allow multiple sections open at once in panel/tree variants (default: false) */
   multiple?: boolean;
   /** Items rendered at the start of the bar */
@@ -38,7 +48,7 @@ export interface MenuBarProps {
   /** Breakpoint (px) at which mobile mode activates */
   mobileBreakpoint?: number;
   /** Position of the hamburger button in mobile mode */
-  hamburgerPosition?: 'start' | 'end';
+  hamburgerPosition?: "start" | "end";
   /** Additional CSS class name */
   className?: string;
   /** Inline styles */
@@ -73,102 +83,165 @@ export interface MenuBarProps {
  * ```
  */
 export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
-  ({ items, orientation = 'horizontal', variant = 'default', multiple: multipleOpen = false, start, end, onItemSelect, disabled = false, showChevron = true, chevronOpen, chevronClosed, mobileAdaptive = true, mobileBreakpoint = 768, hamburgerPosition = 'start', className = '', style }, ref) => {
-    const base = 'k-menubar';
+  (
+    {
+      items,
+      orientation = "horizontal",
+      variant = "default",
+      multiple: multipleOpen = false,
+      start,
+      end,
+      onItemSelect,
+      disabled = false,
+      showChevron = true,
+      chevronOpen,
+      chevronClosed,
+      mobileAdaptive = true,
+      mobileBreakpoint = 768,
+      hamburgerPosition = "start",
+      className = "",
+      style,
+    },
+    ref
+  ) => {
+    const base = "k-menubar";
     const [openKey, setOpenKey] = useState<string | null>(null);
     const [expandedKeys, setExpandedKeys] = useState<Set<string>>(new Set());
     const [isMobile, setIsMobile] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const barRef = useRef<HTMLDivElement>(null);
 
-    const visibleItems = items.filter((i) => i.visible !== false);
+    const visibleItems = items.filter(i => i.visible !== false);
 
     useEffect(() => {
-      if (!mobileAdaptive) { setIsMobile(false); return; }
+      if (!mobileAdaptive) {
+        setIsMobile(false);
+        return;
+      }
       const mq = window.matchMedia(`(max-width: ${mobileBreakpoint}px)`);
       const onChange = (e: MediaQueryListEvent | MediaQueryList) => {
         setIsMobile(e.matches);
-        if (e.matches) { setOpenKey(null); setDrawerOpen(false); }
+        if (e.matches) {
+          setOpenKey(null);
+          setDrawerOpen(false);
+        }
       };
       onChange(mq);
-      mq.addEventListener('change', onChange);
-      return () => mq.removeEventListener('change', onChange);
+      mq.addEventListener("change", onChange);
+      return () => mq.removeEventListener("change", onChange);
     }, [mobileAdaptive, mobileBreakpoint]);
 
-    const isVertical = orientation === 'vertical';
-    const useInline = isVertical && (variant === 'panel' || variant === 'tree');
+    const isVertical = orientation === "vertical";
+    const useInline = isVertical && (variant === "panel" || variant === "tree");
 
-    const classes = [base, isVertical && `${base}--vertical`, useInline && `${base}--${variant}`, disabled && `${base}--disabled`, className]
+    const classes = [
+      base,
+      isVertical && `${base}--vertical`,
+      useInline && `${base}--${variant}`,
+      disabled && `${base}--disabled`,
+      className,
+    ]
       .filter(Boolean)
-      .join(' ');
+      .join(" ");
 
     const closeAll = useCallback(() => setOpenKey(null), []);
 
     useEffect(() => {
       if (!openKey) return;
       const handle = (e: MouseEvent) => {
-        if (barRef.current && !barRef.current.contains(e.target as Node)) closeAll();
+        if (barRef.current && !barRef.current.contains(e.target as Node))
+          closeAll();
       };
-      document.addEventListener('mousedown', handle);
-      return () => document.removeEventListener('mousedown', handle);
+      document.addEventListener("mousedown", handle);
+      return () => document.removeEventListener("mousedown", handle);
     }, [openKey, closeAll]);
 
     useEffect(() => {
       if (!openKey) return;
-      const handle = (e: KeyboardEvent) => { if (e.key === 'Escape') closeAll(); };
-      document.addEventListener('keydown', handle);
-      return () => document.removeEventListener('keydown', handle);
+      const handle = (e: KeyboardEvent) => {
+        if (e.key === "Escape") closeAll();
+      };
+      document.addEventListener("keydown", handle);
+      return () => document.removeEventListener("keydown", handle);
     }, [openKey, closeAll]);
 
-    const handleTopClick = useCallback((item: MenuItem) => {
-      if (disabled || item.disabled) return;
-      if (!item.items || item.items.length === 0) {
-        if (item.command) item.command(item);
-        if (item.url) {
-          if (item.target === '_blank') window.open(item.url, '_blank', 'noopener');
-          else window.location.href = item.url;
+    const handleTopClick = useCallback(
+      (item: MenuItem) => {
+        if (disabled || item.disabled) return;
+        if (!item.items || item.items.length === 0) {
+          if (item.command) item.command(item);
+          if (item.url) {
+            if (item.target === "_blank")
+              window.open(item.url, "_blank", "noopener");
+            else window.location.href = item.url;
+          }
+          onItemSelect?.(item.key, item);
+          closeAll();
+          return;
         }
-        onItemSelect?.(item.key, item);
-        closeAll();
-        return;
-      }
-      setOpenKey((prev) => prev === item.key ? null : item.key);
-    }, [disabled, onItemSelect, closeAll]);
+        setOpenKey(prev => (prev === item.key ? null : item.key));
+      },
+      [disabled, onItemSelect, closeAll]
+    );
 
-    const handleTopEnter = useCallback((item: MenuItem) => {
-      if (openKey && item.items && item.items.length > 0) {
-        setOpenKey(item.key);
-      }
-    }, [openKey]);
+    const handleTopEnter = useCallback(
+      (item: MenuItem) => {
+        if (openKey && item.items && item.items.length > 0) {
+          setOpenKey(item.key);
+        }
+      },
+      [openKey]
+    );
 
-    const handleBarKeyDown = useCallback((e: React.KeyboardEvent, item: MenuItem) => {
-      const enabled = visibleItems.filter((i) => !i.separator && !i.disabled);
-      const idx = enabled.findIndex((i) => i.key === item.key);
+    const handleBarKeyDown = useCallback(
+      (e: React.KeyboardEvent, item: MenuItem) => {
+        const enabled = visibleItems.filter(i => !i.separator && !i.disabled);
+        const idx = enabled.findIndex(i => i.key === item.key);
 
-      if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        const next = enabled[(idx + 1) % enabled.length];
-        (document.getElementById(`${base}-top-${next.key}`) as HTMLElement)?.focus();
-        if (openKey) setOpenKey(next.key);
-      } else if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        const prev = enabled[(idx - 1 + enabled.length) % enabled.length];
-        (document.getElementById(`${base}-top-${prev.key}`) as HTMLElement)?.focus();
-        if (openKey) setOpenKey(prev.key);
-      } else if (e.key === 'ArrowDown' && item.items && item.items.length > 0) {
-        e.preventDefault();
-        setOpenKey(item.key);
-      } else if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        handleTopClick(item);
-      } else if (e.key === 'Escape') {
-        closeAll();
-      }
-    }, [visibleItems, openKey, handleTopClick, closeAll]);
+        if (e.key === "ArrowRight") {
+          e.preventDefault();
+          const next = enabled[(idx + 1) % enabled.length];
+          (
+            document.getElementById(`${base}-top-${next.key}`) as HTMLElement
+          )?.focus();
+          if (openKey) setOpenKey(next.key);
+        } else if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          const prev = enabled[(idx - 1 + enabled.length) % enabled.length];
+          (
+            document.getElementById(`${base}-top-${prev.key}`) as HTMLElement
+          )?.focus();
+          if (openKey) setOpenKey(prev.key);
+        } else if (
+          e.key === "ArrowDown" &&
+          item.items &&
+          item.items.length > 0
+        ) {
+          e.preventDefault();
+          setOpenKey(item.key);
+        } else if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleTopClick(item);
+        } else if (e.key === "Escape") {
+          closeAll();
+        }
+      },
+      [visibleItems, openKey, handleTopClick, closeAll]
+    );
 
     const renderTopItem = (item: MenuItem) => {
-      if (item.separator) return <div key={item.key} className={`${base}__top-separator`} role="separator" />;
-      if (item.template) return <React.Fragment key={item.key}>{item.template(item)}</React.Fragment>;
+      if (item.separator)
+        return (
+          <div
+            key={item.key}
+            className={`${base}__top-separator`}
+            role="separator"
+          />
+        );
+      if (item.template)
+        return (
+          <React.Fragment key={item.key}>{item.template(item)}</React.Fragment>
+        );
 
       const hasDropdown = item.items && item.items.length > 0;
       const isOpen = openKey === item.key;
@@ -183,11 +256,13 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
           isExpanded && `${base}__top-item--expanded`,
           isDisabled && `${base}__top-item--disabled`,
           item.className,
-        ].filter(Boolean).join(' ');
+        ]
+          .filter(Boolean)
+          .join(" ");
 
         const toggleExpand = () => {
           if (isDisabled) return;
-          setExpandedKeys((prev) => {
+          setExpandedKeys(prev => {
             const next = new Set(multipleOpen ? prev : []);
             if (prev.has(item.key)) next.delete(item.key);
             else next.add(item.key);
@@ -207,10 +282,24 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
               disabled={isDisabled}
               onClick={toggleExpand}
             >
-              {item.icon && <span className={`${base}__icon`} aria-hidden="true">{renderMenuIcon(item.icon)}</span>}
+              {item.icon && (
+                <span className={`${base}__icon`} aria-hidden="true">
+                  {renderMenuIcon(item.icon)}
+                </span>
+              )}
               <span className={`${base}__label`}>{item.label}</span>
-              <span className={`${base}__chevron ${isExpanded ? `${base}__chevron--open` : ''}`} aria-hidden="true">
-                <svg width={12} height={12} viewBox="0 0 24 24" fill="currentColor"><path d={CHEVRON_DOWN_PATH} /></svg>
+              <span
+                className={`${base}__chevron ${isExpanded ? `${base}__chevron--open` : ""}`}
+                aria-hidden="true"
+              >
+                <svg
+                  width={12}
+                  height={12}
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d={CHEVRON_DOWN_PATH} />
+                </svg>
               </span>
             </button>
             {isExpanded && (
@@ -218,8 +307,10 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
                 <SideMenu
                   items={item.items!}
                   disabled={isDisabled}
-                  animated={variant === 'panel'}
-                  onItemSelect={(key, selectedItem) => onItemSelect?.(key, selectedItem)}
+                  animated={variant === "panel"}
+                  onItemSelect={(key, selectedItem) =>
+                    onItemSelect?.(key, selectedItem)
+                  }
                 />
               </div>
             )}
@@ -232,13 +323,31 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
         isOpen && `${base}__top-item--open`,
         isDisabled && `${base}__top-item--disabled`,
         item.className,
-      ].filter(Boolean).join(' ');
+      ]
+        .filter(Boolean)
+        .join(" ");
 
-      const defaultChevronOpen = <svg width={12} height={12} viewBox="0 0 24 24" fill="currentColor"><path d={CHEVRON_UP_PATH} /></svg>;
-      const defaultChevronClosed = <svg width={12} height={12} viewBox="0 0 24 24" fill="currentColor"><path d={CHEVRON_DOWN_PATH} /></svg>;
+      const defaultChevronOpen = (
+        <svg width={12} height={12} viewBox="0 0 24 24" fill="currentColor">
+          <path d={CHEVRON_UP_PATH} />
+        </svg>
+      );
+      const defaultChevronClosed = (
+        <svg width={12} height={12} viewBox="0 0 24 24" fill="currentColor">
+          <path d={CHEVRON_DOWN_PATH} />
+        </svg>
+      );
 
-      const resolvedChevronOpen = chevronOpen ? (typeof chevronOpen === 'string' ? renderMenuIcon(chevronOpen, 12) : chevronOpen) : defaultChevronOpen;
-      const resolvedChevronClosed = chevronClosed ? (typeof chevronClosed === 'string' ? renderMenuIcon(chevronClosed, 12) : chevronClosed) : defaultChevronClosed;
+      const resolvedChevronOpen = chevronOpen
+        ? typeof chevronOpen === "string"
+          ? renderMenuIcon(chevronOpen, 12)
+          : chevronOpen
+        : defaultChevronOpen;
+      const resolvedChevronClosed = chevronClosed
+        ? typeof chevronClosed === "string"
+          ? renderMenuIcon(chevronClosed, 12)
+          : chevronClosed
+        : defaultChevronClosed;
 
       const chevron = showChevron && hasDropdown && (
         <span className={`${base}__chevron`} aria-hidden="true">
@@ -252,9 +361,9 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
             key={item.key}
             items={item.items!}
             trigger="click"
-            placement={isVertical ? 'right' : 'bottom'}
+            placement={isVertical ? "right" : "bottom"}
             open={isOpen}
-            onOpenChange={(v) => {
+            onOpenChange={v => {
               if (v) setOpenKey(item.key);
               else if (openKey === item.key) setOpenKey(null);
             }}
@@ -277,9 +386,13 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
               aria-disabled={isDisabled || undefined}
               disabled={isDisabled}
               onMouseEnter={() => handleTopEnter(item)}
-              onKeyDown={(e) => handleBarKeyDown(e, item)}
+              onKeyDown={e => handleBarKeyDown(e, item)}
             >
-              {item.icon && <span className={`${base}__icon`} aria-hidden="true">{renderMenuIcon(item.icon)}</span>}
+              {item.icon && (
+                <span className={`${base}__icon`} aria-hidden="true">
+                  {renderMenuIcon(item.icon)}
+                </span>
+              )}
               <span className={`${base}__label`}>{item.label}</span>
               {chevron}
             </button>
@@ -299,25 +412,29 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
           aria-disabled={isDisabled || undefined}
           disabled={isDisabled}
           onClick={() => handleTopClick(item)}
-          onKeyDown={(e) => handleBarKeyDown(e, item)}
+          onKeyDown={e => handleBarKeyDown(e, item)}
         >
-          {item.icon && <span className={`${base}__icon`} aria-hidden="true">{renderMenuIcon(item.icon)}</span>}
+          {item.icon && (
+            <span className={`${base}__icon`} aria-hidden="true">
+              {renderMenuIcon(item.icon)}
+            </span>
+          )}
           <span className={`${base}__label`}>{item.label}</span>
         </button>
       );
     };
     /** Collect all items for mobile SideMenu (start + items + end) */
     const allMobileItems: MenuItem[] = [
-      ...(start ? start.filter((i) => i.visible !== false) : []),
+      ...(start ? start.filter(i => i.visible !== false) : []),
       ...visibleItems,
-      ...(end ? end.filter((i) => i.visible !== false) : []),
+      ...(end ? end.filter(i => i.visible !== false) : []),
     ];
 
     if (isMobile) {
       return (
         <div
           ref={ref as React.Ref<HTMLDivElement>}
-          className={`${base} ${base}--mobile ${hamburgerPosition === 'end' ? `${base}--mobile-end` : ''} ${className}`}
+          className={`${base} ${base}--mobile ${hamburgerPosition === "end" ? `${base}--mobile-end` : ""} ${className}`}
           style={style}
           role="menubar"
           aria-label="Menu bar"
@@ -329,8 +446,24 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
             aria-label="Open menu"
             aria-expanded={drawerOpen}
           >
-            <svg width={22} height={22} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              {HAMBURGER_RECTS.map((r, i) => <rect key={i} x={r.x} y={r.y} width={r.width} height={r.height} rx=".57" ry=".57" />)}
+            <svg
+              width={22}
+              height={22}
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              {HAMBURGER_RECTS.map((r, i) => (
+                <rect
+                  key={i}
+                  x={r.x}
+                  y={r.y}
+                  width={r.width}
+                  height={r.height}
+                  rx=".57"
+                  ry=".57"
+                />
+              ))}
             </svg>
           </button>
           <Drawer
@@ -345,7 +478,8 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
               disabled={disabled}
               onItemSelect={(key, item) => {
                 onItemSelect?.(key, item);
-                if (!item.items || item.items.length === 0) setDrawerOpen(false);
+                if (!item.items || item.items.length === 0)
+                  setDrawerOpen(false);
               }}
             />
           </Drawer>
@@ -354,22 +488,34 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
     }
     return (
       <div
-        ref={(el) => {
-          (barRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
-          if (typeof ref === 'function') ref(el);
-          else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = el;
+        ref={el => {
+          (barRef as React.MutableRefObject<HTMLDivElement | null>).current =
+            el;
+          if (typeof ref === "function") ref(el);
+          else if (ref)
+            (ref as React.MutableRefObject<HTMLDivElement | null>).current = el;
         }}
         className={classes}
         style={style}
         role="menubar"
         aria-label="Menu bar"
       >
-        {start && start.filter((i) => i.visible !== false).map((item) => renderTopItem(item))}
-        {visibleItems.map((item) => renderTopItem(item))}
-        {end && <><div className={`${base}__spacer`} />{end.filter((i) => i.visible !== false).map((item) => renderTopItem(item))}</>}
+        {start &&
+          start
+            .filter(i => i.visible !== false)
+            .map(item => renderTopItem(item))}
+        {visibleItems.map(item => renderTopItem(item))}
+        {end && (
+          <>
+            <div className={`${base}__spacer`} />
+            {end
+              .filter(i => i.visible !== false)
+              .map(item => renderTopItem(item))}
+          </>
+        )}
       </div>
     );
-  },
+  }
 );
 
-MenuBar.displayName = 'MenuBar';
+MenuBar.displayName = "MenuBar";

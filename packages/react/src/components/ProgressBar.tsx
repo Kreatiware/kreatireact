@@ -1,5 +1,5 @@
-import React, { forwardRef, useRef, useImperativeHandle } from 'react';
-import './ProgressBar.css';
+import React, { forwardRef, useRef, useImperativeHandle } from "react";
+import "./ProgressBar.css";
 
 export interface ProgressBarProps {
   /** Current value (0-100) — omit for indeterminate */
@@ -7,7 +7,7 @@ export interface ProgressBarProps {
   /** Show value label */
   showValue?: boolean;
   /** Label position — inside the bar or outside to the right */
-  labelPosition?: 'inside' | 'outside';
+  labelPosition?: "inside" | "outside";
   /** Custom format for the label */
   valueTemplate?: (value: number) => React.ReactNode;
   /**
@@ -16,9 +16,20 @@ export interface ProgressBarProps {
    * @param props - Object with value (0-100) and severity
    * @returns ReactNode (rendered inside the fill div)
    */
-  fillTemplate?: (props: { value: number; severity: string }) => React.ReactNode;
+  fillTemplate?: (props: {
+    value: number;
+    severity: string;
+  }) => React.ReactNode;
   /** Visual severity */
-  severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  severity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Height — CSS value */
   height?: string | number;
   /** Accessible label for screen readers */
@@ -46,14 +57,28 @@ export interface ProgressBarProps {
  * ```
  */
 export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
-  ({ value, showValue = false, labelPosition = 'outside', valueTemplate, fillTemplate, severity = 'primary', height, ariaLabel, className = '', style }, ref) => {
+  (
+    {
+      value,
+      showValue = false,
+      labelPosition = "outside",
+      valueTemplate,
+      fillTemplate,
+      severity = "primary",
+      height,
+      ariaLabel,
+      className = "",
+      style,
+    },
+    ref
+  ) => {
     const elRef = useRef<HTMLDivElement>(null);
     useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
 
-    const base = 'k-progressbar';
+    const base = "k-progressbar";
     const indeterminate = value === undefined;
     const clamped = indeterminate ? 0 : Math.max(0, Math.min(100, value));
-    const inside = labelPosition === 'inside';
+    const inside = labelPosition === "inside";
 
     const classes = [
       base,
@@ -61,24 +86,49 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
       indeterminate && `${base}--indeterminate`,
       inside && `${base}--label-inside`,
       className,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
-    const labelContent = showValue && !indeterminate
-      ? (valueTemplate ? valueTemplate(clamped) : `${clamped}%`)
-      : null;
+    const labelContent =
+      showValue && !indeterminate
+        ? valueTemplate
+          ? valueTemplate(clamped)
+          : `${clamped}%`
+        : null;
 
     return (
-      <div ref={elRef} className={classes} style={style} role="progressbar" aria-valuenow={indeterminate ? undefined : clamped} aria-valuemin={0} aria-valuemax={100} aria-label={ariaLabel}>
+      <div
+        ref={elRef}
+        className={classes}
+        style={style}
+        role="progressbar"
+        aria-valuenow={indeterminate ? undefined : clamped}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={ariaLabel}
+      >
         <div className={`${base}__track`} style={{ height }}>
-          <div className={`${base}__fill`} style={indeterminate ? undefined : { width: `${clamped}%` }}>
+          <div
+            className={`${base}__fill`}
+            style={indeterminate ? undefined : { width: `${clamped}%` }}
+          >
             {fillTemplate && fillTemplate({ value: clamped, severity })}
-            {inside && labelContent && <span className={`${base}__label ${base}__label--inside`}>{labelContent}</span>}
+            {inside && labelContent && (
+              <span className={`${base}__label ${base}__label--inside`}>
+                {labelContent}
+              </span>
+            )}
           </div>
         </div>
-        {!inside && labelContent && <span className={`${base}__label ${base}__label--outside`}>{labelContent}</span>}
+        {!inside && labelContent && (
+          <span className={`${base}__label ${base}__label--outside`}>
+            {labelContent}
+          </span>
+        )}
       </div>
     );
-  },
+  }
 );
 
-ProgressBar.displayName = 'ProgressBar';
+ProgressBar.displayName = "ProgressBar";

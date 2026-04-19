@@ -1,13 +1,21 @@
-import React, { forwardRef } from 'react';
-import './Badge.css';
+import React, { forwardRef } from "react";
+import "./Badge.css";
 
 export interface BadgeProps {
   /** Content inside the badge (text, number, icon) */
   value?: React.ReactNode;
   /** Position using cardinal directions */
-  position?: 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw';
+  position?: "n" | "ne" | "e" | "se" | "s" | "sw" | "w" | "nw";
   /** Color severity */
-  severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  severity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** The element the badge is attached to */
   children: React.ReactNode;
   /** Additional CSS class names */
@@ -37,16 +45,16 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
   (
     {
       value,
-      position = 'ne',
-      severity = 'danger',
+      position = "ne",
+      severity = "danger",
       children,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
-    const base = 'k-badge';
-    const isEmpty = value == null || value === '';
+    const base = "k-badge";
+    const isEmpty = value == null || value === "";
 
     return (
       <span ref={ref} className={`${base} ${className}`.trim()} style={style}>
@@ -59,7 +67,7 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
             isEmpty && `${base}__dot--empty`,
           ]
             .filter(Boolean)
-            .join(' ')}
+            .join(" ")}
           role="status"
           aria-label={!isEmpty ? `${value}` : undefined}
         >
@@ -67,7 +75,7 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
         </span>
       </span>
     );
-  },
+  }
 );
 
-Badge.displayName = 'Badge';
+Badge.displayName = "Badge";

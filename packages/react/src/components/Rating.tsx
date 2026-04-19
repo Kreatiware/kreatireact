@@ -1,8 +1,15 @@
-import React, { forwardRef, useState, useCallback, useRef, useImperativeHandle, useId } from 'react';
-import { STAR_PATH, TIMES_CIRCLE_PATH } from './iconPaths';
-import { FieldWrapper } from './FieldWrapper';
-import { useKreatiLocale } from '../locale';
-import './Rating.css';
+import React, {
+  forwardRef,
+  useState,
+  useCallback,
+  useRef,
+  useImperativeHandle,
+  useId,
+} from "react";
+import { STAR_PATH, TIMES_CIRCLE_PATH } from "./iconPaths";
+import { FieldWrapper } from "./FieldWrapper";
+import { useKreatiLocale } from "../locale";
+import "./Rating.css";
 
 export interface RatingProps {
   /** Current value (controlled) */
@@ -20,7 +27,7 @@ export interface RatingProps {
   /** Show a cancel/clear icon before the stars */
   showCancel?: boolean;
   /** Component size */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Active color — overrides the CSS variable */
   color?: string;
   /** Custom icon ReactNode — rendered for every star position */
@@ -42,7 +49,15 @@ export interface RatingProps {
   /** Success state */
   success?: boolean;
   /** Helper text severity color */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  helperSeverity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** HTML name for hidden input (form compatibility) */
   name?: string;
   /** Blur handler */
@@ -53,7 +68,7 @@ export interface RatingProps {
   style?: React.CSSProperties;
 }
 
-const base = 'k-rating';
+const base = "k-rating";
 
 const StarSvg = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -92,7 +107,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
       allowHalf = false,
       allowClear = true,
       showCancel = false,
-      size = 'md',
+      size = "md",
       color,
       icon,
       cancelIcon,
@@ -106,10 +121,10 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
       helperSeverity,
       name,
       onBlur,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const containerRef = useRef<HTMLDivElement>(null);
     useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
@@ -130,7 +145,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
         if (!isControlled) setInternalValue(next);
         onChange?.(next);
       },
-      [allowClear, currentValue, isControlled, onChange],
+      [allowClear, currentValue, isControlled, onChange]
     );
 
     const handleClick = useCallback(
@@ -138,7 +153,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
         if (readOnly || disabled) return;
         setValue(val);
       },
-      [readOnly, disabled, setValue],
+      [readOnly, disabled, setValue]
     );
 
     const handleKeyDown = useCallback(
@@ -146,27 +161,27 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
         if (readOnly || disabled) return;
         const step = allowHalf ? 0.5 : 1;
         switch (e.key) {
-          case 'ArrowRight':
-          case 'ArrowUp':
+          case "ArrowRight":
+          case "ArrowUp":
             e.preventDefault();
             setValue(Math.min(currentValue + step, count));
             break;
-          case 'ArrowLeft':
-          case 'ArrowDown':
+          case "ArrowLeft":
+          case "ArrowDown":
             e.preventDefault();
             setValue(Math.max(currentValue - step, 0));
             break;
-          case 'Home':
+          case "Home":
             e.preventDefault();
             setValue(0);
             break;
-          case 'End':
+          case "End":
             e.preventDefault();
             setValue(count);
             break;
         }
       },
-      [readOnly, disabled, allowHalf, currentValue, count, setValue],
+      [readOnly, disabled, allowHalf, currentValue, count, setValue]
     );
 
     const iconEl = icon || <StarSvg />;
@@ -186,7 +201,9 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
       }
 
       return (
-        <span className={`${base}__icon ${isFull ? `${base}__icon--on` : `${base}__icon--off`}`}>
+        <span
+          className={`${base}__icon ${isFull ? `${base}__icon--on` : `${base}__icon--off`}`}
+        >
           {iconEl}
         </span>
       );
@@ -207,13 +224,25 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
             <>
               <span
                 className={`${base}__half-left`}
-                onMouseEnter={(e) => { e.stopPropagation(); setHoverValue(starNum - 0.5); }}
-                onClick={(e) => { e.stopPropagation(); handleClick(starNum - 0.5); }}
+                onMouseEnter={e => {
+                  e.stopPropagation();
+                  setHoverValue(starNum - 0.5);
+                }}
+                onClick={e => {
+                  e.stopPropagation();
+                  handleClick(starNum - 0.5);
+                }}
               />
               <span
                 className={`${base}__half-right`}
-                onMouseEnter={(e) => { e.stopPropagation(); setHoverValue(starNum); }}
-                onClick={(e) => { e.stopPropagation(); handleClick(starNum); }}
+                onMouseEnter={e => {
+                  e.stopPropagation();
+                  setHoverValue(starNum);
+                }}
+                onClick={e => {
+                  e.stopPropagation();
+                  handleClick(starNum);
+                }}
               />
             </>
           )}
@@ -222,16 +251,20 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
     });
 
     const hasError = !!error;
-    const errorMessage = typeof error === 'boolean' ? undefined : error;
+    const errorMessage = typeof error === "boolean" ? undefined : error;
 
     const cls = [
       base,
       `${base}--${size}`,
       readOnly && `${base}--readonly`,
       disabled && `${base}--disabled`,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
-    const cssVars = color ? { '--kreati-rating-color': color } as React.CSSProperties : undefined;
+    const cssVars = color
+      ? ({ "--kreati-rating-color": color } as React.CSSProperties)
+      : undefined;
 
     const rater = (
       <div
@@ -257,7 +290,12 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
             tabIndex={0}
             aria-label={locale.rating.clear}
             onClick={() => setValue(0)}
-            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setValue(0); } }}
+            onKeyDown={e => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setValue(0);
+              }
+            }}
           >
             {cancelIcon || <CancelSvg />}
           </span>
@@ -270,7 +308,11 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
     const hasWrapper = !!(label || helperText || errorMessage || required);
 
     if (!hasWrapper) {
-      return <div className={className} style={style}>{rater}</div>;
+      return (
+        <div className={className} style={style}>
+          {rater}
+        </div>
+      );
     }
 
     return (
@@ -290,7 +332,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
         </FieldWrapper>
       </div>
     );
-  },
+  }
 );
 
-Rating.displayName = 'Rating';
+Rating.displayName = "Rating";

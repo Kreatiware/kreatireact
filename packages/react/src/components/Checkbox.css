@@ -66,11 +66,26 @@
 }
 
 /* Sizes */
-.k-checkbox__box--xs { width: var(--kreati-checkbox-size-xs); height: var(--kreati-checkbox-size-xs); }
-.k-checkbox__box--sm { width: var(--kreati-checkbox-size-sm); height: var(--kreati-checkbox-size-sm); }
-.k-checkbox__box--md { width: var(--kreati-checkbox-size-md); height: var(--kreati-checkbox-size-md); }
-.k-checkbox__box--lg { width: var(--kreati-checkbox-size-lg); height: var(--kreati-checkbox-size-lg); }
-.k-checkbox__box--xl { width: var(--kreati-checkbox-size-xl); height: var(--kreati-checkbox-size-xl); }
+.k-checkbox__box--xs {
+  width: var(--kreati-checkbox-size-xs);
+  height: var(--kreati-checkbox-size-xs);
+}
+.k-checkbox__box--sm {
+  width: var(--kreati-checkbox-size-sm);
+  height: var(--kreati-checkbox-size-sm);
+}
+.k-checkbox__box--md {
+  width: var(--kreati-checkbox-size-md);
+  height: var(--kreati-checkbox-size-md);
+}
+.k-checkbox__box--lg {
+  width: var(--kreati-checkbox-size-lg);
+  height: var(--kreati-checkbox-size-lg);
+}
+.k-checkbox__box--xl {
+  width: var(--kreati-checkbox-size-xl);
+  height: var(--kreati-checkbox-size-xl);
+}
 
 /* Checked / Indeterminate */
 .k-checkbox__box--active {
@@ -86,11 +101,15 @@
 }
 
 /* Hover */
-.k-checkbox__control:hover .k-checkbox__box:not(.k-checkbox__box--disabled):not(.k-checkbox__box--active):not(.k-checkbox__box--success):not(.k-checkbox__box--error-active) {
+.k-checkbox__control:hover
+  .k-checkbox__box:not(.k-checkbox__box--disabled):not(
+    .k-checkbox__box--active
+  ):not(.k-checkbox__box--success):not(.k-checkbox__box--error-active) {
   border-color: var(--kreati-gray-400);
 }
 
-.k-checkbox__control:hover .k-checkbox__box--active:not(.k-checkbox__box--disabled) {
+.k-checkbox__control:hover
+  .k-checkbox__box--active:not(.k-checkbox__box--disabled) {
   background-color: var(--kreati-severity-primary-hover);
   border-color: var(--kreati-severity-primary-hover);
 }
@@ -109,7 +128,8 @@
   color: var(--kreati-checkbox-checked-color);
 }
 
-.k-checkbox__control:hover .k-checkbox__box--success:not(.k-checkbox__box--disabled) {
+.k-checkbox__control:hover
+  .k-checkbox__box--success:not(.k-checkbox__box--disabled) {
   background-color: var(--kreati-severity-success-hover);
   border-color: var(--kreati-severity-success-hover);
 }
@@ -127,7 +147,8 @@
   color: var(--kreati-checkbox-checked-color);
 }
 
-.k-checkbox__control:hover .k-checkbox__box--error-active:not(.k-checkbox__box--disabled) {
+.k-checkbox__control:hover
+  .k-checkbox__box--error-active:not(.k-checkbox__box--disabled) {
   background-color: var(--kreati-severity-danger-hover);
   border-color: var(--kreati-severity-danger-hover);
 }
@@ -146,11 +167,21 @@
   line-height: var(--kreati-line-height-sm);
 }
 
-.k-checkbox__label--xs { font-size: var(--kreati-font-size-xxs); }
-.k-checkbox__label--sm { font-size: var(--kreati-font-size-xs); }
-.k-checkbox__label--md { font-size: var(--kreati-font-size-sm); }
-.k-checkbox__label--lg { font-size: var(--kreati-font-size-base); }
-.k-checkbox__label--xl { font-size: var(--kreati-font-size-md); }
+.k-checkbox__label--xs {
+  font-size: var(--kreati-font-size-xxs);
+}
+.k-checkbox__label--sm {
+  font-size: var(--kreati-font-size-xs);
+}
+.k-checkbox__label--md {
+  font-size: var(--kreati-font-size-sm);
+}
+.k-checkbox__label--lg {
+  font-size: var(--kreati-font-size-base);
+}
+.k-checkbox__label--xl {
+  font-size: var(--kreati-font-size-md);
+}
 
 .k-checkbox__required {
   color: var(--kreati-severity-danger);
@@ -174,13 +205,27 @@
   margin-top: var(--kreati-field-helper-gap);
 }
 
-.k-checkbox__helper--primary   { color: var(--kreati-severity-primary); }
-.k-checkbox__helper--secondary { color: var(--kreati-severity-secondary); }
-.k-checkbox__helper--success   { color: var(--kreati-severity-success); }
-.k-checkbox__helper--info      { color: var(--kreati-severity-info); }
-.k-checkbox__helper--warning   { color: var(--kreati-severity-warning); }
-.k-checkbox__helper--help      { color: var(--kreati-severity-help); }
-.k-checkbox__helper--danger    { color: var(--kreati-severity-danger); }
+.k-checkbox__helper--primary {
+  color: var(--kreati-severity-primary);
+}
+.k-checkbox__helper--secondary {
+  color: var(--kreati-severity-secondary);
+}
+.k-checkbox__helper--success {
+  color: var(--kreati-severity-success);
+}
+.k-checkbox__helper--info {
+  color: var(--kreati-severity-info);
+}
+.k-checkbox__helper--warning {
+  color: var(--kreati-severity-warning);
+}
+.k-checkbox__helper--help {
+  color: var(--kreati-severity-help);
+}
+.k-checkbox__helper--danger {
+  color: var(--kreati-severity-danger);
+}
 
 /* ============================================
    CheckboxGroup

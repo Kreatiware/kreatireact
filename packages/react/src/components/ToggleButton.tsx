@@ -1,5 +1,5 @@
-import React, { forwardRef } from 'react';
-import './ToggleButton.css';
+import React, { forwardRef } from "react";
+import "./ToggleButton.css";
 
 export interface ToggleButtonProps {
   /** Whether the button is active/on */
@@ -13,7 +13,7 @@ export interface ToggleButtonProps {
   /** Right icon */
   iconRight?: React.ReactNode;
   /** Button size */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Disabled state */
   disabled?: boolean;
   /** Raised shadow effect */
@@ -51,18 +51,18 @@ export const ToggleButton = forwardRef<HTMLButtonElement, ToggleButtonProps>(
       label,
       iconLeft,
       iconRight,
-      size = 'md',
+      size = "md",
       disabled = false,
       raised = false,
       slim = false,
       compact = false,
       onClick,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
-    const base = 'k-toggle-btn';
+    const base = "k-toggle-btn";
     const classes = [
       base,
       `${base}--${size}`,
@@ -72,7 +72,9 @@ export const ToggleButton = forwardRef<HTMLButtonElement, ToggleButtonProps>(
       compact && `${base}--compact`,
       disabled && `${base}--disabled`,
       className,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     return (
       <button
@@ -90,7 +92,7 @@ export const ToggleButton = forwardRef<HTMLButtonElement, ToggleButtonProps>(
         {iconRight && <span className={`${base}__icon`}>{iconRight}</span>}
       </button>
     );
-  },
+  }
 );
 
-ToggleButton.displayName = 'ToggleButton';
+ToggleButton.displayName = "ToggleButton";

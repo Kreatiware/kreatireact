@@ -1,5 +1,5 @@
-import React, { forwardRef, useRef, useImperativeHandle } from 'react';
-import './Timeline.css';
+import React, { forwardRef, useRef, useImperativeHandle } from "react";
+import "./Timeline.css";
 
 export interface TimelineEvent {
   /** Unique key */
@@ -33,7 +33,7 @@ export interface TimelineProps {
   style?: React.CSSProperties;
 }
 
-const base = 'k-timeline';
+const base = "k-timeline";
 
 /**
  * Timeline component for displaying chronological events.
@@ -52,18 +52,34 @@ const base = 'k-timeline';
  * ```
  */
 export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
-  ({ events, alternate = false, contentTemplate, markerTemplate, className = '', style }, ref) => {
+  (
+    {
+      events,
+      alternate = false,
+      contentTemplate,
+      markerTemplate,
+      className = "",
+      style,
+    },
+    ref
+  ) => {
     const elRef = useRef<HTMLDivElement>(null);
     useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
 
-    const cls = [base, alternate && `${base}--alternate`, className].filter(Boolean).join(' ');
+    const cls = [base, alternate && `${base}--alternate`, className]
+      .filter(Boolean)
+      .join(" ");
 
     return (
       <div ref={elRef} className={cls} style={style} role="list">
         {events.map((event, i) => {
-          const marker = markerTemplate ? markerTemplate(event, i) : event.marker;
+          const marker = markerTemplate
+            ? markerTemplate(event, i)
+            : event.marker;
           const hasCustom = !!marker;
-          const content = contentTemplate ? contentTemplate(event, i) : event.content;
+          const content = contentTemplate
+            ? contentTemplate(event, i)
+            : event.content;
           const isFirst = i === 0;
           const isLast = i === events.length - 1;
           const isOdd = i % 2 === 0;
@@ -72,12 +88,18 @@ export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
             `${base}__connector`,
             isFirst && `${base}__connector--first`,
             isLast && `${base}__connector--last`,
-          ].filter(Boolean).join(' ');
+          ]
+            .filter(Boolean)
+            .join(" ");
 
           const markerEl = (
             <span
-              className={`${base}__marker${hasCustom ? ` ${base}__marker--custom` : ''}`}
-              style={!hasCustom && event.color ? { background: event.color } : undefined}
+              className={`${base}__marker${hasCustom ? ` ${base}__marker--custom` : ""}`}
+              style={
+                !hasCustom && event.color
+                  ? { background: event.color }
+                  : undefined
+              }
             >
               {hasCustom && marker}
             </span>
@@ -85,16 +107,30 @@ export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
 
           if (alternate) {
             return (
-              <div key={event.key} className={`${base}__item ${event.className || ''}`} style={event.style} role="listitem">
-                <div className={`${base}__side ${base}__side--a`}>{isOdd ? content : event.opposite}</div>
+              <div
+                key={event.key}
+                className={`${base}__item ${event.className || ""}`}
+                style={event.style}
+                role="listitem"
+              >
+                <div className={`${base}__side ${base}__side--a`}>
+                  {isOdd ? content : event.opposite}
+                </div>
                 <div className={connectorCls}>{markerEl}</div>
-                <div className={`${base}__side ${base}__side--b`}>{isOdd ? event.opposite : content}</div>
+                <div className={`${base}__side ${base}__side--b`}>
+                  {isOdd ? event.opposite : content}
+                </div>
               </div>
             );
           }
 
           return (
-            <div key={event.key} className={`${base}__item ${event.className || ''}`} style={event.style} role="listitem">
+            <div
+              key={event.key}
+              className={`${base}__item ${event.className || ""}`}
+              style={event.style}
+              role="listitem"
+            >
               <div className={connectorCls}>{markerEl}</div>
               <div className={`${base}__content`}>{content}</div>
             </div>
@@ -102,7 +138,7 @@ export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
         })}
       </div>
     );
-  },
+  }
 );
 
-Timeline.displayName = 'Timeline';
+Timeline.displayName = "Timeline";

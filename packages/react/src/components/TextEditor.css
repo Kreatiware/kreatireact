@@ -16,18 +16,38 @@
 }
 
 /* ─── States ───────────────────────────────────────────────────────── */
-.k-te--error { border-color: var(--kreati-severity-danger); }
-.k-te--error:focus-within { border-color: var(--kreati-severity-danger); box-shadow: 0 0 0 2px var(--kreati-severity-danger-light); }
+.k-te--error {
+  border-color: var(--kreati-severity-danger);
+}
+.k-te--error:focus-within {
+  border-color: var(--kreati-severity-danger);
+  box-shadow: 0 0 0 2px var(--kreati-severity-danger-light);
+}
 
-.k-te--success { border-color: var(--kreati-severity-success); }
-.k-te--success:focus-within { border-color: var(--kreati-severity-success); box-shadow: 0 0 0 2px var(--kreati-severity-success-light); }
+.k-te--success {
+  border-color: var(--kreati-severity-success);
+}
+.k-te--success:focus-within {
+  border-color: var(--kreati-severity-success);
+  box-shadow: 0 0 0 2px var(--kreati-severity-success-light);
+}
 
-.k-te--disabled { opacity: 0.4; pointer-events: none; }
-.k-te--readonly { background: var(--kreati-gray-50); }
+.k-te--disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.k-te--readonly {
+  background: var(--kreati-gray-50);
+}
 
-.k-te--resizable { resize: both; overflow: hidden; }
+.k-te--resizable {
+  resize: both;
+  overflow: hidden;
+}
 
-.k-te--full-width { width: 100%; }
+.k-te--full-width {
+  width: 100%;
+}
 
 /* ─── Toolbar ──────────────────────────────────────────────────────── */
 .k-te__toolbar {
@@ -51,7 +71,9 @@
   background: transparent;
   color: var(--kreati-gray-600);
   cursor: pointer;
-  transition: color var(--kreati-transition-fast), background var(--kreati-transition-fast);
+  transition:
+    color var(--kreati-transition-fast),
+    background var(--kreati-transition-fast);
 }
 
 .k-te__btn:hover:not(:disabled) {
@@ -102,7 +124,9 @@
   cursor: pointer;
   outline: none;
   white-space: nowrap;
-  transition: color var(--kreati-transition-fast), background var(--kreati-transition-fast);
+  transition:
+    color var(--kreati-transition-fast),
+    background var(--kreati-transition-fast);
 }
 
 .k-te__select-btn:hover:not(:disabled) {
@@ -206,7 +230,9 @@
   border-radius: 50%;
   cursor: pointer;
   padding: 0;
-  transition: border-color var(--kreati-transition-fast), transform var(--kreati-transition-fast);
+  transition:
+    border-color var(--kreati-transition-fast),
+    transform var(--kreati-transition-fast);
 }
 
 .k-te__color-swatch:hover {

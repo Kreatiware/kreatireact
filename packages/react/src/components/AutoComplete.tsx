@@ -6,16 +6,16 @@ import React, {
   useCallback,
   useEffect,
   useImperativeHandle,
-} from 'react';
-import { createPortal } from 'react-dom';
-import { Input } from './Input';
-import { Chip } from './Chip';
-import { Tag } from './Tag';
-import { Spinner } from './Spinner';
-import { useKreatiLocale } from '../locale';
-import { useOverlayPosition } from './useOverlayPosition';
-import { useLayerZIndex } from './LayerContext';
-import './AutoComplete.css';
+} from "react";
+import { createPortal } from "react-dom";
+import { Input } from "./Input";
+import { Chip } from "./Chip";
+import { Tag } from "./Tag";
+import { Spinner } from "./Spinner";
+import { useKreatiLocale } from "../locale";
+import { useOverlayPosition } from "./useOverlayPosition";
+import { useLayerZIndex } from "./LayerContext";
+import "./AutoComplete.css";
 
 export interface AutoCompleteItem {
   /** Unique value */
@@ -58,9 +58,12 @@ export interface AutoCompleteProps {
   /** Enable multiple selection mode */
   multiple?: boolean;
   /** Visual style for selected items in multiple mode (default: 'chip') */
-  selectionDisplay?: 'chip' | 'tag';
+  selectionDisplay?: "chip" | "tag";
   /** Custom render for each selected item in multiple mode */
-  selectedItemTemplate?: (item: AutoCompleteItem, onRemove: () => void) => React.ReactNode;
+  selectedItemTemplate?: (
+    item: AutoCompleteItem,
+    onRemove: () => void
+  ) => React.ReactNode;
   /** Maximum items in multiple mode */
   maxItems?: number;
   /** Minimum characters before triggering search (default: 1) */
@@ -72,15 +75,18 @@ export interface AutoCompleteProps {
   /** Message when no suggestions match */
   emptyMessage?: string;
   /** Custom render for each suggestion item */
-  itemTemplate?: (item: AutoCompleteItem, state: { selected: boolean; focused: boolean }) => React.ReactNode;
+  itemTemplate?: (
+    item: AutoCompleteItem,
+    state: { selected: boolean; focused: boolean }
+  ) => React.ReactNode;
   /** Clears value on blur if no match (single mode only) */
   forceSelection?: boolean;
   /** Show the dropdown on focus even without typing */
   showOnFocus?: boolean;
   /** Visual variant */
-  variant?: 'floating' | 'stacked';
+  variant?: "floating" | "stacked";
   /** Component size */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Label text */
   label?: string;
   /** Placeholder */
@@ -96,7 +102,15 @@ export interface AutoCompleteProps {
   /** Success state */
   success?: boolean;
   /** Helper text severity color */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  helperSeverity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Disabled */
   disabled?: boolean;
   /** Read-only */
@@ -113,7 +127,7 @@ export interface AutoCompleteProps {
   style?: React.CSSProperties;
 }
 
-const base = 'k-autocomplete';
+const base = "k-autocomplete";
 
 /**
  * AutoComplete component for text input with suggestion dropdown.
@@ -150,7 +164,7 @@ export const AutoComplete = forwardRef<HTMLInputElement, AutoCompleteProps>(
       onRemove,
       onBlur,
       multiple = false,
-      selectionDisplay = 'chip',
+      selectionDisplay = "chip",
       selectedItemTemplate,
       maxItems,
       minLength = 1,
@@ -175,10 +189,10 @@ export const AutoComplete = forwardRef<HTMLInputElement, AutoCompleteProps>(
       required,
       fullWidth,
       name,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const locale = useKreatiLocale();
     const uid = useId();
@@ -187,19 +201,22 @@ export const AutoComplete = forwardRef<HTMLInputElement, AutoCompleteProps>(
 
     // --- Single mode state ---
     const [internalSingle, setInternalSingle] = useState<string>(
-      typeof defaultValue === 'string' ? defaultValue : '',
+      typeof defaultValue === "string" ? defaultValue : ""
     );
-    const singleValue = isControlled ? (controlledValue as string) : internalSingle;
+    const singleValue = isControlled
+      ? (controlledValue as string)
+      : internalSingle;
 
     // --- Multiple mode state ---
-    const [internalMultiple, setInternalMultiple] = useState<AutoCompleteItem[]>(
-      Array.isArray(defaultValue) ? defaultValue : [],
-    );
-    const multiItems: AutoCompleteItem[] = isControlled && Array.isArray(controlledValue)
-      ? controlledValue
-      : internalMultiple;
+    const [internalMultiple, setInternalMultiple] = useState<
+      AutoCompleteItem[]
+    >(Array.isArray(defaultValue) ? defaultValue : []);
+    const multiItems: AutoCompleteItem[] =
+      isControlled && Array.isArray(controlledValue)
+        ? controlledValue
+        : internalMultiple;
 
-    const [inputText, setInputText] = useState('');
+    const [inputText, setInputText] = useState("");
     const [open, setOpen] = useState(false);
     const [focusedIndex, setFocusedIndex] = useState(-1);
     const [selectedValue, setSelectedValue] = useState<string | null>(null);
@@ -218,13 +235,19 @@ export const AutoComplete = forwardRef<HTMLInputElement, AutoCompleteProps>(
 
     useEffect(() => {
       if (!multiple) {
-        const el = wrapperRef.current?.querySelector('.k-input__fieldset, .k-input__container') as HTMLElement | null;
+        const el = wrapperRef.current?.querySelector(
+          ".k-input__fieldset, .k-input__container"
+        ) as HTMLElement | null;
         if (el) triggerRef.current = el;
       }
     });
 
     const zIndex = useLayerZIndex();
-    const { coords, positioned } = useOverlayPosition(triggerRef, panelRef, open);
+    const { coords, positioned } = useOverlayPosition(
+      triggerRef,
+      panelRef,
+      open
+    );
     const resolvedEmpty = emptyMessage ?? locale.select.emptyMessage;
 
     const openPanel = useCallback(() => {
@@ -243,7 +266,7 @@ export const AutoComplete = forwardRef<HTMLInputElement, AutoCompleteProps>(
         if (debounceRef.current) clearTimeout(debounceRef.current);
         debounceRef.current = setTimeout(() => onSearch?.(query), delay);
       },
-      [delay, onSearch],
+      [delay, onSearch]
     );
 
     // --- Single handlers ---
@@ -252,7 +275,7 @@ export const AutoComplete = forwardRef<HTMLInputElement, AutoCompleteProps>(
         if (!isControlled) setInternalSingle(val);
         onChange?.(val);
       },
-      [isControlled, onChange],
+      [isControlled, onChange]
     );
 
     const handleSingleChange = useCallback(
@@ -260,10 +283,12 @@ export const AutoComplete = forwardRef<HTMLInputElement, AutoCompleteProps>(
         const val = e.target.value;
         updateSingle(val);
         setSelectedValue(null);
-        if (val.length >= minLength) { triggerSearch(val); openPanel(); }
-        else closePanel();
+        if (val.length >= minLength) {
+          triggerSearch(val);
+          openPanel();
+        } else closePanel();
       },
-      [updateSingle, minLength, triggerSearch, openPanel, closePanel],
+      [updateSingle, minLength, triggerSearch, openPanel, closePanel]
     );
 
     const handleSingleSelect = useCallback(
@@ -274,7 +299,7 @@ export const AutoComplete = forwardRef<HTMLInputElement, AutoCompleteProps>(
         onSelect?.(item);
         closePanel();
       },
-      [updateSingle, onSelect, closePanel],
+      [updateSingle, onSelect, closePanel]
     );
 
     // --- Multiple handlers ---
@@ -283,41 +308,43 @@ export const AutoComplete = forwardRef<HTMLInputElement, AutoCompleteProps>(
         if (!isControlled) setInternalMultiple(items);
         onChange?.(items);
       },
-      [isControlled, onChange],
+      [isControlled, onChange]
     );
 
     const handleMultipleInputChange = useCallback(
       (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value;
         setInputText(val);
-        if (val.length >= minLength) { triggerSearch(val); openPanel(); }
-        else closePanel();
+        if (val.length >= minLength) {
+          triggerSearch(val);
+          openPanel();
+        } else closePanel();
       },
-      [minLength, triggerSearch, openPanel, closePanel],
+      [minLength, triggerSearch, openPanel, closePanel]
     );
 
     const handleMultipleSelect = useCallback(
       (item: AutoCompleteItem) => {
         if (item.disabled) return;
-        if (multiItems.some((i) => i.value === item.value)) return;
+        if (multiItems.some(i => i.value === item.value)) return;
         if (maxItems && multiItems.length >= maxItems) return;
         updateMultiple([...multiItems, item]);
         onSelect?.(item);
-        setInputText('');
+        setInputText("");
         closePanel();
         inputRef.current?.focus();
       },
-      [multiItems, maxItems, updateMultiple, onSelect, closePanel],
+      [multiItems, maxItems, updateMultiple, onSelect, closePanel]
     );
 
     const handleRemoveItem = useCallback(
       (val: string) => {
-        const removed = multiItems.find((i) => i.value === val);
-        updateMultiple(multiItems.filter((i) => i.value !== val));
+        const removed = multiItems.find(i => i.value === val);
+        updateMultiple(multiItems.filter(i => i.value !== val));
         if (removed) onRemove?.(removed);
         inputRef.current?.focus();
       },
-      [multiItems, updateMultiple, onRemove],
+      [multiItems, updateMultiple, onRemove]
     );
 
     // --- Shared ---
@@ -326,9 +353,20 @@ export const AutoComplete = forwardRef<HTMLInputElement, AutoCompleteProps>(
     const handleFocus = useCallback(() => {
       if (showOnFocus) {
         const q = multiple ? inputText : singleValue;
-        if (q.length >= minLength) { onSearch?.(q); openPanel(); }
+        if (q.length >= minLength) {
+          onSearch?.(q);
+          openPanel();
+        }
       }
-    }, [showOnFocus, multiple, inputText, singleValue, minLength, onSearch, openPanel]);
+    }, [
+      showOnFocus,
+      multiple,
+      inputText,
+      singleValue,
+      minLength,
+      onSearch,
+      openPanel,
+    ]);
 
     const handleBlur = useCallback(
       (e: React.FocusEvent<HTMLInputElement>) => {
@@ -336,152 +374,327 @@ export const AutoComplete = forwardRef<HTMLInputElement, AutoCompleteProps>(
           if (panelRef.current?.contains(document.activeElement)) return;
           if (wrapperRef.current?.contains(document.activeElement)) return;
           if (!multiple && forceSelection && !selectedValue) {
-            const match = suggestions.find((s) => s.label.toLowerCase() === singleValue.toLowerCase());
+            const match = suggestions.find(
+              s => s.label.toLowerCase() === singleValue.toLowerCase()
+            );
             if (match) handleSingleSelect(match);
-            else { updateSingle(''); setSelectedValue(null); }
+            else {
+              updateSingle("");
+              setSelectedValue(null);
+            }
           }
-          if (multiple) setInputText('');
+          if (multiple) setInputText("");
           closePanel();
           onBlur?.(e);
         }, 150);
       },
-      [multiple, forceSelection, selectedValue, suggestions, singleValue, handleSingleSelect, updateSingle, closePanel, onBlur],
+      [
+        multiple,
+        forceSelection,
+        selectedValue,
+        suggestions,
+        singleValue,
+        handleSingleSelect,
+        updateSingle,
+        closePanel,
+        onBlur,
+      ]
     );
 
     const handleKeyDown = useCallback(
       (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (multiple && e.key === 'Backspace' && inputText === '' && multiItems.length > 0) {
+        if (
+          multiple &&
+          e.key === "Backspace" &&
+          inputText === "" &&
+          multiItems.length > 0
+        ) {
           handleRemoveItem(multiItems[multiItems.length - 1].value);
           return;
         }
         if (!open) {
           const q = multiple ? inputText : singleValue;
-          if (e.key === 'ArrowDown' && q.length >= minLength) { openPanel(); e.preventDefault(); }
+          if (e.key === "ArrowDown" && q.length >= minLength) {
+            openPanel();
+            e.preventDefault();
+          }
           return;
         }
         const sug = visibleSuggestions;
         switch (e.key) {
-          case 'ArrowDown':
+          case "ArrowDown":
             e.preventDefault();
-            setFocusedIndex((p) => { let n = p + 1; while (n < sug.length && sug[n].disabled) n++; return n < sug.length ? n : p; });
+            setFocusedIndex(p => {
+              let n = p + 1;
+              while (n < sug.length && sug[n].disabled) n++;
+              return n < sug.length ? n : p;
+            });
             break;
-          case 'ArrowUp':
+          case "ArrowUp":
             e.preventDefault();
-            setFocusedIndex((p) => { let n = p - 1; while (n >= 0 && sug[n].disabled) n--; return n >= 0 ? n : p; });
+            setFocusedIndex(p => {
+              let n = p - 1;
+              while (n >= 0 && sug[n].disabled) n--;
+              return n >= 0 ? n : p;
+            });
             break;
-          case 'Enter':
+          case "Enter":
             e.preventDefault();
-            if (focusedIndex >= 0 && focusedIndex < sug.length) handleSelect(sug[focusedIndex]);
+            if (focusedIndex >= 0 && focusedIndex < sug.length)
+              handleSelect(sug[focusedIndex]);
             break;
-          case 'Escape':
+          case "Escape":
             closePanel();
             break;
         }
       },
-      [open, multiple, inputText, singleValue, minLength, focusedIndex, multiItems, handleSelect, handleRemoveItem, openPanel, closePanel],
+      [
+        open,
+        multiple,
+        inputText,
+        singleValue,
+        minLength,
+        focusedIndex,
+        multiItems,
+        handleSelect,
+        handleRemoveItem,
+        openPanel,
+        closePanel,
+      ]
     );
 
     // --- Effects ---
     useEffect(() => {
       if (!open || focusedIndex < 0) return;
-      const el = panelRef.current?.querySelector(`.${base}__list`)?.children[focusedIndex] as HTMLElement | undefined;
-      el?.scrollIntoView({ block: 'nearest' });
+      const el = panelRef.current?.querySelector(`.${base}__list`)?.children[
+        focusedIndex
+      ] as HTMLElement | undefined;
+      el?.scrollIntoView({ block: "nearest" });
     }, [focusedIndex, open]);
 
     useEffect(() => {
       if (!open) return;
       const handler = (e: MouseEvent) => {
-        if (wrapperRef.current?.contains(e.target as Node) || panelRef.current?.contains(e.target as Node)) return;
+        if (
+          wrapperRef.current?.contains(e.target as Node) ||
+          panelRef.current?.contains(e.target as Node)
+        )
+          return;
         closePanel();
       };
-      document.addEventListener('mousedown', handler);
-      return () => document.removeEventListener('mousedown', handler);
+      document.addEventListener("mousedown", handler);
+      return () => document.removeEventListener("mousedown", handler);
     }, [open, closePanel]);
 
-    useEffect(() => () => { if (debounceRef.current) clearTimeout(debounceRef.current); }, []);
+    useEffect(
+      () => () => {
+        if (debounceRef.current) clearTimeout(debounceRef.current);
+      },
+      []
+    );
 
     useEffect(() => {
       const el = inputRef.current;
       if (!el) return;
-      el.setAttribute('role', 'combobox');
-      el.setAttribute('aria-autocomplete', 'list');
-      el.setAttribute('aria-expanded', String(open));
-      if (open) el.setAttribute('aria-controls', listId); else el.removeAttribute('aria-controls');
-      if (open && focusedIndex >= 0) el.setAttribute('aria-activedescendant', `${uid}-item-${focusedIndex}`);
-      else el.removeAttribute('aria-activedescendant');
+      el.setAttribute("role", "combobox");
+      el.setAttribute("aria-autocomplete", "list");
+      el.setAttribute("aria-expanded", String(open));
+      if (open) el.setAttribute("aria-controls", listId);
+      else el.removeAttribute("aria-controls");
+      if (open && focusedIndex >= 0)
+        el.setAttribute("aria-activedescendant", `${uid}-item-${focusedIndex}`);
+      else el.removeAttribute("aria-activedescendant");
     }, [open, focusedIndex, listId, uid]);
 
     // --- Visible suggestions ---
-    const selectedValues = new Set(multiItems.map((i) => i.value));
-    const visibleSuggestions = multiple ? suggestions.filter((s) => !selectedValues.has(s.value)) : suggestions;
+    const selectedValues = new Set(multiItems.map(i => i.value));
+    const visibleSuggestions = multiple
+      ? suggestions.filter(s => !selectedValues.has(s.value))
+      : suggestions;
     const currentQuery = multiple ? inputText : singleValue;
-    const showPanel = open && (visibleSuggestions.length > 0 || loading || currentQuery.length >= minLength);
+    const showPanel =
+      open &&
+      (visibleSuggestions.length > 0 ||
+        loading ||
+        currentQuery.length >= minLength);
 
     // --- Dropdown ---
     const panel = showPanel
       ? createPortal(
           <div
             ref={panelRef}
-            className={`${base}__panel${positioned ? ` ${base}__panel--visible` : ''}`}
-            style={{ top: coords.top, left: coords.left, minWidth: coords.minWidth, zIndex: zIndex.overlay }}
+            className={`${base}__panel${positioned ? ` ${base}__panel--visible` : ""}`}
+            style={{
+              top: coords.top,
+              left: coords.left,
+              minWidth: coords.minWidth,
+              zIndex: zIndex.overlay,
+            }}
             role="listbox"
             id={listId}
           >
             {loading ? (
-              <div className={`${base}__loading`}><Spinner size="sm" />{locale.common.loading}</div>
+              <div className={`${base}__loading`}>
+                <Spinner size="sm" />
+                {locale.common.loading}
+              </div>
             ) : visibleSuggestions.length === 0 ? (
               <div className={`${base}__empty`}>{resolvedEmpty}</div>
             ) : (
               <div className={`${base}__list`}>
                 {visibleSuggestions.map((item, i) => {
                   const isFocused = i === focusedIndex;
-                  const isSelected = multiple ? selectedValues.has(item.value) : item.value === selectedValue;
-                  const cls = [`${base}__item`, isFocused && `${base}__item--focused`, isSelected && `${base}__item--selected`, item.disabled && `${base}__item--disabled`, item.className].filter(Boolean).join(' ');
+                  const isSelected = multiple
+                    ? selectedValues.has(item.value)
+                    : item.value === selectedValue;
+                  const cls = [
+                    `${base}__item`,
+                    isFocused && `${base}__item--focused`,
+                    isSelected && `${base}__item--selected`,
+                    item.disabled && `${base}__item--disabled`,
+                    item.className,
+                  ]
+                    .filter(Boolean)
+                    .join(" ");
                   return (
-                    <div key={item.value} id={`${uid}-item-${i}`} className={cls} style={item.style} role="option" aria-selected={isSelected} aria-disabled={item.disabled || undefined} onMouseDown={(e) => e.preventDefault()} onClick={() => handleSelect(item)} onMouseEnter={() => setFocusedIndex(i)}>
-                      {itemTemplate ? itemTemplate(item, { selected: isSelected, focused: isFocused }) : item.label}
+                    <div
+                      key={item.value}
+                      id={`${uid}-item-${i}`}
+                      className={cls}
+                      style={item.style}
+                      role="option"
+                      aria-selected={isSelected}
+                      aria-disabled={item.disabled || undefined}
+                      onMouseDown={e => e.preventDefault()}
+                      onClick={() => handleSelect(item)}
+                      onMouseEnter={() => setFocusedIndex(i)}
+                    >
+                      {itemTemplate
+                        ? itemTemplate(item, {
+                            selected: isSelected,
+                            focused: isFocused,
+                          })
+                        : item.label}
                     </div>
                   );
                 })}
               </div>
             )}
           </div>,
-          document.body,
+          document.body
         )
       : null;
 
     // --- Multiple render ---
     if (multiple) {
       const atMax = !!maxItems && multiItems.length >= maxItems;
-      const tokens = multiItems.map((item) => {
+      const tokens = multiItems.map(item => {
         const remove = () => handleRemoveItem(item.value);
-        if (selectedItemTemplate) return <React.Fragment key={item.value}>{selectedItemTemplate(item, remove)}</React.Fragment>;
-        if (selectionDisplay === 'tag') return <Tag key={item.value} severity="primary" removable onRemove={remove}>{item.label}</Tag>;
-        return <Chip key={item.value} variant="primary" size="sm" removable onRemove={remove}>{item.label}</Chip>;
+        if (selectedItemTemplate)
+          return (
+            <React.Fragment key={item.value}>
+              {selectedItemTemplate(item, remove)}
+            </React.Fragment>
+          );
+        if (selectionDisplay === "tag")
+          return (
+            <Tag
+              key={item.value}
+              severity="primary"
+              removable
+              onRemove={remove}
+            >
+              {item.label}
+            </Tag>
+          );
+        return (
+          <Chip
+            key={item.value}
+            variant="primary"
+            size="sm"
+            removable
+            onRemove={remove}
+          >
+            {item.label}
+          </Chip>
+        );
       });
 
       const hasError = !!error;
-      const errorMessage = typeof error === 'boolean' ? undefined : error;
-      const wrapperCls = [`${base}__tokens`, `${base}__tokens--${size || 'md'}`, hasError && `${base}__tokens--error`, !hasError && success && `${base}__tokens--success`, disabled && `${base}__tokens--disabled`, fullWidth && `${base}__tokens--full-width`].filter(Boolean).join(' ');
+      const errorMessage = typeof error === "boolean" ? undefined : error;
+      const wrapperCls = [
+        `${base}__tokens`,
+        `${base}__tokens--${size || "md"}`,
+        hasError && `${base}__tokens--error`,
+        !hasError && success && `${base}__tokens--success`,
+        disabled && `${base}__tokens--disabled`,
+        fullWidth && `${base}__tokens--full-width`,
+      ]
+        .filter(Boolean)
+        .join(" ");
 
       const inputId = `${uid}-input`;
 
       return (
-        <div ref={wrapperRef} className={`${base}${fullWidth ? ` ${base}--full-width` : ''} ${className}`} style={style}>
-          {variant === 'stacked' && label && (
-            <label htmlFor={inputId} className={`${base}__label`}>{label}{required && <span className={`${base}__required`} aria-hidden="true">*</span>}</label>
+        <div
+          ref={wrapperRef}
+          className={`${base}${fullWidth ? ` ${base}--full-width` : ""} ${className}`}
+          style={style}
+        >
+          {variant === "stacked" && label && (
+            <label htmlFor={inputId} className={`${base}__label`}>
+              {label}
+              {required && (
+                <span className={`${base}__required`} aria-hidden="true">
+                  *
+                </span>
+              )}
+            </label>
           )}
-          <div ref={triggerCallbackRef} className={wrapperCls} onClick={() => inputRef.current?.focus()} aria-label={label}>
-            {iconLeft && <span className={`${base}__icon-left`}>{iconLeft}</span>}
+          <div
+            ref={triggerCallbackRef}
+            className={wrapperCls}
+            onClick={() => inputRef.current?.focus()}
+            aria-label={label}
+          >
+            {iconLeft && (
+              <span className={`${base}__icon-left`}>{iconLeft}</span>
+            )}
             {tokens}
             {!atMax && (
-              <input ref={inputRef} id={inputId} className={`${base}__tokens-input`} type="text" value={inputText} onChange={handleMultipleInputChange} onFocus={handleFocus} onBlur={handleBlur} onKeyDown={handleKeyDown} placeholder={multiItems.length === 0 ? placeholder : undefined} disabled={disabled} readOnly={readOnly} aria-required={required || undefined} autoComplete="off" />
+              <input
+                ref={inputRef}
+                id={inputId}
+                className={`${base}__tokens-input`}
+                type="text"
+                value={inputText}
+                onChange={handleMultipleInputChange}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                onKeyDown={handleKeyDown}
+                placeholder={multiItems.length === 0 ? placeholder : undefined}
+                disabled={disabled}
+                readOnly={readOnly}
+                aria-required={required || undefined}
+                autoComplete="off"
+              />
             )}
-            {iconRight && <span className={`${base}__icon-right`}>{iconRight}</span>}
+            {iconRight && (
+              <span className={`${base}__icon-right`}>{iconRight}</span>
+            )}
           </div>
-          {hasError && errorMessage && <span className={`${base}__error`} role="alert">{errorMessage}</span>}
-          {helperText && <span className={`${base}__helper`}>{helperText}</span>}
-          {name && multiItems.map((i) => <input key={i.value} type="hidden" name={name} value={i.value} />)}
+          {hasError && errorMessage && (
+            <span className={`${base}__error`} role="alert">
+              {errorMessage}
+            </span>
+          )}
+          {helperText && (
+            <span className={`${base}__helper`}>{helperText}</span>
+          )}
+          {name &&
+            multiItems.map(i => (
+              <input key={i.value} type="hidden" name={name} value={i.value} />
+            ))}
           {panel}
         </div>
       );
@@ -489,12 +702,40 @@ export const AutoComplete = forwardRef<HTMLInputElement, AutoCompleteProps>(
 
     // --- Single render ---
     return (
-      <div ref={wrapperRef} className={`${base}${fullWidth ? ` ${base}--full-width` : ''} ${className}`} style={style}>
-        <Input ref={inputRef} type="text" name={name} value={singleValue} onChange={handleSingleChange} onFocus={handleFocus} onBlur={handleBlur} onKeyDown={handleKeyDown} variant={variant} size={size} label={label} placeholder={placeholder} iconLeft={iconLeft} iconRight={iconRight} helperText={helperText} error={error} success={success} helperSeverity={helperSeverity} disabled={disabled} readOnly={readOnly} required={required} fullWidth={fullWidth} autoComplete="off" />
+      <div
+        ref={wrapperRef}
+        className={`${base}${fullWidth ? ` ${base}--full-width` : ""} ${className}`}
+        style={style}
+      >
+        <Input
+          ref={inputRef}
+          type="text"
+          name={name}
+          value={singleValue}
+          onChange={handleSingleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+          variant={variant}
+          size={size}
+          label={label}
+          placeholder={placeholder}
+          iconLeft={iconLeft}
+          iconRight={iconRight}
+          helperText={helperText}
+          error={error}
+          success={success}
+          helperSeverity={helperSeverity}
+          disabled={disabled}
+          readOnly={readOnly}
+          required={required}
+          fullWidth={fullWidth}
+          autoComplete="off"
+        />
         {panel}
       </div>
     );
-  },
+  }
 );
 
-AutoComplete.displayName = 'AutoComplete';
+AutoComplete.displayName = "AutoComplete";

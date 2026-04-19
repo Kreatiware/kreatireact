@@ -1,8 +1,19 @@
-import React, { forwardRef, useState, useRef, useEffect, useCallback } from 'react';
-import './Carousel.css';
-import { Button } from './Button';
-import { useKreatiLocale } from '../locale';
-import { CHEVRON_LEFT_PATH, CHEVRON_RIGHT_PATH, CHEVRON_DOWN_PATH, CHEVRON_UP_PATH } from './iconPaths';
+import React, {
+  forwardRef,
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+} from "react";
+import "./Carousel.css";
+import { Button } from "./Button";
+import { useKreatiLocale } from "../locale";
+import {
+  CHEVRON_LEFT_PATH,
+  CHEVRON_RIGHT_PATH,
+  CHEVRON_DOWN_PATH,
+  CHEVRON_UP_PATH,
+} from "./iconPaths";
 
 /** Single item in the carousel */
 export interface CarouselItem {
@@ -22,15 +33,23 @@ export interface CarouselProps {
   /** Custom template for each item. Receives item and index. */
   itemTemplate?: (item: CarouselItem, index: number) => React.ReactNode;
   /** Custom template for navigation arrows. Receives direction, onClick, disabled. */
-  navigationTemplate?: (direction: 'prev' | 'next', onClick: () => void, disabled: boolean) => React.ReactNode;
+  navigationTemplate?: (
+    direction: "prev" | "next",
+    onClick: () => void,
+    disabled: boolean
+  ) => React.ReactNode;
   /** Custom template for indicators. Receives total, active index, goTo function. */
-  indicatorTemplate?: (total: number, activeIndex: number, goTo: (index: number) => void) => React.ReactNode;
+  indicatorTemplate?: (
+    total: number,
+    activeIndex: number,
+    goTo: (index: number) => void
+  ) => React.ReactNode;
   /** Number of visible items at once. Default: 1 */
   visibleItems?: number;
   /** Number of items to scroll per step. Default: 1 */
   scrollStep?: number;
   /** Scroll direction. Default: 'horizontal' */
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: "horizontal" | "vertical";
   /** Enable infinite circular scrolling. Default: false */
   circular?: boolean;
   /** Autoplay interval in ms. 0 = disabled. Default: 0 */
@@ -42,7 +61,7 @@ export interface CarouselProps {
   /** Show indicator dots/stepper. Default: true */
   showIndicators?: boolean;
   /** Indicator style. Default: 'dots' */
-  indicatorType?: 'dots' | 'numbers' | 'fraction';
+  indicatorType?: "dots" | "numbers" | "fraction";
   /** Callback when active page changes */
   onPageChange?: (page: number) => void;
   /** Additional CSS class */
@@ -52,7 +71,13 @@ export interface CarouselProps {
 }
 
 const iconSvg = (path: string) => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
     <path d={path} />
   </svg>
 );
@@ -76,21 +101,21 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
       indicatorTemplate,
       visibleItems = 1,
       scrollStep = 1,
-      orientation = 'horizontal',
+      orientation = "horizontal",
       circular = false,
       autoplay = 0,
       pauseOnHover = true,
       showNavigation = true,
       showIndicators = true,
-      indicatorType = 'dots',
+      indicatorType = "dots",
       onPageChange,
       className,
       style,
     },
-    ref,
+    ref
   ) => {
     const locale = useKreatiLocale();
-    const isHorizontal = orientation === 'horizontal';
+    const isHorizontal = orientation === "horizontal";
     const total = items.length;
     const maxIndex = Math.max(0, total - visibleItems);
 
@@ -103,22 +128,31 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
 
     const displayIndex = ((realIndex % total) + total) % total;
 
-    const goTo = useCallback((next: number) => {
-      if (transitioning) return;
-      if (circular) {
-        setTransitioning(true);
-        setRealIndex(next);
-        onPageChange?.(((next % total) + total) % total);
-      } else {
-        const clamped = Math.max(0, Math.min(maxIndex, next));
-        setTransitioning(true);
-        setRealIndex(clamped);
-        onPageChange?.(clamped);
-      }
-    }, [transitioning, circular, total, maxIndex, onPageChange]);
+    const goTo = useCallback(
+      (next: number) => {
+        if (transitioning) return;
+        if (circular) {
+          setTransitioning(true);
+          setRealIndex(next);
+          onPageChange?.(((next % total) + total) % total);
+        } else {
+          const clamped = Math.max(0, Math.min(maxIndex, next));
+          setTransitioning(true);
+          setRealIndex(clamped);
+          onPageChange?.(clamped);
+        }
+      },
+      [transitioning, circular, total, maxIndex, onPageChange]
+    );
 
-    const prev = useCallback(() => goTo(realIndex - scrollStep), [goTo, realIndex, scrollStep]);
-    const next = useCallback(() => goTo(realIndex + scrollStep), [goTo, realIndex, scrollStep]);
+    const prev = useCallback(
+      () => goTo(realIndex - scrollStep),
+      [goTo, realIndex, scrollStep]
+    );
+    const next = useCallback(
+      () => goTo(realIndex + scrollStep),
+      [goTo, realIndex, scrollStep]
+    );
 
     /* End of transition */
     const onTransitionEnd = useCallback(() => {
@@ -143,12 +177,21 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
 
     /* Keyboard */
     const onKeyDown = (e: React.KeyboardEvent) => {
-      const prevKey = isHorizontal ? 'ArrowLeft' : 'ArrowUp';
-      const nextKey = isHorizontal ? 'ArrowRight' : 'ArrowDown';
-      if (e.key === prevKey) { e.preventDefault(); prev(); }
-      else if (e.key === nextKey) { e.preventDefault(); next(); }
-      else if (e.key === 'Home') { e.preventDefault(); goTo(0); }
-      else if (e.key === 'End') { e.preventDefault(); goTo(circular ? total - 1 : maxIndex); }
+      const prevKey = isHorizontal ? "ArrowLeft" : "ArrowUp";
+      const nextKey = isHorizontal ? "ArrowRight" : "ArrowDown";
+      if (e.key === prevKey) {
+        e.preventDefault();
+        prev();
+      } else if (e.key === nextKey) {
+        e.preventDefault();
+        next();
+      } else if (e.key === "Home") {
+        e.preventDefault();
+        goTo(0);
+      } else if (e.key === "End") {
+        e.preventDefault();
+        goTo(circular ? total - 1 : maxIndex);
+      }
     };
 
     /* Build visible window of items */
@@ -170,7 +213,8 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
     useEffect(() => {
       const el = viewportRef.current;
       if (!el) return;
-      const measure = () => setViewportSize(isHorizontal ? el.offsetWidth : el.offsetHeight);
+      const measure = () =>
+        setViewportSize(isHorizontal ? el.offsetWidth : el.offsetHeight);
       measure();
       const ro = new ResizeObserver(measure);
       ro.observe(el);
@@ -181,8 +225,8 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
     const trackOffset = (realIndex + baseOffset) * itemSize;
 
     const trackStyle: React.CSSProperties = {
-      display: 'flex',
-      flexDirection: isHorizontal ? 'row' : 'column',
+      display: "flex",
+      flexDirection: isHorizontal ? "row" : "column",
       transform: isHorizontal
         ? `translateX(-${trackOffset}px)`
         : `translateY(-${trackOffset}px)`,
@@ -198,18 +242,22 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
     const nextIconPath = isHorizontal ? CHEVRON_RIGHT_PATH : CHEVRON_DOWN_PATH;
     const pageCount = circular ? total : maxIndex + 1;
 
-    const renderNav = (dir: 'prev' | 'next') => {
-      const onClick = dir === 'prev' ? prev : next;
-      const disabled = dir === 'prev' ? prevDisabled : nextDisabled;
+    const renderNav = (dir: "prev" | "next") => {
+      const onClick = dir === "prev" ? prev : next;
+      const disabled = dir === "prev" ? prevDisabled : nextDisabled;
       if (navigationTemplate) return navigationTemplate(dir, onClick, disabled);
       return (
         <Button
           className={`k-carousel__nav k-carousel__nav--${dir}`}
-          iconLeft={iconSvg(dir === 'prev' ? prevIconPath : nextIconPath)}
+          iconLeft={iconSvg(dir === "prev" ? prevIconPath : nextIconPath)}
           buttonType="outlined"
           severity="secondary"
           size="sm"
-          ariaLabel={dir === 'prev' ? (locale?.common?.previous || 'Previous') : (locale?.common?.next || 'Next')}
+          ariaLabel={
+            dir === "prev"
+              ? locale?.common?.previous || "Previous"
+              : locale?.common?.next || "Next"
+          }
           onClick={onClick}
           disabled={disabled}
         />
@@ -219,57 +267,68 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
     return (
       <div
         ref={ref}
-        className={`k-carousel k-carousel--${orientation} ${className || ''}`}
+        className={`k-carousel k-carousel--${orientation} ${className || ""}`}
         style={style}
         role="region"
         aria-roledescription="carousel"
-        aria-label={locale?.common?.carousel || 'Carousel'}
+        aria-label={locale?.common?.carousel || "Carousel"}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onKeyDown={onKeyDown}
         tabIndex={0}
       >
         <div className="k-carousel__body">
-          {showNavigation && renderNav('prev')}
+          {showNavigation && renderNav("prev")}
 
           <div className="k-carousel__viewport" ref={viewportRef}>
-            <div className={`k-carousel__track ${transitioning ? 'k-carousel__track--moving' : ''}`} style={trackStyle} onTransitionEnd={onTransitionEnd} aria-live="off">
+            <div
+              className={`k-carousel__track ${transitioning ? "k-carousel__track--moving" : ""}`}
+              style={trackStyle}
+              onTransitionEnd={onTransitionEnd}
+              aria-live="off"
+            >
               {slides.map((s, i) => (
                 <div
                   key={`${s.index}-${i}`}
-                  className={`k-carousel__item ${s.item.className || ''}`}
+                  className={`k-carousel__item ${s.item.className || ""}`}
                   style={{ ...itemBaseStyle, ...s.item.style }}
                   role="group"
                   aria-roledescription="slide"
                   aria-label={`${s.index + 1} / ${total}`}
                 >
-                  {itemTemplate ? itemTemplate(s.item, s.index) : s.item.content}
+                  {itemTemplate
+                    ? itemTemplate(s.item, s.index)
+                    : s.item.content}
                 </div>
               ))}
             </div>
           </div>
 
-          {showNavigation && renderNav('next')}
+          {showNavigation && renderNav("next")}
         </div>
 
-        {showIndicators && indicatorTemplate && indicatorTemplate(pageCount, displayIndex, (i) => goTo(i))}
+        {showIndicators &&
+          indicatorTemplate &&
+          indicatorTemplate(pageCount, displayIndex, i => goTo(i))}
 
         {showIndicators && !indicatorTemplate && (
           <div className="k-carousel__indicators" role="tablist">
-            {indicatorType === 'fraction' ? (
-              <span className="k-carousel__fraction">{displayIndex + 1} / {total}</span>
+            {indicatorType === "fraction" ? (
+              <span className="k-carousel__fraction">
+                {displayIndex + 1} / {total}
+              </span>
             ) : (
               Array.from({ length: pageCount }).map((_, i) => (
                 <button
                   key={i}
-                  className={`k-carousel__indicator ${indicatorType === 'numbers' ? 'k-carousel__indicator--numbered' : ''} ${i === displayIndex ? 'k-carousel__indicator--active' : ''}`}
+                  className={`k-carousel__indicator ${indicatorType === "numbers" ? "k-carousel__indicator--numbered" : ""} ${i === displayIndex ? "k-carousel__indicator--active" : ""}`}
                   onClick={() => goTo(i)}
                   role="tab"
                   aria-selected={i === displayIndex}
-                  aria-label={`${locale?.common?.page || 'Page'} ${i + 1}`}
+                  aria-label={`${locale?.common?.page || "Page"} ${i + 1}`}
                   type="button"
                 >
-                  {indicatorType === 'numbers' ? i + 1 : null}
+                  {indicatorType === "numbers" ? i + 1 : null}
                 </button>
               ))
             )}
@@ -277,7 +336,7 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
         )}
       </div>
     );
-  },
+  }
 );
 
-Carousel.displayName = 'Carousel';
+Carousel.displayName = "Carousel";

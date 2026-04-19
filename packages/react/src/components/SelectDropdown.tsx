@@ -1,5 +1,11 @@
-import React, { useRef, useState, useEffect, useCallback, useMemo } from 'react';
-import { useKreatiLocale } from '../locale';
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
+import { useKreatiLocale } from "../locale";
 
 export interface SelectOption {
   /** Unique value */
@@ -29,7 +35,10 @@ export interface SelectDropdownProps {
   filterPlaceholder?: string;
   focusedIndex: number;
   virtualScroll?: boolean;
-  optionTemplate?: (option: SelectOption, state: { selected: boolean; focused: boolean; disabled: boolean }) => React.ReactNode;
+  optionTemplate?: (
+    option: SelectOption,
+    state: { selected: boolean; focused: boolean; disabled: boolean }
+  ) => React.ReactNode;
   groupTemplate?: (group: SelectGroup) => React.ReactNode;
   emptyMessage?: string;
   onSelect: (option: SelectOption) => void;
@@ -39,10 +48,10 @@ export interface SelectDropdownProps {
   dropdownId: string;
   autoFocusFilter?: boolean;
   /** Size variant for font scaling */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
 }
 
-import { SEARCH_PATH } from './iconPaths';
+import { SEARCH_PATH } from "./iconPaths";
 
 const ITEM_HEIGHT = 36;
 
@@ -55,66 +64,80 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
   groups,
   value,
   filterable,
-  filterPlaceholder = 'Search...',
+  filterPlaceholder = "Search...",
   focusedIndex,
   virtualScroll = false,
   optionTemplate,
   groupTemplate,
-  emptyMessage = 'No results found',
+  emptyMessage = "No results found",
   onSelect,
   onMouseEnterOption,
   onFilterChange,
   onKeyDown,
   dropdownId,
   autoFocusFilter = true,
-  size = 'md',
+  size = "md",
 }) => {
   const listRef = useRef<HTMLDivElement>(null);
   const filterRef = useRef<HTMLInputElement>(null);
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState("");
   const kreatiLocale = useKreatiLocale();
-  const base = 'k-select';
+  const base = "k-select";
 
   useEffect(() => {
-    if (filterable && autoFocusFilter && filterRef.current) filterRef.current.focus();
+    if (filterable && autoFocusFilter && filterRef.current)
+      filterRef.current.focus();
   }, [filterable, autoFocusFilter]);
 
-  const handleFilterChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setFilter(val);
-    onFilterChange(val);
-  }, [onFilterChange]);
+  const handleFilterChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value;
+      setFilter(val);
+      onFilterChange(val);
+    },
+    [onFilterChange]
+  );
 
   const filtered = useMemo(() => {
     if (!filterable || !filter) return options;
     const lower = filter.toLowerCase();
-    return options.filter((o) => o.label.toLowerCase().includes(lower));
+    return options.filter(o => o.label.toLowerCase().includes(lower));
   }, [options, filter, filterable]);
 
   const flatItems = useMemo(() => {
-    if (!groups || groups.length === 0) return filtered.map((o, i) => ({ type: 'option' as const, option: o, flatIndex: i }));
+    if (!groups || groups.length === 0)
+      return filtered.map((o, i) => ({
+        type: "option" as const,
+        option: o,
+        flatIndex: i,
+      }));
 
-    const items: Array<{ type: 'group'; group: SelectGroup } | { type: 'option'; option: SelectOption; flatIndex: number }> = [];
+    const items: Array<
+      | { type: "group"; group: SelectGroup }
+      | { type: "option"; option: SelectOption; flatIndex: number }
+    > = [];
     let idx = 0;
     for (const g of groups) {
-      const groupOptions = filtered.filter((o) => o.group === g.key);
+      const groupOptions = filtered.filter(o => o.group === g.key);
       if (groupOptions.length === 0) continue;
-      items.push({ type: 'group', group: g });
+      items.push({ type: "group", group: g });
       for (const o of groupOptions) {
-        items.push({ type: 'option', option: o, flatIndex: idx++ });
+        items.push({ type: "option", option: o, flatIndex: idx++ });
       }
     }
-    const ungrouped = filtered.filter((o) => !o.group);
+    const ungrouped = filtered.filter(o => !o.group);
     for (const o of ungrouped) {
-      items.push({ type: 'option', option: o, flatIndex: idx++ });
+      items.push({ type: "option", option: o, flatIndex: idx++ });
     }
     return items;
   }, [filtered, groups]);
 
   const scrollToFocused = useCallback(() => {
     if (!listRef.current || focusedIndex < 0) return;
-    const el = listRef.current.querySelector(`[data-index="${focusedIndex}"]`) as HTMLElement | null;
-    if (el) el.scrollIntoView({ block: 'nearest' });
+    const el = listRef.current.querySelector(
+      `[data-index="${focusedIndex}"]`
+    ) as HTMLElement | null;
+    if (el) el.scrollIntoView({ block: "nearest" });
   }, [focusedIndex]);
 
   useEffect(() => {
@@ -123,7 +146,14 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
 
   const filterBar = filterable ? (
     <div className={`${base}__filter`}>
-      <svg className={`${base}__filter-icon`} width={14} height={14} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <svg
+        className={`${base}__filter-icon`}
+        width={14}
+        height={14}
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+      >
         <path d={SEARCH_PATH} />
       </svg>
       <input
@@ -148,8 +178,11 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
     if (virtualScroll && !groups) {
       const totalHeight = filtered.length * ITEM_HEIGHT;
       return (
-        <div ref={listRef} className={`${base}__options ${base}__options--virtual`}>
-          <div style={{ height: totalHeight, position: 'relative' }}>
+        <div
+          ref={listRef}
+          className={`${base}__options ${base}__options--virtual`}
+        >
+          <div style={{ height: totalHeight, position: "relative" }}>
             <VirtualItems
               options={filtered}
               value={value}
@@ -168,9 +201,14 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
     return (
       <div ref={listRef} className={`${base}__options`}>
         {flatItems.map((item, i) => {
-          if (item.type === 'group') {
+          if (item.type === "group") {
             return (
-              <div key={`g-${item.group.key}`} className={`${base}__group-header`} role="presentation" aria-hidden="true">
+              <div
+                key={`g-${item.group.key}`}
+                className={`${base}__group-header`}
+                role="presentation"
+                aria-hidden="true"
+              >
                 {groupTemplate ? groupTemplate(item.group) : item.group.label}
               </div>
             );
@@ -188,7 +226,9 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
                 selected && `${base}__option--selected`,
                 focused && `${base}__option--focused`,
                 option.disabled && `${base}__option--disabled`,
-              ].filter(Boolean).join(' ')}
+              ]
+                .filter(Boolean)
+                .join(" ")}
               role="option"
               aria-selected={selected}
               aria-disabled={option.disabled || undefined}
@@ -197,7 +237,11 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
               onMouseEnter={() => onMouseEnterOption(flatIndex)}
             >
               {optionTemplate
-                ? optionTemplate(option, { selected, focused, disabled: !!option.disabled })
+                ? optionTemplate(option, {
+                    selected,
+                    focused,
+                    disabled: !!option.disabled,
+                  })
                 : option.label}
             </div>
           );
@@ -207,7 +251,11 @@ export const SelectDropdown: React.FC<SelectDropdownProps> = ({
   };
 
   return (
-    <div className={`${base}__dropdown ${base}__container--${size}`} role="listbox" id={dropdownId}>
+    <div
+      className={`${base}__dropdown ${base}__container--${size}`}
+      role="listbox"
+      id={dropdownId}
+    >
       {filterBar}
       {renderOptions()}
     </div>
@@ -218,7 +266,7 @@ interface VirtualItemsProps {
   options: SelectOption[];
   value?: string | number | null;
   focusedIndex: number;
-  optionTemplate?: SelectDropdownProps['optionTemplate'];
+  optionTemplate?: SelectDropdownProps["optionTemplate"];
   onSelect: (option: SelectOption) => void;
   onMouseEnterOption: (index: number) => void;
   containerRef: React.RefObject<HTMLDivElement>;
@@ -243,8 +291,8 @@ const VirtualItems: React.FC<VirtualItemsProps> = ({
     if (!el) return;
     setContainerHeight(el.clientHeight);
     const onScroll = () => setScrollTop(el.scrollTop);
-    el.addEventListener('scroll', onScroll, { passive: true });
-    return () => el.removeEventListener('scroll', onScroll);
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
   }, [containerRef]);
 
   const startIdx = Math.max(0, Math.floor(scrollTop / ITEM_HEIGHT) - 2);
@@ -265,19 +313,31 @@ const VirtualItems: React.FC<VirtualItemsProps> = ({
           selected && `${base}__option--selected`,
           focused && `${base}__option--focused`,
           option.disabled && `${base}__option--disabled`,
-        ].filter(Boolean).join(' ')}
+        ]
+          .filter(Boolean)
+          .join(" ")}
         role="option"
         aria-selected={selected}
         aria-disabled={option.disabled || undefined}
         data-index={i}
-        style={{ position: 'absolute', top: i * ITEM_HEIGHT, left: 0, right: 0, height: ITEM_HEIGHT }}
+        style={{
+          position: "absolute",
+          top: i * ITEM_HEIGHT,
+          left: 0,
+          right: 0,
+          height: ITEM_HEIGHT,
+        }}
         onClick={option.disabled ? undefined : () => onSelect(option)}
         onMouseEnter={() => onMouseEnterOption(i)}
       >
         {optionTemplate
-          ? optionTemplate(option, { selected, focused, disabled: !!option.disabled })
+          ? optionTemplate(option, {
+              selected,
+              focused,
+              disabled: !!option.disabled,
+            })
           : option.label}
-      </div>,
+      </div>
     );
   }
 

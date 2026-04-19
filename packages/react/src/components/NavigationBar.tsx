@@ -1,9 +1,15 @@
-import React, { useState, useRef, useEffect, useCallback, forwardRef } from 'react';
-import './NavigationBar.css';
-import { MenuItem, NavigationRouter } from '../types/navigation';
-import { CHEVRON_DOWN_PATH, HAMBURGER_RECTS } from './iconPaths';
-import { Drawer } from './Drawer';
-import { SideMenu } from './SideMenu';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  forwardRef,
+} from "react";
+import "./NavigationBar.css";
+import { MenuItem, NavigationRouter } from "../types/navigation";
+import { CHEVRON_DOWN_PATH, HAMBURGER_RECTS } from "./iconPaths";
+import { Drawer } from "./Drawer";
+import { SideMenu } from "./SideMenu";
 
 /**
  * Props for the NavigationBar component
@@ -54,37 +60,37 @@ export interface NavigationBarProps {
 export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
   (
     {
-      logo = 'LOGO',
+      logo = "LOGO",
       start = [
-        { key: 'about', label: 'About', url: '#about' },
-        { key: 'projects', label: 'Projects', url: '#projects' },
+        { key: "about", label: "About", url: "#about" },
+        { key: "projects", label: "Projects", url: "#projects" },
       ],
       end = [
-        { key: 'shop', label: 'Shop', url: '#shop' },
-        { key: 'contact', label: 'Contact', url: '#contact' },
+        { key: "shop", label: "Shop", url: "#shop" },
+        { key: "contact", label: "Contact", url: "#contact" },
       ],
       router,
       useRouter = false,
       transparent = true,
       mobileBreakpoint = 768,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
-    const baseClass = 'kreati-navbar';
+    const baseClass = "kreati-navbar";
     const classes = [
       baseClass,
       transparent ? `${baseClass}--transparent` : `${baseClass}--solid`,
       className,
     ]
       .filter(Boolean)
-      .join(' ');
+      .join(" ");
 
     useEffect(() => {
       const mq = window.matchMedia(`(max-width: ${mobileBreakpoint}px)`);
@@ -96,33 +102,34 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
         }
       };
       onChange(mq);
-      mq.addEventListener('change', onChange);
-      return () => mq.removeEventListener('change', onChange);
+      mq.addEventListener("change", onChange);
+      return () => mq.removeEventListener("change", onChange);
     }, [mobileBreakpoint]);
 
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
         const target = event.target as Node;
         const isOutside = Object.values(dropdownRefs.current).every(
-          (r) => r && !r.contains(target),
+          r => r && !r.contains(target)
         );
         if (isOutside) setOpenDropdown(null);
       };
 
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     useEffect(() => {
       const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
+        if (e.key === "Escape") {
           if (openDropdown) setOpenDropdown(null);
           if (mobileOpen) closeMobile();
         }
       };
 
-      document.addEventListener('keydown', handleKeyDown);
-      return () => document.removeEventListener('keydown', handleKeyDown);
+      document.addEventListener("keydown", handleKeyDown);
+      return () => document.removeEventListener("keydown", handleKeyDown);
     }, [openDropdown, mobileOpen]);
 
     const closeMobile = useCallback(() => {
@@ -161,7 +168,7 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
     };
 
     const handleItemKeyDown = (item: MenuItem, event: React.KeyboardEvent) => {
-      if (event.key === 'Enter' || event.key === ' ') {
+      if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
         handleItemClick(item, event as unknown as React.MouseEvent);
       }
@@ -169,31 +176,52 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
 
     const renderNavItem = (item: MenuItem, index: number) => {
       if (item.visible === false) return null;
-      if (item.separator) return <hr key={item.key || `sep-${index}`} className="kreati-navbar__separator" />;
+      if (item.separator)
+        return (
+          <hr
+            key={item.key || `sep-${index}`}
+            className="kreati-navbar__separator"
+          />
+        );
 
       const hasDropdown = item.items && item.items.length > 0;
       const isOpen = openDropdown === item.key;
 
       if (item.template) {
-        return <React.Fragment key={item.key}>{item.template(item)}</React.Fragment>;
+        return (
+          <React.Fragment key={item.key}>{item.template(item)}</React.Fragment>
+        );
       }
 
       const itemClasses = [
-        'kreati-navbar__link',
-        item.disabled && 'kreati-navbar__link--disabled',
-        hasDropdown && 'kreati-navbar__link--has-dropdown',
+        "kreati-navbar__link",
+        item.disabled && "kreati-navbar__link--disabled",
+        hasDropdown && "kreati-navbar__link--has-dropdown",
         item.className,
       ]
         .filter(Boolean)
-        .join(' ');
+        .join(" ");
 
       const content = (
         <>
-          {item.icon && <span className="kreati-navbar__link-icon" aria-hidden="true">{item.icon}</span>}
+          {item.icon && (
+            <span className="kreati-navbar__link-icon" aria-hidden="true">
+              {item.icon}
+            </span>
+          )}
           <span className="kreati-navbar__link-text">{item.label}</span>
           {hasDropdown && (
-            <span className={`kreati-navbar__link-arrow ${isOpen ? 'kreati-navbar__link-arrow--open' : ''}`} aria-hidden="true">
-              <svg width={18} height={18} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <span
+              className={`kreati-navbar__link-arrow ${isOpen ? "kreati-navbar__link-arrow--open" : ""}`}
+              aria-hidden="true"
+            >
+              <svg
+                width={18}
+                height={18}
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
                 <path d={CHEVRON_DOWN_PATH} />
               </svg>
             </span>
@@ -201,64 +229,82 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
         </>
       );
 
-      const linkElement = item.url && !item.command && !useRouter && !hasDropdown ? (
-        <a
-          key={item.key}
-          href={item.url}
-          target={item.target}
-          className={itemClasses}
-          style={item.style}
-          onClick={(e) => handleItemClick(item, e)}
-          onKeyDown={(e) => handleItemKeyDown(item, e)}
-          aria-haspopup={hasDropdown ? 'true' : undefined}
-          aria-expanded={hasDropdown ? isOpen : undefined}
-        >
-          {content}
-        </a>
-      ) : (
-        <button
-          key={item.key}
-          type="button"
-          className={itemClasses}
-          style={item.style}
-          onClick={(e) => handleItemClick(item, e)}
-          onKeyDown={(e) => handleItemKeyDown(item, e)}
-          disabled={item.disabled}
-          aria-haspopup={hasDropdown ? 'true' : undefined}
-          aria-expanded={hasDropdown ? isOpen : undefined}
-        >
-          {content}
-        </button>
-      );
+      const linkElement =
+        item.url && !item.command && !useRouter && !hasDropdown ? (
+          <a
+            key={item.key}
+            href={item.url}
+            target={item.target}
+            className={itemClasses}
+            style={item.style}
+            onClick={e => handleItemClick(item, e)}
+            onKeyDown={e => handleItemKeyDown(item, e)}
+            aria-haspopup={hasDropdown ? "true" : undefined}
+            aria-expanded={hasDropdown ? isOpen : undefined}
+          >
+            {content}
+          </a>
+        ) : (
+          <button
+            key={item.key}
+            type="button"
+            className={itemClasses}
+            style={item.style}
+            onClick={e => handleItemClick(item, e)}
+            onKeyDown={e => handleItemKeyDown(item, e)}
+            disabled={item.disabled}
+            aria-haspopup={hasDropdown ? "true" : undefined}
+            aria-expanded={hasDropdown ? isOpen : undefined}
+          >
+            {content}
+          </button>
+        );
 
       if (hasDropdown) {
         return (
           <div
             key={item.key}
             className="kreati-navbar__dropdown-wrapper"
-            ref={(el) => (dropdownRefs.current[item.key] = el)}
+            ref={el => (dropdownRefs.current[item.key] = el)}
           >
             {linkElement}
             {isOpen && (
-              <div className="kreati-navbar__dropdown" role="menu" aria-label={item.label}>
+              <div
+                className="kreati-navbar__dropdown"
+                role="menu"
+                aria-label={item.label}
+              >
                 {item.items!.map((subItem, subIndex) => {
                   if (subItem.visible === false) return null;
-                  if (subItem.separator) return <hr key={subItem.key || `sep-${subIndex}`} className="kreati-navbar__dropdown-separator" />;
-                  if (subItem.template) return <React.Fragment key={subItem.key}>{subItem.template(subItem)}</React.Fragment>;
+                  if (subItem.separator)
+                    return (
+                      <hr
+                        key={subItem.key || `sep-${subIndex}`}
+                        className="kreati-navbar__dropdown-separator"
+                      />
+                    );
+                  if (subItem.template)
+                    return (
+                      <React.Fragment key={subItem.key}>
+                        {subItem.template(subItem)}
+                      </React.Fragment>
+                    );
 
                   return (
                     <a
                       key={subItem.key}
-                      href={subItem.url || '#'}
+                      href={subItem.url || "#"}
                       target={subItem.target}
                       role="menuitem"
                       className={`kreati-navbar__dropdown-item ${
-                        subItem.disabled ? 'kreati-navbar__dropdown-item--disabled' : ''
-                      } ${subItem.className || ''}`}
+                        subItem.disabled
+                          ? "kreati-navbar__dropdown-item--disabled"
+                          : ""
+                      } ${subItem.className || ""}`}
                       style={subItem.style}
                       tabIndex={subItem.disabled ? -1 : 0}
                       aria-disabled={subItem.disabled || undefined}
-                      onClick={(e) => {
+                      onClick={e => {
                         if (subItem.disabled) {
                           e.preventDefault();
                           return;
@@ -277,7 +323,14 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
                         }
                       }}
                     >
-                      {subItem.icon && <span className="kreati-navbar__dropdown-item-icon" aria-hidden="true">{subItem.icon}</span>}
+                      {subItem.icon && (
+                        <span
+                          className="kreati-navbar__dropdown-item-icon"
+                          aria-hidden="true"
+                        >
+                          {subItem.icon}
+                        </span>
+                      )}
                       <span>{subItem.label}</span>
                     </a>
                   );
@@ -294,7 +347,13 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
     const allItems = [...start, ...end];
 
     return (
-      <nav ref={ref} className={classes} style={style} role="navigation" aria-label="Main navigation">
+      <nav
+        ref={ref}
+        className={classes}
+        style={style}
+        role="navigation"
+        aria-label="Main navigation"
+      >
         <div className="kreati-navbar__container">
           {!isMobile && (
             <>
@@ -303,7 +362,7 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
               </div>
 
               <div className="kreati-navbar__logo">
-                {typeof logo === 'string' ? (
+                {typeof logo === "string" ? (
                   <span className="kreati-navbar__logo-text">{logo}</span>
                 ) : (
                   logo
@@ -321,7 +380,7 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
               <span className="kreati-navbar__spacer" aria-hidden="true" />
 
               <div className="kreati-navbar__logo">
-                {typeof logo === 'string' ? (
+                {typeof logo === "string" ? (
                   <span className="kreati-navbar__logo-text">{logo}</span>
                 ) : (
                   logo
@@ -335,8 +394,24 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
                 aria-label="Open menu"
                 aria-expanded={mobileOpen}
               >
-                <svg width={24} height={24} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  {HAMBURGER_RECTS.map((r, i) => <rect key={i} x={r.x} y={r.y} width={r.width} height={r.height} rx=".57" ry=".57" />)}
+                <svg
+                  width={24}
+                  height={24}
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  {HAMBURGER_RECTS.map((r, i) => (
+                    <rect
+                      key={i}
+                      x={r.x}
+                      y={r.y}
+                      width={r.width}
+                      height={r.height}
+                      rx=".57"
+                      ry=".57"
+                    />
+                  ))}
                 </svg>
               </button>
             </>
@@ -363,7 +438,7 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
         )}
       </nav>
     );
-  },
+  }
 );
 
-NavigationBar.displayName = 'NavigationBar';
+NavigationBar.displayName = "NavigationBar";

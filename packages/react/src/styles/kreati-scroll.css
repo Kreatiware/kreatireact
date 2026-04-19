@@ -8,7 +8,8 @@
 .k-scroll-kreati,
 .k-scroll-visible {
   scrollbar-width: thin;
-  scrollbar-color: var(--kreati-scroll-thumb-color) var(--kreati-scroll-track-color);
+  scrollbar-color: var(--kreati-scroll-thumb-color)
+    var(--kreati-scroll-track-color);
 }
 
 .k-scroll-kreati::-webkit-scrollbar,
@@ -57,7 +58,8 @@
 }
 
 .k-scroll-kreati:hover {
-  scrollbar-color: var(--kreati-scroll-thumb-color) var(--kreati-scroll-track-color);
+  scrollbar-color: var(--kreati-scroll-thumb-color)
+    var(--kreati-scroll-track-color);
 }
 
 .k-scroll-kreati:hover::-webkit-scrollbar {

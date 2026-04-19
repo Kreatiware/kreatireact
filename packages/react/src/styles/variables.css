@@ -130,9 +130,9 @@
   --kreati-surface-active: var(--kreati-severity-primary-light);
 
   /* ─── Typography — Font Families ─────────────────────────────────────── */
-  --kreati-font-family-display: 'Raleway', 'Helvetica Neue', sans-serif;
-  --kreati-font-family-body: 'Inter', 'Helvetica', sans-serif;
-  --kreati-font-family-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --kreati-font-family-display: "Raleway", "Helvetica Neue", sans-serif;
+  --kreati-font-family-body: "Inter", "Helvetica", sans-serif;
+  --kreati-font-family-mono: "JetBrains Mono", "Courier New", monospace;
   --kreati-font-family: var(--kreati-font-family-body);
 
   /* ─── Typography — Font Sizes (hybrid scale: rem) ──────────────────── */
@@ -664,11 +664,13 @@
   --kreati-item-picker-border-radius: var(--kreati-radius-md);
   --kreati-item-picker-bg: var(--kreati-white);
   --kreati-item-picker-header-bg: var(--kreati-gray-50);
-  --kreati-item-picker-header-padding: var(--kreati-space-2) var(--kreati-space-3);
+  --kreati-item-picker-header-padding: var(--kreati-space-2)
+    var(--kreati-space-3);
   --kreati-item-picker-header-color: var(--kreati-gray-800);
   --kreati-item-picker-controls-gap: var(--kreati-space-2);
   --kreati-item-picker-drag-bg: var(--kreati-severity-primary-light);
-  --kreati-item-picker-drop-border: 0.125rem dashed var(--kreati-severity-primary);
+  --kreati-item-picker-drop-border: 0.125rem dashed
+    var(--kreati-severity-primary);
 
   /* ─── Component Tokens — Rating ────────────────────────────────── */
   --kreati-rating-color: var(--kreati-severity-warning);

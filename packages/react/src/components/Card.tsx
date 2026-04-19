@@ -1,5 +1,5 @@
-import React, { forwardRef, useId } from 'react';
-import './Card.css';
+import React, { forwardRef, useId } from "react";
+import "./Card.css";
 
 /**
  * Props for the Card component
@@ -18,7 +18,7 @@ export interface CardProps {
   /** Custom footer template */
   footer?: React.ReactNode;
   /** Visual variant */
-  variant?: 'default' | 'outlined' | 'elevated';
+  variant?: "default" | "outlined" | "elevated";
   /** Card body content */
   children?: React.ReactNode;
   /** Additional CSS class name */
@@ -51,16 +51,32 @@ export interface CardProps {
  * ```
  */
 export const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ title, subtitle, image, imageAlt = '', header, footer, variant = 'default', children, className = '', style }, ref) => {
-    const base = 'k-card';
+  (
+    {
+      title,
+      subtitle,
+      image,
+      imageAlt = "",
+      header,
+      footer,
+      variant = "default",
+      children,
+      className = "",
+      style,
+    },
+    ref
+  ) => {
+    const base = "k-card";
     const generatedId = useId();
     const titleId = title ? `${base}-title-${generatedId}` : undefined;
 
-    const classes = [base, `${base}--${variant}`, className].filter(Boolean).join(' ');
+    const classes = [base, `${base}--${variant}`, className]
+      .filter(Boolean)
+      .join(" ");
 
     const imageZone = image ? (
       <div className={`${base}__image`}>
-        {typeof image === 'string' ? <img src={image} alt={imageAlt} /> : image}
+        {typeof image === "string" ? <img src={image} alt={imageAlt} /> : image}
       </div>
     ) : header ? (
       <div className={`${base}__header`}>{header}</div>
@@ -77,7 +93,11 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         {imageZone}
         {(title || subtitle || children) && (
           <div className={`${base}__body`}>
-            {title && <div id={titleId} className={`${base}__title`}>{title}</div>}
+            {title && (
+              <div id={titleId} className={`${base}__title`}>
+                {title}
+              </div>
+            )}
             {subtitle && <div className={`${base}__subtitle`}>{subtitle}</div>}
             {children}
           </div>
@@ -85,7 +105,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         {footer && <div className={`${base}__footer`}>{footer}</div>}
       </div>
     );
-  },
+  }
 );
 
-Card.displayName = 'Card';
+Card.displayName = "Card";

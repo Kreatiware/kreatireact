@@ -6,7 +6,9 @@
   flex-direction: column;
 }
 
-.k-tree-select--full-width { width: 100%; }
+.k-tree-select--full-width {
+  width: 100%;
+}
 
 .k-tree-select__trigger {
   pointer-events: none;
@@ -24,7 +26,9 @@
   padding: var(--kreati-space-1) 0;
   opacity: 0;
   transform: translateY(0.25rem);
-  transition: opacity var(--kreati-transition-fast), transform var(--kreati-transition-fast);
+  transition:
+    opacity var(--kreati-transition-fast),
+    transform var(--kreati-transition-fast);
 }
 
 .k-tree-select__panel--visible {
@@ -61,5 +65,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .k-tree-select__panel { transition: none; }
+  .k-tree-select__panel {
+    transition: none;
+  }
 }

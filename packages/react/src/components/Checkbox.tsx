@@ -1,6 +1,13 @@
-import React, { forwardRef, useId, useRef, useState, useEffect, useImperativeHandle } from 'react';
-import { CHECK_PATH, MINUS_PATH } from './iconPaths';
-import './Checkbox.css';
+import React, {
+  forwardRef,
+  useId,
+  useRef,
+  useState,
+  useEffect,
+  useImperativeHandle,
+} from "react";
+import { CHECK_PATH, MINUS_PATH } from "./iconPaths";
+import "./Checkbox.css";
 
 export interface CheckboxProps {
   /** Checked state (controlled) */
@@ -14,9 +21,9 @@ export interface CheckboxProps {
   /** Label text next to the checkbox */
   label?: React.ReactNode;
   /** Label position relative to the box */
-  labelPosition?: 'left' | 'right';
+  labelPosition?: "left" | "right";
   /** Component size */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Custom content rendered inside the box when checked — replaces the default Check icon */
   checkedTemplate?: React.ReactNode;
   /** Custom content rendered inside the box when unchecked — empty by default */
@@ -28,7 +35,15 @@ export interface CheckboxProps {
   /** Error message or boolean */
   error?: React.ReactNode | boolean;
   /** Severity color for the helper text */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  helperSeverity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Success state — applies success border color */
   success?: boolean;
   /** Disabled state */
@@ -74,8 +89,8 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       indeterminate = false,
       value,
       label,
-      labelPosition = 'right',
-      size = 'md',
+      labelPosition = "right",
+      size = "md",
       checkedTemplate,
       uncheckedTemplate,
       indeterminateTemplate,
@@ -89,10 +104,10 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       name,
       onChange,
       onBlur,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const autoId = useId();
     const inputId = name || autoId;
@@ -100,37 +115,62 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     useImperativeHandle(ref, () => innerRef.current as HTMLInputElement);
 
     const isControlled = controlledChecked !== undefined;
-    const [internalChecked, setInternalChecked] = useState(defaultChecked ?? false);
+    const [internalChecked, setInternalChecked] = useState(
+      defaultChecked ?? false
+    );
     const isChecked = isControlled ? controlledChecked : internalChecked;
 
     const hasError = !!error;
-    const errorMessage = typeof error === 'boolean' ? undefined : error;
-    const base = 'k-checkbox';
+    const errorMessage = typeof error === "boolean" ? undefined : error;
+    const base = "k-checkbox";
 
     const helperId = `${inputId}-helper`;
     const errorId = `${inputId}-error`;
-    const describedBy = [hasError && errorId, helperText && helperId].filter(Boolean).join(' ') || undefined;
+    const describedBy =
+      [hasError && errorId, helperText && helperId].filter(Boolean).join(" ") ||
+      undefined;
 
     useEffect(() => {
       if (innerRef.current) innerRef.current.indeterminate = indeterminate;
     }, [indeterminate]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (readOnly) { e.preventDefault(); return; }
+      if (readOnly) {
+        e.preventDefault();
+        return;
+      }
       if (!isControlled) setInternalChecked(e.target.checked);
       onChange?.(e);
     };
 
-    const iconSize: Record<string, number> = { xs: 10, sm: 12, md: 14, lg: 18, xl: 22 };
+    const iconSize: Record<string, number> = {
+      xs: 10,
+      sm: 12,
+      md: 14,
+      lg: 18,
+      xl: 22,
+    };
 
     const defaultCheckIcon = (
-      <svg width={iconSize[size]} height={iconSize[size]} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <svg
+        width={iconSize[size]}
+        height={iconSize[size]}
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+      >
         <path d={CHECK_PATH} />
       </svg>
     );
 
     const defaultMinusIcon = (
-      <svg width={iconSize[size]} height={iconSize[size]} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <svg
+        width={iconSize[size]}
+        height={iconSize[size]}
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+      >
         <path d={MINUS_PATH} />
       </svg>
     );
@@ -153,7 +193,9 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       hasError && isActive && `${base}__box--error-active`,
       hasError && !isActive && `${base}__box--error`,
       disabled && `${base}__box--disabled`,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     const wrapperClasses = [
       base,
@@ -161,12 +203,18 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       disabled && `${base}--disabled`,
       readOnly && `${base}--readonly`,
       className,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     const labelEl = label ? (
       <span className={`${base}__label ${base}__label--${size}`}>
         {label}
-        {required && <span className={`${base}__required`} aria-hidden="true">*</span>}
+        {required && (
+          <span className={`${base}__required`} aria-hidden="true">
+            *
+          </span>
+        )}
       </span>
     ) : null;
 
@@ -189,22 +237,24 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             aria-invalid={hasError || undefined}
             aria-describedby={describedBy}
             aria-required={required || undefined}
-            aria-checked={indeterminate ? 'mixed' : undefined}
+            aria-checked={indeterminate ? "mixed" : undefined}
           />
-          <span className={boxClasses}>
-            {renderBoxContent()}
-          </span>
+          <span className={boxClasses}>{renderBoxContent()}</span>
           {labelEl}
         </label>
         {hasError && errorMessage && (
-          <span className={`${base}__error`} id={errorId} role="alert">{errorMessage}</span>
+          <span className={`${base}__error`} id={errorId} role="alert">
+            {errorMessage}
+          </span>
         )}
         {helperText && (
           <span
             className={[
               `${base}__helper`,
               helperSeverity && `${base}__helper--${helperSeverity}`,
-            ].filter(Boolean).join(' ')}
+            ]
+              .filter(Boolean)
+              .join(" ")}
             id={helperId}
           >
             {helperText}
@@ -212,7 +262,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         )}
       </div>
     );
-  },
+  }
 );
 
-Checkbox.displayName = 'Checkbox';
+Checkbox.displayName = "Checkbox";

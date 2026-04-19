@@ -92,16 +92,28 @@
 }
 
 /* ─── Sizes ───────────────────────────────────────────────────────── */
-.k-datatable--sm .k-datatable__table { font-size: var(--kreati-dt-font-size-sm); }
-.k-datatable--md .k-datatable__table { font-size: var(--kreati-dt-font-size-md); }
-.k-datatable--lg .k-datatable__table { font-size: var(--kreati-dt-font-size-lg); }
+.k-datatable--sm .k-datatable__table {
+  font-size: var(--kreati-dt-font-size-sm);
+}
+.k-datatable--md .k-datatable__table {
+  font-size: var(--kreati-dt-font-size-md);
+}
+.k-datatable--lg .k-datatable__table {
+  font-size: var(--kreati-dt-font-size-lg);
+}
 
 .k-datatable--sm .k-datatable__th,
-.k-datatable--sm .k-datatable__td { padding: var(--kreati-dt-cell-padding-sm); }
+.k-datatable--sm .k-datatable__td {
+  padding: var(--kreati-dt-cell-padding-sm);
+}
 .k-datatable--md .k-datatable__th,
-.k-datatable--md .k-datatable__td { padding: var(--kreati-dt-cell-padding-md); }
+.k-datatable--md .k-datatable__td {
+  padding: var(--kreati-dt-cell-padding-md);
+}
 .k-datatable--lg .k-datatable__th,
-.k-datatable--lg .k-datatable__td { padding: var(--kreati-dt-cell-padding-lg); }
+.k-datatable--lg .k-datatable__td {
+  padding: var(--kreati-dt-cell-padding-lg);
+}
 
 /* ─── Header Cells ────────────────────────────────────────────────── */
 .k-datatable__thead {
@@ -147,8 +159,12 @@
   min-width: 2rem;
 }
 
-.k-datatable__th--align-center .k-datatable__th-content { justify-content: center; }
-.k-datatable__th--align-right .k-datatable__th-content { justify-content: flex-end; }
+.k-datatable__th--align-center .k-datatable__th-content {
+  justify-content: center;
+}
+.k-datatable__th--align-right .k-datatable__th-content {
+  justify-content: flex-end;
+}
 
 /* ─── Sort Icon ───────────────────────────────────────────────────── */
 .k-datatable__sort-icon {
@@ -210,7 +226,9 @@
   padding: var(--kreati-space-3);
   opacity: 0;
   transform: translateY(-0.25rem);
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
   pointer-events: none;
 }
 
@@ -222,7 +240,7 @@
 
 /* Arrow */
 .k-datatable__filter-panel::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -0.375rem;
   left: 0.5rem;
@@ -273,7 +291,8 @@
   background: var(--kreati-dt-row-stripe-bg);
 }
 
-.k-datatable--striped.k-datatable--hover .k-datatable__tr:nth-child(even):hover {
+.k-datatable--striped.k-datatable--hover
+  .k-datatable__tr:nth-child(even):hover {
   background: var(--kreati-dt-row-hover-bg);
 }
 
@@ -302,8 +321,12 @@
   overflow-wrap: break-word;
 }
 
-.k-datatable__td--align-center { text-align: center; }
-.k-datatable__td--align-right { text-align: right; }
+.k-datatable__td--align-center {
+  text-align: center;
+}
+.k-datatable__td--align-right {
+  text-align: right;
+}
 
 .k-datatable__td--ellipsis {
   white-space: nowrap;
@@ -387,13 +410,21 @@
   background: var(--kreati-dt-row-selected-bg);
 }
 
-.k-datatable--striped .k-datatable__tr:nth-child(even) .k-datatable__td--frozen-left,
-.k-datatable--striped .k-datatable__tr:nth-child(even) .k-datatable__td--frozen-right {
+.k-datatable--striped
+  .k-datatable__tr:nth-child(even)
+  .k-datatable__td--frozen-left,
+.k-datatable--striped
+  .k-datatable__tr:nth-child(even)
+  .k-datatable__td--frozen-right {
   background: var(--kreati-dt-row-stripe-bg);
 }
 
-.k-datatable--striped.k-datatable--hover .k-datatable__tr:nth-child(even):hover .k-datatable__td--frozen-left,
-.k-datatable--striped.k-datatable--hover .k-datatable__tr:nth-child(even):hover .k-datatable__td--frozen-right {
+.k-datatable--striped.k-datatable--hover
+  .k-datatable__tr:nth-child(even):hover
+  .k-datatable__td--frozen-left,
+.k-datatable--striped.k-datatable--hover
+  .k-datatable__tr:nth-child(even):hover
+  .k-datatable__td--frozen-right {
   background: var(--kreati-dt-row-hover-bg-opaque);
 }
 
@@ -605,7 +636,9 @@
   border-radius: var(--kreati-radius-sm);
   cursor: pointer;
   color: var(--kreati-gray-500);
-  transition: transform 0.15s ease, color 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    color 0.15s ease;
   padding: 0;
 }
 
@@ -645,14 +678,16 @@
 }
 
 .k-datatable__resize-handle::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 20%;
   left: 0.1875rem;
   width: 0.0625rem;
   height: 60%;
   background: var(--kreati-white-alpha-25);
-  transition: background 0.15s ease, width 0.15s ease;
+  transition:
+    background 0.15s ease,
+    width 0.15s ease;
 }
 
 .k-datatable__th:hover .k-datatable__resize-handle::after {
@@ -679,9 +714,30 @@
   opacity: 0;
   transition: opacity 0.15s ease;
   background:
-    linear-gradient(135deg, transparent 50%, var(--kreati-severity-primary) 50%, var(--kreati-severity-primary) calc(50% + 0.0625rem), transparent calc(50% + 0.0625rem)) no-repeat bottom right / 0.75rem 0.75rem,
-    linear-gradient(135deg, transparent 50%, var(--kreati-severity-primary) 50%, var(--kreati-severity-primary) calc(50% + 0.0625rem), transparent calc(50% + 0.0625rem)) no-repeat bottom right / 0.5rem 0.5rem,
-    linear-gradient(135deg, transparent 50%, var(--kreati-severity-primary) 50%, var(--kreati-severity-primary) calc(50% + 0.0625rem), transparent calc(50% + 0.0625rem)) no-repeat bottom right / 0.25rem 0.25rem;
+    linear-gradient(
+        135deg,
+        transparent 50%,
+        var(--kreati-severity-primary) 50%,
+        var(--kreati-severity-primary) calc(50% + 0.0625rem),
+        transparent calc(50% + 0.0625rem)
+      )
+      no-repeat bottom right / 0.75rem 0.75rem,
+    linear-gradient(
+        135deg,
+        transparent 50%,
+        var(--kreati-severity-primary) 50%,
+        var(--kreati-severity-primary) calc(50% + 0.0625rem),
+        transparent calc(50% + 0.0625rem)
+      )
+      no-repeat bottom right / 0.5rem 0.5rem,
+    linear-gradient(
+        135deg,
+        transparent 50%,
+        var(--kreati-severity-primary) 50%,
+        var(--kreati-severity-primary) calc(50% + 0.0625rem),
+        transparent calc(50% + 0.0625rem)
+      )
+      no-repeat bottom right / 0.25rem 0.25rem;
 }
 
 .k-datatable__td:hover .k-datatable__cell-resize-grip {

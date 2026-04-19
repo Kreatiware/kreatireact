@@ -1,6 +1,12 @@
-import React, { forwardRef, useState, useCallback, useRef, useImperativeHandle } from 'react';
-import { CHEVRON_RIGHT_PATH } from './iconPaths';
-import './Tree.css';
+import React, {
+  forwardRef,
+  useState,
+  useCallback,
+  useRef,
+  useImperativeHandle,
+} from "react";
+import { CHEVRON_RIGHT_PATH } from "./iconPaths";
+import "./Tree.css";
 
 export interface TreeNode {
   /** Unique key */
@@ -39,17 +45,26 @@ export interface TreeProps {
   /** Allow multiple selection */
   multiple?: boolean;
   /** Custom render for each node */
-  nodeTemplate?: (node: TreeNode, state: { selected: boolean; expanded: boolean }) => React.ReactNode;
+  nodeTemplate?: (
+    node: TreeNode,
+    state: { selected: boolean; expanded: boolean }
+  ) => React.ReactNode;
   /** Additional CSS class names */
   className?: string;
   /** Inline styles */
   style?: React.CSSProperties;
 }
 
-const base = 'k-tree';
+const base = "k-tree";
 
 const ToggleIcon = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true">
+  <svg
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    width="1em"
+    height="1em"
+    aria-hidden="true"
+  >
     <path d={CHEVRON_RIGHT_PATH} />
   </svg>
 );
@@ -82,10 +97,10 @@ export const Tree = forwardRef<HTMLUListElement, TreeProps>(
       onToggle,
       multiple = false,
       nodeTemplate,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const elRef = useRef<HTMLUListElement>(null);
     useImperativeHandle(ref, () => elRef.current as HTMLUListElement);
@@ -94,26 +109,36 @@ export const Tree = forwardRef<HTMLUListElement, TreeProps>(
     const isExpandedControlled = controlledExpanded !== undefined;
 
     const [internalSelected, setInternalSelected] = useState<string[]>(
-      defaultSelectedKeys ? (Array.isArray(defaultSelectedKeys) ? defaultSelectedKeys : [defaultSelectedKeys]) : [],
+      defaultSelectedKeys
+        ? Array.isArray(defaultSelectedKeys)
+          ? defaultSelectedKeys
+          : [defaultSelectedKeys]
+        : []
     );
-    const [internalExpanded, setInternalExpanded] = useState<string[]>(defaultExpandedKeys ?? []);
+    const [internalExpanded, setInternalExpanded] = useState<string[]>(
+      defaultExpandedKeys ?? []
+    );
 
     const selected = new Set(
       isSelectedControlled
-        ? (Array.isArray(controlledSelected) ? controlledSelected : [controlledSelected])
-        : internalSelected,
+        ? Array.isArray(controlledSelected)
+          ? controlledSelected
+          : [controlledSelected]
+        : internalSelected
     );
-    const expanded = new Set(isExpandedControlled ? controlledExpanded : internalExpanded);
+    const expanded = new Set(
+      isExpandedControlled ? controlledExpanded : internalExpanded
+    );
 
     const toggleExpand = useCallback(
       (key: string) => {
         const next = expanded.has(key)
-          ? [...expanded].filter((k) => k !== key)
+          ? [...expanded].filter(k => k !== key)
           : [...expanded, key];
         if (!isExpandedControlled) setInternalExpanded(next);
         onToggle?.(next);
       },
-      [expanded, isExpandedControlled, onToggle],
+      [expanded, isExpandedControlled, onToggle]
     );
 
     const selectNode = useCallback(
@@ -122,7 +147,7 @@ export const Tree = forwardRef<HTMLUListElement, TreeProps>(
         let next: string[];
         if (multiple) {
           next = selected.has(node.key)
-            ? [...selected].filter((k) => k !== node.key)
+            ? [...selected].filter(k => k !== node.key)
             : [...selected, node.key];
         } else {
           next = selected.has(node.key) ? [] : [node.key];
@@ -130,27 +155,33 @@ export const Tree = forwardRef<HTMLUListElement, TreeProps>(
         if (!isSelectedControlled) setInternalSelected(next);
         onSelect?.(next, node);
       },
-      [selected, multiple, isSelectedControlled, onSelect],
+      [selected, multiple, isSelectedControlled, onSelect]
     );
 
     const handleKeyDown = useCallback(
       (e: React.KeyboardEvent, node: TreeNode, hasChildren: boolean) => {
         switch (e.key) {
-          case 'Enter':
-          case ' ':
+          case "Enter":
+          case " ":
             e.preventDefault();
             if (hasChildren) toggleExpand(node.key);
             else selectNode(node);
             break;
-          case 'ArrowRight':
-            if (hasChildren && !expanded.has(node.key)) { e.preventDefault(); toggleExpand(node.key); }
+          case "ArrowRight":
+            if (hasChildren && !expanded.has(node.key)) {
+              e.preventDefault();
+              toggleExpand(node.key);
+            }
             break;
-          case 'ArrowLeft':
-            if (hasChildren && expanded.has(node.key)) { e.preventDefault(); toggleExpand(node.key); }
+          case "ArrowLeft":
+            if (hasChildren && expanded.has(node.key)) {
+              e.preventDefault();
+              toggleExpand(node.key);
+            }
             break;
         }
       },
-      [selectNode, expanded, toggleExpand],
+      [selectNode, expanded, toggleExpand]
     );
 
     const renderNode = (node: TreeNode, level: number) => {
@@ -163,28 +194,46 @@ export const Tree = forwardRef<HTMLUListElement, TreeProps>(
         isSelected && `${base}__node--selected`,
         node.disabled && `${base}__node--disabled`,
         node.className,
-      ].filter(Boolean).join(' ');
+      ]
+        .filter(Boolean)
+        .join(" ");
 
       return (
-        <li key={node.key} role="treeitem" aria-expanded={hasChildren ? isExpanded : undefined} aria-selected={isSelected} aria-disabled={node.disabled || undefined}>
+        <li
+          key={node.key}
+          role="treeitem"
+          aria-expanded={hasChildren ? isExpanded : undefined}
+          aria-selected={isSelected}
+          aria-disabled={node.disabled || undefined}
+        >
           <div
             className={nodeCls}
             style={node.style}
             tabIndex={node.disabled ? -1 : 0}
-            onClick={() => { if (hasChildren) toggleExpand(node.key); if (!hasChildren) selectNode(node); }}
-            onKeyDown={(e) => handleKeyDown(e, node, hasChildren)}
+            onClick={() => {
+              if (hasChildren) toggleExpand(node.key);
+              if (!hasChildren) selectNode(node);
+            }}
+            onKeyDown={e => handleKeyDown(e, node, hasChildren)}
           >
-            <span className={`${base}__toggle${isExpanded ? ` ${base}__toggle--expanded` : ''}${!hasChildren ? ` ${base}__toggle--leaf` : ''}`}>
+            <span
+              className={`${base}__toggle${isExpanded ? ` ${base}__toggle--expanded` : ""}${!hasChildren ? ` ${base}__toggle--leaf` : ""}`}
+            >
               <ToggleIcon />
             </span>
             {node.icon && <span className={`${base}__icon`}>{node.icon}</span>}
             <span className={`${base}__label`}>
-              {nodeTemplate ? nodeTemplate(node, { selected: isSelected, expanded: isExpanded }) : node.label}
+              {nodeTemplate
+                ? nodeTemplate(node, {
+                    selected: isSelected,
+                    expanded: isExpanded,
+                  })
+                : node.label}
             </span>
           </div>
           {hasChildren && isExpanded && (
             <ul className={`${base}__subtree`} role="group">
-              {node.children!.map((child) => renderNode(child, level + 1))}
+              {node.children!.map(child => renderNode(child, level + 1))}
             </ul>
           )}
         </li>
@@ -192,11 +241,16 @@ export const Tree = forwardRef<HTMLUListElement, TreeProps>(
     };
 
     return (
-      <ul ref={elRef} className={`${base} ${className}`} style={style} role="tree">
-        {nodes.map((node) => renderNode(node, 0))}
+      <ul
+        ref={elRef}
+        className={`${base} ${className}`}
+        style={style}
+        role="tree"
+      >
+        {nodes.map(node => renderNode(node, 0))}
       </ul>
     );
-  },
+  }
 );
 
-Tree.displayName = 'Tree';
+Tree.displayName = "Tree";

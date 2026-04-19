@@ -39,7 +39,9 @@
   border-radius: var(--kreati-radius-sm);
   font-family: var(--kreati-font-family);
   font-size: var(--kreati-font-size-xxs);
-  transition: color var(--kreati-transition-fast), background var(--kreati-transition-fast);
+  transition:
+    color var(--kreati-transition-fast),
+    background var(--kreati-transition-fast);
 }
 
 .k-code__copy:hover {
@@ -99,18 +101,43 @@
 }
 
 /* ─── Token colors ─────────────────────────────────────────────────── */
-.k-code__token--keyword    { color: var(--kreati-code-keyword); }
-.k-code__token--string     { color: var(--kreati-code-string); }
-.k-code__token--number     { color: var(--kreati-code-number); }
-.k-code__token--comment    { color: var(--kreati-code-comment); font-style: italic; }
-.k-code__token--tag        { color: var(--kreati-code-tag); }
-.k-code__token--attr       { color: var(--kreati-code-attr); }
-.k-code__token--attr-value { color: var(--kreati-code-attr-value); }
-.k-code__token--property   { color: var(--kreati-code-property); }
-.k-code__token--selector   { color: var(--kreati-code-selector); }
-.k-code__token--function   { color: var(--kreati-code-function); }
-.k-code__token--operator   { color: var(--kreati-code-operator); }
-.k-code__token--punctuation { color: var(--kreati-code-punctuation); }
+.k-code__token--keyword {
+  color: var(--kreati-code-keyword);
+}
+.k-code__token--string {
+  color: var(--kreati-code-string);
+}
+.k-code__token--number {
+  color: var(--kreati-code-number);
+}
+.k-code__token--comment {
+  color: var(--kreati-code-comment);
+  font-style: italic;
+}
+.k-code__token--tag {
+  color: var(--kreati-code-tag);
+}
+.k-code__token--attr {
+  color: var(--kreati-code-attr);
+}
+.k-code__token--attr-value {
+  color: var(--kreati-code-attr-value);
+}
+.k-code__token--property {
+  color: var(--kreati-code-property);
+}
+.k-code__token--selector {
+  color: var(--kreati-code-selector);
+}
+.k-code__token--function {
+  color: var(--kreati-code-function);
+}
+.k-code__token--operator {
+  color: var(--kreati-code-operator);
+}
+.k-code__token--punctuation {
+  color: var(--kreati-code-punctuation);
+}
 
 /* ─── Reduced motion ───────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {

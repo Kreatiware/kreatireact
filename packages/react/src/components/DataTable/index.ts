@@ -1,4 +1,4 @@
-export { DataTable } from './DataTable';
+export { DataTable } from "./DataTable";
 export type {
   DataTableProps,
   DataTableRef,
@@ -18,4 +18,4 @@ export type {
   RowClassCallback,
   RowStyleCallback,
   RowExpansionTemplate,
-} from './types';
+} from "./types";

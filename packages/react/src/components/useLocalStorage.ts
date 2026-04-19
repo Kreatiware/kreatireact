@@ -1,4 +1,4 @@
-import { useSyncExternalStore, useCallback, useRef, useEffect } from 'react';
+import { useSyncExternalStore, useCallback, useRef, useEffect } from "react";
 
 /**
  * Hook that works like `useState` but persists the value in localStorage.
@@ -14,7 +14,10 @@ import { useSyncExternalStore, useCallback, useRef, useEffect } from 'react';
  * const [columns, setColumns] = useLocalStorage<string[]>('visible-cols', ['name', 'email']);
  * ```
  */
-export const useLocalStorage = <T>(key: string, initialValue: T): [T, (value: T | ((prev: T) => T)) => void] => {
+export const useLocalStorage = <T>(
+  key: string,
+  initialValue: T
+): [T, (value: T | ((prev: T) => T)) => void] => {
   const initialRef = useRef(initialValue);
 
   const getSnapshot = useCallback((): string => {
@@ -32,10 +35,10 @@ export const useLocalStorage = <T>(key: string, initialValue: T): [T, (value: T 
       const handler = (e: StorageEvent) => {
         if (e.key === key) cb();
       };
-      window.addEventListener('storage', handler);
-      return () => window.removeEventListener('storage', handler);
+      window.addEventListener("storage", handler);
+      return () => window.removeEventListener("storage", handler);
     },
-    [key],
+    [key]
   );
 
   const raw = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
@@ -44,13 +47,18 @@ export const useLocalStorage = <T>(key: string, initialValue: T): [T, (value: T 
   const setValue = useCallback(
     (next: T | ((prev: T) => T)) => {
       try {
-        const current: T = JSON.parse(localStorage.getItem(key) ?? JSON.stringify(initialRef.current));
-        const resolved = typeof next === 'function' ? (next as (prev: T) => T)(current) : next;
+        const current: T = JSON.parse(
+          localStorage.getItem(key) ?? JSON.stringify(initialRef.current)
+        );
+        const resolved =
+          typeof next === "function" ? (next as (prev: T) => T)(current) : next;
         localStorage.setItem(key, JSON.stringify(resolved));
-        window.dispatchEvent(new StorageEvent('storage', { key }));
-      } catch { /* noop */ }
+        window.dispatchEvent(new StorageEvent("storage", { key }));
+      } catch {
+        /* noop */
+      }
     },
-    [key],
+    [key]
   );
 
   return [value, setValue];

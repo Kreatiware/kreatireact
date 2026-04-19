@@ -32,10 +32,14 @@
   top: var(--kreati-segmented-track-padding);
   left: 0;
   height: calc(100% - var(--kreati-segmented-track-padding) * 2);
-  border-radius: calc(var(--kreati-radius-md) - var(--kreati-segmented-track-padding) / 2);
+  border-radius: calc(
+    var(--kreati-radius-md) - var(--kreati-segmented-track-padding) / 2
+  );
   background: var(--kreati-white);
   box-shadow: var(--kreati-shadow-sm);
-  transition: transform var(--kreati-transition-fast), width var(--kreati-transition-fast);
+  transition:
+    transform var(--kreati-transition-fast),
+    width var(--kreati-transition-fast);
   z-index: 0;
 }
 
@@ -56,7 +60,9 @@
   white-space: nowrap;
   transition: color var(--kreati-transition-fast);
   flex: 1;
-  border-radius: calc(var(--kreati-radius-md) - var(--kreati-segmented-track-padding) / 2);
+  border-radius: calc(
+    var(--kreati-radius-md) - var(--kreati-segmented-track-padding) / 2
+  );
   padding: 0 var(--kreati-space-4);
 }
 
@@ -87,55 +93,107 @@
 
 /* ─── Sizes ────────────────────────────────────────────────────────── */
 .k-segmented--xs .k-segmented__option {
-  height: calc(var(--kreati-input-height-xs) - var(--kreati-segmented-track-padding) * 2);
+  height: calc(
+    var(--kreati-input-height-xs) - var(--kreati-segmented-track-padding) * 2
+  );
   font-size: var(--kreati-font-size-xxs);
   padding: 0 var(--kreati-space-2);
 }
-.k-segmented--xs .k-segmented__icon svg { width: 0.75rem; height: 0.75rem; }
+.k-segmented--xs .k-segmented__icon svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
 
 .k-segmented--sm .k-segmented__option {
-  height: calc(var(--kreati-input-height-sm) - var(--kreati-segmented-track-padding) * 2);
+  height: calc(
+    var(--kreati-input-height-sm) - var(--kreati-segmented-track-padding) * 2
+  );
   font-size: var(--kreati-font-size-xs);
   padding: 0 var(--kreati-space-3);
 }
-.k-segmented--sm .k-segmented__icon svg { width: 0.875rem; height: 0.875rem; }
+.k-segmented--sm .k-segmented__icon svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
 
 .k-segmented--md .k-segmented__option {
-  height: calc(var(--kreati-input-height-md) - var(--kreati-segmented-track-padding) * 2);
+  height: calc(
+    var(--kreati-input-height-md) - var(--kreati-segmented-track-padding) * 2
+  );
   font-size: var(--kreati-font-size-sm);
 }
-.k-segmented--md .k-segmented__icon svg { width: 1rem; height: 1rem; }
+.k-segmented--md .k-segmented__icon svg {
+  width: 1rem;
+  height: 1rem;
+}
 
 .k-segmented--lg .k-segmented__option {
-  height: calc(var(--kreati-input-height-lg) - var(--kreati-segmented-track-padding) * 2);
+  height: calc(
+    var(--kreati-input-height-lg) - var(--kreati-segmented-track-padding) * 2
+  );
   font-size: var(--kreati-font-size-base);
   padding: 0 var(--kreati-space-5);
 }
-.k-segmented--lg .k-segmented__icon svg { width: 1.125rem; height: 1.125rem; }
+.k-segmented--lg .k-segmented__icon svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
 
 /* ─── Severity — subtle variant: white pill, active text colored ────── */
-.k-segmented--subtle.k-segmented--primary .k-segmented__option--active   { color: var(--kreati-severity-primary); }
-.k-segmented--subtle.k-segmented--secondary .k-segmented__option--active { color: var(--kreati-gray-700); }
-.k-segmented--subtle.k-segmented--success .k-segmented__option--active   { color: var(--kreati-severity-success); }
-.k-segmented--subtle.k-segmented--info .k-segmented__option--active      { color: var(--kreati-severity-info); }
-.k-segmented--subtle.k-segmented--warning .k-segmented__option--active   { color: var(--kreati-severity-warning); }
-.k-segmented--subtle.k-segmented--help .k-segmented__option--active      { color: var(--kreati-severity-help); }
-.k-segmented--subtle.k-segmented--danger .k-segmented__option--active    { color: var(--kreati-severity-danger); }
-.k-segmented--subtle.k-segmented--accent .k-segmented__option--active    { color: var(--kreati-severity-accent); }
+.k-segmented--subtle.k-segmented--primary .k-segmented__option--active {
+  color: var(--kreati-severity-primary);
+}
+.k-segmented--subtle.k-segmented--secondary .k-segmented__option--active {
+  color: var(--kreati-gray-700);
+}
+.k-segmented--subtle.k-segmented--success .k-segmented__option--active {
+  color: var(--kreati-severity-success);
+}
+.k-segmented--subtle.k-segmented--info .k-segmented__option--active {
+  color: var(--kreati-severity-info);
+}
+.k-segmented--subtle.k-segmented--warning .k-segmented__option--active {
+  color: var(--kreati-severity-warning);
+}
+.k-segmented--subtle.k-segmented--help .k-segmented__option--active {
+  color: var(--kreati-severity-help);
+}
+.k-segmented--subtle.k-segmented--danger .k-segmented__option--active {
+  color: var(--kreati-severity-danger);
+}
+.k-segmented--subtle.k-segmented--accent .k-segmented__option--active {
+  color: var(--kreati-severity-accent);
+}
 
 /* ─── Severity — default variant: pill takes severity color, white text ── */
 .k-segmented--default .k-segmented__option--active {
   color: var(--kreati-white);
 }
 
-.k-segmented--default.k-segmented--primary .k-segmented__pill   { background: var(--kreati-severity-primary); }
-.k-segmented--default.k-segmented--secondary .k-segmented__pill { background: var(--kreati-gray-600); }
-.k-segmented--default.k-segmented--success .k-segmented__pill   { background: var(--kreati-severity-success); }
-.k-segmented--default.k-segmented--info .k-segmented__pill      { background: var(--kreati-severity-info); }
-.k-segmented--default.k-segmented--warning .k-segmented__pill   { background: var(--kreati-severity-warning); }
-.k-segmented--default.k-segmented--help .k-segmented__pill      { background: var(--kreati-severity-help); }
-.k-segmented--default.k-segmented--danger .k-segmented__pill    { background: var(--kreati-severity-danger); }
-.k-segmented--default.k-segmented--accent .k-segmented__pill    { background: var(--kreati-severity-accent); }
+.k-segmented--default.k-segmented--primary .k-segmented__pill {
+  background: var(--kreati-severity-primary);
+}
+.k-segmented--default.k-segmented--secondary .k-segmented__pill {
+  background: var(--kreati-gray-600);
+}
+.k-segmented--default.k-segmented--success .k-segmented__pill {
+  background: var(--kreati-severity-success);
+}
+.k-segmented--default.k-segmented--info .k-segmented__pill {
+  background: var(--kreati-severity-info);
+}
+.k-segmented--default.k-segmented--warning .k-segmented__pill {
+  background: var(--kreati-severity-warning);
+}
+.k-segmented--default.k-segmented--help .k-segmented__pill {
+  background: var(--kreati-severity-help);
+}
+.k-segmented--default.k-segmented--danger .k-segmented__pill {
+  background: var(--kreati-severity-danger);
+}
+.k-segmented--default.k-segmented--accent .k-segmented__pill {
+  background: var(--kreati-severity-accent);
+}
 
 /* ─── Slim variant ─────────────────────────────────────────────────── */
 .k-segmented--slim .k-segmented__track {
@@ -145,17 +203,27 @@
 .k-segmented--slim .k-segmented__pill {
   top: var(--kreati-segmented-slim-padding);
   height: calc(100% - var(--kreati-segmented-slim-padding) * 2);
-  border-radius: calc(var(--kreati-radius-md) - var(--kreati-segmented-slim-padding) / 2);
+  border-radius: calc(
+    var(--kreati-radius-md) - var(--kreati-segmented-slim-padding) / 2
+  );
 }
 
 .k-segmented--slim.k-segmented--rounded .k-segmented__pill {
   border-radius: var(--kreati-radius-full);
 }
 
-.k-segmented--slim.k-segmented--xs .k-segmented__option { height: 1.25rem; }
-.k-segmented--slim.k-segmented--sm .k-segmented__option { height: 1.5rem; }
-.k-segmented--slim.k-segmented--md .k-segmented__option { height: 1.75rem; }
-.k-segmented--slim.k-segmented--lg .k-segmented__option { height: 2rem; }
+.k-segmented--slim.k-segmented--xs .k-segmented__option {
+  height: 1.25rem;
+}
+.k-segmented--slim.k-segmented--sm .k-segmented__option {
+  height: 1.5rem;
+}
+.k-segmented--slim.k-segmented--md .k-segmented__option {
+  height: 1.75rem;
+}
+.k-segmented--slim.k-segmented--lg .k-segmented__option {
+  height: 2rem;
+}
 
 /* ─── Rounded (pill) variant ────────────────────────────────────────── */
 .k-segmented--rounded .k-segmented__track {

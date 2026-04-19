@@ -1,11 +1,11 @@
-import React, { forwardRef, useRef, useImperativeHandle } from 'react';
-import './ButtonGroup.css';
+import React, { forwardRef, useRef, useImperativeHandle } from "react";
+import "./ButtonGroup.css";
 
 export interface ButtonGroupProps {
   /** Orientation of the group */
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: "horizontal" | "vertical";
   /** Component size — overrides children via CSS variable */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Disabled state for all children */
   disabled?: boolean;
   /** Additional CSS class names */
@@ -16,7 +16,7 @@ export interface ButtonGroupProps {
   children: React.ReactNode;
 }
 
-const base = 'k-btn-group';
+const base = "k-btn-group";
 
 /**
  * ButtonGroup component for grouping Buttons and ToggleButtons.
@@ -41,7 +41,17 @@ const base = 'k-btn-group';
  * ```
  */
 export const ButtonGroup = forwardRef<HTMLDivElement, ButtonGroupProps>(
-  ({ orientation = 'horizontal', size, disabled, className = '', style, children }, ref) => {
+  (
+    {
+      orientation = "horizontal",
+      size,
+      disabled,
+      className = "",
+      style,
+      children,
+    },
+    ref
+  ) => {
     const elRef = useRef<HTMLDivElement>(null);
     useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
 
@@ -51,14 +61,16 @@ export const ButtonGroup = forwardRef<HTMLDivElement, ButtonGroupProps>(
       size && `${base}--${size}`,
       disabled && `${base}--disabled`,
       className,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     return (
       <div ref={elRef} className={cls} style={style} role="group">
         {children}
       </div>
     );
-  },
+  }
 );
 
-ButtonGroup.displayName = 'ButtonGroup';
+ButtonGroup.displayName = "ButtonGroup";

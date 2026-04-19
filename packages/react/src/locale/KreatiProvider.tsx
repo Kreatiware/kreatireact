@@ -1,9 +1,25 @@
-import React, { createContext, useContext, useMemo, useEffect, useState, useCallback } from 'react';
-import type { KreatiLocale } from './types';
-import { en } from './en';
+import React, {
+  createContext,
+  useContext,
+  useMemo,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
+import type { KreatiLocale } from "./types";
+import { en } from "./en";
 
 /** Available built-in theme names */
-export type KreatiTheme = 'light' | 'dark' | 'midnight' | 'abyss' | 'soft' | 'arctic' | 'high-contrast' | 'kreati' | (string & {});
+export type KreatiTheme =
+  | "light"
+  | "dark"
+  | "midnight"
+  | "abyss"
+  | "soft"
+  | "arctic"
+  | "high-contrast"
+  | "kreati"
+  | (string & NonNullable<unknown>);
 
 interface KreatiContextValue {
   locale: KreatiLocale;
@@ -14,16 +30,16 @@ interface KreatiContextValue {
 
 const KreatiContext = createContext<KreatiContextValue>({
   locale: en,
-  theme: 'light',
+  theme: "light",
   setTheme: () => {},
-  resolvedTheme: 'light',
+  resolvedTheme: "light",
 });
 
 export interface KreatiProviderProps {
   /** Locale object — use built-in `en`/`es` or provide a custom one */
   locale?: Partial<KreatiLocale>;
   /** Theme name. Use `"auto"` to follow system preference (light/dark). Default: `"light"` */
-  theme?: KreatiTheme | 'auto';
+  theme?: KreatiTheme | "auto";
   /** Dark theme to use when `theme="auto"` and system prefers dark. Default: `"dark"` */
   darkTheme?: KreatiTheme;
   children: React.ReactNode;
@@ -47,36 +63,36 @@ export interface KreatiProviderProps {
  */
 export const KreatiProvider: React.FC<KreatiProviderProps> = ({
   locale,
-  theme = 'light',
-  darkTheme = 'dark',
+  theme = "light",
+  darkTheme = "dark",
   children,
 }) => {
   const [systemDark, setSystemDark] = useState(false);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
     setSystemDark(mq.matches);
     const handler = (e: MediaQueryListEvent) => setSystemDark(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
   }, []);
 
-  const [manualTheme, setManualTheme] = useState<KreatiTheme | 'auto'>(theme);
+  const [manualTheme, setManualTheme] = useState<KreatiTheme | "auto">(theme);
 
   useEffect(() => {
     setManualTheme(theme);
   }, [theme]);
 
   const resolvedTheme = useMemo<KreatiTheme>(() => {
-    if (manualTheme === 'auto') return systemDark ? darkTheme : 'light';
+    if (manualTheme === "auto") return systemDark ? darkTheme : "light";
     return manualTheme;
   }, [manualTheme, systemDark, darkTheme]);
 
   useEffect(() => {
-    if (typeof document === 'undefined') return;
-    document.documentElement.setAttribute('data-kreati-theme', resolvedTheme);
-    return () => document.documentElement.removeAttribute('data-kreati-theme');
+    if (typeof document === "undefined") return;
+    document.documentElement.setAttribute("data-kreati-theme", resolvedTheme);
+    return () => document.documentElement.removeAttribute("data-kreati-theme");
   }, [resolvedTheme]);
 
   const setTheme = useCallback((t: KreatiTheme) => setManualTheme(t), []);
@@ -106,14 +122,19 @@ export const KreatiProvider: React.FC<KreatiProviderProps> = ({
     };
   }, [locale]);
 
-  const value = useMemo(() => ({
-    locale: merged,
-    theme: manualTheme === 'auto' ? 'auto' as KreatiTheme : manualTheme,
-    setTheme,
-    resolvedTheme,
-  }), [merged, manualTheme, setTheme, resolvedTheme]);
+  const value = useMemo(
+    () => ({
+      locale: merged,
+      theme: manualTheme === "auto" ? ("auto" as KreatiTheme) : manualTheme,
+      setTheme,
+      resolvedTheme,
+    }),
+    [merged, manualTheme, setTheme, resolvedTheme]
+  );
 
-  return <KreatiContext.Provider value={value}>{children}</KreatiContext.Provider>;
+  return (
+    <KreatiContext.Provider value={value}>{children}</KreatiContext.Provider>
+  );
 };
 
 /**

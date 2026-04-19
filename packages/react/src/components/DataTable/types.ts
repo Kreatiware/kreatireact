@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
 /** Sort direction */
-export type SortDirection = 'asc' | 'desc' | null;
+export type SortDirection = "asc" | "desc" | null;
 
 /** Sort meta for multi-sort */
 export interface SortMeta {
@@ -10,7 +10,16 @@ export interface SortMeta {
 }
 
 /** Filter match mode */
-export type FilterMatchMode = 'contains' | 'startsWith' | 'endsWith' | 'equals' | 'notEquals' | 'gt' | 'gte' | 'lt' | 'lte';
+export type FilterMatchMode =
+  | "contains"
+  | "startsWith"
+  | "endsWith"
+  | "equals"
+  | "notEquals"
+  | "gt"
+  | "gte"
+  | "lt"
+  | "lte";
 
 /** Column filter meta */
 export interface ColumnFilterMeta {
@@ -19,13 +28,13 @@ export interface ColumnFilterMeta {
 }
 
 /** Selection mode */
-export type SelectionMode = 'single' | 'multiple' | 'checkbox' | null;
+export type SelectionMode = "single" | "multiple" | "checkbox" | null;
 
 /** Column frozen position */
-export type FrozenPosition = 'left' | 'right';
+export type FrozenPosition = "left" | "right";
 
 /** Action preset type */
-export type ActionPreset = 'edit' | 'delete' | 'view' | 'copy';
+export type ActionPreset = "edit" | "delete" | "view" | "copy";
 
 /** Column action item */
 export interface DataTableActionItem {
@@ -40,7 +49,14 @@ export interface DataTableActionItem {
   /** Disabled state per row */
   disabled?: boolean | ((row: Record<string, unknown>) => boolean);
   /** Severity for styling */
-  severity?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'help';
+  severity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "warning"
+    | "danger"
+    | "info"
+    | "help";
   /** Additional class */
   className?: string;
   /** Inline style */
@@ -56,7 +72,11 @@ export interface DataTableColumn<T = Record<string, unknown>> {
   /** Custom header template */
   headerTemplate?: (col: DataTableColumn<T>) => React.ReactNode;
   /** Custom body/cell template */
-  bodyTemplate?: (row: T, col: DataTableColumn<T>, rowIndex: number) => React.ReactNode;
+  bodyTemplate?: (
+    row: T,
+    col: DataTableColumn<T>,
+    rowIndex: number
+  ) => React.ReactNode;
   /** Custom footer template */
   footerTemplate?: (col: DataTableColumn<T>) => React.ReactNode;
   /** Footer text */
@@ -70,13 +90,23 @@ export interface DataTableColumn<T = Record<string, unknown>> {
   /** Filter match mode */
   filterMatchMode?: FilterMatchMode;
   /** Filter panel direction (default: 'down', auto-flips if no space) */
-  filterDirection?: 'up' | 'down';
+  filterDirection?: "up" | "down";
   /** Custom filter template */
-  filterTemplate?: (col: DataTableColumn<T>, value: unknown, onChange: (val: unknown) => void) => React.ReactNode;
+  filterTemplate?: (
+    col: DataTableColumn<T>,
+    value: unknown,
+    onChange: (val: unknown) => void
+  ) => React.ReactNode;
   /** Editable */
   editable?: boolean;
   /** Custom editor template */
-  editorTemplate?: (row: T, col: DataTableColumn<T>, rowIndex: number, onSave: (val: unknown) => void, onCancel: () => void) => React.ReactNode;
+  editorTemplate?: (
+    row: T,
+    col: DataTableColumn<T>,
+    rowIndex: number,
+    onSave: (val: unknown) => void,
+    onCancel: () => void
+  ) => React.ReactNode;
   /** Column width (CSS value) */
   width?: string | number;
   /** Min width */
@@ -84,7 +114,7 @@ export interface DataTableColumn<T = Record<string, unknown>> {
   /** Max width */
   maxWidth?: string | number;
   /** Text alignment */
-  align?: 'left' | 'center' | 'right';
+  align?: "left" | "center" | "right";
   /** Frozen column */
   frozen?: FrozenPosition;
   /** Hidden column */
@@ -110,7 +140,7 @@ export interface DataTableColumn<T = Record<string, unknown>> {
   /** View callback (for actionsPreset) */
   onView?: (row: T, rowIndex: number) => void;
   /** Text overflow behavior */
-  textOverflow?: 'wrap' | 'ellipsis' | 'clip';
+  textOverflow?: "wrap" | "ellipsis" | "clip";
   /** Additional class for the column cells */
   className?: string;
   /** Inline style for the column cells */
@@ -122,8 +152,14 @@ export interface DataTableColumn<T = Record<string, unknown>> {
 }
 
 /** Row class/style callback */
-export type RowClassCallback<T = Record<string, unknown>> = (row: T, rowIndex: number) => string | undefined;
-export type RowStyleCallback<T = Record<string, unknown>> = (row: T, rowIndex: number) => React.CSSProperties | undefined;
+export type RowClassCallback<T = Record<string, unknown>> = (
+  row: T,
+  rowIndex: number
+) => string | undefined;
+export type RowStyleCallback<T = Record<string, unknown>> = (
+  row: T,
+  rowIndex: number
+) => React.CSSProperties | undefined;
 
 /** Lazy load event */
 export interface DataTableLazyEvent {
@@ -154,10 +190,13 @@ export interface DataTableCellEditEvent<T = Record<string, unknown>> {
 }
 
 /** Export format */
-export type ExportFormat = 'csv';
+export type ExportFormat = "csv";
 
 /** Row expansion template */
-export type RowExpansionTemplate<T = Record<string, unknown>> = (row: T, rowIndex: number) => React.ReactNode;
+export type RowExpansionTemplate<T = Record<string, unknown>> = (
+  row: T,
+  rowIndex: number
+) => React.ReactNode;
 
 /** DataTable props */
 export interface DataTableProps<T = Record<string, unknown>> {
@@ -166,7 +205,7 @@ export interface DataTableProps<T = Record<string, unknown>> {
   /** Column definitions */
   columns: DataTableColumn<T>[];
   /** Component size */
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   /** Striped rows */
   stripedRows?: boolean;
   /** Slim mode — reduces row padding to hug content tightly */
@@ -198,7 +237,13 @@ export interface DataTableProps<T = Record<string, unknown>> {
   /** Rows per page options */
   rowsPerPageOptions?: number[];
   /** Custom template for the paginator bar */
-  paginatorTemplate?: (props: { page: number; totalPages: number; totalRecords: number; rows: number; onPageChange: (p: number) => void }) => React.ReactNode;
+  paginatorTemplate?: (props: {
+    page: number;
+    totalPages: number;
+    totalRecords: number;
+    rows: number;
+    onPageChange: (p: number) => void;
+  }) => React.ReactNode;
   /** Current page (controlled, 1-based) */
   page?: number;
   /** Page change callback */
@@ -206,7 +251,7 @@ export interface DataTableProps<T = Record<string, unknown>> {
   /** Total records (for lazy mode) */
   totalRecords?: number;
   /** Sort mode */
-  sortMode?: 'single' | 'multiple';
+  sortMode?: "single" | "multiple";
   /** Current sort field (single mode, controlled) */
   sortField?: string;
   /** Current sort order (single mode, controlled) */
@@ -214,7 +259,11 @@ export interface DataTableProps<T = Record<string, unknown>> {
   /** Multi sort meta (controlled) */
   multiSortMeta?: SortMeta[];
   /** Sort change callback */
-  onSort?: (field: string, order: SortDirection, multiSortMeta?: SortMeta[]) => void;
+  onSort?: (
+    field: string,
+    order: SortDirection,
+    multiSortMeta?: SortMeta[]
+  ) => void;
   /** Global filter value */
   globalFilter?: string;
   /** Global filter fields (which columns to search) */
@@ -246,7 +295,7 @@ export interface DataTableProps<T = Record<string, unknown>> {
   /** Row reorder callback */
   onRowReorder?: (value: T[]) => void;
   /** Cell edit mode */
-  editMode?: 'cell' | 'row' | null;
+  editMode?: "cell" | "row" | null;
   /** Cell edit complete callback */
   onCellEditComplete?: (event: DataTableCellEditEvent<T>) => void;
   /** Row edit complete callback */
@@ -254,7 +303,7 @@ export interface DataTableProps<T = Record<string, unknown>> {
   /** Header template (above table) */
   headerTemplate?: React.ReactNode;
   /** Toolbar presets — renders pre-built toolbar items. Overridden by headerTemplate if both provided */
-  toolbar?: ('search' | 'export' | 'print' | 'copy')[];
+  toolbar?: ("search" | "export" | "print" | "copy")[];
   /** Footer template (below table) */
   footerTemplate?: React.ReactNode;
   /** Empty message when no data */

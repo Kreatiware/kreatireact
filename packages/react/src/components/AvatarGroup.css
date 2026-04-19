@@ -5,7 +5,8 @@
 
 .k-avatar-group > .k-avatar,
 .k-avatar-group > .k-avatar-group__overflow {
-  border: var(--kreati-avatar-group-border-width, 0.125rem) solid var(--kreati-avatar-group-border-color, var(--kreati-surface));
+  border: var(--kreati-avatar-group-border-width, 0.125rem) solid
+    var(--kreati-avatar-group-border-color, var(--kreati-surface));
   margin-inline-start: var(--kreati-avatar-group-overlap, -0.5rem);
 }
 

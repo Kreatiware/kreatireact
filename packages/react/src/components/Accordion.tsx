@@ -1,8 +1,14 @@
-import React, { forwardRef, useState, useCallback, Children, isValidElement } from 'react';
-import { Panel } from './Panel';
-import type { PanelProps } from './Panel';
-import { CHEVRON_RIGHT_PATH } from './iconPaths';
-import './Accordion.css';
+import React, {
+  forwardRef,
+  useState,
+  useCallback,
+  Children,
+  isValidElement,
+} from "react";
+import { Panel } from "./Panel";
+import type { PanelProps } from "./Panel";
+import { CHEVRON_RIGHT_PATH } from "./iconPaths";
+import "./Accordion.css";
 
 /**
  * Props for the AccordionTab component
@@ -13,7 +19,7 @@ export interface AccordionTabProps {
   /** Header text */
   header?: string;
   /** Custom header template — receives collapsed state and toggle function */
-  headerTemplate?: PanelProps['headerTemplate'];
+  headerTemplate?: PanelProps["headerTemplate"];
   /** Tab content */
   children?: React.ReactNode;
   /** Whether this tab is disabled */
@@ -40,10 +46,10 @@ export interface AccordionTabProps {
  * ```
  */
 export const AccordionTab = forwardRef<HTMLDivElement, AccordionTabProps>(
-  (_props, _ref) => null,
+  (_props, _ref) => null
 );
 
-AccordionTab.displayName = 'AccordionTab';
+AccordionTab.displayName = "AccordionTab";
 
 /**
  * Props for the Accordion component
@@ -89,59 +95,98 @@ export interface AccordionProps {
  * ```
  */
 export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
-  ({ multiple = false, activeKeys: controlledKeys, defaultActiveKeys = [], onToggle, children, className = '', style }, ref) => {
+  (
+    {
+      multiple = false,
+      activeKeys: controlledKeys,
+      defaultActiveKeys = [],
+      onToggle,
+      children,
+      className = "",
+      style,
+    },
+    ref
+  ) => {
     const isControlled = controlledKeys !== undefined;
-    const [internalKeys, setInternalKeys] = useState<string[]>(defaultActiveKeys);
+    const [internalKeys, setInternalKeys] =
+      useState<string[]>(defaultActiveKeys);
     const activeKeys = isControlled ? controlledKeys : internalKeys;
 
-    const handleToggle = useCallback((key: string) => {
-      const isOpen = activeKeys.includes(key);
-      let next: string[];
+    const handleToggle = useCallback(
+      (key: string) => {
+        const isOpen = activeKeys.includes(key);
+        let next: string[];
 
-      if (multiple) {
-        next = isOpen ? activeKeys.filter((k) => k !== key) : [...activeKeys, key];
-      } else {
-        next = isOpen ? [] : [key];
-      }
+        if (multiple) {
+          next = isOpen
+            ? activeKeys.filter(k => k !== key)
+            : [...activeKeys, key];
+        } else {
+          next = isOpen ? [] : [key];
+        }
 
-      if (!isControlled) setInternalKeys(next);
-      onToggle?.(next);
-    }, [activeKeys, multiple, isControlled, onToggle]);
+        if (!isControlled) setInternalKeys(next);
+        onToggle?.(next);
+      },
+      [activeKeys, multiple, isControlled, onToggle]
+    );
 
     const tabs = Children.toArray(children).filter(
       (child): child is React.ReactElement<AccordionTabProps> =>
-        isValidElement(child) && (child.type as { displayName?: string }).displayName === 'AccordionTab',
+        isValidElement(child) &&
+        (child.type as { displayName?: string }).displayName === "AccordionTab"
     );
 
-    const classes = ['k-accordion', className].filter(Boolean).join(' ');
+    const classes = ["k-accordion", className].filter(Boolean).join(" ");
 
     return (
       <div ref={ref} className={classes} style={style}>
-        {tabs.map((tab) => {
-          const { tabKey, header, headerTemplate, children: tabChildren, disabled, className: tabClass, style: tabStyle } = tab.props;
+        {tabs.map(tab => {
+          const {
+            tabKey,
+            header,
+            headerTemplate,
+            children: tabChildren,
+            disabled,
+            className: tabClass,
+            style: tabStyle,
+          } = tab.props;
           const isOpen = activeKeys.includes(tabKey);
           const toggle = () => !disabled && handleToggle(tabKey);
 
-          const accordionHeader = headerTemplate
-            ? headerTemplate(!isOpen, toggle)
-            : header
-              ? (
-                <div
-                  className={`k-accordion__header ${disabled ? 'k-accordion__header--disabled' : ''}`}
-                  role="button"
-                  tabIndex={disabled ? -1 : 0}
-                  aria-expanded={!disabled ? isOpen : undefined}
-                  aria-disabled={disabled || undefined}
-                  onClick={toggle}
-                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } }}
+          const accordionHeader = headerTemplate ? (
+            headerTemplate(!isOpen, toggle)
+          ) : header ? (
+            <div
+              className={`k-accordion__header ${disabled ? "k-accordion__header--disabled" : ""}`}
+              role="button"
+              tabIndex={disabled ? -1 : 0}
+              aria-expanded={!disabled ? isOpen : undefined}
+              aria-disabled={disabled || undefined}
+              onClick={toggle}
+              onKeyDown={e => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  toggle();
+                }
+              }}
+            >
+              <span
+                className={`k-accordion__chevron ${isOpen ? "k-accordion__chevron--open" : ""}`}
+                aria-hidden="true"
+              >
+                <svg
+                  width={16}
+                  height={16}
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
                 >
-                  <span className={`k-accordion__chevron ${isOpen ? 'k-accordion__chevron--open' : ''}`} aria-hidden="true">
-                    <svg width={16} height={16} viewBox="0 0 24 24" fill="currentColor"><path d={CHEVRON_RIGHT_PATH} /></svg>
-                  </span>
-                  <span className="k-accordion__title">{header}</span>
-                </div>
-              )
-              : null;
+                  <path d={CHEVRON_RIGHT_PATH} />
+                </svg>
+              </span>
+              <span className="k-accordion__title">{header}</span>
+            </div>
+          ) : null;
 
           return (
             <Panel
@@ -159,7 +204,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
         })}
       </div>
     );
-  },
+  }
 );
 
-Accordion.displayName = 'Accordion';
+Accordion.displayName = "Accordion";

@@ -1,10 +1,31 @@
-import React, { forwardRef, useState, useEffect, useCallback, useRef, useImperativeHandle } from 'react';
-import { CHECK_PATH, TIMES_PATH, INFO_CIRCLE_PATH, EXCLAMATION_TRIANGLE_PATH, HELP_CIRCLE_PATH } from './iconPaths';
-import { useKreatiLocale } from '../locale';
-import './Toast.css';
+import React, {
+  forwardRef,
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useImperativeHandle,
+} from "react";
+import {
+  CHECK_PATH,
+  TIMES_PATH,
+  INFO_CIRCLE_PATH,
+  EXCLAMATION_TRIANGLE_PATH,
+  HELP_CIRCLE_PATH,
+} from "./iconPaths";
+import { useKreatiLocale } from "../locale";
+import "./Toast.css";
 
 /** Severity types for Toast */
-export type ToastSeverity = 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+export type ToastSeverity =
+  | "primary"
+  | "secondary"
+  | "success"
+  | "info"
+  | "warning"
+  | "help"
+  | "danger"
+  | "accent";
 
 export interface ToastItem {
   /** Unique key — auto-generated if not provided */
@@ -31,7 +52,10 @@ export interface ToastItem {
    * @param props - Object with the toast item data and onClose callback
    * @returns ReactNode to render as the toast body
    */
-  contentTemplate?: (props: { item: ToastItem; onClose: () => void }) => React.ReactNode;
+  contentTemplate?: (props: {
+    item: ToastItem;
+    onClose: () => void;
+  }) => React.ReactNode;
   /** Additional CSS class names */
   className?: string;
   /** Inline styles */
@@ -39,7 +63,13 @@ export interface ToastItem {
 }
 
 /** Position of the ToastContainer on screen */
-export type ToastPosition = 'top-right' | 'top-left' | 'top-center' | 'bottom-right' | 'bottom-left' | 'bottom-center';
+export type ToastPosition =
+  | "top-right"
+  | "top-left"
+  | "top-center"
+  | "bottom-right"
+  | "bottom-left"
+  | "bottom-center";
 
 const SEVERITY_ICONS: Record<ToastSeverity, string> = {
   primary: INFO_CIRCLE_PATH,
@@ -53,7 +83,13 @@ const SEVERITY_ICONS: Record<ToastSeverity, string> = {
 };
 
 const iconSvg = (path: string) => (
-  <svg width={20} height={20} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+  <svg
+    width={20}
+    height={20}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
     <path d={path} />
   </svg>
 );
@@ -69,8 +105,8 @@ interface ToastEntryProps {
 const ToastEntry: React.FC<ToastEntryProps> = ({ item, onClose, position }) => {
   const [exiting, setExiting] = useState(false);
   const locale = useKreatiLocale();
-  const base = 'k-toast';
-  const severity = item.severity ?? 'info';
+  const base = "k-toast";
+  const severity = item.severity ?? "info";
 
   const handleClose = useCallback(() => setExiting(true), []);
 
@@ -84,14 +120,17 @@ const ToastEntry: React.FC<ToastEntryProps> = ({ item, onClose, position }) => {
     return () => clearTimeout(timer);
   }, [item.sticky, item.life, exiting, handleClose]);
 
-  const resolvedIcon = item.icon === true ? iconSvg(SEVERITY_ICONS[severity]) : item.icon || null;
+  const resolvedIcon =
+    item.icon === true ? iconSvg(SEVERITY_ICONS[severity]) : item.icon || null;
   const closable = item.closable ?? true;
   const showProgress = item.showProgress === true && item.sticky === false;
 
   // Determine slide direction from position
-  const slideClass = position.includes('left') ? `${base}--slide-left`
-    : position.includes('right') ? `${base}--slide-right`
-    : `${base}--slide-top`;
+  const slideClass = position.includes("left")
+    ? `${base}--slide-left`
+    : position.includes("right")
+      ? `${base}--slide-right`
+      : `${base}--slide-top`;
 
   const classes = [
     `${base}__item`,
@@ -99,23 +138,38 @@ const ToastEntry: React.FC<ToastEntryProps> = ({ item, onClose, position }) => {
     slideClass,
     exiting && `${base}__item--exit`,
     item.className,
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div
       className={classes}
-      style={{ ...item.style, '--k-toast-life': `${item.life ?? 3000}ms` } as React.CSSProperties}
+      style={
+        {
+          ...item.style,
+          "--k-toast-life": `${item.life ?? 3000}ms`,
+        } as React.CSSProperties
+      }
       role="alert"
       aria-live="assertive"
       aria-atomic="true"
       onAnimationEnd={handleAnimationEnd}
     >
-      {item.contentTemplate ? item.contentTemplate({ item, onClose: handleClose }) : (
+      {item.contentTemplate ? (
+        item.contentTemplate({ item, onClose: handleClose })
+      ) : (
         <>
-          {resolvedIcon && <span className={`${base}__icon`}>{resolvedIcon}</span>}
+          {resolvedIcon && (
+            <span className={`${base}__icon`}>{resolvedIcon}</span>
+          )}
           <div className={`${base}__content`}>
-            {item.summary && <div className={`${base}__summary`}>{item.summary}</div>}
-            {item.detail && <div className={`${base}__detail`}>{item.detail}</div>}
+            {item.summary && (
+              <div className={`${base}__summary`}>{item.summary}</div>
+            )}
+            {item.detail && (
+              <div className={`${base}__detail`}>{item.detail}</div>
+            )}
           </div>
           {closable && (
             <button
@@ -129,7 +183,9 @@ const ToastEntry: React.FC<ToastEntryProps> = ({ item, onClose, position }) => {
           )}
         </>
       )}
-      {showProgress && !exiting && <div className={`${base}__progress ${base}__progress--${severity}`} />}
+      {showProgress && !exiting && (
+        <div className={`${base}__progress ${base}__progress--${severity}`} />
+      )}
     </div>
   );
 };
@@ -181,38 +237,52 @@ const nextId = () => `kt-${++counter}`;
  * })}>Save</Button>
  * ```
  */
-export const ToastContainer = forwardRef<ToastContainerRef, ToastContainerProps>(
-  ({ position = 'top-right', className = '', style }, ref) => {
-    const [toasts, setToasts] = useState<(ToastItem & { id: string })[]>([]);
+export const ToastContainer = forwardRef<
+  ToastContainerRef,
+  ToastContainerProps
+>(({ position = "top-right", className = "", style }, ref) => {
+  const [toasts, setToasts] = useState<(ToastItem & { id: string })[]>([]);
 
-    const show = useCallback((input: ToastItem | ToastItem[]) => {
-      const items = Array.isArray(input) ? input : [input];
-      setToasts((prev) => [...prev, ...items.map((t) => ({ ...t, id: t.id ?? nextId() }))]);
-    }, []);
+  const show = useCallback((input: ToastItem | ToastItem[]) => {
+    const items = Array.isArray(input) ? input : [input];
+    setToasts(prev => [
+      ...prev,
+      ...items.map(t => ({ ...t, id: t.id ?? nextId() })),
+    ]);
+  }, []);
 
-    const remove = useCallback((id: string) => {
-      setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, []);
+  const remove = useCallback((id: string) => {
+    setToasts(prev => prev.filter(t => t.id !== id));
+  }, []);
 
-    const clear = useCallback(() => setToasts([]), []);
+  const clear = useCallback(() => setToasts([]), []);
 
-    useImperativeHandle(ref, () => ({ show, remove, clear }), [show, remove, clear]);
+  useImperativeHandle(ref, () => ({ show, remove, clear }), [
+    show,
+    remove,
+    clear,
+  ]);
 
-    const base = 'k-toast';
+  const base = "k-toast";
 
-    return (
-      <div
-        className={[`${base}__container`, `${base}__container--${position}`, className].filter(Boolean).join(' ')}
-        style={style}
-        aria-live="polite"
-        aria-relevant="additions removals"
-      >
-        {toasts.map((t) => (
-          <ToastEntry key={t.id} item={t} onClose={remove} position={position} />
-        ))}
-      </div>
-    );
-  },
-);
+  return (
+    <div
+      className={[
+        `${base}__container`,
+        `${base}__container--${position}`,
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      style={style}
+      aria-live="polite"
+      aria-relevant="additions removals"
+    >
+      {toasts.map(t => (
+        <ToastEntry key={t.id} item={t} onClose={remove} position={position} />
+      ))}
+    </div>
+  );
+});
 
-ToastContainer.displayName = 'ToastContainer';
+ToastContainer.displayName = "ToastContainer";

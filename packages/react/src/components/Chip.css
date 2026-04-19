@@ -15,35 +15,73 @@
 /* ============================================
    Sizes
    ============================================ */
-.k-chip--sm { padding: var(--kreati-chip-padding-sm); font-size: var(--kreati-font-size-xxs); }
-.k-chip--md { padding: var(--kreati-chip-padding-md); font-size: var(--kreati-font-size-sm); }
-.k-chip--lg { padding: var(--kreati-chip-padding-lg); font-size: var(--kreati-font-size-base); }
+.k-chip--sm {
+  padding: var(--kreati-chip-padding-sm);
+  font-size: var(--kreati-font-size-xxs);
+}
+.k-chip--md {
+  padding: var(--kreati-chip-padding-md);
+  font-size: var(--kreati-font-size-sm);
+}
+.k-chip--lg {
+  padding: var(--kreati-chip-padding-lg);
+  font-size: var(--kreati-font-size-base);
+}
 
 /* ============================================
    Variants
    ============================================ */
-.k-chip--primary   { background-color: var(--kreati-primary-50);      color: var(--kreati-primary-700); }
-.k-chip--secondary { background-color: var(--kreati-accent-100);     color: var(--kreati-gray-800); }
-.k-chip--success   { background-color: var(--kreati-severity-success-light);  color: var(--kreati-severity-success-active); }
-.k-chip--warning   { background-color: var(--kreati-severity-warning-light);  color: var(--kreati-severity-warning-active); }
-.k-chip--error     { background-color: var(--kreati-severity-danger-light);   color: var(--kreati-severity-danger-active); }
-.k-chip--outline   { background-color: transparent; color: var(--kreati-gray-700); border: 1px solid var(--kreati-gray-300); }
+.k-chip--primary {
+  background-color: var(--kreati-primary-50);
+  color: var(--kreati-primary-700);
+}
+.k-chip--secondary {
+  background-color: var(--kreati-accent-100);
+  color: var(--kreati-gray-800);
+}
+.k-chip--success {
+  background-color: var(--kreati-severity-success-light);
+  color: var(--kreati-severity-success-active);
+}
+.k-chip--warning {
+  background-color: var(--kreati-severity-warning-light);
+  color: var(--kreati-severity-warning-active);
+}
+.k-chip--error {
+  background-color: var(--kreati-severity-danger-light);
+  color: var(--kreati-severity-danger-active);
+}
+.k-chip--outline {
+  background-color: transparent;
+  color: var(--kreati-gray-700);
+  border: 1px solid var(--kreati-gray-300);
+}
 
 /* ============================================
    Icon
    ============================================ */
-.k-chip__icon { display: inline-flex; align-items: center; }
+.k-chip__icon {
+  display: inline-flex;
+  align-items: center;
+}
 
 /* ============================================
    Raised
    ============================================ */
-.k-chip--raised { box-shadow: var(--kreati-shadow-sm); }
-.k-chip--raised:hover { box-shadow: var(--kreati-shadow-md); }
+.k-chip--raised {
+  box-shadow: var(--kreati-shadow-sm);
+}
+.k-chip--raised:hover {
+  box-shadow: var(--kreati-shadow-md);
+}
 
 /* ============================================
    Text
    ============================================ */
-.k-chip__text { display: inline-flex; align-items: center; }
+.k-chip__text {
+  display: inline-flex;
+  align-items: center;
+}
 
 /* ============================================
    Remove button

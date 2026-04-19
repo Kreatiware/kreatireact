@@ -1,11 +1,11 @@
-import React, { forwardRef, useImperativeHandle, useRef } from 'react';
-import './Skeleton.css';
+import React, { forwardRef, useImperativeHandle, useRef } from "react";
+import "./Skeleton.css";
 
 /** Shape of the skeleton placeholder */
-export type SkeletonShape = 'rectangle' | 'circle' | 'text';
+export type SkeletonShape = "rectangle" | "circle" | "text";
 
 /** Animation style */
-export type SkeletonAnimation = 'shimmer' | 'pulse' | 'none';
+export type SkeletonAnimation = "shimmer" | "pulse" | "none";
 
 export interface SkeletonProps {
   /** Shape of the placeholder */
@@ -46,33 +46,38 @@ export interface SkeletonProps {
 export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
   (
     {
-      shape = 'rectangle',
+      shape = "rectangle",
       width,
       height,
       lines = 3,
       lineGap,
       borderRadius,
-      animation = 'shimmer',
-      className = '',
+      animation = "shimmer",
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const elRef = useRef<HTMLDivElement>(null);
     useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
 
-    const base = 'k-skeleton';
+    const base = "k-skeleton";
 
-    if (shape === 'text') {
-      const cls = [base, `${base}--text`, className].filter(Boolean).join(' ');
+    if (shape === "text") {
+      const cls = [base, `${base}--text`, className].filter(Boolean).join(" ");
       return (
-        <div ref={elRef} className={cls} style={{ gap: lineGap, ...style }} aria-hidden="true">
+        <div
+          ref={elRef}
+          className={cls}
+          style={{ gap: lineGap, ...style }}
+          aria-hidden="true"
+        >
           {Array.from({ length: lines }, (_, i) => (
             <div
               key={i}
               className={`${base}__line ${base}--${animation}`}
               style={{
-                width: i === lines - 1 ? '60%' : '100%',
+                width: i === lines - 1 ? "60%" : "100%",
                 borderRadius,
               }}
             />
@@ -81,12 +86,14 @@ export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
       );
     }
 
-    const isCircle = shape === 'circle';
-    const resolvedWidth = width ?? (isCircle ? 48 : '100%');
-    const resolvedHeight = height ?? (isCircle ? resolvedWidth : '1em');
-    const resolvedRadius = borderRadius ?? (isCircle ? '50%' : undefined);
+    const isCircle = shape === "circle";
+    const resolvedWidth = width ?? (isCircle ? 48 : "100%");
+    const resolvedHeight = height ?? (isCircle ? resolvedWidth : "1em");
+    const resolvedRadius = borderRadius ?? (isCircle ? "50%" : undefined);
 
-    const cls = [base, `${base}--${animation}`, className].filter(Boolean).join(' ');
+    const cls = [base, `${base}--${animation}`, className]
+      .filter(Boolean)
+      .join(" ");
 
     return (
       <div
@@ -101,7 +108,7 @@ export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
         aria-hidden="true"
       />
     );
-  },
+  }
 );
 
-Skeleton.displayName = 'Skeleton';
+Skeleton.displayName = "Skeleton";

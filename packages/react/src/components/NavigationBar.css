@@ -54,7 +54,7 @@
 
 .kreati-navbar__logo::before,
 .kreati-navbar__logo::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   width: var(--kreati-space-8);
@@ -143,7 +143,7 @@
 }
 
 .kreati-navbar__link::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: calc(-1 * var(--kreati-space-1));
   left: 0;
@@ -336,7 +336,8 @@
   box-shadow: var(--kreati-shadow-none);
   border: none;
   background-color: transparent;
-  padding: var(--kreati-space-1) var(--kreati-space-0) var(--kreati-space-1) var(--kreati-space-4);
+  padding: var(--kreati-space-1) var(--kreati-space-0) var(--kreati-space-1)
+    var(--kreati-space-4);
   animation: none;
   min-width: 0;
 }

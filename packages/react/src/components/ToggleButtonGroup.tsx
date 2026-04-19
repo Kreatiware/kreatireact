@@ -1,6 +1,6 @@
-import React, { forwardRef, useState, useCallback } from 'react';
-import { ToggleButton } from './ToggleButton';
-import type { ToggleButtonProps } from './ToggleButton';
+import React, { forwardRef, useState, useCallback } from "react";
+import { ToggleButton } from "./ToggleButton";
+import type { ToggleButtonProps } from "./ToggleButton";
 
 export interface ToggleButtonGroupOption {
   /** Unique value */
@@ -27,9 +27,9 @@ export interface ToggleButtonGroupProps {
   /** Allow multiple selection */
   multiple?: boolean;
   /** Layout direction */
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: "horizontal" | "vertical";
   /** Button size — passed to each ToggleButton */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Slim mode — passed to each ToggleButton */
   slim?: boolean;
   /** Compact mode — passed to each ToggleButton */
@@ -59,7 +59,10 @@ export interface ToggleButtonGroupProps {
  * />
  * ```
  */
-export const ToggleButtonGroup = forwardRef<HTMLDivElement, ToggleButtonGroupProps>(
+export const ToggleButtonGroup = forwardRef<
+  HTMLDivElement,
+  ToggleButtonGroupProps
+>(
   (
     {
       options,
@@ -67,49 +70,55 @@ export const ToggleButtonGroup = forwardRef<HTMLDivElement, ToggleButtonGroupPro
       defaultValue,
       onChange,
       multiple = false,
-      orientation = 'horizontal',
-      size = 'md',
+      orientation = "horizontal",
+      size = "md",
       slim = false,
       compact = false,
       disabled = false,
-      className = '',
+      className = "",
       style,
       children,
     },
-    ref,
+    ref
   ) => {
     const isControlled = controlledValue !== undefined;
-    const [internalValue, setInternalValue] = useState<string | number | Array<string | number>>(defaultValue ?? (multiple ? [] : ''));
+    const [internalValue, setInternalValue] = useState<
+      string | number | Array<string | number>
+    >(defaultValue ?? (multiple ? [] : ""));
     const selected = isControlled ? controlledValue : internalValue;
 
-    const isActive = useCallback((val: string | number): boolean => {
-      if (Array.isArray(selected)) return selected.includes(val);
-      return selected === val;
-    }, [selected]);
+    const isActive = useCallback(
+      (val: string | number): boolean => {
+        if (Array.isArray(selected)) return selected.includes(val);
+        return selected === val;
+      },
+      [selected]
+    );
 
-    const handleClick = useCallback((val: string | number) => {
-      let next: string | number | Array<string | number>;
-      if (multiple) {
-        const arr = Array.isArray(selected) ? selected : [];
-        next = arr.includes(val) ? arr.filter((v) => v !== val) : [...arr, val];
-      } else {
-        next = selected === val ? '' : val;
-      }
-      if (!isControlled) setInternalValue(next);
-      onChange?.(next);
-    }, [selected, multiple, isControlled, onChange]);
+    const handleClick = useCallback(
+      (val: string | number) => {
+        let next: string | number | Array<string | number>;
+        if (multiple) {
+          const arr = Array.isArray(selected) ? selected : [];
+          next = arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val];
+        } else {
+          next = selected === val ? "" : val;
+        }
+        if (!isControlled) setInternalValue(next);
+        onChange?.(next);
+      },
+      [selected, multiple, isControlled, onChange]
+    );
 
-    const base = 'k-toggle-group';
-    const classes = [
-      base,
-      `${base}--${orientation}`,
-      className,
-    ].filter(Boolean).join(' ');
+    const base = "k-toggle-group";
+    const classes = [base, `${base}--${orientation}`, className]
+      .filter(Boolean)
+      .join(" ");
 
     if (children) {
       return (
         <div ref={ref} className={classes} style={style} role="group">
-          {React.Children.map(children, (child) => {
+          {React.Children.map(children, child => {
             if (!React.isValidElement<ToggleButtonProps>(child)) return child;
             const val = child.props.value;
             if (val === undefined) return child;
@@ -128,7 +137,7 @@ export const ToggleButtonGroup = forwardRef<HTMLDivElement, ToggleButtonGroupPro
 
     return (
       <div ref={ref} className={classes} role="group">
-        {options?.map((opt) => (
+        {options?.map(opt => (
           <ToggleButton
             key={opt.value}
             value={opt.value}
@@ -145,7 +154,7 @@ export const ToggleButtonGroup = forwardRef<HTMLDivElement, ToggleButtonGroupPro
         ))}
       </div>
     );
-  },
+  }
 );
 
-ToggleButtonGroup.displayName = 'ToggleButtonGroup';
+ToggleButtonGroup.displayName = "ToggleButtonGroup";

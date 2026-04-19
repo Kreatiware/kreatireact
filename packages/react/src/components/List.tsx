@@ -1,7 +1,15 @@
-import React, { forwardRef, useId, useRef, useState, useCallback, useImperativeHandle, useMemo } from 'react';
-import { Input } from './Input';
-import { useKreatiLocale } from '../locale';
-import './List.css';
+import React, {
+  forwardRef,
+  useId,
+  useRef,
+  useState,
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+} from "react";
+import { Input } from "./Input";
+import { useKreatiLocale } from "../locale";
+import "./List.css";
 
 /** Single item in a List */
 export interface ListItem {
@@ -26,7 +34,10 @@ export interface ListItem {
    * @param state - Object with boolean flags: selected, focused, disabled
    * @returns ReactNode to render inside the item
    */
-  template?: (item: ListItem, state: { selected: boolean; focused: boolean; disabled: boolean }) => React.ReactNode;
+  template?: (
+    item: ListItem,
+    state: { selected: boolean; focused: boolean; disabled: boolean }
+  ) => React.ReactNode;
 }
 
 export interface ListProps {
@@ -52,7 +63,7 @@ export interface ListProps {
    */
   groupTemplate?: (group: string) => React.ReactNode;
   /** Component size */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Maximum height before scrolling */
   maxHeight?: string | number;
   /** Additional CSS class names */
@@ -92,22 +103,23 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
       filterPlaceholder,
       emptyMessage,
       groupTemplate,
-      size = 'md',
+      size = "md",
       maxHeight,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const listId = useId();
     useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
 
     const kreatiLocale = useKreatiLocale();
-    const resolvedFilterPlaceholder = filterPlaceholder ?? kreatiLocale.list.filterPlaceholder;
+    const resolvedFilterPlaceholder =
+      filterPlaceholder ?? kreatiLocale.list.filterPlaceholder;
     const resolvedEmptyMessage = emptyMessage ?? kreatiLocale.list.emptyMessage;
 
-    const [filter, setFilter] = useState('');
+    const [filter, setFilter] = useState("");
     const [focusedIndex, setFocusedIndex] = useState(-1);
 
     const selectedKeys = useMemo(() => {
@@ -118,72 +130,109 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
     const filtered = useMemo(() => {
       if (!filter) return items;
       const q = filter.toLowerCase();
-      return items.filter((item) => {
+      return items.filter(item => {
         const target = item.searchKey || item.label;
         return target.toLowerCase().includes(q);
       });
     }, [items, filter]);
 
     const enabledIndices = useMemo(
-      () => filtered.map((item, i) => (!item.disabled ? i : -1)).filter((i) => i >= 0),
-      [filtered],
+      () =>
+        filtered
+          .map((item, i) => (!item.disabled ? i : -1))
+          .filter(i => i >= 0),
+      [filtered]
     );
 
     const scrollToIndex = useCallback((index: number) => {
       const el = containerRef.current;
       if (!el) return;
       const items = el.querySelectorAll('[role="option"]');
-      items[index]?.scrollIntoView({ block: 'nearest' });
+      items[index]?.scrollIntoView({ block: "nearest" });
     }, []);
 
-    const moveFocus = useCallback((delta: number) => {
-      if (enabledIndices.length === 0) return;
-      const currentPos = enabledIndices.indexOf(focusedIndex);
-      let nextPos: number;
-      if (currentPos < 0) {
-        nextPos = delta > 0 ? 0 : enabledIndices.length - 1;
-      } else {
-        nextPos = (currentPos + delta + enabledIndices.length) % enabledIndices.length;
-      }
-      const next = enabledIndices[nextPos];
-      setFocusedIndex(next);
-      scrollToIndex(next);
-    }, [enabledIndices, focusedIndex, scrollToIndex]);
+    const moveFocus = useCallback(
+      (delta: number) => {
+        if (enabledIndices.length === 0) return;
+        const currentPos = enabledIndices.indexOf(focusedIndex);
+        let nextPos: number;
+        if (currentPos < 0) {
+          nextPos = delta > 0 ? 0 : enabledIndices.length - 1;
+        } else {
+          nextPos =
+            (currentPos + delta + enabledIndices.length) %
+            enabledIndices.length;
+        }
+        const next = enabledIndices[nextPos];
+        setFocusedIndex(next);
+        scrollToIndex(next);
+      },
+      [enabledIndices, focusedIndex, scrollToIndex]
+    );
 
-    const handleSelect = useCallback((item: ListItem) => {
-      if (item.disabled) return;
-      onSelect?.(item.key, item);
-    }, [onSelect]);
+    const handleSelect = useCallback(
+      (item: ListItem) => {
+        if (item.disabled) return;
+        onSelect?.(item.key, item);
+      },
+      [onSelect]
+    );
 
-    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-      switch (e.key) {
-        case 'ArrowDown':
-          e.preventDefault();
-          moveFocus(1);
-          break;
-        case 'ArrowUp':
-          e.preventDefault();
-          moveFocus(-1);
-          break;
-        case 'Home':
-          e.preventDefault();
-          if (enabledIndices.length > 0) { setFocusedIndex(enabledIndices[0]); scrollToIndex(enabledIndices[0]); }
-          break;
-        case 'End':
-          e.preventDefault();
-          if (enabledIndices.length > 0) { const last = enabledIndices[enabledIndices.length - 1]; setFocusedIndex(last); scrollToIndex(last); }
-          break;
-        case 'Enter':
-        case ' ':
-          e.preventDefault();
-          if (focusedIndex >= 0 && filtered[focusedIndex]) handleSelect(filtered[focusedIndex]);
-          break;
-      }
-    }, [moveFocus, enabledIndices, focusedIndex, filtered, handleSelect, scrollToIndex]);
+    const handleKeyDown = useCallback(
+      (e: React.KeyboardEvent) => {
+        switch (e.key) {
+          case "ArrowDown":
+            e.preventDefault();
+            moveFocus(1);
+            break;
+          case "ArrowUp":
+            e.preventDefault();
+            moveFocus(-1);
+            break;
+          case "Home":
+            e.preventDefault();
+            if (enabledIndices.length > 0) {
+              setFocusedIndex(enabledIndices[0]);
+              scrollToIndex(enabledIndices[0]);
+            }
+            break;
+          case "End":
+            e.preventDefault();
+            if (enabledIndices.length > 0) {
+              const last = enabledIndices[enabledIndices.length - 1];
+              setFocusedIndex(last);
+              scrollToIndex(last);
+            }
+            break;
+          case "Enter":
+          case " ":
+            e.preventDefault();
+            if (focusedIndex >= 0 && filtered[focusedIndex])
+              handleSelect(filtered[focusedIndex]);
+            break;
+        }
+      },
+      [
+        moveFocus,
+        enabledIndices,
+        focusedIndex,
+        filtered,
+        handleSelect,
+        scrollToIndex,
+      ]
+    );
 
-    const base = 'k-list';
-    const containerClasses = [base, size !== 'md' && `${base}--${size}`, className].filter(Boolean).join(' ');
-    const mergedStyle: React.CSSProperties | undefined = maxHeight ? { ...style, maxHeight } : style;
+    const base = "k-list";
+    const containerClasses = [
+      base,
+      size !== "md" && `${base}--${size}`,
+      className,
+    ]
+      .filter(Boolean)
+      .join(" ");
+    const mergedStyle: React.CSSProperties | undefined = maxHeight
+      ? { ...style, maxHeight }
+      : style;
 
     const groups = useMemo(() => {
       const map = new Map<string | undefined, ListItem[]>();
@@ -219,7 +268,9 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
         sel && `${base}__item--selected`,
         foc && `${base}__item--focused`,
         dis && `${base}__item--disabled`,
-      ].filter(Boolean).join(' ');
+      ]
+        .filter(Boolean)
+        .join(" ");
 
       return (
         <div
@@ -230,7 +281,14 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
           aria-disabled={dis || undefined}
           className={cls}
           tabIndex={-1}
-          onClick={dis ? undefined : () => { handleSelect(item); setFocusedIndex(idx); }}
+          onClick={
+            dis
+              ? undefined
+              : () => {
+                  handleSelect(item);
+                  setFocusedIndex(idx);
+                }
+          }
           onMouseEnter={() => setFocusedIndex(idx)}
         >
           {item.template ? (
@@ -239,7 +297,9 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
             <>
               {item.icon && <span aria-hidden="true">{item.icon}</span>}
               <span className={`${base}__item-label`}>{item.label}</span>
-              {item.command && <span className={`${base}__item-command`}>{item.command}</span>}
+              {item.command && (
+                <span className={`${base}__item-command`}>{item.command}</span>
+              )}
             </>
           )}
         </div>
@@ -260,7 +320,14 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
       return entries.map(([group, groupItems], gi) => (
         <React.Fragment key={group ?? `__ungrouped_${gi}`}>
           {gi > 0 && <hr className={`${base}__separator`} />}
-          {group && (groupTemplate ? groupTemplate(group) : <div className={`${base}__group-label`} role="presentation">{group}</div>)}
+          {group &&
+            (groupTemplate ? (
+              groupTemplate(group)
+            ) : (
+              <div className={`${base}__group-label`} role="presentation">
+                {group}
+              </div>
+            ))}
           {groupItems.map(renderItem)}
         </React.Fragment>
       ));
@@ -275,7 +342,9 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
         tabIndex={0}
         onKeyDown={handleKeyDown}
         style={mergedStyle}
-        aria-activedescendant={focusedIndex >= 0 ? `${listId}-opt-${focusedIndex}` : undefined}
+        aria-activedescendant={
+          focusedIndex >= 0 ? `${listId}-opt-${focusedIndex}` : undefined
+        }
       >
         {filterable && (
           <div className={`${base}__filter`}>
@@ -283,7 +352,10 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
               size={size}
               placeholder={resolvedFilterPlaceholder}
               value={filter}
-              onChange={(e) => { setFilter(e.target.value); setFocusedIndex(-1); }}
+              onChange={e => {
+                setFilter(e.target.value);
+                setFocusedIndex(-1);
+              }}
               fullWidth
             />
           </div>
@@ -291,7 +363,7 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
         {renderContent()}
       </div>
     );
-  },
+  }
 );
 
-List.displayName = 'List';
+List.displayName = "List";

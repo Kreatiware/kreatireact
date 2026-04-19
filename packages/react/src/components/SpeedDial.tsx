@@ -1,9 +1,16 @@
-import React, { forwardRef, useState, useCallback, useRef, useImperativeHandle, useEffect } from 'react';
-import { Button } from './Button';
-import type { ButtonProps } from './Button';
-import { Tooltip } from './Tooltip';
-import { PLUS_PATH, TIMES_PATH } from './iconPaths';
-import './SpeedDial.css';
+import React, {
+  forwardRef,
+  useState,
+  useCallback,
+  useRef,
+  useImperativeHandle,
+  useEffect,
+} from "react";
+import { Button } from "./Button";
+import type { ButtonProps } from "./Button";
+import { Tooltip } from "./Tooltip";
+import { PLUS_PATH, TIMES_PATH } from "./iconPaths";
+import "./SpeedDial.css";
 
 /** Single action in the SpeedDial */
 export interface SpeedDialItem {
@@ -22,17 +29,22 @@ export interface SpeedDialItem {
   /** Disabled state */
   disabled?: boolean;
   /** Button severity */
-  severity?: ButtonProps['severity'];
+  severity?: ButtonProps["severity"];
   /** Button type style */
-  buttonType?: ButtonProps['buttonType'];
+  buttonType?: ButtonProps["buttonType"];
   /** Additional CSS class name */
   className?: string;
   /** Inline styles */
   style?: React.CSSProperties;
 }
 
-export type SpeedDialDirection = 'up' | 'down' | 'left' | 'right';
-export type SpeedDialLayout = 'linear' | 'quarter-up-right' | 'quarter-up-left' | 'quarter-down-right' | 'quarter-down-left';
+export type SpeedDialDirection = "up" | "down" | "left" | "right";
+export type SpeedDialLayout =
+  | "linear"
+  | "quarter-up-right"
+  | "quarter-up-left"
+  | "quarter-down-right"
+  | "quarter-down-left";
 
 export interface SpeedDialProps {
   /** Action items */
@@ -50,13 +62,13 @@ export interface SpeedDialProps {
   /** Whether the trigger icon rotates 45deg instead of swapping icons */
   rotateAnimation?: boolean;
   /** Trigger button severity */
-  severity?: ButtonProps['severity'];
+  severity?: ButtonProps["severity"];
   /** Trigger button type style */
-  buttonType?: ButtonProps['buttonType'];
+  buttonType?: ButtonProps["buttonType"];
   /** Trigger button size */
-  size?: ButtonProps['size'];
+  size?: ButtonProps["size"];
   /** Action button size */
-  actionSize?: ButtonProps['size'];
+  actionSize?: ButtonProps["size"];
   /** Show overlay mask when open */
   mask?: boolean;
   /** Disabled state */
@@ -66,7 +78,7 @@ export interface SpeedDialProps {
   /** Fires when open state changes */
   onOpenChange?: (open: boolean) => void;
   /** Trigger mode */
-  triggerOn?: 'click' | 'hover';
+  triggerOn?: "click" | "hover";
   /** Accessible label for the trigger */
   ariaLabel?: string;
   /** Additional CSS class names */
@@ -76,7 +88,13 @@ export interface SpeedDialProps {
 }
 
 const defaultIcon = (path: string) => (
-  <svg width={18} height={18} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+  <svg
+    width={18}
+    height={18}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
     <path d={path} />
   </svg>
 );
@@ -106,26 +124,26 @@ export const SpeedDial = forwardRef<HTMLDivElement, SpeedDialProps>(
   (
     {
       items,
-      direction = 'up',
-      layout = 'linear',
+      direction = "up",
+      layout = "linear",
       radius = 80,
       icon,
       activeIcon,
       rotateAnimation = true,
-      severity = 'primary',
-      buttonType = 'filled',
-      size = 'lg',
-      actionSize = 'md',
+      severity = "primary",
+      buttonType = "filled",
+      size = "lg",
+      actionSize = "md",
       mask = false,
       disabled = false,
       open: controlledOpen,
       onOpenChange,
-      triggerOn = 'click',
-      ariaLabel = 'Quick actions',
-      className = '',
+      triggerOn = "click",
+      ariaLabel = "Quick actions",
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const containerRef = useRef<HTMLDivElement>(null);
     useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
@@ -137,11 +155,14 @@ export const SpeedDial = forwardRef<HTMLDivElement, SpeedDialProps>(
     // Track which sub-dial keys are expanded
     const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
-    const setOpen = useCallback((next: boolean) => {
-      if (!next) setExpanded(new Set()); // close all sub-levels
-      if (!isControlled) setInternalOpen(next);
-      onOpenChange?.(next);
-    }, [isControlled, onOpenChange]);
+    const setOpen = useCallback(
+      (next: boolean) => {
+        if (!next) setExpanded(new Set()); // close all sub-levels
+        if (!isControlled) setInternalOpen(next);
+        onOpenChange?.(next);
+      },
+      [isControlled, onOpenChange]
+    );
 
     const toggle = useCallback(() => {
       if (disabled) return;
@@ -150,84 +171,103 @@ export const SpeedDial = forwardRef<HTMLDivElement, SpeedDialProps>(
 
     const close = useCallback(() => setOpen(false), [setOpen]);
 
-    const toggleSub = useCallback((key: string) => {
-      setExpanded((prev) => {
-        const next = new Set(prev);
-        if (next.has(key)) {
-          // Close this key and all its descendants
-          const closeDescendants = (items: SpeedDialItem[], parentKey: string) => {
-            for (const item of items) {
-              if (next.has(item.key)) next.delete(item.key);
-              if (item.items) closeDescendants(item.items, item.key);
-            }
-          };
-          next.delete(key);
-          // Find the item and close its children
-          const findAndClose = (list: SpeedDialItem[]) => {
-            for (const item of list) {
-              if (item.key === key && item.items) closeDescendants(item.items, key);
-              if (item.items) findAndClose(item.items);
-            }
-          };
-          findAndClose(items);
-        } else {
-          next.add(key);
-        }
-        return next;
-      });
-    }, [items]);
+    const toggleSub = useCallback(
+      (key: string) => {
+        setExpanded(prev => {
+          const next = new Set(prev);
+          if (next.has(key)) {
+            // Close this key and all its descendants
+            const closeDescendants = (
+              items: SpeedDialItem[],
+              parentKey: string
+            ) => {
+              for (const item of items) {
+                if (next.has(item.key)) next.delete(item.key);
+                if (item.items) closeDescendants(item.items, item.key);
+              }
+            };
+            next.delete(key);
+            // Find the item and close its children
+            const findAndClose = (list: SpeedDialItem[]) => {
+              for (const item of list) {
+                if (item.key === key && item.items)
+                  closeDescendants(item.items, key);
+                if (item.items) findAndClose(item.items);
+              }
+            };
+            findAndClose(items);
+          } else {
+            next.add(key);
+          }
+          return next;
+        });
+      },
+      [items]
+    );
 
     // Escape and click-outside
     useEffect(() => {
       if (!isOpen) return;
       const onKey = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') { e.preventDefault(); close(); }
+        if (e.key === "Escape") {
+          e.preventDefault();
+          close();
+        }
       };
       const onClick = (e: MouseEvent) => {
         if (!containerRef.current?.contains(e.target as Node)) close();
       };
-      document.addEventListener('keydown', onKey);
-      document.addEventListener('mousedown', onClick);
+      document.addEventListener("keydown", onKey);
+      document.addEventListener("mousedown", onClick);
       return () => {
-        document.removeEventListener('keydown', onKey);
-        document.removeEventListener('mousedown', onClick);
+        document.removeEventListener("keydown", onKey);
+        document.removeEventListener("mousedown", onClick);
       };
     }, [isOpen, close]);
 
-    const base = 'k-speeddial';
-    const isQuarter = layout.startsWith('quarter');
+    const base = "k-speeddial";
+    const isQuarter = layout.startsWith("quarter");
 
-    const getQuarterStyle = (index: number, total: number): React.CSSProperties => {
+    const getQuarterStyle = (
+      index: number,
+      total: number
+    ): React.CSSProperties => {
       const angleMap: Record<string, { start: number; end: number }> = {
-        'quarter-up-right': { start: 180, end: 270 },
-        'quarter-up-left': { start: 270, end: 360 },
-        'quarter-down-right': { start: 90, end: 180 },
-        'quarter-down-left': { start: 0, end: 90 },
+        "quarter-up-right": { start: 180, end: 270 },
+        "quarter-up-left": { start: 270, end: 360 },
+        "quarter-down-right": { start: 90, end: 180 },
+        "quarter-down-left": { start: 0, end: 90 },
       };
-      const range = angleMap[layout] || angleMap['quarter-up-right'];
+      const range = angleMap[layout] || angleMap["quarter-up-right"];
       const step = total > 1 ? (range.end - range.start) / (total - 1) : 0;
       const angle = (range.start + step * index) * (Math.PI / 180);
       return {
-        position: 'absolute',
+        position: "absolute",
         left: `calc(50% + ${Math.cos(angle) * radius}px)`,
         top: `calc(50% + ${Math.sin(angle) * radius}px)`,
-        transform: 'translate(-50%, -50%)',
+        transform: "translate(-50%, -50%)",
       };
     };
 
-    const renderItems = (list: SpeedDialItem[], dir: SpeedDialDirection, parentVisible: boolean) => {
-      const visible = list.filter((i) => i.key);
+    const renderItems = (
+      list: SpeedDialItem[],
+      dir: SpeedDialDirection,
+      parentVisible: boolean
+    ) => {
+      const visible = list.filter(i => i.key);
       const actionsCls = [
         `${base}__actions`,
         `${base}__actions--${dir}`,
         parentVisible && `${base}__actions--visible`,
-      ].filter(Boolean).join(' ');
+      ]
+        .filter(Boolean)
+        .join(" ");
 
       return (
         <div className={actionsCls} role="menu">
           {visible.map((item, i) => {
             const stagger: React.CSSProperties = {
-              '--k-dial-i': i,
+              "--k-dial-i": i,
               ...item.style,
             } as React.CSSProperties;
 
@@ -238,15 +278,32 @@ export const SpeedDial = forwardRef<HTMLDivElement, SpeedDialProps>(
             if (hasSub) {
               const subDir = item.direction || dir;
               return (
-                <div key={item.key} className={`${base}__action`} role="menuitem" style={stagger}>
-                  <div className={base} style={{ position: 'relative' }}>
-                    <div className={[`${base}__trigger`, isSubOpen && `${base}__trigger--open`].filter(Boolean).join(' ')}>
+                <div
+                  key={item.key}
+                  className={`${base}__action`}
+                  role="menuitem"
+                  style={stagger}
+                >
+                  <div className={base} style={{ position: "relative" }}>
+                    <div
+                      className={[
+                        `${base}__trigger`,
+                        isSubOpen && `${base}__trigger--open`,
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                    >
                       {item.label ? (
-                        <Tooltip content={item.label} position={dir === 'up' || dir === 'down' ? 'left' : 'top'}>
+                        <Tooltip
+                          content={item.label}
+                          position={
+                            dir === "up" || dir === "down" ? "left" : "top"
+                          }
+                        >
                           <Button
                             iconLeft={item.icon}
-                            severity={item.severity || 'secondary'}
-                            buttonType={item.buttonType || 'filled'}
+                            severity={item.severity || "secondary"}
+                            buttonType={item.buttonType || "filled"}
                             size={actionSize}
                             rounded
                             disabled={isDis}
@@ -259,8 +316,8 @@ export const SpeedDial = forwardRef<HTMLDivElement, SpeedDialProps>(
                       ) : (
                         <Button
                           iconLeft={item.icon}
-                          severity={item.severity || 'secondary'}
-                          buttonType={item.buttonType || 'filled'}
+                          severity={item.severity || "secondary"}
+                          buttonType={item.buttonType || "filled"}
                           size={actionSize}
                           rounded
                           disabled={isDis}
@@ -280,24 +337,37 @@ export const SpeedDial = forwardRef<HTMLDivElement, SpeedDialProps>(
             const btn = (
               <Button
                 iconLeft={item.icon}
-                severity={item.severity || 'secondary'}
-                buttonType={item.buttonType || 'filled'}
+                severity={item.severity || "secondary"}
+                buttonType={item.buttonType || "filled"}
                 size={actionSize}
                 rounded
                 disabled={isDis}
-                onClick={() => { item.command?.(); close(); }}
+                onClick={() => {
+                  item.command?.();
+                  close();
+                }}
                 ariaLabel={item.label}
                 className={item.className}
               />
             );
 
             return (
-              <div key={item.key} className={`${base}__action`} role="menuitem" style={stagger}>
+              <div
+                key={item.key}
+                className={`${base}__action`}
+                role="menuitem"
+                style={stagger}
+              >
                 {item.label ? (
-                  <Tooltip content={item.label} position={dir === 'up' || dir === 'down' ? 'left' : 'top'}>
+                  <Tooltip
+                    content={item.label}
+                    position={dir === "up" || dir === "down" ? "left" : "top"}
+                  >
                     {btn}
                   </Tooltip>
-                ) : btn}
+                ) : (
+                  btn
+                )}
               </div>
             );
           })}
@@ -314,24 +384,38 @@ export const SpeedDial = forwardRef<HTMLDivElement, SpeedDialProps>(
     const triggerCls = [
       `${base}__trigger`,
       isOpen && rotateAnimation && `${base}__trigger--open`,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
-    const hoverProps = triggerOn === 'hover' ? {
-      onMouseEnter: () => !disabled && setOpen(true),
-      onMouseLeave: () => setOpen(false),
-    } : {};
+    const hoverProps =
+      triggerOn === "hover"
+        ? {
+            onMouseEnter: () => !disabled && setOpen(true),
+            onMouseLeave: () => setOpen(false),
+          }
+        : {};
 
     // Root level uses layout (quarter or linear)
     const rootActionsCls = [
       `${base}__actions`,
-      isQuarter ? `${base}__actions--${layout}` : `${base}__actions--${direction}`,
+      isQuarter
+        ? `${base}__actions--${layout}`
+        : `${base}__actions--${direction}`,
       isOpen && `${base}__actions--visible`,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
-    const rootVisible = items.filter((i) => i.key);
+    const rootVisible = items.filter(i => i.key);
 
     return (
-      <div ref={containerRef} className={`${base} ${className}`.trim()} style={style} {...hoverProps}>
+      <div
+        ref={containerRef}
+        className={`${base} ${className}`.trim()}
+        style={style}
+        {...hoverProps}
+      >
         <div className={triggerCls}>
           <Button
             iconLeft={triggerIcon}
@@ -340,7 +424,7 @@ export const SpeedDial = forwardRef<HTMLDivElement, SpeedDialProps>(
             size={size}
             rounded
             disabled={disabled}
-            onClick={triggerOn === 'click' ? toggle : undefined}
+            onClick={triggerOn === "click" ? toggle : undefined}
             ariaLabel={ariaLabel}
             aria-expanded={isOpen}
             aria-haspopup="menu"
@@ -350,8 +434,10 @@ export const SpeedDial = forwardRef<HTMLDivElement, SpeedDialProps>(
         <div className={rootActionsCls} role="menu" aria-label={ariaLabel}>
           {rootVisible.map((item, i) => {
             const stagger: React.CSSProperties = {
-              '--k-dial-i': i,
-              ...(isQuarter ? getQuarterStyle(i, rootVisible.length) : item.style),
+              "--k-dial-i": i,
+              ...(isQuarter
+                ? getQuarterStyle(i, rootVisible.length)
+                : item.style),
             } as React.CSSProperties;
 
             const hasSub = item.items && item.items.length > 0;
@@ -361,15 +447,34 @@ export const SpeedDial = forwardRef<HTMLDivElement, SpeedDialProps>(
             if (hasSub) {
               const subDir = item.direction || direction;
               return (
-                <div key={item.key} className={`${base}__action`} role="menuitem" style={stagger}>
-                  <div className={base} style={{ position: 'relative' }}>
-                    <div className={[`${base}__trigger`, isSubOpen && `${base}__trigger--open`].filter(Boolean).join(' ')}>
+                <div
+                  key={item.key}
+                  className={`${base}__action`}
+                  role="menuitem"
+                  style={stagger}
+                >
+                  <div className={base} style={{ position: "relative" }}>
+                    <div
+                      className={[
+                        `${base}__trigger`,
+                        isSubOpen && `${base}__trigger--open`,
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                    >
                       {item.label ? (
-                        <Tooltip content={item.label} position={direction === 'up' || direction === 'down' ? 'left' : 'top'}>
+                        <Tooltip
+                          content={item.label}
+                          position={
+                            direction === "up" || direction === "down"
+                              ? "left"
+                              : "top"
+                          }
+                        >
                           <Button
                             iconLeft={item.icon}
-                            severity={item.severity || 'secondary'}
-                            buttonType={item.buttonType || 'filled'}
+                            severity={item.severity || "secondary"}
+                            buttonType={item.buttonType || "filled"}
                             size={actionSize}
                             rounded
                             disabled={isDis}
@@ -382,8 +487,8 @@ export const SpeedDial = forwardRef<HTMLDivElement, SpeedDialProps>(
                       ) : (
                         <Button
                           iconLeft={item.icon}
-                          severity={item.severity || 'secondary'}
-                          buttonType={item.buttonType || 'filled'}
+                          severity={item.severity || "secondary"}
+                          buttonType={item.buttonType || "filled"}
                           size={actionSize}
                           rounded
                           disabled={isDis}
@@ -403,12 +508,15 @@ export const SpeedDial = forwardRef<HTMLDivElement, SpeedDialProps>(
             const btn = (
               <Button
                 iconLeft={item.icon}
-                severity={item.severity || 'secondary'}
-                buttonType={item.buttonType || 'filled'}
+                severity={item.severity || "secondary"}
+                buttonType={item.buttonType || "filled"}
                 size={actionSize}
                 rounded
                 disabled={isDis}
-                onClick={() => { item.command?.(); close(); }}
+                onClick={() => {
+                  item.command?.();
+                  close();
+                }}
                 ariaLabel={item.label}
                 className={item.className}
                 style={isQuarter ? undefined : item.style}
@@ -416,21 +524,37 @@ export const SpeedDial = forwardRef<HTMLDivElement, SpeedDialProps>(
             );
 
             return (
-              <div key={item.key} className={`${base}__action`} role="menuitem" style={stagger}>
+              <div
+                key={item.key}
+                className={`${base}__action`}
+                role="menuitem"
+                style={stagger}
+              >
                 {item.label ? (
-                  <Tooltip content={item.label} position={direction === 'up' || direction === 'down' ? 'left' : 'top'}>
+                  <Tooltip
+                    content={item.label}
+                    position={
+                      direction === "up" || direction === "down"
+                        ? "left"
+                        : "top"
+                    }
+                  >
                     {btn}
                   </Tooltip>
-                ) : btn}
+                ) : (
+                  btn
+                )}
               </div>
             );
           })}
         </div>
 
-        {mask && isOpen && <div className={`${base}__mask`} aria-hidden="true" onClick={close} />}
+        {mask && isOpen && (
+          <div className={`${base}__mask`} aria-hidden="true" onClick={close} />
+        )}
       </div>
     );
-  },
+  }
 );
 
-SpeedDial.displayName = 'SpeedDial';
+SpeedDial.displayName = "SpeedDial";

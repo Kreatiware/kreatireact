@@ -1,6 +1,6 @@
-import React, { forwardRef } from 'react';
-import './EmptyState.css';
-import { useKreatiLocale } from '../locale';
+import React, { forwardRef } from "react";
+import "./EmptyState.css";
+import { useKreatiLocale } from "../locale";
 
 export interface EmptyStateProps {
   /** Icon or illustration to display */
@@ -12,7 +12,7 @@ export interface EmptyStateProps {
   /** Action area — typically a Button */
   actions?: React.ReactNode;
   /** Size variant. Default: 'md' */
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   /** Additional CSS class */
   className?: string;
   /** Inline styles */
@@ -34,15 +34,21 @@ export interface EmptyStateProps {
  * ```
  */
 export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
-  ({ icon, title, description, actions, size = 'md', className, style }, ref) => {
+  (
+    { icon, title, description, actions, size = "md", className, style },
+    ref
+  ) => {
     const locale = useKreatiLocale();
-    const resolvedTitle = title ?? locale?.emptyState?.title ?? 'No data';
-    const resolvedDesc = description ?? locale?.emptyState?.description ?? 'There are no items to display.';
+    const resolvedTitle = title ?? locale?.emptyState?.title ?? "No data";
+    const resolvedDesc =
+      description ??
+      locale?.emptyState?.description ??
+      "There are no items to display.";
 
     return (
       <div
         ref={ref}
-        className={`k-empty-state k-empty-state--${size} ${className || ''}`}
+        className={`k-empty-state k-empty-state--${size} ${className || ""}`}
         style={style}
         role="status"
         aria-live="polite"
@@ -53,7 +59,7 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
         {actions && <div className="k-empty-state__actions">{actions}</div>}
       </div>
     );
-  },
+  }
 );
 
-EmptyState.displayName = 'EmptyState';
+EmptyState.displayName = "EmptyState";

@@ -4,7 +4,9 @@
   font-family: var(--kreati-font-family);
 }
 
-.k-input-group--full-width { width: 100%; }
+.k-input-group--full-width {
+  width: 100%;
+}
 
 /* ─── Row (the flex container with addon + input + addon) ────────── */
 
@@ -14,7 +16,10 @@
   width: 100%;
 }
 
-.k-input-group__row--disabled { opacity: 0.5; pointer-events: none; }
+.k-input-group__row--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
 
 /* ─── Input slot ─────────────────────────────────────────────────── */
 
@@ -97,8 +102,12 @@
 }
 
 /* Compensate padding when border grows */
-.k-input-group__row:focus-within .k-input-group__addon--prefix { padding-right: 0; }
-.k-input-group__row:focus-within .k-input-group__addon--suffix { padding-left: 0; }
+.k-input-group__row:focus-within .k-input-group__addon--prefix {
+  padding-right: 0;
+}
+.k-input-group__row:focus-within .k-input-group__addon--suffix {
+  padding-left: 0;
+}
 
 /* Error */
 .k-input-group__row--error .k-input-group__addon {
@@ -153,19 +162,35 @@
 
 /* ─── Sizes ──────────────────────────────────────────────────────── */
 
-.k-input-group--xs .k-input-group__addon { font-size: var(--kreati-font-size-xs); padding: 0 var(--kreati-space-2); }
-.k-input-group--sm .k-input-group__addon { font-size: var(--kreati-font-size-xs); padding: 0 var(--kreati-space-2); }
-.k-input-group--lg .k-input-group__addon { font-size: var(--kreati-font-size-base); padding: 0 var(--kreati-space-4); }
-.k-input-group--xl .k-input-group__addon { font-size: var(--kreati-font-size-lg); padding: 0 var(--kreati-space-4); }
+.k-input-group--xs .k-input-group__addon {
+  font-size: var(--kreati-font-size-xs);
+  padding: 0 var(--kreati-space-2);
+}
+.k-input-group--sm .k-input-group__addon {
+  font-size: var(--kreati-font-size-xs);
+  padding: 0 var(--kreati-space-2);
+}
+.k-input-group--lg .k-input-group__addon {
+  font-size: var(--kreati-font-size-base);
+  padding: 0 var(--kreati-space-4);
+}
+.k-input-group--xl .k-input-group__addon {
+  font-size: var(--kreati-font-size-lg);
+  padding: 0 var(--kreati-space-4);
+}
 
 /* ─── Responsive ─────────────────────────────────────────────────── */
 
 @media (max-width: 20rem) {
-  .k-input-group__addon { padding: 0 var(--kreati-space-2); }
+  .k-input-group__addon {
+    padding: 0 var(--kreati-space-2);
+  }
 }
 
 /* ─── Reduced motion ─────────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
-  .k-input-group__addon { transition: none; }
+  .k-input-group__addon {
+    transition: none;
+  }
 }

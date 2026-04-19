@@ -1,10 +1,10 @@
 // Wrapper Component
-export { KreatiIcon } from './icons';
-export type { KreatiIconProps } from './icons';
+export { KreatiIcon } from "./icons";
+export type { KreatiIconProps } from "./icons";
 
 // Icon Resolver
-export { Icon } from './IconResolver';
-export type { IconResolverProps } from './IconResolver';
+export { Icon } from "./IconResolver";
+export type { IconResolverProps } from "./IconResolver";
 
 // Icons
 export {
@@ -81,6 +81,6 @@ export {
   FontFamily,
   // Deprecated aliases
   Menu,
-} from './icons';
+} from "./icons";
 
-export type { IconProps } from './icons';
+export type { IconProps } from "./icons";

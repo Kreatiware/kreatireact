@@ -1,7 +1,7 @@
-import React, { forwardRef } from 'react';
-import { ScrollBar } from './ScrollBar';
-import type { ScrollBarProps } from './ScrollBar';
-import './ScrollArea.css';
+import React, { forwardRef } from "react";
+import { ScrollBar } from "./ScrollBar";
+import type { ScrollBarProps } from "./ScrollBar";
+import "./ScrollArea.css";
 
 /**
  * Props for the ScrollArea component
@@ -12,9 +12,17 @@ export interface ScrollAreaProps {
   /** Maximum width before horizontal scroll activates */
   maxWidth?: string;
   /** Scroll direction */
-  orientation?: 'vertical' | 'horizontal' | 'both';
+  orientation?: "vertical" | "horizontal" | "both";
   /** Props forwarded to the internal ScrollBar component */
-  scrollBarProps?: Omit<ScrollBarProps, 'children' | 'maxHeight' | 'maxWidth' | 'orientation' | 'className' | 'style'>;
+  scrollBarProps?: Omit<
+    ScrollBarProps,
+    | "children"
+    | "maxHeight"
+    | "maxWidth"
+    | "orientation"
+    | "className"
+    | "style"
+  >;
   /** Custom ScrollBar element — replaces the internal ScrollBar entirely */
   scrollBar?: (children: React.ReactNode) => React.ReactNode;
   /** Content */
@@ -45,12 +53,28 @@ export interface ScrollAreaProps {
  * ```
  */
 export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(
-  ({ maxHeight, maxWidth, orientation = 'vertical', scrollBarProps, scrollBar, children, className = '', style }, ref) => {
-    const classes = ['k-scroll-area', className].filter(Boolean).join(' ');
+  (
+    {
+      maxHeight,
+      maxWidth,
+      orientation = "vertical",
+      scrollBarProps,
+      scrollBar,
+      children,
+      className = "",
+      style,
+    },
+    ref
+  ) => {
+    const classes = ["k-scroll-area", className].filter(Boolean).join(" ");
 
     if (scrollBar) {
       return (
-        <div ref={ref} className={classes} style={{ ...style, maxHeight, maxWidth }}>
+        <div
+          ref={ref}
+          className={classes}
+          style={{ ...style, maxHeight, maxWidth }}
+        >
           {scrollBar(children)}
         </div>
       );
@@ -69,7 +93,7 @@ export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(
         {children}
       </ScrollBar>
     );
-  },
+  }
 );
 
-ScrollArea.displayName = 'ScrollArea';
+ScrollArea.displayName = "ScrollArea";

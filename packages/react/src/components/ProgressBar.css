@@ -28,14 +28,30 @@
   justify-content: flex-end;
 }
 
-.k-progressbar--primary .k-progressbar__fill   { background: var(--kreati-severity-primary); }
-.k-progressbar--secondary .k-progressbar__fill { background: var(--kreati-severity-secondary); }
-.k-progressbar--success .k-progressbar__fill   { background: var(--kreati-severity-success); }
-.k-progressbar--info .k-progressbar__fill      { background: var(--kreati-severity-info); }
-.k-progressbar--warning .k-progressbar__fill   { background: var(--kreati-severity-warning); }
-.k-progressbar--help .k-progressbar__fill      { background: var(--kreati-severity-help); }
-.k-progressbar--danger .k-progressbar__fill    { background: var(--kreati-severity-danger); }
-.k-progressbar--accent .k-progressbar__fill    { background: var(--kreati-severity-accent); }
+.k-progressbar--primary .k-progressbar__fill {
+  background: var(--kreati-severity-primary);
+}
+.k-progressbar--secondary .k-progressbar__fill {
+  background: var(--kreati-severity-secondary);
+}
+.k-progressbar--success .k-progressbar__fill {
+  background: var(--kreati-severity-success);
+}
+.k-progressbar--info .k-progressbar__fill {
+  background: var(--kreati-severity-info);
+}
+.k-progressbar--warning .k-progressbar__fill {
+  background: var(--kreati-severity-warning);
+}
+.k-progressbar--help .k-progressbar__fill {
+  background: var(--kreati-severity-help);
+}
+.k-progressbar--danger .k-progressbar__fill {
+  background: var(--kreati-severity-danger);
+}
+.k-progressbar--accent .k-progressbar__fill {
+  background: var(--kreati-severity-accent);
+}
 
 /* Label — outside (right of bar) */
 .k-progressbar__label--outside {
@@ -69,11 +85,21 @@
 }
 
 @keyframes k-progressbar-indeterminate {
-  0%   { transform: translateX(-100%); }
-  100% { transform: translateX(350%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(350%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .k-progressbar--indeterminate .k-progressbar__fill { animation: none; width: 100%; opacity: 0.5; }
-  .k-progressbar__fill { transition: none; }
+  .k-progressbar--indeterminate .k-progressbar__fill {
+    animation: none;
+    width: 100%;
+    opacity: 0.5;
+  }
+  .k-progressbar__fill {
+    transition: none;
+  }
 }

@@ -1,15 +1,22 @@
-import React, { forwardRef, useRef, useState, useCallback, useEffect, useImperativeHandle } from 'react';
-import { createPortal } from 'react-dom';
-import { useKreatiLocale } from '../locale';
-import { Button } from './Button';
-import { useLayerZIndex } from './LayerContext';
-import './Popover.css';
+import React, {
+  forwardRef,
+  useRef,
+  useState,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+} from "react";
+import { createPortal } from "react-dom";
+import { useKreatiLocale } from "../locale";
+import { Button } from "./Button";
+import { useLayerZIndex } from "./LayerContext";
+import "./Popover.css";
 
-export type PopoverPosition = 'top' | 'bottom' | 'left' | 'right';
+export type PopoverPosition = "top" | "bottom" | "left" | "right";
 
 export interface PopoverProps {
   /** Popover variant — default shows content as-is, confirm shows message + accept/reject buttons */
-  variant?: 'default' | 'confirm';
+  variant?: "default" | "confirm";
   /** Content rendered inside the popover panel */
   content?: React.ReactNode;
   /** Message text for confirm variant */
@@ -21,9 +28,25 @@ export interface PopoverProps {
   /** Reject button label — overrides locale default */
   rejectLabel?: string;
   /** Accept button severity */
-  acceptSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  acceptSeverity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Reject button severity */
-  rejectSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  rejectSeverity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Fires when accept is clicked (confirm variant) */
   onAccept?: () => void;
   /** Fires when reject is clicked (confirm variant) */
@@ -75,17 +98,17 @@ export interface PopoverProps {
 export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
   (
     {
-      variant = 'default',
+      variant = "default",
       content,
       message,
       icon,
       acceptLabel: acceptLabelProp,
       rejectLabel: rejectLabelProp,
-      acceptSeverity = 'primary',
-      rejectSeverity = 'secondary',
+      acceptSeverity = "primary",
+      rejectSeverity = "secondary",
       onAccept,
       onReject,
-      position = 'bottom',
+      position = "bottom",
       offset = 4,
       portal = true,
       closeOnClickOutside = true,
@@ -93,13 +116,13 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
       open: controlledOpen,
       onOpenChange,
       disabled = false,
-      panelClassName = '',
+      panelClassName = "",
       matchTriggerWidth = true,
-      className = '',
+      className = "",
       style,
       children,
     },
-    ref,
+    ref
   ) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const panelRef = useRef<HTMLDivElement>(null);
@@ -112,13 +135,20 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
     const [internalOpen, setInternalOpen] = useState(false);
     const isOpen = isControlled ? controlledOpen : internalOpen;
     const [positioned, setPositioned] = useState(false);
-    const [coords, setCoords] = useState<{ top: number; left: number; minWidth?: number }>({ top: -9999, left: -9999 });
+    const [coords, setCoords] = useState<{
+      top: number;
+      left: number;
+      minWidth?: number;
+    }>({ top: -9999, left: -9999 });
 
-    const setOpen = useCallback((next: boolean) => {
-      if (!next) setPositioned(false);
-      if (!isControlled) setInternalOpen(next);
-      onOpenChange?.(next);
-    }, [isControlled, onOpenChange]);
+    const setOpen = useCallback(
+      (next: boolean) => {
+        if (!next) setPositioned(false);
+        if (!isControlled) setInternalOpen(next);
+        onOpenChange?.(next);
+      },
+      [isControlled, onOpenChange]
+    );
 
     const toggle = useCallback(() => {
       if (disabled) return;
@@ -138,18 +168,40 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
       const vh = window.innerHeight;
 
       let pos = position;
-      if (pos === 'bottom' && tr.bottom + offset + pr.height > vh && tr.top - offset - pr.height > 0) pos = 'top';
-      else if (pos === 'top' && tr.top - offset - pr.height < 0) pos = 'bottom';
-      else if (pos === 'right' && tr.right + offset + pr.width > vw && tr.left - offset - pr.width > 0) pos = 'left';
-      else if (pos === 'left' && tr.left - offset - pr.width < 0) pos = 'right';
+      if (
+        pos === "bottom" &&
+        tr.bottom + offset + pr.height > vh &&
+        tr.top - offset - pr.height > 0
+      )
+        pos = "top";
+      else if (pos === "top" && tr.top - offset - pr.height < 0) pos = "bottom";
+      else if (
+        pos === "right" &&
+        tr.right + offset + pr.width > vw &&
+        tr.left - offset - pr.width > 0
+      )
+        pos = "left";
+      else if (pos === "left" && tr.left - offset - pr.width < 0) pos = "right";
 
       let top = 0;
       let left = 0;
       switch (pos) {
-        case 'bottom': top = tr.bottom + offset; left = tr.left; break;
-        case 'top': top = tr.top - pr.height - offset; left = tr.left; break;
-        case 'right': top = tr.top; left = tr.right + offset; break;
-        case 'left': top = tr.top; left = tr.left - pr.width - offset; break;
+        case "bottom":
+          top = tr.bottom + offset;
+          left = tr.left;
+          break;
+        case "top":
+          top = tr.top - pr.height - offset;
+          left = tr.left;
+          break;
+        case "right":
+          top = tr.top;
+          left = tr.right + offset;
+          break;
+        case "left":
+          top = tr.top;
+          left = tr.left - pr.width - offset;
+          break;
       }
 
       if (left + pr.width > vw) left = vw - pr.width - 8;
@@ -157,7 +209,14 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
       if (top + pr.height > vh) top = vh - pr.height - 8;
       if (top < 0) top = 8;
 
-      setCoords({ top, left, minWidth: matchTriggerWidth && (pos === 'bottom' || pos === 'top') ? tr.width : undefined });
+      setCoords({
+        top,
+        left,
+        minWidth:
+          matchTriggerWidth && (pos === "bottom" || pos === "top")
+            ? tr.width
+            : undefined,
+      });
       setPositioned(true);
     }, [position, offset]);
 
@@ -168,12 +227,12 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
         return () => cancelAnimationFrame(frame2);
       });
       const onUpdate = computePosition;
-      window.addEventListener('scroll', onUpdate, true);
-      window.addEventListener('resize', onUpdate);
+      window.addEventListener("scroll", onUpdate, true);
+      window.addEventListener("resize", onUpdate);
       return () => {
         cancelAnimationFrame(frame1);
-        window.removeEventListener('scroll', onUpdate, true);
-        window.removeEventListener('resize', onUpdate);
+        window.removeEventListener("scroll", onUpdate, true);
+        window.removeEventListener("resize", onUpdate);
       };
     }, [isOpen, computePosition]);
 
@@ -181,40 +240,82 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
       if (!isOpen || !closeOnClickOutside) return;
       const handler = (e: MouseEvent) => {
         const t = e.target as Node;
-        if (wrapperRef.current?.contains(t) || panelRef.current?.contains(t)) return;
+        if (wrapperRef.current?.contains(t) || panelRef.current?.contains(t))
+          return;
         close();
       };
-      document.addEventListener('mousedown', handler);
-      return () => document.removeEventListener('mousedown', handler);
+      document.addEventListener("mousedown", handler);
+      return () => document.removeEventListener("mousedown", handler);
     }, [isOpen, closeOnClickOutside, close]);
 
     useEffect(() => {
       if (!isOpen || !closeOnEscape) return;
-      const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') { e.preventDefault(); close(); } };
-      document.addEventListener('keydown', handler);
-      return () => document.removeEventListener('keydown', handler);
+      const handler = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          close();
+        }
+      };
+      document.addEventListener("keydown", handler);
+      return () => document.removeEventListener("keydown", handler);
     }, [isOpen, closeOnEscape, close]);
 
-    const base = 'k-popover';
+    const base = "k-popover";
 
-    const resolvedContent = variant === 'confirm' && !content ? (
-      <div className={`${base}__confirm`}>
-        <div className={`${base}__confirm-body`}>
-          {icon && <span className={`${base}__confirm-icon`} aria-hidden="true">{icon}</span>}
-          <span className={`${base}__confirm-message`}>{message}</span>
+    const resolvedContent =
+      variant === "confirm" && !content ? (
+        <div className={`${base}__confirm`}>
+          <div className={`${base}__confirm-body`}>
+            {icon && (
+              <span className={`${base}__confirm-icon`} aria-hidden="true">
+                {icon}
+              </span>
+            )}
+            <span className={`${base}__confirm-message`}>{message}</span>
+          </div>
+          <div className={`${base}__confirm-actions`}>
+            <Button
+              label={rejectLabelProp || kreatiLocale.dialog.reject}
+              buttonType="text"
+              severity={rejectSeverity}
+              size="sm"
+              onClick={() => {
+                onReject?.();
+                close();
+              }}
+            />
+            <Button
+              label={acceptLabelProp || kreatiLocale.dialog.accept}
+              severity={acceptSeverity}
+              size="sm"
+              onClick={() => {
+                onAccept?.();
+                close();
+              }}
+            />
+          </div>
         </div>
-        <div className={`${base}__confirm-actions`}>
-          <Button label={rejectLabelProp || kreatiLocale.dialog.reject} buttonType="text" severity={rejectSeverity} size="sm" onClick={() => { onReject?.(); close(); }} />
-          <Button label={acceptLabelProp || kreatiLocale.dialog.accept} severity={acceptSeverity} size="sm" onClick={() => { onAccept?.(); close(); }} />
-        </div>
-      </div>
-    ) : content;
+      ) : (
+        content
+      );
 
     const panelEl = isOpen ? (
       <div
         ref={panelRef}
-        className={[`${base}__panel`, positioned && `${base}__panel--visible`, panelClassName].filter(Boolean).join(' ')}
-        style={{ position: 'fixed', top: coords.top, left: coords.left, minWidth: coords.minWidth, zIndex: childZ }}
+        className={[
+          `${base}__panel`,
+          positioned && `${base}__panel--visible`,
+          panelClassName,
+        ]
+          .filter(Boolean)
+          .join(" ")}
+        style={{
+          position: "fixed",
+          top: coords.top,
+          left: coords.left,
+          minWidth: coords.minWidth,
+          zIndex: childZ,
+        }}
         role="dialog"
         aria-modal="false"
       >
@@ -223,14 +324,18 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
     ) : null;
 
     return (
-      <div ref={wrapperRef} className={`${base} ${className}`.trim()} style={style}>
+      <div
+        ref={wrapperRef}
+        className={`${base} ${className}`.trim()}
+        style={style}
+      >
         <div className={`${base}__trigger`} onClick={toggle}>
           {children}
         </div>
-        {portal ? (panelEl && createPortal(panelEl, document.body)) : panelEl}
+        {portal ? panelEl && createPortal(panelEl, document.body) : panelEl}
       </div>
     );
-  },
+  }
 );
 
-Popover.displayName = 'Popover';
+Popover.displayName = "Popover";

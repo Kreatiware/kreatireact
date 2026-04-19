@@ -1,7 +1,13 @@
-import React, { forwardRef, useCallback, useRef, useEffect, useState } from 'react';
-import './TabMenu.css';
-import { MenuItem } from '../types/navigation';
-import { renderMenuIcon } from './resolveIcon';
+import React, {
+  forwardRef,
+  useCallback,
+  useRef,
+  useEffect,
+  useState,
+} from "react";
+import "./TabMenu.css";
+import { MenuItem } from "../types/navigation";
+import { renderMenuIcon } from "./resolveIcon";
 
 /**
  * Props for the TabMenu component
@@ -43,26 +49,19 @@ export interface TabMenuProps {
  */
 export const TabMenu = forwardRef<HTMLDivElement, TabMenuProps>(
   (
-    {
-      items,
-      activeKey,
-      onTabChange,
-      disabled = false,
-      className = '',
-      style,
-    },
-    ref,
+    { items, activeKey, onTabChange, disabled = false, className = "", style },
+    ref
   ) => {
-    const base = 'k-tabmenu';
+    const base = "k-tabmenu";
     const listRef = useRef<HTMLDivElement>(null);
     const [inkStyle, setInkStyle] = useState<React.CSSProperties>({});
     const tabRefs = useRef<Map<string, HTMLElement>>(new Map());
 
-    const visibleItems = items.filter((item) => item.visible !== false);
+    const visibleItems = items.filter(item => item.visible !== false);
 
     const classes = [base, disabled && `${base}--disabled`, className]
       .filter(Boolean)
-      .join(' ');
+      .join(" ");
 
     /** Update the ink bar position to match the active tab */
     const updateInk = useCallback(() => {
@@ -95,7 +94,11 @@ export const TabMenu = forwardRef<HTMLDivElement, TabMenuProps>(
     const scrollIntoView = useCallback((key: string) => {
       const el = tabRefs.current.get(key);
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+        el.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "nearest",
+        });
       }
     }, []);
 
@@ -108,35 +111,39 @@ export const TabMenu = forwardRef<HTMLDivElement, TabMenuProps>(
         if (disabled || item.disabled) return;
         if (item.command) item.command(item);
         if (item.url) {
-          if (item.target === '_blank') {
-            window.open(item.url, '_blank', 'noopener');
+          if (item.target === "_blank") {
+            window.open(item.url, "_blank", "noopener");
           } else {
             window.location.href = item.url;
           }
         }
         onTabChange?.(item.key, item);
       },
-      [disabled, onTabChange],
+      [disabled, onTabChange]
     );
 
     const handleKeyDown = useCallback(
       (e: React.KeyboardEvent) => {
-        const enabledItems = visibleItems.filter((i) => !i.separator && !i.disabled);
+        const enabledItems = visibleItems.filter(
+          i => !i.separator && !i.disabled
+        );
         if (enabledItems.length === 0) return;
 
-        const currentIndex = enabledItems.findIndex((i) => i.key === activeKey);
+        const currentIndex = enabledItems.findIndex(i => i.key === activeKey);
         let nextIndex = -1;
 
-        if (e.key === 'ArrowRight') {
+        if (e.key === "ArrowRight") {
           e.preventDefault();
-          nextIndex = currentIndex < enabledItems.length - 1 ? currentIndex + 1 : 0;
-        } else if (e.key === 'ArrowLeft') {
+          nextIndex =
+            currentIndex < enabledItems.length - 1 ? currentIndex + 1 : 0;
+        } else if (e.key === "ArrowLeft") {
           e.preventDefault();
-          nextIndex = currentIndex > 0 ? currentIndex - 1 : enabledItems.length - 1;
-        } else if (e.key === 'Home') {
+          nextIndex =
+            currentIndex > 0 ? currentIndex - 1 : enabledItems.length - 1;
+        } else if (e.key === "Home") {
           e.preventDefault();
           nextIndex = 0;
-        } else if (e.key === 'End') {
+        } else if (e.key === "End") {
           e.preventDefault();
           nextIndex = enabledItems.length - 1;
         }
@@ -147,16 +154,24 @@ export const TabMenu = forwardRef<HTMLDivElement, TabMenuProps>(
           handleSelect(nextItem);
         }
       },
-      [visibleItems, activeKey, handleSelect],
+      [visibleItems, activeKey, handleSelect]
     );
 
     const renderItem = (item: MenuItem) => {
       if (item.separator) {
-        return <div key={item.key} className={`${base}__separator`} role="separator" />;
+        return (
+          <div
+            key={item.key}
+            className={`${base}__separator`}
+            role="separator"
+          />
+        );
       }
 
       if (item.template) {
-        return <React.Fragment key={item.key}>{item.template(item)}</React.Fragment>;
+        return (
+          <React.Fragment key={item.key}>{item.template(item)}</React.Fragment>
+        );
       }
 
       const isActive = activeKey === item.key;
@@ -169,12 +184,12 @@ export const TabMenu = forwardRef<HTMLDivElement, TabMenuProps>(
         item.className,
       ]
         .filter(Boolean)
-        .join(' ');
+        .join(" ");
 
       return (
         <button
           key={item.key}
-          ref={(el) => {
+          ref={el => {
             if (el) tabRefs.current.set(item.key, el);
             else tabRefs.current.delete(item.key);
           }}
@@ -190,7 +205,11 @@ export const TabMenu = forwardRef<HTMLDivElement, TabMenuProps>(
           onClick={() => handleSelect(item)}
           onKeyDown={handleKeyDown}
         >
-          {item.icon && <span className={`${base}__icon`} aria-hidden="true">{renderMenuIcon(item.icon)}</span>}
+          {item.icon && (
+            <span className={`${base}__icon`} aria-hidden="true">
+              {renderMenuIcon(item.icon)}
+            </span>
+          )}
           {item.label && <span className={`${base}__label`}>{item.label}</span>}
         </button>
       );
@@ -209,7 +228,7 @@ export const TabMenu = forwardRef<HTMLDivElement, TabMenuProps>(
         </div>
       </div>
     );
-  },
+  }
 );
 
-TabMenu.displayName = 'TabMenu';
+TabMenu.displayName = "TabMenu";

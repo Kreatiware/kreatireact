@@ -1,7 +1,13 @@
-import React, { forwardRef, useState, useCallback, useImperativeHandle, useRef } from 'react';
-import { Message } from './Message';
-import type { MessageSeverity } from './Message';
-import './MessageList.css';
+import React, {
+  forwardRef,
+  useState,
+  useCallback,
+  useImperativeHandle,
+  useRef,
+} from "react";
+import { Message } from "./Message";
+import type { MessageSeverity } from "./Message";
+import "./MessageList.css";
 
 /** Data for a single message in the list */
 export interface MessageListItem {
@@ -20,7 +26,7 @@ export interface MessageListItem {
   /** Auto-dismiss duration in ms */
   life?: number;
   /** Border accent position */
-  borderPosition?: 'left' | 'top' | 'right' | 'bottom' | false;
+  borderPosition?: "left" | "top" | "right" | "bottom" | false;
   /** Additional CSS class names for this message */
   className?: string;
   /** Inline styles for this message */
@@ -66,39 +72,45 @@ const nextId = () => `kml-${++counter}`;
  * ```
  */
 export const MessageList = forwardRef<MessageListRef, MessageListProps>(
-  ({ className = '', style }, ref) => {
-    const [messages, setMessages] = useState<(MessageListItem & { id: string })[]>([]);
+  ({ className = "", style }, ref) => {
+    const [messages, setMessages] = useState<
+      (MessageListItem & { id: string })[]
+    >([]);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const show = useCallback((input: MessageListItem | MessageListItem[]) => {
       const items = Array.isArray(input) ? input : [input];
-      const withIds = items.map((m) => ({ ...m, id: m.id ?? nextId() }));
-      setMessages((prev) => [...prev, ...withIds]);
+      const withIds = items.map(m => ({ ...m, id: m.id ?? nextId() }));
+      setMessages(prev => [...prev, ...withIds]);
     }, []);
 
     const remove = useCallback((id: string) => {
-      setMessages((prev) => prev.filter((m) => m.id !== id));
+      setMessages(prev => prev.filter(m => m.id !== id));
     }, []);
 
     const clear = useCallback(() => {
       setMessages([]);
     }, []);
 
-    useImperativeHandle(ref, () => ({ show, remove, clear }), [show, remove, clear]);
+    useImperativeHandle(ref, () => ({ show, remove, clear }), [
+      show,
+      remove,
+      clear,
+    ]);
 
-    const base = 'k-message-list';
+    const base = "k-message-list";
 
     if (messages.length === 0) return null;
 
     return (
       <div
         ref={containerRef}
-        className={[base, className].filter(Boolean).join(' ')}
+        className={[base, className].filter(Boolean).join(" ")}
         style={style}
         aria-live="polite"
         aria-relevant="additions removals"
       >
-        {messages.map((msg) => (
+        {messages.map(msg => (
           <Message
             key={msg.id}
             severity={msg.severity}
@@ -116,7 +128,7 @@ export const MessageList = forwardRef<MessageListRef, MessageListProps>(
         ))}
       </div>
     );
-  },
+  }
 );
 
-MessageList.displayName = 'MessageList';
+MessageList.displayName = "MessageList";

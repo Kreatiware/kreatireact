@@ -1,16 +1,23 @@
-import React, { forwardRef, useState, useCallback, useRef, useEffect, useImperativeHandle } from 'react';
-import { createPortal } from 'react-dom';
-import { Input } from './Input';
-import { Tree } from './Tree';
-import type { TreeNode } from './Tree';
-import { Chip } from './Chip';
-import { useKreatiLocale } from '../locale';
-import { useOverlayPosition } from './useOverlayPosition';
-import { useLayerZIndex } from './LayerContext';
-import { CHEVRON_DOWN_PATH, TIMES_PATH } from './iconPaths';
-import './TreeSelect.css';
+import React, {
+  forwardRef,
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  useImperativeHandle,
+} from "react";
+import { createPortal } from "react-dom";
+import { Input } from "./Input";
+import { Tree } from "./Tree";
+import type { TreeNode } from "./Tree";
+import { Chip } from "./Chip";
+import { useKreatiLocale } from "../locale";
+import { useOverlayPosition } from "./useOverlayPosition";
+import { useLayerZIndex } from "./LayerContext";
+import { CHEVRON_DOWN_PATH, TIMES_PATH } from "./iconPaths";
+import "./TreeSelect.css";
 
-export type { TreeNode } from './Tree';
+export type { TreeNode } from "./Tree";
 
 export interface TreeSelectProps {
   /** Tree data */
@@ -30,9 +37,9 @@ export interface TreeSelectProps {
   /** Hide disabled nodes from filter results (default: false) */
   filterDisabled?: boolean;
   /** Visual variant */
-  variant?: 'floating' | 'stacked';
+  variant?: "floating" | "stacked";
   /** Component size */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Label text */
   label?: string;
   /** Placeholder when nothing selected */
@@ -59,18 +66,27 @@ export interface TreeSelectProps {
   style?: React.CSSProperties;
 }
 
-const base = 'k-tree-select';
+const base = "k-tree-select";
 
 const flattenNodes = (nodes: TreeNode[]): TreeNode[] =>
-  nodes.flatMap((n) => [n, ...(n.children ? flattenNodes(n.children) : [])]);
+  nodes.flatMap(n => [n, ...(n.children ? flattenNodes(n.children) : [])]);
 
-const filterTree = (nodes: TreeNode[], query: string, hideDisabled: boolean): TreeNode[] => {
+const filterTree = (
+  nodes: TreeNode[],
+  query: string,
+  hideDisabled: boolean
+): TreeNode[] => {
   const q = query.toLowerCase();
   return nodes.reduce<TreeNode[]>((acc, node) => {
     if (hideDisabled && node.disabled) return acc;
-    const childMatch = node.children ? filterTree(node.children, query, hideDisabled) : [];
+    const childMatch = node.children
+      ? filterTree(node.children, query, hideDisabled)
+      : [];
     if (node.label.toLowerCase().includes(q) || childMatch.length > 0) {
-      acc.push({ ...node, children: childMatch.length > 0 ? childMatch : node.children });
+      acc.push({
+        ...node,
+        children: childMatch.length > 0 ? childMatch : node.children,
+      });
     }
     return acc;
   }, []);
@@ -111,10 +127,10 @@ export const TreeSelect = forwardRef<HTMLDivElement, TreeSelectProps>(
       fullWidth,
       name,
       onBlur,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const locale = useKreatiLocale();
     const wrapperRef = useRef<HTMLDivElement>(null);
@@ -124,58 +140,90 @@ export const TreeSelect = forwardRef<HTMLDivElement, TreeSelectProps>(
 
     const isControlled = controlledValue !== undefined;
     const [internalValue, setInternalValue] = useState<string[]>(
-      defaultValue ? (Array.isArray(defaultValue) ? defaultValue : [defaultValue]) : [],
+      defaultValue
+        ? Array.isArray(defaultValue)
+          ? defaultValue
+          : [defaultValue]
+        : []
     );
     const selectedKeys = isControlled
-      ? (Array.isArray(controlledValue) ? controlledValue : [controlledValue])
+      ? Array.isArray(controlledValue)
+        ? controlledValue
+        : [controlledValue]
       : internalValue;
 
     const [open, setOpen] = useState(false);
-    const [filter, setFilter] = useState('');
+    const [filter, setFilter] = useState("");
 
     const zIndex = useLayerZIndex();
-    const { coords, positioned } = useOverlayPosition(triggerRef, panelRef, open);
+    const { coords, positioned } = useOverlayPosition(
+      triggerRef,
+      panelRef,
+      open
+    );
 
     const allFlat = flattenNodes(nodes);
-    const selectedNodes = selectedKeys.map((k) => allFlat.find((n) => n.key === k)).filter(Boolean) as TreeNode[];
-    const displayLabel = selectedNodes.map((n) => n.label).join(', ');
+    const selectedNodes = selectedKeys
+      .map(k => allFlat.find(n => n.key === k))
+      .filter(Boolean) as TreeNode[];
+    const displayLabel = selectedNodes.map(n => n.label).join(", ");
 
     const handleSelect = useCallback(
       (keys: string[], node: TreeNode) => {
         const next = multiple ? keys : keys.slice(-1);
         if (!isControlled) setInternalValue(next);
-        const matched = next.map((k) => allFlat.find((n) => n.key === k)).filter(Boolean) as TreeNode[];
-        onChange?.(multiple ? next : next[0] ?? '', matched);
+        const matched = next
+          .map(k => allFlat.find(n => n.key === k))
+          .filter(Boolean) as TreeNode[];
+        onChange?.(multiple ? next : (next[0] ?? ""), matched);
         if (!multiple) setOpen(false);
       },
-      [multiple, isControlled, allFlat, onChange],
+      [multiple, isControlled, allFlat, onChange]
     );
 
     const toggleOpen = useCallback(() => {
       if (disabled) return;
-      setOpen((p) => !p);
-      setFilter('');
+      setOpen(p => !p);
+      setFilter("");
     }, [disabled]);
 
     useEffect(() => {
       if (!open) return;
       const handler = (e: MouseEvent) => {
-        if (wrapperRef.current?.contains(e.target as Node) || panelRef.current?.contains(e.target as Node)) return;
+        if (
+          wrapperRef.current?.contains(e.target as Node) ||
+          panelRef.current?.contains(e.target as Node)
+        )
+          return;
         setOpen(false);
         onBlur?.();
       };
-      document.addEventListener('mousedown', handler);
-      return () => document.removeEventListener('mousedown', handler);
+      document.addEventListener("mousedown", handler);
+      return () => document.removeEventListener("mousedown", handler);
     }, [open, onBlur]);
 
-    const visibleNodes = filter ? filterTree(nodes, filter, filterDisabled) : (filterDisabled ? filterTree(nodes, '', filterDisabled) : nodes);
+    const visibleNodes = filter
+      ? filterTree(nodes, filter, filterDisabled)
+      : filterDisabled
+        ? filterTree(nodes, "", filterDisabled)
+        : nodes;
 
     const collectKeys = (ns: TreeNode[]): string[] =>
-      ns.flatMap((n) => [n.key, ...(n.children ? collectKeys(n.children) : [])]);
+      ns.flatMap(n => [n.key, ...(n.children ? collectKeys(n.children) : [])]);
     const filterExpandedKeys = filter ? collectKeys(visibleNodes) : undefined;
 
     const dropdownIcon = (
-      <svg viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em" aria-hidden="true" style={{ transition: 'transform 0.15s', transform: open ? 'rotate(180deg)' : undefined }}>
+      <svg
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        width="1em"
+        height="1em"
+        aria-hidden="true"
+        style={{
+          transition: "transform 0.15s",
+          transform: open ? "rotate(180deg)" : undefined,
+        }}
+      >
         <path d={CHEVRON_DOWN_PATH} />
       </svg>
     );
@@ -184,41 +232,68 @@ export const TreeSelect = forwardRef<HTMLDivElement, TreeSelectProps>(
       ? createPortal(
           <div
             ref={panelRef}
-            className={`${base}__panel${positioned ? ` ${base}__panel--visible` : ''}`}
-            style={{ top: coords.top, left: coords.left, minWidth: coords.minWidth, zIndex: zIndex.overlay }}
+            className={`${base}__panel${positioned ? ` ${base}__panel--visible` : ""}`}
+            style={{
+              top: coords.top,
+              left: coords.left,
+              minWidth: coords.minWidth,
+              zIndex: zIndex.overlay,
+            }}
           >
             {filterable && (
               <div className={`${base}__filter`}>
                 <input
                   type="text"
                   value={filter}
-                  onChange={(e) => setFilter(e.target.value)}
-                  placeholder={filterPlaceholder ?? locale.select.filterPlaceholder}
+                  onChange={e => setFilter(e.target.value)}
+                  placeholder={
+                    filterPlaceholder ?? locale.select.filterPlaceholder
+                  }
                   autoFocus
                 />
               </div>
             )}
             {visibleNodes.length === 0 ? (
-              <div className={`${base}__empty`}>{locale.select.emptyMessage}</div>
+              <div className={`${base}__empty`}>
+                {locale.select.emptyMessage}
+              </div>
             ) : (
               <Tree
                 nodes={visibleNodes}
                 selectedKeys={selectedKeys}
                 onSelect={handleSelect}
                 multiple={multiple}
-                {...(filterExpandedKeys ? { expandedKeys: filterExpandedKeys } : { defaultExpandedKeys: selectedKeys })}
+                {...(filterExpandedKeys
+                  ? { expandedKeys: filterExpandedKeys }
+                  : { defaultExpandedKeys: selectedKeys })}
               />
             )}
           </div>,
-          document.body,
+          document.body
         )
       : null;
 
-    const cls = [base, fullWidth && `${base}--full-width`, className].filter(Boolean).join(' ');
+    const cls = [base, fullWidth && `${base}--full-width`, className]
+      .filter(Boolean)
+      .join(" ");
 
     return (
       <div ref={wrapperRef} className={cls} style={style}>
-        <div ref={triggerRef as React.Ref<HTMLDivElement>} onClick={toggleOpen} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleOpen(); } }} tabIndex={disabled ? -1 : 0} role="combobox" aria-expanded={open} aria-haspopup="tree" style={{ cursor: disabled ? 'not-allowed' : 'pointer' }}>
+        <div
+          ref={triggerRef as React.Ref<HTMLDivElement>}
+          onClick={toggleOpen}
+          onKeyDown={e => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              toggleOpen();
+            }
+          }}
+          tabIndex={disabled ? -1 : 0}
+          role="combobox"
+          aria-expanded={open}
+          aria-haspopup="tree"
+          style={{ cursor: disabled ? "not-allowed" : "pointer" }}
+        >
           <Input
             readOnly
             variant={variant}
@@ -236,11 +311,14 @@ export const TreeSelect = forwardRef<HTMLDivElement, TreeSelectProps>(
             className="k-tree-select__trigger"
           />
         </div>
-        {name && selectedKeys.map((k) => <input key={k} type="hidden" name={name} value={k} />)}
+        {name &&
+          selectedKeys.map(k => (
+            <input key={k} type="hidden" name={name} value={k} />
+          ))}
         {panel}
       </div>
     );
-  },
+  }
 );
 
-TreeSelect.displayName = 'TreeSelect';
+TreeSelect.displayName = "TreeSelect";

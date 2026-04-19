@@ -28,11 +28,26 @@
 /* ============================================
    Dial — Sizes
    ============================================ */
-.k-dial--xs { width: var(--kreati-dial-size-xs); height: var(--kreati-dial-size-xs); }
-.k-dial--sm { width: var(--kreati-dial-size-sm); height: var(--kreati-dial-size-sm); }
-.k-dial--md { width: var(--kreati-dial-size-md); height: var(--kreati-dial-size-md); }
-.k-dial--lg { width: var(--kreati-dial-size-lg); height: var(--kreati-dial-size-lg); }
-.k-dial--xl { width: var(--kreati-dial-size-xl); height: var(--kreati-dial-size-xl); }
+.k-dial--xs {
+  width: var(--kreati-dial-size-xs);
+  height: var(--kreati-dial-size-xs);
+}
+.k-dial--sm {
+  width: var(--kreati-dial-size-sm);
+  height: var(--kreati-dial-size-sm);
+}
+.k-dial--md {
+  width: var(--kreati-dial-size-md);
+  height: var(--kreati-dial-size-md);
+}
+.k-dial--lg {
+  width: var(--kreati-dial-size-lg);
+  height: var(--kreati-dial-size-lg);
+}
+.k-dial--xl {
+  width: var(--kreati-dial-size-xl);
+  height: var(--kreati-dial-size-xl);
+}
 
 /* ============================================
    Dial — SVG

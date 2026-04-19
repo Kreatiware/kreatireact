@@ -6,19 +6,24 @@ module.exports = {
     node: true,
   },
   extends: [
-    'eslint:recommended',
-    'prettier',
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react-hooks/recommended",
+    "prettier",
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs', 'node_modules', '**/*.d.ts'],
+  parser: "@typescript-eslint/parser",
+  plugins: ["@typescript-eslint", "react-refresh"],
+  ignorePatterns: ["dist", ".eslintrc.cjs", "node_modules", "**/*.d.ts", "packages/layout/scripts", "packages/layout/bin"],
   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
+    ecmaVersion: "latest",
+    sourceType: "module",
     ecmaFeatures: {
       jsx: true,
     },
   },
   rules: {
-    'no-unused-vars': 'off',
-    'no-undef': 'off',
+    "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    "@typescript-eslint/no-explicit-any": "warn",
+    "no-console": "warn",
   },
 };

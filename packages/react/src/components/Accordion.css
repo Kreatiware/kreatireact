@@ -32,7 +32,8 @@
   gap: var(--kreati-space-3);
   padding: var(--kreati-panel-header-padding, var(--kreati-space-4));
   background: var(--kreati-panel-header-bg, var(--kreati-gray-50));
-  border-bottom: 1px solid var(--kreati-panel-border-color, var(--kreati-gray-200));
+  border-bottom: 1px solid
+    var(--kreati-panel-border-color, var(--kreati-gray-200));
   cursor: pointer;
   user-select: none;
   transition: background 0.15s ease;
@@ -61,9 +62,15 @@
 
 .k-accordion__title {
   flex: 1;
-  font-family: var(--kreati-panel-title-font-family, var(--kreati-preset-h4-family));
+  font-family: var(
+    --kreati-panel-title-font-family,
+    var(--kreati-preset-h4-family)
+  );
   font-size: var(--kreati-panel-title-font-size, var(--kreati-preset-h4-size));
-  font-weight: var(--kreati-panel-title-font-weight, var(--kreati-preset-h4-weight));
+  font-weight: var(
+    --kreati-panel-title-font-weight,
+    var(--kreati-preset-h4-weight)
+  );
   line-height: var(--kreati-preset-h4-line-height);
   color: var(--kreati-panel-title-color, var(--kreati-gray-900));
 }

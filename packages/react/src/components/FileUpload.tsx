@@ -1,8 +1,15 @@
-import React, { forwardRef, useState, useCallback, useRef, useImperativeHandle, useId } from 'react';
-import { TIMES_PATH, UPLOAD_PATH } from './iconPaths';
-import { FieldWrapper } from './FieldWrapper';
-import { useKreatiLocale } from '../locale';
-import './FileUpload.css';
+import React, {
+  forwardRef,
+  useState,
+  useCallback,
+  useRef,
+  useImperativeHandle,
+  useId,
+} from "react";
+import { TIMES_PATH, UPLOAD_PATH } from "./iconPaths";
+import { FieldWrapper } from "./FieldWrapper";
+import { useKreatiLocale } from "../locale";
+import "./FileUpload.css";
 
 export interface FileUploadProps {
   /** Accepted file types (e.g. "image/*,.pdf") */
@@ -34,9 +41,17 @@ export interface FileUploadProps {
   /** Success state */
   success?: boolean;
   /** Helper text severity color */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  helperSeverity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Component size */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Required indicator */
   required?: boolean;
   /** Disabled */
@@ -51,7 +66,7 @@ export interface FileUploadProps {
   style?: React.CSSProperties;
 }
 
-const base = 'k-file-upload';
+const base = "k-file-upload";
 
 const formatSize = (bytes: number): string => {
   if (bytes < 1024) return `${bytes} B`;
@@ -97,10 +112,10 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
       disabled = false,
       fullWidth = false,
       name,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const elRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -115,14 +130,14 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
     const addFiles = useCallback(
       (incoming: File[]) => {
         let valid = incoming;
-        if (maxFileSize) valid = valid.filter((f) => f.size <= maxFileSize);
+        if (maxFileSize) valid = valid.filter(f => f.size <= maxFileSize);
         if (maxFiles) valid = valid.slice(0, maxFiles - files.length);
         if (!multiple) valid = valid.slice(0, 1);
         const next = multiple ? [...files, ...valid] : valid;
         setFiles(next);
         onSelect?.(next);
       },
-      [files, multiple, maxFileSize, maxFiles, onSelect],
+      [files, multiple, maxFileSize, maxFiles, onSelect]
     );
 
     const removeFile = useCallback(
@@ -133,7 +148,7 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
         onRemoveProp?.(removed);
         if (next.length === 0) onClear?.();
       },
-      [files, onRemoveProp, onClear],
+      [files, onRemoveProp, onClear]
     );
 
     const handleDrop = useCallback(
@@ -143,33 +158,38 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
         if (disabled) return;
         addFiles(Array.from(e.dataTransfer.files));
       },
-      [disabled, addFiles],
+      [disabled, addFiles]
     );
 
     const handleInputChange = useCallback(
       (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) addFiles(Array.from(e.target.files));
-        e.target.value = '';
+        e.target.value = "";
       },
-      [addFiles],
+      [addFiles]
     );
 
     const hasError = !!error;
-    const errorMessage = typeof error === 'boolean' ? undefined : error;
+    const errorMessage = typeof error === "boolean" ? undefined : error;
 
     const dropCls = [
       `${base}__dropzone`,
       dragging && `${base}__dropzone--dragging`,
       hasError && `${base}__dropzone--error`,
       !hasError && success && `${base}__dropzone--success`,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     const dropzone = (
       <div
         id={dropzoneId}
         className={dropCls}
         onClick={() => !disabled && inputRef.current?.click()}
-        onDragOver={(e) => { e.preventDefault(); if (!disabled) setDragging(true); }}
+        onDragOver={e => {
+          e.preventDefault();
+          if (!disabled) setDragging(true);
+        }}
         onDragLeave={() => setDragging(false)}
         onDrop={handleDrop}
         onBlur={onBlur}
@@ -178,45 +198,81 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
         aria-label={label ?? locale.fileUpload.clickToUpload}
         aria-disabled={disabled || undefined}
         aria-required={required || undefined}
-        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inputRef.current?.click(); } }}
+        onKeyDown={e => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            inputRef.current?.click();
+          }
+        }}
       >
-        {dropzoneTemplate ? dropzoneTemplate({ isDragging: dragging }) : (
+        {dropzoneTemplate ? (
+          dropzoneTemplate({ isDragging: dragging })
+        ) : (
           <>
             <span className={`${base}__icon`} aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d={UPLOAD_PATH} /></svg>
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                width="32"
+                height="32"
+              >
+                <path d={UPLOAD_PATH} />
+              </svg>
             </span>
             <span className={`${base}__text`}>
-              <strong>{locale.fileUpload.clickToUpload}</strong> {locale.fileUpload.dragAndDrop}
+              <strong>{locale.fileUpload.clickToUpload}</strong>{" "}
+              {locale.fileUpload.dragAndDrop}
             </span>
             {accept && <span className={`${base}__hint`}>{accept}</span>}
-            {maxFileSize && <span className={`${base}__hint`}>{locale.fileUpload.maxSize} {formatSize(maxFileSize)}</span>}
+            {maxFileSize && (
+              <span className={`${base}__hint`}>
+                {locale.fileUpload.maxSize} {formatSize(maxFileSize)}
+              </span>
+            )}
           </>
         )}
       </div>
     );
 
-    const fileList = files.length > 0 ? (
-      <div className={`${base}__list`} role="list">
-        {files.map((file, i) => (
-          fileTemplate ? (
-            <React.Fragment key={`${file.name}-${i}`}>{fileTemplate(file, () => removeFile(i))}</React.Fragment>
-          ) : (
-            <div key={`${file.name}-${i}`} className={`${base}__file`} role="listitem">
-              <span className={`${base}__file-name`}>{file.name}</span>
-              <span className={`${base}__file-size`}>{formatSize(file.size)}</span>
-              <button
-                type="button"
-                className={`${base}__file-remove`}
-                onClick={() => removeFile(i)}
-                aria-label={`${locale.fileUpload.removeFile} ${file.name}`}
+    const fileList =
+      files.length > 0 ? (
+        <div className={`${base}__list`} role="list">
+          {files.map((file, i) =>
+            fileTemplate ? (
+              <React.Fragment key={`${file.name}-${i}`}>
+                {fileTemplate(file, () => removeFile(i))}
+              </React.Fragment>
+            ) : (
+              <div
+                key={`${file.name}-${i}`}
+                className={`${base}__file`}
+                role="listitem"
               >
-                <svg width={14} height={14} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={TIMES_PATH} /></svg>
-              </button>
-            </div>
-          )
-        ))}
-      </div>
-    ) : null;
+                <span className={`${base}__file-name`}>{file.name}</span>
+                <span className={`${base}__file-size`}>
+                  {formatSize(file.size)}
+                </span>
+                <button
+                  type="button"
+                  className={`${base}__file-remove`}
+                  onClick={() => removeFile(i)}
+                  aria-label={`${locale.fileUpload.removeFile} ${file.name}`}
+                >
+                  <svg
+                    width={14}
+                    height={14}
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d={TIMES_PATH} />
+                  </svg>
+                </button>
+              </div>
+            )
+          )}
+        </div>
+      ) : null;
 
     const content = (
       <>
@@ -227,7 +283,7 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
           accept={accept}
           multiple={multiple}
           onChange={handleInputChange}
-          style={{ display: 'none' }}
+          style={{ display: "none" }}
           name={name}
           aria-hidden="true"
           tabIndex={-1}
@@ -236,7 +292,9 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
       </>
     );
 
-    const wrapperCls = [base, disabled && `${base}--disabled`, className].filter(Boolean).join(' ');
+    const wrapperCls = [base, disabled && `${base}--disabled`, className]
+      .filter(Boolean)
+      .join(" ");
 
     return (
       <div ref={elRef} className={wrapperCls} style={style}>
@@ -256,7 +314,7 @@ export const FileUpload = forwardRef<HTMLDivElement, FileUploadProps>(
         </FieldWrapper>
       </div>
     );
-  },
+  }
 );
 
-FileUpload.displayName = 'FileUpload';
+FileUpload.displayName = "FileUpload";

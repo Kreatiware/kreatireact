@@ -1,5 +1,11 @@
-import React, { forwardRef, useId, useRef, useState, useImperativeHandle } from 'react';
-import './Switch.css';
+import React, {
+  forwardRef,
+  useId,
+  useRef,
+  useState,
+  useImperativeHandle,
+} from "react";
+import "./Switch.css";
 
 export interface SwitchProps {
   /** Checked (on) state — controlled */
@@ -11,9 +17,9 @@ export interface SwitchProps {
   /** Label text next to the switch */
   label?: React.ReactNode;
   /** Label position relative to the switch */
-  labelPosition?: 'left' | 'right';
+  labelPosition?: "left" | "right";
   /** Component size */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Custom content rendered inside the thumb when on */
   thumbOnTemplate?: React.ReactNode;
   /** Custom content rendered inside the thumb when off */
@@ -29,7 +35,15 @@ export interface SwitchProps {
   /** Success state */
   success?: boolean;
   /** Severity color for the helper text */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  helperSeverity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Disabled state */
   disabled?: boolean;
   /** Read-only state */
@@ -71,8 +85,8 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       defaultChecked,
       value,
       label,
-      labelPosition = 'right',
-      size = 'md',
+      labelPosition = "right",
+      size = "md",
       thumbOnTemplate,
       thumbOffTemplate,
       trackOnTemplate,
@@ -87,10 +101,10 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       name,
       onChange,
       onBlur,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const autoId = useId();
     const inputId = name || autoId;
@@ -98,19 +112,26 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
     useImperativeHandle(ref, () => innerRef.current as HTMLInputElement);
 
     const isControlled = controlledChecked !== undefined;
-    const [internalChecked, setInternalChecked] = useState(defaultChecked ?? false);
+    const [internalChecked, setInternalChecked] = useState(
+      defaultChecked ?? false
+    );
     const isOn = isControlled ? controlledChecked : internalChecked;
 
     const hasError = !!error;
-    const errorMessage = typeof error === 'boolean' ? undefined : error;
-    const base = 'k-switch';
+    const errorMessage = typeof error === "boolean" ? undefined : error;
+    const base = "k-switch";
 
     const helperId = `${inputId}-helper`;
     const errorId = `${inputId}-error`;
-    const describedBy = [hasError && errorId, helperText && helperId].filter(Boolean).join(' ') || undefined;
+    const describedBy =
+      [hasError && errorId, helperText && helperId].filter(Boolean).join(" ") ||
+      undefined;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (readOnly) { e.preventDefault(); return; }
+      if (readOnly) {
+        e.preventDefault();
+        return;
+      }
       if (!isControlled) setInternalChecked(e.target.checked);
       onChange?.(e);
     };
@@ -123,13 +144,17 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       isOn && hasError && `${base}__track--error`,
       !isOn && hasError && `${base}__track--error-off`,
       disabled && `${base}__track--disabled`,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     const thumbClasses = [
       `${base}__thumb`,
       `${base}__thumb--${size}`,
       isOn && `${base}__thumb--on`,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     const wrapperClasses = [
       base,
@@ -137,12 +162,18 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       disabled && `${base}--disabled`,
       readOnly && `${base}--readonly`,
       className,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     const labelEl = label ? (
       <span className={`${base}__label ${base}__label--${size}`}>
         {label}
-        {required && <span className={`${base}__required`} aria-hidden="true">*</span>}
+        {required && (
+          <span className={`${base}__required`} aria-hidden="true">
+            *
+          </span>
+        )}
       </span>
     ) : null;
 
@@ -169,8 +200,16 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
             aria-required={required || undefined}
           />
           <span className={trackClasses}>
-            {isOn && trackOnTemplate && <span className={`${base}__track-content`}>{trackOnTemplate}</span>}
-            {!isOn && trackOffTemplate && <span className={`${base}__track-content`}>{trackOffTemplate}</span>}
+            {isOn && trackOnTemplate && (
+              <span className={`${base}__track-content`}>
+                {trackOnTemplate}
+              </span>
+            )}
+            {!isOn && trackOffTemplate && (
+              <span className={`${base}__track-content`}>
+                {trackOffTemplate}
+              </span>
+            )}
             <span className={thumbClasses}>
               {isOn ? thumbOnTemplate : thumbOffTemplate}
             </span>
@@ -178,14 +217,18 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
           {labelEl}
         </label>
         {hasError && errorMessage && (
-          <span className={`${base}__error`} id={errorId} role="alert">{errorMessage}</span>
+          <span className={`${base}__error`} id={errorId} role="alert">
+            {errorMessage}
+          </span>
         )}
         {helperText && (
           <span
             className={[
               `${base}__helper`,
               helperSeverity && `${base}__helper--${helperSeverity}`,
-            ].filter(Boolean).join(' ')}
+            ]
+              .filter(Boolean)
+              .join(" ")}
             id={helperId}
           >
             {helperText}
@@ -193,7 +236,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
         )}
       </div>
     );
-  },
+  }
 );
 
-Switch.displayName = 'Switch';
+Switch.displayName = "Switch";

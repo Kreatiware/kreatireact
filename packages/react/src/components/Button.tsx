@@ -1,10 +1,10 @@
-import React, { forwardRef } from 'react';
-import { Tooltip } from './Tooltip';
-import type { TooltipPosition } from './Tooltip';
-import './Button.css';
+import React, { forwardRef } from "react";
+import { Tooltip } from "./Tooltip";
+import type { TooltipPosition } from "./Tooltip";
+import "./Button.css";
 
 export interface ButtonSize {
-  value: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  value: "xs" | "sm" | "md" | "lg" | "xl";
 }
 
 export interface ButtonProps {
@@ -15,11 +15,19 @@ export interface ButtonProps {
   /** Right icon (JSX element) */
   iconRight?: React.ReactNode;
   /** Button size */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Button type style */
-  buttonType?: 'filled' | 'outlined' | 'text';
+  buttonType?: "filled" | "outlined" | "text";
   /** Color severity */
-  severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  severity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Disabled state (keeps color, applies 40% opacity) */
   disabled?: boolean;
   /** Raised shadow effect */
@@ -33,11 +41,11 @@ export interface ButtonProps {
   /** Badge content */
   badge?: React.ReactNode;
   /** Badge position using cardinal directions */
-  badgePosition?: 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw';
+  badgePosition?: "n" | "ne" | "e" | "se" | "s" | "sw" | "w" | "nw";
   /** Click handler */
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   /** HTML button type attribute */
-  type?: 'button' | 'submit' | 'reset';
+  type?: "button" | "submit" | "reset";
   /** Custom width (e.g. '100%', '200px', 'auto') */
   width?: string;
   /** Accessible label for icon-only buttons */
@@ -75,30 +83,30 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       label,
       iconLeft,
       iconRight,
-      size = 'md',
-      buttonType = 'filled',
-      severity = 'primary',
+      size = "md",
+      buttonType = "filled",
+      severity = "primary",
       disabled = false,
       raised = false,
       rounded = false,
       slim = false,
       compact = false,
       badge,
-      badgePosition = 'ne',
+      badgePosition = "ne",
       onClick,
-      type = 'button',
+      type = "button",
       width,
       ariaLabel,
       tooltip,
-      tooltipPosition = 'top',
-      className = '',
+      tooltipPosition = "top",
+      className = "",
       style,
       children,
     },
-    ref,
+    ref
   ) => {
     const isIconOnly = !label && !children && (iconLeft || iconRight);
-    const base = 'k-button';
+    const base = "k-button";
 
     const classes = [
       base,
@@ -114,7 +122,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       className,
     ]
       .filter(Boolean)
-      .join(' ');
+      .join(" ");
 
     const buttonEl = (
       <button
@@ -131,9 +139,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           children
         ) : (
           <>
-            {iconLeft && <span className={`${base}__icon ${base}__icon--left`}>{iconLeft}</span>}
+            {iconLeft && (
+              <span className={`${base}__icon ${base}__icon--left`}>
+                {iconLeft}
+              </span>
+            )}
             {label && <span className={`${base}__label`}>{label}</span>}
-            {iconRight && <span className={`${base}__icon ${base}__icon--right`}>{iconRight}</span>}
+            {iconRight && (
+              <span className={`${base}__icon ${base}__icon--right`}>
+                {iconRight}
+              </span>
+            )}
           </>
         )}
         {badge != null && (
@@ -153,7 +169,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     }
 
     return buttonEl;
-  },
+  }
 );
 
-Button.displayName = 'Button';
+Button.displayName = "Button";

@@ -1,8 +1,8 @@
-import React, { forwardRef } from 'react';
-import './Breadcrumb.css';
-import { MenuItem } from '../types/navigation';
-import { renderMenuIcon } from './resolveIcon';
-import { CHEVRON_RIGHT_PATH } from './iconPaths';
+import React, { forwardRef } from "react";
+import "./Breadcrumb.css";
+import { MenuItem } from "../types/navigation";
+import { renderMenuIcon } from "./resolveIcon";
+import { CHEVRON_RIGHT_PATH } from "./iconPaths";
 
 /**
  * Props for the Breadcrumb component
@@ -20,7 +20,13 @@ export interface BreadcrumbProps {
 
 /** Default chevron separator */
 const defaultSeparator = (
-  <svg width={14} height={14} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+  <svg
+    width={14}
+    height={14}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
     <path d={CHEVRON_RIGHT_PATH} />
   </svg>
 );
@@ -43,17 +49,17 @@ const defaultSeparator = (
  * ```
  */
 export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
-  ({ items, separator, className = '', style }, ref) => {
-    const base = 'k-breadcrumb';
-    const visibleItems = items.filter((item) => item.visible !== false);
+  ({ items, separator, className = "", style }, ref) => {
+    const base = "k-breadcrumb";
+    const visibleItems = items.filter(item => item.visible !== false);
 
     const resolvedSeparator = separator
-      ? typeof separator === 'string'
+      ? typeof separator === "string"
         ? renderMenuIcon(separator, 14) || <span>{separator}</span>
         : separator
       : defaultSeparator;
 
-    const classes = [base, className].filter(Boolean).join(' ');
+    const classes = [base, className].filter(Boolean).join(" ");
 
     const handleClick = (item: MenuItem, e: React.MouseEvent) => {
       if (item.disabled) {
@@ -76,7 +82,11 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
               return (
                 <li key={item.key} className={`${base}__item`}>
                   {item.template(item)}
-                  {!isLast && <span className={`${base}__separator`} aria-hidden="true">{resolvedSeparator}</span>}
+                  {!isLast && (
+                    <span className={`${base}__separator`} aria-hidden="true">
+                      {resolvedSeparator}
+                    </span>
+                  )}
                 </li>
               );
             }
@@ -91,11 +101,15 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
               item.className,
             ]
               .filter(Boolean)
-              .join(' ');
+              .join(" ");
 
             const content = (
               <>
-                {item.icon && <span className={`${base}__icon`} aria-hidden="true">{renderMenuIcon(item.icon, 14)}</span>}
+                {item.icon && (
+                  <span className={`${base}__icon`} aria-hidden="true">
+                    {renderMenuIcon(item.icon, 14)}
+                  </span>
+                )}
                 <span>{item.label}</span>
               </>
             );
@@ -108,7 +122,7 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
                     target={item.target}
                     className={linkClasses}
                     style={item.style}
-                    onClick={(e) => handleClick(item, e)}
+                    onClick={e => handleClick(item, e)}
                   >
                     {content}
                   </a>
@@ -116,19 +130,23 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
                   <span
                     className={linkClasses}
                     style={item.style}
-                    aria-current={isLast ? 'page' : undefined}
+                    aria-current={isLast ? "page" : undefined}
                   >
                     {content}
                   </span>
                 )}
-                {!isLast && <span className={`${base}__separator`} aria-hidden="true">{resolvedSeparator}</span>}
+                {!isLast && (
+                  <span className={`${base}__separator`} aria-hidden="true">
+                    {resolvedSeparator}
+                  </span>
+                )}
               </li>
             );
           })}
         </ol>
       </nav>
     );
-  },
+  }
 );
 
-Breadcrumb.displayName = 'Breadcrumb';
+Breadcrumb.displayName = "Breadcrumb";

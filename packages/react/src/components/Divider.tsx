@@ -1,20 +1,20 @@
-import React, { forwardRef } from 'react';
-import './Divider.css';
+import React, { forwardRef } from "react";
+import "./Divider.css";
 
 /**
  * Props for the Divider component
  */
 export interface DividerProps {
   /** Divider orientation */
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: "horizontal" | "vertical";
   /** Line style */
-  variant?: 'solid' | 'dashed' | 'dotted';
+  variant?: "solid" | "dashed" | "dotted";
   /** Text label displayed in the divider */
   label?: string;
   /** Custom content — replaces label when provided */
   template?: React.ReactNode;
   /** Content alignment along the divider */
-  align?: 'start' | 'center' | 'end';
+  align?: "start" | "center" | "end";
   /** Line color — must be a Kreati CSS variable or valid CSS color */
   color?: string;
   /** Line thickness */
@@ -43,16 +43,42 @@ export interface DividerProps {
  * ```
  */
 export const Divider = forwardRef<HTMLDivElement, DividerProps>(
-  ({ orientation = 'horizontal', variant = 'solid', label, template, align = 'center', color, width, className = '', style }, ref) => {
-    const base = 'k-divider';
+  (
+    {
+      orientation = "horizontal",
+      variant = "solid",
+      label,
+      template,
+      align = "center",
+      color,
+      width,
+      className = "",
+      style,
+    },
+    ref
+  ) => {
+    const base = "k-divider";
     const content = template ?? (label ? <span>{label}</span> : null);
-    const classes = [base, `${base}--${orientation}`, content && `${base}--${align}`, className].filter(Boolean).join(' ');
+    const classes = [
+      base,
+      `${base}--${orientation}`,
+      content && `${base}--${align}`,
+      className,
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     const cssVars: React.CSSProperties = {
       ...style,
-      ...(color ? { '--kreati-divider-color': color } as React.CSSProperties : {}),
-      ...(width ? { '--kreati-divider-width': width } as React.CSSProperties : {}),
-      ...(variant !== 'solid' ? { '--kreati-divider-style': variant } as React.CSSProperties : {}),
+      ...(color
+        ? ({ "--kreati-divider-color": color } as React.CSSProperties)
+        : {}),
+      ...(width
+        ? ({ "--kreati-divider-width": width } as React.CSSProperties)
+        : {}),
+      ...(variant !== "solid"
+        ? ({ "--kreati-divider-style": variant } as React.CSSProperties)
+        : {}),
     };
 
     return (
@@ -68,7 +94,7 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
         {content && <div className={`${base}__line`} />}
       </div>
     );
-  },
+  }
 );
 
-Divider.displayName = 'Divider';
+Divider.displayName = "Divider";

@@ -1,6 +1,6 @@
-import React, { forwardRef, useId, useState, useCallback } from 'react';
-import { Radio } from './Radio';
-import { FieldWrapper } from './FieldWrapper';
+import React, { forwardRef, useId, useState, useCallback } from "react";
+import { Radio } from "./Radio";
+import { FieldWrapper } from "./FieldWrapper";
 
 export interface RadioGroupOption {
   /** Unique value */
@@ -21,9 +21,9 @@ export interface RadioGroupProps {
   /** Fires when selection changes */
   onChange?: (value: string | number) => void;
   /** Layout direction */
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: "horizontal" | "vertical";
   /** Component size — passed to each Radio */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Group label */
   label?: string;
   /** Helper text below the group */
@@ -33,7 +33,15 @@ export interface RadioGroupProps {
   /** Success state */
   success?: boolean;
   /** Severity color for the helper text */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  helperSeverity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Disabled state for all radios */
   disabled?: boolean;
   /** Required indicator on the group label */
@@ -79,8 +87,8 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
       value: controlledValue,
       defaultValue,
       onChange,
-      orientation = 'vertical',
-      size = 'md',
+      orientation = "vertical",
+      size = "md",
       label,
       helperText,
       error,
@@ -91,30 +99,37 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
       fullWidth = false,
       name,
       onBlur,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const autoId = useId();
     const groupId = name || autoId;
     const isControlled = controlledValue !== undefined;
-    const [internalValue, setInternalValue] = useState<string | number | null>(defaultValue ?? null);
+    const [internalValue, setInternalValue] = useState<string | number | null>(
+      defaultValue ?? null
+    );
     const selected = isControlled ? controlledValue : internalValue;
 
     const hasError = !!error;
-    const errorMessage = typeof error === 'boolean' ? undefined : error;
-    const base = 'k-radio-group';
+    const errorMessage = typeof error === "boolean" ? undefined : error;
+    const base = "k-radio-group";
 
-    const handleChange = useCallback((optionValue: string | number) => {
-      if (!isControlled) setInternalValue(optionValue);
-      onChange?.(optionValue);
-    }, [isControlled, onChange]);
+    const handleChange = useCallback(
+      (optionValue: string | number) => {
+        if (!isControlled) setInternalValue(optionValue);
+        onChange?.(optionValue);
+      },
+      [isControlled, onChange]
+    );
 
     const groupClasses = [
       `${base}__options`,
       `${base}__options--${orientation}`,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     const content = (
       <div
@@ -124,7 +139,7 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
         aria-required={required || undefined}
         aria-invalid={hasError || undefined}
       >
-        {options.map((opt) => (
+        {options.map(opt => (
           <Radio
             key={opt.value}
             value={opt.value}
@@ -151,7 +166,11 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
     }
 
     return (
-      <div ref={ref} className={`${base} ${fullWidth ? `${base}--full-width` : ''} ${className}`.trim()} style={style}>
+      <div
+        ref={ref}
+        className={`${base} ${fullWidth ? `${base}--full-width` : ""} ${className}`.trim()}
+        style={style}
+      >
         <FieldWrapper
           label={label}
           htmlFor={groupId}
@@ -168,7 +187,7 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
         </FieldWrapper>
       </div>
     );
-  },
+  }
 );
 
-RadioGroup.displayName = 'RadioGroup';
+RadioGroup.displayName = "RadioGroup";

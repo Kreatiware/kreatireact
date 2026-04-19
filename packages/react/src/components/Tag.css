@@ -17,18 +17,47 @@
   text-overflow: ellipsis;
 }
 
-.k-tag--rounded { border-radius: var(--kreati-tag-radius); }
+.k-tag--rounded {
+  border-radius: var(--kreati-tag-radius);
+}
 
-.k-tag--primary   { background: var(--kreati-severity-primary-light); color: var(--kreati-severity-primary); }
-.k-tag--secondary { background: var(--kreati-severity-secondary-light); color: var(--kreati-severity-secondary); }
-.k-tag--success   { background: var(--kreati-severity-success-light); color: var(--kreati-severity-success); }
-.k-tag--info      { background: var(--kreati-severity-info-light); color: var(--kreati-severity-info); }
-.k-tag--warning   { background: var(--kreati-severity-warning-light); color: var(--kreati-severity-warning); }
-.k-tag--help      { background: var(--kreati-severity-help-light); color: var(--kreati-severity-help); }
-.k-tag--danger    { background: var(--kreati-severity-danger-light); color: var(--kreati-severity-danger); }
-.k-tag--accent    { background: var(--kreati-severity-accent-light); color: var(--kreati-severity-accent); }
+.k-tag--primary {
+  background: var(--kreati-severity-primary-light);
+  color: var(--kreati-severity-primary);
+}
+.k-tag--secondary {
+  background: var(--kreati-severity-secondary-light);
+  color: var(--kreati-severity-secondary);
+}
+.k-tag--success {
+  background: var(--kreati-severity-success-light);
+  color: var(--kreati-severity-success);
+}
+.k-tag--info {
+  background: var(--kreati-severity-info-light);
+  color: var(--kreati-severity-info);
+}
+.k-tag--warning {
+  background: var(--kreati-severity-warning-light);
+  color: var(--kreati-severity-warning);
+}
+.k-tag--help {
+  background: var(--kreati-severity-help-light);
+  color: var(--kreati-severity-help);
+}
+.k-tag--danger {
+  background: var(--kreati-severity-danger-light);
+  color: var(--kreati-severity-danger);
+}
+.k-tag--accent {
+  background: var(--kreati-severity-accent-light);
+  color: var(--kreati-severity-accent);
+}
 
-.k-tag__icon { display: inline-flex; flex-shrink: 0; }
+.k-tag__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
 
 .k-tag__remove {
   display: inline-flex;
@@ -46,5 +75,11 @@
   transition: opacity 0.15s ease;
 }
 
-.k-tag__remove:hover { opacity: 1; }
-.k-tag__remove:focus-visible { outline: 2px solid currentColor; outline-offset: 1px; opacity: 1; }
+.k-tag__remove:hover {
+  opacity: 1;
+}
+.k-tag__remove:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 1px;
+  opacity: 1;
+}

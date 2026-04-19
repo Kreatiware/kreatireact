@@ -21,17 +21,37 @@
 /* ============================================
    Sizes — stacked (more vertical padding)
    ============================================ */
-.k-textarea__container--xs { padding: var(--kreati-space-2) 0.625rem; }
-.k-textarea__container--sm { padding: var(--kreati-space-3) 0.875rem; }
-.k-textarea__container--md { padding: var(--kreati-space-3) 1.125rem; }
-.k-textarea__container--lg { padding: var(--kreati-space-4) 1.375rem; }
-.k-textarea__container--xl { padding: var(--kreati-space-5) 1.75rem; }
+.k-textarea__container--xs {
+  padding: var(--kreati-space-2) 0.625rem;
+}
+.k-textarea__container--sm {
+  padding: var(--kreati-space-3) 0.875rem;
+}
+.k-textarea__container--md {
+  padding: var(--kreati-space-3) 1.125rem;
+}
+.k-textarea__container--lg {
+  padding: var(--kreati-space-4) 1.375rem;
+}
+.k-textarea__container--xl {
+  padding: var(--kreati-space-5) 1.75rem;
+}
 
-.k-textarea__container--xs .k-textarea__native { font-size: var(--kreati-font-size-xxs); }
-.k-textarea__container--sm .k-textarea__native { font-size: var(--kreati-font-size-xs); }
-.k-textarea__container--md .k-textarea__native { font-size: var(--kreati-font-size-sm); }
-.k-textarea__container--lg .k-textarea__native { font-size: var(--kreati-font-size-base); }
-.k-textarea__container--xl .k-textarea__native { font-size: var(--kreati-font-size-md); }
+.k-textarea__container--xs .k-textarea__native {
+  font-size: var(--kreati-font-size-xxs);
+}
+.k-textarea__container--sm .k-textarea__native {
+  font-size: var(--kreati-font-size-xs);
+}
+.k-textarea__container--md .k-textarea__native {
+  font-size: var(--kreati-font-size-sm);
+}
+.k-textarea__container--lg .k-textarea__native {
+  font-size: var(--kreati-font-size-base);
+}
+.k-textarea__container--xl .k-textarea__native {
+  font-size: var(--kreati-font-size-md);
+}
 
 /* ============================================
    Native textarea
@@ -54,7 +74,8 @@
 }
 
 .k-textarea__native:hover {
-  scrollbar-color: var(--kreati-scroll-thumb-color) var(--kreati-scroll-track-color);
+  scrollbar-color: var(--kreati-scroll-thumb-color)
+    var(--kreati-scroll-track-color);
 }
 
 .k-textarea__native::-webkit-scrollbar {
@@ -134,54 +155,86 @@
 /* ============================================
    Stacked — Hover (only when NOT focused)
    ============================================ */
-.k-textarea__container:hover:not(:focus-within):not(.k-textarea__container--disabled):not(.k-textarea__container--readonly):not(.k-textarea__container--error):not(.k-textarea__container--success) {
+.k-textarea__container:hover:not(:focus-within):not(
+    .k-textarea__container--disabled
+  ):not(.k-textarea__container--readonly):not(
+    .k-textarea__container--error
+  ):not(.k-textarea__container--success) {
   border-color: var(--kreati-gray-400);
 }
 
 /* ============================================
    Stacked — Focus
    ============================================ */
-.k-textarea__container:focus-within:not(.k-textarea__container--disabled):not(.k-textarea__container--readonly) {
+.k-textarea__container:focus-within:not(.k-textarea__container--disabled):not(
+    .k-textarea__container--readonly
+  ) {
   border-color: var(--kreati-severity-primary);
   box-shadow: 0 0 0 2px var(--kreati-severity-primary-light);
 }
 
-.k-textarea__container:focus-within:not(.k-textarea__container--disabled) .k-textarea__icon {
+.k-textarea__container:focus-within:not(.k-textarea__container--disabled)
+  .k-textarea__icon {
   color: var(--kreati-severity-primary);
 }
 
-.k-textarea__container--error:focus-within:not(.k-textarea__container--disabled) {
+.k-textarea__container--error:focus-within:not(
+    .k-textarea__container--disabled
+  ) {
   border-color: var(--kreati-severity-danger);
   box-shadow: 0 0 0 2px var(--kreati-severity-danger-light);
 }
 
-.k-textarea__container--error:focus-within:not(.k-textarea__container--disabled) .k-textarea__icon {
+.k-textarea__container--error:focus-within:not(.k-textarea__container--disabled)
+  .k-textarea__icon {
   color: var(--kreati-severity-danger);
 }
 
-.k-textarea__container--success:focus-within:not(.k-textarea__container--disabled) {
+.k-textarea__container--success:focus-within:not(
+    .k-textarea__container--disabled
+  ) {
   border-color: var(--kreati-severity-success);
   box-shadow: 0 0 0 2px var(--kreati-severity-success-light);
 }
 
-.k-textarea__container--success:focus-within:not(.k-textarea__container--disabled) .k-textarea__icon {
+.k-textarea__container--success:focus-within:not(
+    .k-textarea__container--disabled
+  )
+  .k-textarea__icon {
   color: var(--kreati-severity-success);
 }
 
 /* ============================================
    Stacked — States
    ============================================ */
-.k-textarea__container--error { border-color: var(--kreati-severity-danger); }
-.k-textarea__container--error .k-textarea__icon { color: var(--kreati-severity-danger); }
+.k-textarea__container--error {
+  border-color: var(--kreati-severity-danger);
+}
+.k-textarea__container--error .k-textarea__icon {
+  color: var(--kreati-severity-danger);
+}
 
-.k-textarea__container--success { border-color: var(--kreati-severity-success); }
-.k-textarea__container--success .k-textarea__icon { color: var(--kreati-severity-success); }
+.k-textarea__container--success {
+  border-color: var(--kreati-severity-success);
+}
+.k-textarea__container--success .k-textarea__icon {
+  color: var(--kreati-severity-success);
+}
 
-.k-textarea__container--disabled { opacity: 0.4; cursor: not-allowed; }
-.k-textarea__container--disabled .k-textarea__native { cursor: not-allowed; }
+.k-textarea__container--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.k-textarea__container--disabled .k-textarea__native {
+  cursor: not-allowed;
+}
 
-.k-textarea__container--readonly { background-color: var(--kreati-gray-50); }
-.k-textarea__container--readonly .k-textarea__native { cursor: default; }
+.k-textarea__container--readonly {
+  background-color: var(--kreati-gray-50);
+}
+.k-textarea__container--readonly .k-textarea__native {
+  cursor: default;
+}
 
 /* ============================================
    Floating — Fieldset
@@ -228,7 +281,8 @@
 }
 
 .k-textarea__fieldset:focus-within > .k-textarea__legend,
-.k-textarea__fieldset:has(.k-textarea__native:not(:placeholder-shown)) > .k-textarea__legend {
+.k-textarea__fieldset:has(.k-textarea__native:not(:placeholder-shown))
+  > .k-textarea__legend {
   width: auto;
 }
 
@@ -244,24 +298,59 @@
 /* ============================================
    Floating — Sizes
    ============================================ */
-.k-textarea__fieldset--xs .k-textarea__fieldset-inner { padding: var(--kreati-space-2) var(--kreati-space-2) var(--kreati-space-2) 0.625rem; }
-.k-textarea__fieldset--sm .k-textarea__fieldset-inner { padding: var(--kreati-space-3) var(--kreati-space-2) var(--kreati-space-3) 0.875rem; }
-.k-textarea__fieldset--md .k-textarea__fieldset-inner { padding: var(--kreati-space-3) var(--kreati-space-3) var(--kreati-space-3) 1.125rem; }
-.k-textarea__fieldset--lg .k-textarea__fieldset-inner { padding: var(--kreati-space-4) var(--kreati-space-3) var(--kreati-space-4) 1.375rem; }
-.k-textarea__fieldset--xl .k-textarea__fieldset-inner { padding: var(--kreati-space-5) var(--kreati-space-4) var(--kreati-space-5) 1.75rem; }
+.k-textarea__fieldset--xs .k-textarea__fieldset-inner {
+  padding: var(--kreati-space-2) var(--kreati-space-2) var(--kreati-space-2)
+    0.625rem;
+}
+.k-textarea__fieldset--sm .k-textarea__fieldset-inner {
+  padding: var(--kreati-space-3) var(--kreati-space-2) var(--kreati-space-3)
+    0.875rem;
+}
+.k-textarea__fieldset--md .k-textarea__fieldset-inner {
+  padding: var(--kreati-space-3) var(--kreati-space-3) var(--kreati-space-3)
+    1.125rem;
+}
+.k-textarea__fieldset--lg .k-textarea__fieldset-inner {
+  padding: var(--kreati-space-4) var(--kreati-space-3) var(--kreati-space-4)
+    1.375rem;
+}
+.k-textarea__fieldset--xl .k-textarea__fieldset-inner {
+  padding: var(--kreati-space-5) var(--kreati-space-4) var(--kreati-space-5)
+    1.75rem;
+}
 
-.k-textarea__fieldset--xs .k-textarea__native { font-size: var(--kreati-font-size-xxs); }
-.k-textarea__fieldset--sm .k-textarea__native { font-size: var(--kreati-font-size-xs); }
-.k-textarea__fieldset--md .k-textarea__native { font-size: var(--kreati-font-size-sm); }
-.k-textarea__fieldset--lg .k-textarea__native { font-size: var(--kreati-font-size-base); }
-.k-textarea__fieldset--xl .k-textarea__native { font-size: var(--kreati-font-size-md); }
+.k-textarea__fieldset--xs .k-textarea__native {
+  font-size: var(--kreati-font-size-xxs);
+}
+.k-textarea__fieldset--sm .k-textarea__native {
+  font-size: var(--kreati-font-size-xs);
+}
+.k-textarea__fieldset--md .k-textarea__native {
+  font-size: var(--kreati-font-size-sm);
+}
+.k-textarea__fieldset--lg .k-textarea__native {
+  font-size: var(--kreati-font-size-base);
+}
+.k-textarea__fieldset--xl .k-textarea__native {
+  font-size: var(--kreati-font-size-md);
+}
 
 /* Legend text sizes — match label × scale(0.75) */
-.k-textarea__fieldset--xs .k-textarea__legend-text { font-size: calc(var(--kreati-font-size-xxs) * 0.75); }
-.k-textarea__fieldset--sm .k-textarea__legend-text { font-size: calc(var(--kreati-font-size-xs) * 0.75); }
-.k-textarea__fieldset--md .k-textarea__legend-text { font-size: calc(var(--kreati-font-size-sm) * 0.75); }
-.k-textarea__fieldset--lg .k-textarea__legend-text { font-size: calc(var(--kreati-font-size-base) * 0.75); }
-.k-textarea__fieldset--xl .k-textarea__legend-text { font-size: calc(var(--kreati-font-size-md) * 0.75); }
+.k-textarea__fieldset--xs .k-textarea__legend-text {
+  font-size: calc(var(--kreati-font-size-xxs) * 0.75);
+}
+.k-textarea__fieldset--sm .k-textarea__legend-text {
+  font-size: calc(var(--kreati-font-size-xs) * 0.75);
+}
+.k-textarea__fieldset--md .k-textarea__legend-text {
+  font-size: calc(var(--kreati-font-size-sm) * 0.75);
+}
+.k-textarea__fieldset--lg .k-textarea__legend-text {
+  font-size: calc(var(--kreati-font-size-base) * 0.75);
+}
+.k-textarea__fieldset--xl .k-textarea__legend-text {
+  font-size: calc(var(--kreati-font-size-md) * 0.75);
+}
 
 /* ============================================
    Floating — Label
@@ -295,7 +384,8 @@
 
 /* Float up */
 .k-textarea__fieldset:focus-within .k-textarea__floating-label,
-.k-textarea__fieldset:has(.k-textarea__native:not(:placeholder-shown)) .k-textarea__floating-label {
+.k-textarea__fieldset:has(.k-textarea__native:not(:placeholder-shown))
+  .k-textarea__floating-label {
   top: 0;
   left: var(--kreati-space-2);
   padding-left: 0.125rem;
@@ -306,36 +396,57 @@
 }
 
 /* Floating label sizes — resting */
-.k-textarea__fieldset--xs .k-textarea__floating-label { font-size: var(--kreati-font-size-xxs); }
-.k-textarea__fieldset--sm .k-textarea__floating-label { font-size: var(--kreati-font-size-xs); }
-.k-textarea__fieldset--md .k-textarea__floating-label { font-size: var(--kreati-font-size-sm); }
-.k-textarea__fieldset--lg .k-textarea__floating-label { font-size: var(--kreati-font-size-base); }
-.k-textarea__fieldset--xl .k-textarea__floating-label { font-size: var(--kreati-font-size-md); }
+.k-textarea__fieldset--xs .k-textarea__floating-label {
+  font-size: var(--kreati-font-size-xxs);
+}
+.k-textarea__fieldset--sm .k-textarea__floating-label {
+  font-size: var(--kreati-font-size-xs);
+}
+.k-textarea__fieldset--md .k-textarea__floating-label {
+  font-size: var(--kreati-font-size-sm);
+}
+.k-textarea__fieldset--lg .k-textarea__floating-label {
+  font-size: var(--kreati-font-size-base);
+}
+.k-textarea__fieldset--xl .k-textarea__floating-label {
+  font-size: var(--kreati-font-size-md);
+}
 
 /* ============================================
    Floating — Hover
    ============================================ */
-.k-textarea__fieldset:hover:not(:focus-within):not(.k-textarea__fieldset--disabled):not(.k-textarea__fieldset--readonly):not(.k-textarea__fieldset--error):not(.k-textarea__fieldset--success) {
+.k-textarea__fieldset:hover:not(:focus-within):not(
+    .k-textarea__fieldset--disabled
+  ):not(.k-textarea__fieldset--readonly):not(.k-textarea__fieldset--error):not(
+    .k-textarea__fieldset--success
+  ) {
   border-color: var(--kreati-gray-400);
 }
 
 /* ============================================
    Floating — Focus (border-width instead of box-shadow)
    ============================================ */
-.k-textarea__fieldset:focus-within:not(.k-textarea__fieldset--disabled):not(.k-textarea__fieldset--readonly) {
+.k-textarea__fieldset:focus-within:not(.k-textarea__fieldset--disabled):not(
+    .k-textarea__fieldset--readonly
+  ) {
   border-color: var(--kreati-severity-primary);
   border-width: 0.1875rem;
 }
 
-.k-textarea__fieldset:focus-within:not(.k-textarea__fieldset--disabled) .k-textarea__icon {
+.k-textarea__fieldset:focus-within:not(.k-textarea__fieldset--disabled)
+  .k-textarea__icon {
   color: var(--kreati-severity-primary);
 }
 
 /* ============================================
    Floating — Error
    ============================================ */
-.k-textarea__fieldset--error { border-color: var(--kreati-severity-danger); }
-.k-textarea__fieldset--error .k-textarea__icon { color: var(--kreati-severity-danger); }
+.k-textarea__fieldset--error {
+  border-color: var(--kreati-severity-danger);
+}
+.k-textarea__fieldset--error .k-textarea__icon {
+  color: var(--kreati-severity-danger);
+}
 
 .k-textarea__fieldset--error:focus-within {
   border-color: var(--kreati-severity-danger);
@@ -343,15 +454,20 @@
 }
 
 .k-textarea__fieldset--error:focus-within .k-textarea__floating-label,
-.k-textarea__fieldset--error:has(.k-textarea__native:not(:placeholder-shown)) .k-textarea__floating-label {
+.k-textarea__fieldset--error:has(.k-textarea__native:not(:placeholder-shown))
+  .k-textarea__floating-label {
   color: var(--kreati-severity-danger);
 }
 
 /* ============================================
    Floating — Success
    ============================================ */
-.k-textarea__fieldset--success { border-color: var(--kreati-severity-success); }
-.k-textarea__fieldset--success .k-textarea__icon { color: var(--kreati-severity-success); }
+.k-textarea__fieldset--success {
+  border-color: var(--kreati-severity-success);
+}
+.k-textarea__fieldset--success .k-textarea__icon {
+  color: var(--kreati-severity-success);
+}
 
 .k-textarea__fieldset--success:focus-within {
   border-color: var(--kreati-severity-success);
@@ -359,19 +475,30 @@
 }
 
 .k-textarea__fieldset--success:focus-within .k-textarea__floating-label,
-.k-textarea__fieldset--success:has(.k-textarea__native:not(:placeholder-shown)) .k-textarea__floating-label {
+.k-textarea__fieldset--success:has(.k-textarea__native:not(:placeholder-shown))
+  .k-textarea__floating-label {
   color: var(--kreati-severity-success);
 }
 
 /* ============================================
    Floating — Disabled / Readonly
    ============================================ */
-.k-textarea__fieldset--disabled { opacity: 0.4; }
-.k-textarea__fieldset--disabled .k-textarea__native { cursor: not-allowed; }
-.k-textarea__fieldset--disabled .k-textarea__floating-label { color: var(--kreati-gray-300); }
+.k-textarea__fieldset--disabled {
+  opacity: 0.4;
+}
+.k-textarea__fieldset--disabled .k-textarea__native {
+  cursor: not-allowed;
+}
+.k-textarea__fieldset--disabled .k-textarea__floating-label {
+  color: var(--kreati-gray-300);
+}
 
-.k-textarea__fieldset--readonly { background-color: var(--kreati-gray-50); }
-.k-textarea__fieldset--readonly .k-textarea__native { cursor: default; }
+.k-textarea__fieldset--readonly {
+  background-color: var(--kreati-gray-50);
+}
+.k-textarea__fieldset--readonly .k-textarea__native {
+  cursor: default;
+}
 
 /* ============================================
    Floating — Wrapper
@@ -403,10 +530,24 @@
   padding-left: var(--kreati-space-2);
 }
 
-.k-textarea__floating-helper--primary   { color: var(--kreati-severity-primary); }
-.k-textarea__floating-helper--secondary { color: var(--kreati-severity-secondary); }
-.k-textarea__floating-helper--success   { color: var(--kreati-severity-success); }
-.k-textarea__floating-helper--info      { color: var(--kreati-severity-info); }
-.k-textarea__floating-helper--warning   { color: var(--kreati-severity-warning); }
-.k-textarea__floating-helper--help      { color: var(--kreati-severity-help); }
-.k-textarea__floating-helper--danger    { color: var(--kreati-severity-danger); }
+.k-textarea__floating-helper--primary {
+  color: var(--kreati-severity-primary);
+}
+.k-textarea__floating-helper--secondary {
+  color: var(--kreati-severity-secondary);
+}
+.k-textarea__floating-helper--success {
+  color: var(--kreati-severity-success);
+}
+.k-textarea__floating-helper--info {
+  color: var(--kreati-severity-info);
+}
+.k-textarea__floating-helper--warning {
+  color: var(--kreati-severity-warning);
+}
+.k-textarea__floating-helper--help {
+  color: var(--kreati-severity-help);
+}
+.k-textarea__floating-helper--danger {
+  color: var(--kreati-severity-danger);
+}

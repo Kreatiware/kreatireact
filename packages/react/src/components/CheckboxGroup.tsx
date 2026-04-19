@@ -1,8 +1,8 @@
-import React, { forwardRef, useId, useState, useCallback } from 'react';
-import { Checkbox } from './Checkbox';
-import { FieldWrapper } from './FieldWrapper';
-import { useKreatiLocale } from '../locale';
-import './CheckboxGroup.css';
+import React, { forwardRef, useId, useState, useCallback } from "react";
+import { Checkbox } from "./Checkbox";
+import { FieldWrapper } from "./FieldWrapper";
+import { useKreatiLocale } from "../locale";
+import "./CheckboxGroup.css";
 
 export interface CheckboxGroupOption {
   /** Unique value */
@@ -29,9 +29,9 @@ export interface CheckboxGroupProps {
   /** Custom label for the select all checkbox (default from locale) */
   selectAllLabel?: React.ReactNode;
   /** Layout direction */
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: "horizontal" | "vertical";
   /** Component size — passed to each Checkbox */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Group label */
   label?: string;
   /** Helper text below the group */
@@ -39,7 +39,15 @@ export interface CheckboxGroupProps {
   /** Error message or boolean */
   error?: React.ReactNode | boolean;
   /** Severity color for the helper text */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  helperSeverity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Success state */
   success?: boolean;
   /** Disabled state for all checkboxes */
@@ -101,8 +109,8 @@ export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
       exclusive = false,
       selectAll = false,
       selectAllLabel,
-      orientation = 'vertical',
-      size = 'md',
+      orientation = "vertical",
+      size = "md",
       label,
       helperText,
       error,
@@ -113,50 +121,60 @@ export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
       fullWidth = false,
       name,
       onBlur,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const autoId = useId();
     const groupId = name || autoId;
     const locale = useKreatiLocale();
     const isControlled = controlledValue !== undefined;
-    const [internalValue, setInternalValue] = useState<Array<string | number>>(defaultValue ?? []);
+    const [internalValue, setInternalValue] = useState<Array<string | number>>(
+      defaultValue ?? []
+    );
     const selected = isControlled ? controlledValue : internalValue;
 
     const hasError = !!error;
-    const errorMessage = typeof error === 'boolean' ? undefined : error;
-    const base = 'k-checkbox-group';
+    const errorMessage = typeof error === "boolean" ? undefined : error;
+    const base = "k-checkbox-group";
 
-    const handleChange = useCallback((optionValue: string | number, checked: boolean) => {
-      let next: Array<string | number>;
+    const handleChange = useCallback(
+      (optionValue: string | number, checked: boolean) => {
+        let next: Array<string | number>;
 
-      if (exclusive) {
-        next = checked ? [optionValue] : [];
-      } else {
-        next = checked
-          ? [...selected, optionValue]
-          : selected.filter((v) => v !== optionValue);
-      }
+        if (exclusive) {
+          next = checked ? [optionValue] : [];
+        } else {
+          next = checked
+            ? [...selected, optionValue]
+            : selected.filter(v => v !== optionValue);
+        }
 
-      if (!isControlled) setInternalValue(next);
-      onChange?.(next);
-    }, [selected, exclusive, isControlled, onChange]);
+        if (!isControlled) setInternalValue(next);
+        onChange?.(next);
+      },
+      [selected, exclusive, isControlled, onChange]
+    );
 
     const groupClasses = [
       `${base}__options`,
       `${base}__options--${orientation}`,
-    ].filter(Boolean).join(' ');
+    ]
+      .filter(Boolean)
+      .join(" ");
 
-    const enabledOptions = options.filter((opt) => !opt.disabled && !disabled);
-    const allSelected = enabledOptions.length > 0 && enabledOptions.every((opt) => selected.includes(opt.value));
-    const someSelected = !allSelected && enabledOptions.some((opt) => selected.includes(opt.value));
+    const enabledOptions = options.filter(opt => !opt.disabled && !disabled);
+    const allSelected =
+      enabledOptions.length > 0 &&
+      enabledOptions.every(opt => selected.includes(opt.value));
+    const someSelected =
+      !allSelected && enabledOptions.some(opt => selected.includes(opt.value));
 
     const handleSelectAll = useCallback(() => {
       const next = allSelected
-        ? selected.filter((v) => !enabledOptions.some((opt) => opt.value === v))
-        : [...new Set([...selected, ...enabledOptions.map((opt) => opt.value)])];
+        ? selected.filter(v => !enabledOptions.some(opt => opt.value === v))
+        : [...new Set([...selected, ...enabledOptions.map(opt => opt.value)])];
       if (!isControlled) setInternalValue(next);
       onChange?.(next);
     }, [allSelected, selected, enabledOptions, isControlled, onChange]);
@@ -180,7 +198,7 @@ export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
               onChange={handleSelectAll}
             />
             <div className={`${base}__select-all-children`}>
-              {options.map((opt) => (
+              {options.map(opt => (
                 <Checkbox
                   key={opt.value}
                   value={opt.value}
@@ -189,14 +207,14 @@ export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
                   size={size}
                   checked={selected.includes(opt.value)}
                   disabled={disabled || opt.disabled}
-                  onChange={(e) => handleChange(opt.value, e.target.checked)}
+                  onChange={e => handleChange(opt.value, e.target.checked)}
                   onBlur={onBlur}
                 />
               ))}
             </div>
           </>
         ) : (
-          options.map((opt) => (
+          options.map(opt => (
             <Checkbox
               key={opt.value}
               value={opt.value}
@@ -205,7 +223,7 @@ export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
               size={size}
               checked={selected.includes(opt.value)}
               disabled={disabled || opt.disabled}
-              onChange={(e) => handleChange(opt.value, e.target.checked)}
+              onChange={e => handleChange(opt.value, e.target.checked)}
               onBlur={onBlur}
             />
           ))
@@ -224,7 +242,11 @@ export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
     }
 
     return (
-      <div ref={ref} className={`${base} ${fullWidth ? `${base}--full-width` : ''} ${className}`.trim()} style={style}>
+      <div
+        ref={ref}
+        className={`${base} ${fullWidth ? `${base}--full-width` : ""} ${className}`.trim()}
+        style={style}
+      >
         <FieldWrapper
           label={label}
           htmlFor={groupId}
@@ -241,7 +263,7 @@ export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
         </FieldWrapper>
       </div>
     );
-  },
+  }
 );
 
-CheckboxGroup.displayName = 'CheckboxGroup';
+CheckboxGroup.displayName = "CheckboxGroup";

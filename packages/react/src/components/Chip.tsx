@@ -1,15 +1,21 @@
-import React, { forwardRef } from 'react';
-import { TIMES_PATH } from './iconPaths';
-import { useKreatiLocale } from '../locale';
-import './Chip.css';
+import React, { forwardRef } from "react";
+import { TIMES_PATH } from "./iconPaths";
+import { useKreatiLocale } from "../locale";
+import "./Chip.css";
 
 export interface ChipProps {
   /** Chip content */
   children: React.ReactNode;
   /** Visual variant */
-  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'outline';
+  variant?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "warning"
+    | "error"
+    | "outline";
   /** Chip size */
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   /** Leading icon */
   icon?: React.ReactNode;
   /** Show remove button */
@@ -42,19 +48,19 @@ export const Chip = forwardRef<HTMLSpanElement, ChipProps>(
   (
     {
       children,
-      variant = 'primary',
-      size = 'md',
+      variant = "primary",
+      size = "md",
       icon,
       removable = false,
       onRemove,
       raised = false,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const locale = useKreatiLocale();
-    const baseClass = 'k-chip';
+    const baseClass = "k-chip";
     const classes = [
       baseClass,
       `${baseClass}--${variant}`,
@@ -63,22 +69,37 @@ export const Chip = forwardRef<HTMLSpanElement, ChipProps>(
       className,
     ]
       .filter(Boolean)
-      .join(' ');
+      .join(" ");
 
     return (
       <span ref={ref} className={classes} style={style} role="status">
-        {icon && <span className={`${baseClass}__icon`} aria-hidden="true">{icon}</span>}
+        {icon && (
+          <span className={`${baseClass}__icon`} aria-hidden="true">
+            {icon}
+          </span>
+        )}
         <span className={`${baseClass}__text`}>{children}</span>
         {removable && (
-          <button type="button" className={`${baseClass}__remove`} onClick={onRemove} aria-label={locale.common.close}>
-            <svg width={10} height={10} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <button
+            type="button"
+            className={`${baseClass}__remove`}
+            onClick={onRemove}
+            aria-label={locale.common.close}
+          >
+            <svg
+              width={10}
+              height={10}
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
               <path d={TIMES_PATH} />
             </svg>
           </button>
         )}
       </span>
     );
-  },
+  }
 );
 
-Chip.displayName = 'Chip';
+Chip.displayName = "Chip";

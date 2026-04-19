@@ -1,5 +1,5 @@
-import React, { forwardRef } from 'react';
-import './FieldWrapper.css';
+import React, { forwardRef } from "react";
+import "./FieldWrapper.css";
 
 export interface FieldWrapperProps {
   /** Label text displayed above the content */
@@ -15,9 +15,17 @@ export interface FieldWrapperProps {
   /** Applies success color to helper text */
   success?: boolean;
   /** Severity color for the helper text (overrides default gray) */
-  helperSeverity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'accent';
+  helperSeverity?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "info"
+    | "warning"
+    | "help"
+    | "danger"
+    | "accent";
   /** Size controls font sizes of label and helper */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Reduces opacity and disables interaction */
   disabled?: boolean;
   /** Full width mode */
@@ -59,16 +67,16 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
       error,
       success = false,
       helperSeverity,
-      size = 'md',
+      size = "md",
       disabled = false,
       fullWidth = false,
-      className = '',
+      className = "",
       style,
       children,
     },
-    ref,
+    ref
   ) => {
-    const base = 'k-field';
+    const base = "k-field";
     const hasError = !!error;
 
     const classes = [
@@ -81,14 +89,14 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
       className,
     ]
       .filter(Boolean)
-      .join(' ');
+      .join(" ");
 
     const helperClasses = [
       `${base}__helper`,
       !hasError && helperSeverity && `${base}__helper--${helperSeverity}`,
     ]
       .filter(Boolean)
-      .join(' ');
+      .join(" ");
 
     const errorId = htmlFor ? `${htmlFor}-error` : undefined;
     const helperId = htmlFor ? `${htmlFor}-helper` : undefined;
@@ -98,7 +106,11 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
         {label && (
           <label className={`${base}__label`} htmlFor={htmlFor}>
             {label}
-            {required && <span className={`${base}__required`} aria-hidden="true">*</span>}
+            {required && (
+              <span className={`${base}__required`} aria-hidden="true">
+                *
+              </span>
+            )}
           </label>
         )}
         <div className={`${base}__content`}>{children}</div>
@@ -114,7 +126,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
         )}
       </div>
     );
-  },
+  }
 );
 
-FieldWrapper.displayName = 'FieldWrapper';
+FieldWrapper.displayName = "FieldWrapper";

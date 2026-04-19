@@ -92,6 +92,10 @@
 /* ─── Tree — Reduced motion ──────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
-  .k-tree__toggle { transition: none; }
-  .k-tree__node { transition: none; }
+  .k-tree__toggle {
+    transition: none;
+  }
+  .k-tree__node {
+    transition: none;
+  }
 }

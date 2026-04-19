@@ -1,6 +1,7 @@
 .k-panel {
   background: var(--kreati-panel-bg, var(--kreati-white, #ffffff));
-  border: 1px solid var(--kreati-panel-border-color, var(--kreati-gray-200, #e5e7eb));
+  border: 1px solid
+    var(--kreati-panel-border-color, var(--kreati-gray-200, #e5e7eb));
   border-radius: var(--kreati-panel-radius, var(--kreati-radius-lg, 0.75rem));
   overflow: hidden;
   font-family: var(--kreati-font-family);
@@ -13,7 +14,8 @@
   align-items: center;
   padding: var(--kreati-panel-header-padding, var(--kreati-space-4, 1rem));
   background: var(--kreati-panel-header-bg, var(--kreati-gray-50, #f9fafb));
-  border-bottom: 1px solid var(--kreati-panel-border-color, var(--kreati-gray-200, #e5e7eb));
+  border-bottom: 1px solid
+    var(--kreati-panel-border-color, var(--kreati-gray-200, #e5e7eb));
 }
 
 .k-panel__header--toggleable {
@@ -23,7 +25,10 @@
 }
 
 .k-panel__header--toggleable:hover {
-  background: var(--kreati-panel-header-hover-bg, var(--kreati-gray-100, #f3f4f6));
+  background: var(
+    --kreati-panel-header-hover-bg,
+    var(--kreati-gray-100, #f3f4f6)
+  );
 }
 
 .k-panel__header--toggleable:focus-visible {
@@ -33,9 +38,15 @@
 
 .k-panel__title {
   flex: 1;
-  font-family: var(--kreati-panel-title-font-family, var(--kreati-preset-h4-family));
+  font-family: var(
+    --kreati-panel-title-font-family,
+    var(--kreati-preset-h4-family)
+  );
   font-size: var(--kreati-panel-title-font-size, var(--kreati-preset-h4-size));
-  font-weight: var(--kreati-panel-title-font-weight, var(--kreati-preset-h4-weight));
+  font-weight: var(
+    --kreati-panel-title-font-weight,
+    var(--kreati-preset-h4-weight)
+  );
   line-height: var(--kreati-preset-h4-line-height);
   color: var(--kreati-panel-title-color, var(--kreati-gray-900));
 }
@@ -79,5 +90,6 @@
 /* Footer */
 .k-panel__footer {
   padding: var(--kreati-panel-footer-padding, var(--kreati-space-4, 1rem));
-  border-top: 1px solid var(--kreati-panel-border-color, var(--kreati-gray-200, #e5e7eb));
+  border-top: 1px solid
+    var(--kreati-panel-border-color, var(--kreati-gray-200, #e5e7eb));
 }

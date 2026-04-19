@@ -11,17 +11,24 @@
   flex-wrap: nowrap;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
-  scrollbar-color: var(--kreati-tabmenu-scrollbar-thumb, var(--kreati-gray-300, #d1d5db)) transparent;
+  scrollbar-color: var(
+      --kreati-tabmenu-scrollbar-thumb,
+      var(--kreati-gray-300, #d1d5db)
+    )
+    transparent;
 }
 
 .k-tabmenu__list::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   height: var(--kreati-tabmenu-border-width, 2px);
-  background: var(--kreati-tabmenu-border-color, var(--kreati-gray-200, #e5e7eb));
+  background: var(
+    --kreati-tabmenu-border-color,
+    var(--kreati-gray-200, #e5e7eb)
+  );
 }
 
 .k-tabmenu__list::-webkit-scrollbar {
@@ -33,7 +40,10 @@
 }
 
 .k-tabmenu__list::-webkit-scrollbar-thumb {
-  background: var(--kreati-tabmenu-scrollbar-thumb, var(--kreati-gray-300, #d1d5db));
+  background: var(
+    --kreati-tabmenu-scrollbar-thumb,
+    var(--kreati-gray-300, #d1d5db)
+  );
   border-radius: var(--kreati-radius-full, 9999px);
 }
 
@@ -42,13 +52,22 @@
   display: inline-flex;
   align-items: center;
   gap: var(--kreati-tabmenu-tab-gap, var(--kreati-space-2, 0.5rem));
-  padding: var(--kreati-tabmenu-tab-padding, var(--kreati-space-3, 0.75rem) var(--kreati-space-4, 1rem));
+  padding: var(
+    --kreati-tabmenu-tab-padding,
+    var(--kreati-space-3, 0.75rem) var(--kreati-space-4, 1rem)
+  );
   border: none;
   background: none;
   cursor: pointer;
   font-family: var(--kreati-font-family);
-  font-size: var(--kreati-tabmenu-font-size, var(--kreati-font-size-base, 1rem));
-  font-weight: var(--kreati-tabmenu-font-weight, var(--kreati-font-weight-medium));
+  font-size: var(
+    --kreati-tabmenu-font-size,
+    var(--kreati-font-size-base, 1rem)
+  );
+  font-weight: var(
+    --kreati-tabmenu-font-weight,
+    var(--kreati-font-weight-medium)
+  );
   color: var(--kreati-tabmenu-color, var(--kreati-gray-500, #6b7280));
   white-space: nowrap;
   position: relative;
@@ -61,14 +80,18 @@
 }
 
 .k-tabmenu__tab:focus-visible {
-  outline: 2px solid var(--kreati-tabmenu-focus-color, var(--kreati-primary-500));
+  outline: 2px solid
+    var(--kreati-tabmenu-focus-color, var(--kreati-primary-500));
   outline-offset: -0.125rem;
   border-radius: var(--kreati-radius-sm, 0.25rem);
 }
 
 .k-tabmenu__tab--active {
   color: var(--kreati-tabmenu-active-color, var(--kreati-primary-500));
-  font-weight: var(--kreati-tabmenu-active-font-weight, var(--kreati-font-weight-semibold));
+  font-weight: var(
+    --kreati-tabmenu-active-font-weight,
+    var(--kreati-font-weight-semibold)
+  );
 }
 
 .k-tabmenu__tab--disabled {
@@ -93,8 +116,14 @@
 .k-tabmenu__separator {
   width: var(--kreati-tabmenu-separator-width, 0.0625rem);
   align-self: stretch;
-  margin: var(--kreati-tabmenu-separator-margin, var(--kreati-space-2, 0.5rem) 0);
-  background: var(--kreati-tabmenu-separator-color, var(--kreati-gray-200, #e5e7eb));
+  margin: var(
+    --kreati-tabmenu-separator-margin,
+    var(--kreati-space-2, 0.5rem) 0
+  );
+  background: var(
+    --kreati-tabmenu-separator-color,
+    var(--kreati-gray-200, #e5e7eb)
+  );
   flex-shrink: 0;
 }
 
@@ -105,9 +134,14 @@
   left: 0;
   height: var(--kreati-tabmenu-ink-height, 0.125rem);
   background: var(--kreati-tabmenu-ink-color, var(--kreati-primary-500));
-  transition: transform var(--kreati-tabmenu-ink-transition, 0.3s ease),
-              width var(--kreati-tabmenu-ink-transition, 0.3s ease);
-  border-radius: var(--kreati-tabmenu-ink-radius, var(--kreati-radius-full, 9999px)) var(--kreati-tabmenu-ink-radius, var(--kreati-radius-full, 9999px)) 0 0;
+  transition:
+    transform var(--kreati-tabmenu-ink-transition, 0.3s ease),
+    width var(--kreati-tabmenu-ink-transition, 0.3s ease);
+  border-radius: var(
+      --kreati-tabmenu-ink-radius,
+      var(--kreati-radius-full, 9999px)
+    )
+    var(--kreati-tabmenu-ink-radius, var(--kreati-radius-full, 9999px)) 0 0;
   z-index: 1;
 }
 
@@ -117,5 +151,8 @@
 }
 
 .k-tabmenu--disabled .k-tabmenu__ink {
-  background: var(--kreati-tabmenu-disabled-color, var(--kreati-gray-300, #d1d5db));
+  background: var(
+    --kreati-tabmenu-disabled-color,
+    var(--kreati-gray-300, #d1d5db)
+  );
 }

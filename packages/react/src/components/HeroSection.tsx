@@ -1,5 +1,5 @@
-import React, { forwardRef } from 'react';
-import './HeroSection.css';
+import React, { forwardRef } from "react";
+import "./HeroSection.css";
 
 /**
  * Props for the HeroSection component
@@ -16,13 +16,13 @@ export interface HeroSectionProps {
   /** Visual media content (image, video, component) */
   media?: React.ReactNode;
   /** Content alignment */
-  align?: 'left' | 'center' | 'right';
+  align?: "left" | "center" | "right";
   /** Layout mode: single (content only), split (content + media), or split-full (full-width halves) */
-  layout?: 'single' | 'split' | 'split-full';
+  layout?: "single" | "split" | "split-full";
   /** Reverse content/media order in split layout */
   reverse?: boolean;
   /** Background style */
-  background?: 'solid' | 'gradient' | 'image';
+  background?: "solid" | "gradient" | "image";
   /** Background image URL (when background is 'image') */
   backgroundImage?: string;
   /** Custom solid background color (overrides default) */
@@ -50,7 +50,7 @@ export interface HeroSectionProps {
   /** Dark overlay on background image for text readability */
   overlay?: boolean;
   /** Height of the hero section */
-  size?: 'sm' | 'md' | 'lg' | 'fullscreen';
+  size?: "sm" | "md" | "lg" | "fullscreen";
   /** Glassmorphism effect on the content container */
   glass?: boolean;
   /** Custom glass panel background color */
@@ -102,10 +102,10 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
       badge,
       actions,
       media,
-      align = 'center',
-      layout = 'single',
+      align = "center",
+      layout = "single",
       reverse = false,
-      background = 'solid',
+      background = "solid",
       backgroundImage,
       backgroundColor,
       gradientFrom,
@@ -113,18 +113,18 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
       gradientAngle,
       gradientStops,
       overlay = false,
-      size = 'lg',
+      size = "lg",
       glass = false,
       glassColor,
       glassOpacity,
       id,
       ariaLabel,
-      className = '',
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
-    const baseClass = 'kreati-hero';
+    const baseClass = "kreati-hero";
     const classes = [
       baseClass,
       `${baseClass}--${align}`,
@@ -137,12 +137,15 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
       className,
     ]
       .filter(Boolean)
-      .join(' ');
+      .join(" ");
 
     const getGlassBg = (): string | undefined => {
       if (!glass) return undefined;
-      const hex = glassColor || (background === 'image' ? '#000000' : '#ffffff');
-      const opacity = glassOpacity ?? (background === 'gradient' ? 0.3 : background === 'image' ? 0.2 : 0.15);
+      const hex =
+        glassColor || (background === "image" ? "#000000" : "#ffffff");
+      const opacity =
+        glassOpacity ??
+        (background === "gradient" ? 0.3 : background === "image" ? 0.2 : 0.15);
       const r = parseInt(hex.slice(1, 3), 16);
       const g = parseInt(hex.slice(3, 5), 16);
       const b = parseInt(hex.slice(5, 7), 16);
@@ -153,22 +156,34 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
       const angle = gradientAngle ?? 135;
 
       if (gradientStops && gradientStops.length >= 2) {
-        const stops = gradientStops.map((s) => `${s.color} ${s.position}`).join(', ');
+        const stops = gradientStops
+          .map(s => `${s.color} ${s.position}`)
+          .join(", ");
         return { background: `linear-gradient(${angle}deg, ${stops})` };
       }
 
       return {
-        ...(gradientFrom && { '--kreati-hero-gradient-from': gradientFrom } as React.CSSProperties),
-        ...(gradientTo && { '--kreati-hero-gradient-to': gradientTo } as React.CSSProperties),
-        ...(gradientAngle != null && { '--kreati-hero-gradient-angle': `${angle}deg` } as React.CSSProperties),
+        ...(gradientFrom &&
+          ({
+            "--kreati-hero-gradient-from": gradientFrom,
+          } as React.CSSProperties)),
+        ...(gradientTo &&
+          ({ "--kreati-hero-gradient-to": gradientTo } as React.CSSProperties)),
+        ...(gradientAngle != null &&
+          ({
+            "--kreati-hero-gradient-angle": `${angle}deg`,
+          } as React.CSSProperties)),
       };
     };
 
     const sectionStyle: React.CSSProperties = {
-      ...(background === 'image' && backgroundImage && { backgroundImage: `url(${backgroundImage})` }),
-      ...(backgroundColor && { '--kreati-hero-bg': backgroundColor } as React.CSSProperties),
-      ...(background === 'gradient' && buildGradientStyle()),
-      ...(glass && { '--kreati-hero-glass-bg': getGlassBg() } as React.CSSProperties),
+      ...(background === "image" &&
+        backgroundImage && { backgroundImage: `url(${backgroundImage})` }),
+      ...(backgroundColor &&
+        ({ "--kreati-hero-bg": backgroundColor } as React.CSSProperties)),
+      ...(background === "gradient" && buildGradientStyle()),
+      ...(glass &&
+        ({ "--kreati-hero-glass-bg": getGlassBg() } as React.CSSProperties)),
     };
 
     return (
@@ -187,13 +202,13 @@ export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
             {subtitle && <p className="kreati-hero__subtitle">{subtitle}</p>}
             {actions && <div className="kreati-hero__actions">{actions}</div>}
           </div>
-          {(layout === 'split' || layout === 'split-full') && media && (
+          {(layout === "split" || layout === "split-full") && media && (
             <div className="kreati-hero__media">{media}</div>
           )}
         </div>
       </section>
     );
-  },
+  }
 );
 
-HeroSection.displayName = 'HeroSection';
+HeroSection.displayName = "HeroSection";

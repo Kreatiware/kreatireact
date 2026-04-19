@@ -1,10 +1,10 @@
-import React, { forwardRef, useRef, useImperativeHandle } from 'react';
-import { Button } from './Button';
-import type { ButtonProps } from './Button';
-import { ContextMenu } from './ContextMenu';
-import type { MenuItem } from '../types/navigation';
-import { CHEVRON_DOWN_PATH } from './iconPaths';
-import './DropdownButton.css';
+import React, { forwardRef, useRef, useImperativeHandle } from "react";
+import { Button } from "./Button";
+import type { ButtonProps } from "./Button";
+import { ContextMenu } from "./ContextMenu";
+import type { MenuItem } from "../types/navigation";
+import { CHEVRON_DOWN_PATH } from "./iconPaths";
+import "./DropdownButton.css";
 
 export interface DropdownButtonProps {
   /** Label for the main action button */
@@ -20,11 +20,11 @@ export interface DropdownButtonProps {
   /** Fires when a menu item is selected */
   onItemSelect?: (key: string, item: MenuItem) => void;
   /** Button size */
-  size?: ButtonProps['size'];
+  size?: ButtonProps["size"];
   /** Button type style — applies to both main and toggle */
-  buttonType?: ButtonProps['buttonType'];
+  buttonType?: ButtonProps["buttonType"];
   /** Color severity — applies to both main and toggle */
-  severity?: ButtonProps['severity'];
+  severity?: ButtonProps["severity"];
   /** Raised shadow */
   raised?: boolean;
   /** Rounded borders */
@@ -32,7 +32,7 @@ export interface DropdownButtonProps {
   /** Disabled state */
   disabled?: boolean;
   /** Dropdown placement relative to the button */
-  placement?: 'bottom' | 'top' | 'left' | 'right';
+  placement?: "bottom" | "top" | "left" | "right";
   /** Accessible label for the dropdown toggle */
   toggleAriaLabel?: string;
   /** Additional CSS class names */
@@ -42,7 +42,13 @@ export interface DropdownButtonProps {
 }
 
 const chevronIcon = (
-  <svg width={12} height={12} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+  <svg
+    width={12}
+    height={12}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
     <path d={CHEVRON_DOWN_PATH} />
   </svg>
 );
@@ -78,26 +84,31 @@ export const DropdownButton = forwardRef<HTMLDivElement, DropdownButtonProps>(
       items,
       onClick,
       onItemSelect,
-      size = 'md',
-      buttonType = 'filled',
-      severity = 'primary',
+      size = "md",
+      buttonType = "filled",
+      severity = "primary",
       raised = false,
       rounded = false,
       disabled = false,
-      placement = 'bottom',
-      toggleAriaLabel = 'More options',
-      className = '',
+      placement = "bottom",
+      toggleAriaLabel = "More options",
+      className = "",
       style,
     },
-    ref,
+    ref
   ) => {
     const containerRef = useRef<HTMLDivElement>(null);
     useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
 
-    const base = 'k-dropdownbutton';
+    const base = "k-dropdownbutton";
 
     return (
-      <div ref={containerRef} className={`${base} ${className}`.trim()} style={style} role="group">
+      <div
+        ref={containerRef}
+        className={`${base} ${className}`.trim()}
+        style={style}
+        role="group"
+      >
         <Button
           label={label}
           iconLeft={iconLeft}
@@ -133,7 +144,7 @@ export const DropdownButton = forwardRef<HTMLDivElement, DropdownButtonProps>(
         </ContextMenu>
       </div>
     );
-  },
+  }
 );
 
-DropdownButton.displayName = 'DropdownButton';
+DropdownButton.displayName = "DropdownButton";

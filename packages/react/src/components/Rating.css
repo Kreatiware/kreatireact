@@ -17,11 +17,21 @@
 
 /* ─── Rating — Sizes ─────────────────────────────────────────────── */
 
-.k-rating--xs { --k-rating-size: var(--kreati-rating-size-xs); }
-.k-rating--sm { --k-rating-size: var(--kreati-rating-size-sm); }
-.k-rating--md { --k-rating-size: var(--kreati-rating-size-md); }
-.k-rating--lg { --k-rating-size: var(--kreati-rating-size-lg); }
-.k-rating--xl { --k-rating-size: var(--kreati-rating-size-xl); }
+.k-rating--xs {
+  --k-rating-size: var(--kreati-rating-size-xs);
+}
+.k-rating--sm {
+  --k-rating-size: var(--kreati-rating-size-sm);
+}
+.k-rating--md {
+  --k-rating-size: var(--kreati-rating-size-md);
+}
+.k-rating--lg {
+  --k-rating-size: var(--kreati-rating-size-lg);
+}
+.k-rating--xl {
+  --k-rating-size: var(--kreati-rating-size-xl);
+}
 
 /* ─── Rating — Item ──────────────────────────────────────────────── */
 
@@ -57,8 +67,12 @@
   width: 50%;
 }
 
-.k-rating__half-left { left: 0; }
-.k-rating__half-right { right: 0; }
+.k-rating__half-left {
+  left: 0;
+}
+.k-rating__half-right {
+  right: 0;
+}
 
 /* ─── Rating — Icon ──────────────────────────────────────────────── */
 
@@ -112,7 +126,9 @@
   display: inline-flex;
   cursor: pointer;
   color: var(--kreati-rating-inactive-color);
-  transition: color var(--kreati-transition-fast), transform var(--kreati-transition-fast);
+  transition:
+    color var(--kreati-transition-fast),
+    transform var(--kreati-transition-fast);
 }
 
 .k-rating__cancel:hover {

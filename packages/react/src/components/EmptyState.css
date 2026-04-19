@@ -42,13 +42,29 @@
 .k-empty-state--sm {
   padding: var(--kreati-space-6) var(--kreati-space-4);
 }
-.k-empty-state--sm .k-empty-state__icon { margin-bottom: var(--kreati-space-3); }
-.k-empty-state--sm .k-empty-state__title { font-size: var(--kreati-font-size-sm); margin-bottom: var(--kreati-space-2); }
-.k-empty-state--sm .k-empty-state__description { font-size: var(--kreati-font-size-xs); margin-bottom: var(--kreati-space-4); }
+.k-empty-state--sm .k-empty-state__icon {
+  margin-bottom: var(--kreati-space-3);
+}
+.k-empty-state--sm .k-empty-state__title {
+  font-size: var(--kreati-font-size-sm);
+  margin-bottom: var(--kreati-space-2);
+}
+.k-empty-state--sm .k-empty-state__description {
+  font-size: var(--kreati-font-size-xs);
+  margin-bottom: var(--kreati-space-4);
+}
 
 .k-empty-state--lg {
   padding: var(--kreati-space-16) var(--kreati-space-8);
 }
-.k-empty-state--lg .k-empty-state__icon { margin-bottom: var(--kreati-space-6); }
-.k-empty-state--lg .k-empty-state__title { font-size: var(--kreati-font-size-xl); margin-bottom: var(--kreati-space-4); }
-.k-empty-state--lg .k-empty-state__description { font-size: var(--kreati-font-size-base); margin-bottom: var(--kreati-space-8); }
+.k-empty-state--lg .k-empty-state__icon {
+  margin-bottom: var(--kreati-space-6);
+}
+.k-empty-state--lg .k-empty-state__title {
+  font-size: var(--kreati-font-size-xl);
+  margin-bottom: var(--kreati-space-4);
+}
+.k-empty-state--lg .k-empty-state__description {
+  font-size: var(--kreati-font-size-base);
+  margin-bottom: var(--kreati-space-8);
+}
