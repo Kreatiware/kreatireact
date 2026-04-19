@@ -28,6 +28,8 @@ export interface ButtonProps {
   rounded?: boolean;
   /** Slim mode — reduces vertical padding for a thinner button */
   slim?: boolean;
+  /** Compact mode — minimal vertical padding, ultra-thin button */
+  compact?: boolean;
   /** Badge content */
   badge?: React.ReactNode;
   /** Badge position using cardinal directions */
@@ -80,6 +82,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       raised = false,
       rounded = false,
       slim = false,
+      compact = false,
       badge,
       badgePosition = 'ne',
       onClick,
@@ -106,6 +109,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       raised && `${base}--raised`,
       rounded && `${base}--rounded`,
       slim && `${base}--slim`,
+      compact && `${base}--compact`,
       disabled && `${base}--disabled`,
       className,
     ]

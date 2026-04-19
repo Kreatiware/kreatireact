@@ -1,6 +1,8 @@
 import React, { forwardRef, useId, useState, useCallback } from 'react';
 import { Checkbox } from './Checkbox';
 import { FieldWrapper } from './FieldWrapper';
+import { useKreatiLocale } from '../locale';
+import './CheckboxGroup.css';
 
 export interface CheckboxGroupOption {
   /** Unique value */
@@ -22,6 +24,10 @@ export interface CheckboxGroupProps {
   onChange?: (values: Array<string | number>) => void;
   /** Exclusive mode — only one option can be selected at a time */
   exclusive?: boolean;
+  /** Show a "Select all" checkbox above the options */
+  selectAll?: boolean;
+  /** Custom label for the select all checkbox (default from locale) */
+  selectAllLabel?: React.ReactNode;
   /** Layout direction */
   orientation?: 'horizontal' | 'vertical';
   /** Component size — passed to each Checkbox */
@@ -93,6 +99,8 @@ export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
       defaultValue,
       onChange,
       exclusive = false,
+      selectAll = false,
+      selectAllLabel,
       orientation = 'vertical',
       size = 'md',
       label,
@@ -112,6 +120,7 @@ export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
   ) => {
     const autoId = useId();
     const groupId = name || autoId;
+    const locale = useKreatiLocale();
     const isControlled = controlledValue !== undefined;
     const [internalValue, setInternalValue] = useState<Array<string | number>>(defaultValue ?? []);
     const selected = isControlled ? controlledValue : internalValue;
@@ -140,6 +149,18 @@ export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
       `${base}__options--${orientation}`,
     ].filter(Boolean).join(' ');
 
+    const enabledOptions = options.filter((opt) => !opt.disabled && !disabled);
+    const allSelected = enabledOptions.length > 0 && enabledOptions.every((opt) => selected.includes(opt.value));
+    const someSelected = !allSelected && enabledOptions.some((opt) => selected.includes(opt.value));
+
+    const handleSelectAll = useCallback(() => {
+      const next = allSelected
+        ? selected.filter((v) => !enabledOptions.some((opt) => opt.value === v))
+        : [...new Set([...selected, ...enabledOptions.map((opt) => opt.value)])];
+      if (!isControlled) setInternalValue(next);
+      onChange?.(next);
+    }, [allSelected, selected, enabledOptions, isControlled, onChange]);
+
     const content = (
       <div
         className={groupClasses}
@@ -148,19 +169,47 @@ export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
         aria-required={required || undefined}
         aria-invalid={hasError || undefined}
       >
-        {options.map((opt) => (
-          <Checkbox
-            key={opt.value}
-            value={opt.value}
-            label={opt.label}
-            name={name}
-            size={size}
-            checked={selected.includes(opt.value)}
-            disabled={disabled || opt.disabled}
-            onChange={(e) => handleChange(opt.value, e.target.checked)}
-            onBlur={onBlur}
-          />
-        ))}
+        {selectAll && !exclusive ? (
+          <>
+            <Checkbox
+              label={selectAllLabel ?? locale.common.selectAll}
+              size={size}
+              checked={allSelected}
+              indeterminate={someSelected}
+              disabled={disabled}
+              onChange={handleSelectAll}
+            />
+            <div className={`${base}__select-all-children`}>
+              {options.map((opt) => (
+                <Checkbox
+                  key={opt.value}
+                  value={opt.value}
+                  label={opt.label}
+                  name={name}
+                  size={size}
+                  checked={selected.includes(opt.value)}
+                  disabled={disabled || opt.disabled}
+                  onChange={(e) => handleChange(opt.value, e.target.checked)}
+                  onBlur={onBlur}
+                />
+              ))}
+            </div>
+          </>
+        ) : (
+          options.map((opt) => (
+            <Checkbox
+              key={opt.value}
+              value={opt.value}
+              label={opt.label}
+              name={name}
+              size={size}
+              checked={selected.includes(opt.value)}
+              disabled={disabled || opt.disabled}
+              onChange={(e) => handleChange(opt.value, e.target.checked)}
+              onBlur={onBlur}
+            />
+          ))
+        )}
       </div>
     );
 

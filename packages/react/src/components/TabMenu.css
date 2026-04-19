@@ -6,14 +6,22 @@
 .k-tabmenu__list {
   display: flex;
   position: relative;
-  border-bottom: var(--kreati-tabmenu-border-width, 2px) solid var(--kreati-tabmenu-border-color, var(--kreati-gray-200, #e5e7eb));
   gap: var(--kreati-tabmenu-gap, 0);
   overflow-x: auto;
-  overflow-y: hidden;
   flex-wrap: nowrap;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: var(--kreati-tabmenu-scrollbar-thumb, var(--kreati-gray-300, #d1d5db)) transparent;
+}
+
+.k-tabmenu__list::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--kreati-tabmenu-border-width, 2px);
+  background: var(--kreati-tabmenu-border-color, var(--kreati-gray-200, #e5e7eb));
 }
 
 .k-tabmenu__list::-webkit-scrollbar {
@@ -100,6 +108,7 @@
   transition: transform var(--kreati-tabmenu-ink-transition, 0.3s ease),
               width var(--kreati-tabmenu-ink-transition, 0.3s ease);
   border-radius: var(--kreati-tabmenu-ink-radius, var(--kreati-radius-full, 9999px)) var(--kreati-tabmenu-ink-radius, var(--kreati-radius-full, 9999px)) 0 0;
+  z-index: 1;
 }
 
 /* Disabled state (all) */

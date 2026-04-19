@@ -85,3 +85,36 @@ export const CustomAppearance: Story = {
     </div>
   ),
 };
+
+export const CustomIconHalf: Story = {
+  name: 'Custom Icon + Allow Half',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <Rating
+        label="Hearts (half)"
+        allowHalf
+        defaultValue={3.5}
+        size="lg"
+        color="#ef4444"
+        icon={
+          <svg viewBox="0 0 24 24" fill="currentColor" width="100%" height="100%">
+            <path d={HEART_PATH} />
+          </svg>
+        }
+      />
+      <Rating
+        label="Hearts (half, read-only)"
+        allowHalf
+        value={2.5}
+        readOnly
+        size="md"
+        color="#ef4444"
+        icon={
+          <svg viewBox="0 0 24 24" fill="currentColor" width="100%" height="100%">
+            <path d={HEART_PATH} />
+          </svg>
+        }
+      />
+    </div>
+  ),
+};

@@ -18,6 +18,10 @@ export interface ToggleButtonProps {
   disabled?: boolean;
   /** Raised shadow effect */
   raised?: boolean;
+  /** Slim mode — reduces vertical padding */
+  slim?: boolean;
+  /** Compact mode — minimal vertical padding */
+  compact?: boolean;
   /** Click handler */
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   /** Additional CSS class names */
@@ -50,6 +54,8 @@ export const ToggleButton = forwardRef<HTMLButtonElement, ToggleButtonProps>(
       size = 'md',
       disabled = false,
       raised = false,
+      slim = false,
+      compact = false,
       onClick,
       className = '',
       style,
@@ -62,6 +68,8 @@ export const ToggleButton = forwardRef<HTMLButtonElement, ToggleButtonProps>(
       `${base}--${size}`,
       active && `${base}--active`,
       raised && `${base}--raised`,
+      slim && `${base}--slim`,
+      compact && `${base}--compact`,
       disabled && `${base}--disabled`,
       className,
     ].filter(Boolean).join(' ');

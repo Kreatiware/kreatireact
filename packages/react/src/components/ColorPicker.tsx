@@ -4,6 +4,7 @@ import { FieldWrapper } from './FieldWrapper';
 import { useOverlayPosition } from './useOverlayPosition';
 import { useLayerZIndex } from './LayerContext';
 import { useKreatiLocale } from '../locale';
+import { COPY_PATH, CHECK_PATH } from './iconPaths';
 import './ColorPicker.css';
 
 /* ── Color conversion helpers ── */
@@ -61,17 +62,36 @@ const formatColor = (rgba: RGBA, format: ColorFormat): string => {
     case 'hex': return rgbaToHex(r, g, b, a);
     case 'rgb': return `rgb(${r}, ${g}, ${b})`;
     case 'rgba': return `rgba(${r}, ${g}, ${b}, ${a.toFixed(2)})`;
+    case 'cmyk': {
+      const r1 = r / 255, g1 = g / 255, b1 = b / 255;
+      const k = 1 - Math.max(r1, g1, b1);
+      if (k === 1) return 'cmyk(0%, 0%, 0%, 100%)';
+      const c = Math.round(((1 - r1 - k) / (1 - k)) * 100);
+      const m = Math.round(((1 - g1 - k) / (1 - k)) * 100);
+      const y = Math.round(((1 - b1 - k) / (1 - k)) * 100);
+      return `cmyk(${c}%, ${m}%, ${y}%, ${Math.round(k * 100)}%)`;
+    }
   }
 };
 
 const parseColor = (color: string): RGBA => {
   if (color.startsWith('#')) return hexToRgba(color);
-  const m = color.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+))?\s*\)/);
-  if (m) return { r: +m[1], g: +m[2], b: +m[3], a: m[4] !== undefined ? +m[4] : 1 };
+  const rgbaMatch = color.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+))?\s*\)/);
+  if (rgbaMatch) return { r: +rgbaMatch[1], g: +rgbaMatch[2], b: +rgbaMatch[3], a: rgbaMatch[4] !== undefined ? +rgbaMatch[4] : 1 };
+  const cmykMatch = color.match(/cmyk\(\s*(\d+)%?\s*,\s*(\d+)%?\s*,\s*(\d+)%?\s*,\s*(\d+)%?\s*\)/);
+  if (cmykMatch) {
+    const c = +cmykMatch[1] / 100, m = +cmykMatch[2] / 100, y = +cmykMatch[3] / 100, k = +cmykMatch[4] / 100;
+    return {
+      r: Math.round(255 * (1 - c) * (1 - k)),
+      g: Math.round(255 * (1 - m) * (1 - k)),
+      b: Math.round(255 * (1 - y) * (1 - k)),
+      a: 1,
+    };
+  }
   return { r: 0, g: 0, b: 0, a: 1 };
 };
 
-type ColorFormat = 'hex' | 'rgb' | 'rgba';
+type ColorFormat = 'hex' | 'rgb' | 'rgba' | 'cmyk';
 
 /* ── Component ── */
 
@@ -179,6 +199,7 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
     const [open, setOpen] = useState(false);
     const [format, setFormat] = useState<ColorFormat>(initialFormat);
     const [textInput, setTextInput] = useState('');
+    const [copied, setCopied] = useState(false);
     const dragging = useRef<'sat' | 'hue' | 'alpha' | null>(null);
 
     const zIndex = useLayerZIndex();
@@ -270,8 +291,9 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
       (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value;
         setTextInput(val);
-        const parsed = parseColor(val);
-        if (val.startsWith('#') ? /^#[0-9a-fA-F]{6,8}$/.test(val) : /^rgba?\(/.test(val)) {
+        const isValid = val.startsWith('#') ? /^#[0-9a-fA-F]{6,8}$/.test(val) : /^(rgba?\(|cmyk\()/.test(val);
+        if (isValid) {
+          const parsed = parseColor(val);
           const newHsv = rgbToHsv(parsed.r, parsed.g, parsed.b);
           setHsv(newHsv);
           setAlpha(parsed.a);
@@ -302,10 +324,17 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
     }, [open, onBlur]);
 
     const cycleFormat = useCallback(() => {
-      const formats: ColorFormat[] = showAlpha ? ['hex', 'rgb', 'rgba'] : ['hex', 'rgb'];
+      const formats: ColorFormat[] = showAlpha ? ['hex', 'rgb', 'rgba', 'cmyk'] : ['hex', 'rgb', 'cmyk'];
       const idx = (formats.indexOf(format) + 1) % formats.length;
       setFormat(formats[idx]);
     }, [format, showAlpha]);
+
+    const handleCopy = useCallback(() => {
+      navigator.clipboard.writeText(colorStr).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
+      });
+    }, [colorStr]);
 
     // Update text input when format or color changes (not during typing)
     useEffect(() => {
@@ -456,6 +485,11 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
                 onChange={handleTextChange}
                 spellCheck={false}
               />
+              <button type="button" className={`${base}__copy-btn`} onClick={handleCopy} aria-label={locale.common.copy}>
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" aria-hidden="true">
+                  <path d={copied ? CHECK_PATH : COPY_PATH} />
+                </svg>
+              </button>
               <button type="button" className={`${base}__format-btn`} onClick={cycleFormat} aria-label={locale.colorPicker.switchFormat}>
                 {format.toUpperCase()}
               </button>

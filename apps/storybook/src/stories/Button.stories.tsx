@@ -251,3 +251,29 @@ export const TooltipDisabledButton: Story = {
     </div>
   ),
 };
+
+export const Compact: Story = {
+  name: 'Compact',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start' }}>
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <Button label="Normal" size="md" />
+        <Button label="Slim" size="md" slim />
+        <Button label="Compact" size="md" compact />
+      </div>
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <Button label="XS" size="xs" compact />
+        <Button label="SM" size="sm" compact />
+        <Button label="MD" size="md" compact />
+        <Button label="LG" size="lg" compact />
+        <Button label="XL" size="xl" compact />
+      </div>
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <Button iconLeft={<Check size={14} />} ariaLabel="Check" compact size="sm" />
+        <Button label="Save" iconLeft={<Check size={14} />} compact size="sm" />
+        <Button label="Outlined" buttonType="outlined" compact />
+        <Button label="Text" buttonType="text" compact />
+      </div>
+    </div>
+  ),
+};

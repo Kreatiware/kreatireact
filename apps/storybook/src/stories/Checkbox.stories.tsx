@@ -109,42 +109,21 @@ export const Indeterminate: Story = {
   name: 'Indeterminate (select all)',
   render: () => {
     const Demo = () => {
-      const items = ['Music', 'Sports', 'Reading'];
-      const [selected, setSelected] = useState<string[]>(['Music']);
-
-      const allChecked = selected.length === items.length;
-      const someChecked = selected.length > 0 && !allChecked;
-
-      const toggleAll = () => {
-        setSelected(allChecked ? [] : [...items]);
-      };
-
-      const toggle = (item: string) => {
-        setSelected((prev) =>
-          prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item],
-        );
-      };
-
+      const [values, setValues] = useState<Array<string | number>>(['music']);
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <Checkbox
-            label="Select all"
+        <div style={{ width: 320 }}>
+          <CheckboxGroup
+            label="Interests"
+            selectAll
+            options={[
+              { value: 'music', label: 'Music' },
+              { value: 'sports', label: 'Sports' },
+              { value: 'reading', label: 'Reading' },
+            ]}
+            value={values}
+            onChange={setValues}
             size="md"
-            checked={allChecked}
-            indeterminate={someChecked}
-            onChange={toggleAll}
           />
-          <div style={{ paddingLeft: 28, display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {items.map((item) => (
-              <Checkbox
-                key={item}
-                label={item}
-                size="md"
-                checked={selected.includes(item)}
-                onChange={() => toggle(item)}
-              />
-            ))}
-          </div>
         </div>
       );
     };

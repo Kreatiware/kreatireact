@@ -102,6 +102,7 @@ export const KreatiProvider: React.FC<KreatiProviderProps> = ({
       dataTable: { ...en.dataTable, ...locale.dataTable },
       emptyState: { ...en.emptyState, ...locale.emptyState },
       textEditor: { ...en.textEditor, ...locale.textEditor },
+      avatarGroup: { ...en.avatarGroup, ...locale.avatarGroup },
     };
   }, [locale]);
 

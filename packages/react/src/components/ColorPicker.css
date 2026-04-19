@@ -194,6 +194,29 @@
   border-color: var(--kreati-severity-primary);
 }
 
+.k-color-picker__copy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--kreati-gray-500);
+  cursor: pointer;
+  padding: var(--kreati-space-1);
+  border-radius: var(--kreati-radius-sm);
+  flex-shrink: 0;
+}
+
+.k-color-picker__copy-btn:hover {
+  color: var(--kreati-gray-700);
+  background: var(--kreati-gray-100);
+}
+
+.k-color-picker__copy-btn:focus-visible {
+  outline: 2px solid var(--kreati-severity-primary);
+  outline-offset: 0.0625rem;
+}
+
 .k-color-picker__format-btn {
   border: 1px solid var(--kreati-gray-300);
   border-radius: var(--kreati-radius-sm);

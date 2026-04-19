@@ -75,6 +75,7 @@ export interface KreatiLocale {
     code: string;
     showPassword: string;
     hidePassword: string;
+    selectAll: string;
   };
   /** Message component */
   message: {
@@ -183,5 +184,10 @@ export interface KreatiLocale {
     exportCSV: string;
     reorderRow: string;
     reorderColumn: string;
+  };
+  /** AvatarGroup component */
+  avatarGroup: {
+    groupLabel: string;
+    overflowLabel: string;
   };
 }

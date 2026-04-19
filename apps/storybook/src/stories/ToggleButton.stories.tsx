@@ -45,10 +45,31 @@ export const WithIcons: Story = {
 
 export const Sizes: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-      {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((s) => (
-        <ToggleButton key={s} label={s.toUpperCase()} size={s} active />
-      ))}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div>
+        <strong style={{ fontSize: 12, color: '#6b7280', display: 'block', marginBottom: 8 }}>Normal</strong>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((s) => (
+            <ToggleButton key={s} label={s.toUpperCase()} size={s} active />
+          ))}
+        </div>
+      </div>
+      <div>
+        <strong style={{ fontSize: 12, color: '#6b7280', display: 'block', marginBottom: 8 }}>Slim</strong>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((s) => (
+            <ToggleButton key={s} label={s.toUpperCase()} size={s} active slim />
+          ))}
+        </div>
+      </div>
+      <div>
+        <strong style={{ fontSize: 12, color: '#6b7280', display: 'block', marginBottom: 8 }}>Compact</strong>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((s) => (
+            <ToggleButton key={s} label={s.toUpperCase()} size={s} active compact />
+          ))}
+        </div>
+      </div>
     </div>
   ),
 };
@@ -152,15 +173,48 @@ export const GroupWithIcons: Story = {
 export const GroupSizes: Story = {
   name: 'Group sizes',
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start' }}>
-      {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((s) => (
-        <ToggleButtonGroup
-          key={s}
-          options={[{ value: 'a', label: 'A' }, { value: 'b', label: 'B' }, { value: 'c', label: 'C' }]}
-          value="b"
-          size={s}
-        />
-      ))}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start' }}>
+      <div>
+        <strong style={{ fontSize: 12, color: '#6b7280', display: 'block', marginBottom: 8 }}>Normal</strong>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'flex-start' }}>
+          {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((s) => (
+            <ToggleButtonGroup
+              key={s}
+              options={[{ value: 'a', label: 'A' }, { value: 'b', label: 'B' }, { value: 'c', label: 'C' }]}
+              value="b"
+              size={s}
+            />
+          ))}
+        </div>
+      </div>
+      <div>
+        <strong style={{ fontSize: 12, color: '#6b7280', display: 'block', marginBottom: 8 }}>Slim</strong>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'flex-start' }}>
+          {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((s) => (
+            <ToggleButtonGroup
+              key={s}
+              options={[{ value: 'a', label: 'A' }, { value: 'b', label: 'B' }, { value: 'c', label: 'C' }]}
+              value="b"
+              size={s}
+              slim
+            />
+          ))}
+        </div>
+      </div>
+      <div>
+        <strong style={{ fontSize: 12, color: '#6b7280', display: 'block', marginBottom: 8 }}>Compact</strong>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'flex-start' }}>
+          {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((s) => (
+            <ToggleButtonGroup
+              key={s}
+              options={[{ value: 'a', label: 'A' }, { value: 'b', label: 'B' }, { value: 'c', label: 'C' }]}
+              value="b"
+              size={s}
+              compact
+            />
+          ))}
+        </div>
+      </div>
     </div>
   ),
 };

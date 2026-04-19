@@ -365,6 +365,11 @@
   --kreati-btn-slim-md: 2rem;
   --kreati-btn-slim-lg: 2.375rem;
   --kreati-btn-slim-xl: 2.75rem;
+  --kreati-btn-compact-xs: 1.125rem;
+  --kreati-btn-compact-sm: 1.25rem;
+  --kreati-btn-compact-md: 1.5rem;
+  --kreati-btn-compact-lg: 1.75rem;
+  --kreati-btn-compact-xl: 2rem;
   --kreati-btn-badge-size: 1.125rem;
   --kreati-btn-badge-font-size: 0.6875rem;
   --kreati-btn-badge-offset: -0.5rem;
@@ -460,7 +465,22 @@
   --kreati-radio-size-md: 1.25rem;
   --kreati-radio-size-lg: 1.5rem;
   --kreati-radio-size-xl: 1.75rem;
+  --kreati-radio-border-xs: 0.125rem;
+  --kreati-radio-border-sm: 0.125rem;
+  --kreati-radio-border-md: 0.125rem;
+  --kreati-radio-border-lg: 0.125rem;
+  --kreati-radio-border-xl: 0.125rem;
+  --kreati-radio-border-active-xs: 0.1875rem;
+  --kreati-radio-border-active-sm: 0.1875rem;
+  --kreati-radio-border-active-md: 0.1875rem;
+  --kreati-radio-border-active-lg: 0.25rem;
+  --kreati-radio-border-active-xl: 0.25rem;
   --kreati-radio-dot-scale: 0.45;
+  --kreati-radio-dot-xs: 0.25rem;
+  --kreati-radio-dot-sm: 0.375rem;
+  --kreati-radio-dot-md: 0.5rem;
+  --kreati-radio-dot-lg: 0.625rem;
+  --kreati-radio-dot-xl: 0.75rem;
   --kreati-radio-border-color: var(--kreati-gray-300);
   --kreati-radio-checked-bg: var(--kreati-severity-primary);
   --kreati-radio-checked-color: var(--kreati-white);
@@ -586,6 +606,11 @@
   --kreati-avatar-size-xl: 4rem;
   --kreati-avatar-bg: var(--kreati-gray-200);
   --kreati-avatar-color: var(--kreati-gray-600);
+
+  /* ─── Component Tokens — AvatarGroup ────────────────────────────────── */
+  --kreati-avatar-group-overlap: -0.5rem;
+  --kreati-avatar-group-border-width: 0.125rem;
+  --kreati-avatar-group-border-color: var(--kreati-surface);
 
   /* ─── Component Tokens — Tag ──────────────────────────────────────── */
   --kreati-tag-padding: var(--kreati-space-1) var(--kreati-space-2);

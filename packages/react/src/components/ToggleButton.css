@@ -26,6 +26,20 @@
 .k-toggle-btn--lg { height: var(--kreati-btn-height-lg); padding: var(--kreati-btn-padding-lg); font-size: var(--kreati-font-size-base); }
 .k-toggle-btn--xl { height: var(--kreati-btn-height-xl); padding: var(--kreati-btn-padding-xl); font-size: var(--kreati-font-size-md); }
 
+/* Slim */
+.k-toggle-btn--slim.k-toggle-btn--xs { height: var(--kreati-btn-slim-xs); }
+.k-toggle-btn--slim.k-toggle-btn--sm { height: var(--kreati-btn-slim-sm); }
+.k-toggle-btn--slim.k-toggle-btn--md { height: var(--kreati-btn-slim-md); }
+.k-toggle-btn--slim.k-toggle-btn--lg { height: var(--kreati-btn-slim-lg); }
+.k-toggle-btn--slim.k-toggle-btn--xl { height: var(--kreati-btn-slim-xl); }
+
+/* Compact */
+.k-toggle-btn--compact.k-toggle-btn--xs { height: var(--kreati-btn-compact-xs); }
+.k-toggle-btn--compact.k-toggle-btn--sm { height: var(--kreati-btn-compact-sm); }
+.k-toggle-btn--compact.k-toggle-btn--md { height: var(--kreati-btn-compact-md); }
+.k-toggle-btn--compact.k-toggle-btn--lg { height: var(--kreati-btn-compact-lg); }
+.k-toggle-btn--compact.k-toggle-btn--xl { height: var(--kreati-btn-compact-xl); }
+
 /* Hover */
 .k-toggle-btn:hover:not(:disabled):not(.k-toggle-btn--active) {
   border-color: var(--kreati-gray-400);

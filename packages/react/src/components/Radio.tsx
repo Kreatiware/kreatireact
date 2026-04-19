@@ -108,11 +108,9 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
       onChange?.(e);
     };
 
-    const dotSize: Record<string, number> = { xs: 8, sm: 8, md: 10, lg: 14, xl: 16 };
-
     const defaultDot = (
-      <svg width={dotSize[size]} height={dotSize[size]} viewBox={`0 0 ${dotSize[size]} ${dotSize[size]}`} aria-hidden="true">
-        <circle cx={dotSize[size] / 2} cy={dotSize[size] / 2} r={dotSize[size] / 2} fill="currentColor" />
+      <svg className={`${base}__dot`} viewBox="0 0 10 10" aria-hidden="true">
+        <circle cx="5" cy="5" r="5" fill="currentColor" />
       </svg>
     );
 

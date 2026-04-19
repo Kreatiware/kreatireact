@@ -39,6 +39,15 @@
 .k-button--slim.k-button--xl { height: var(--kreati-btn-slim-xl); }
 
 /* ============================================
+   Compact (minimal vertical padding)
+   ============================================ */
+.k-button--compact.k-button--xs { height: var(--kreati-btn-compact-xs); }
+.k-button--compact.k-button--sm { height: var(--kreati-btn-compact-sm); }
+.k-button--compact.k-button--md { height: var(--kreati-btn-compact-md); }
+.k-button--compact.k-button--lg { height: var(--kreati-btn-compact-lg); }
+.k-button--compact.k-button--xl { height: var(--kreati-btn-compact-xl); }
+
+/* ============================================
    Icon Only (square, or circle if rounded)
    ============================================ */
 .k-button--icon-only.k-button--xs { width: var(--kreati-btn-height-xs); padding: var(--kreati-space-0); }
@@ -52,6 +61,12 @@
 .k-button--icon-only.k-button--slim.k-button--md { width: var(--kreati-btn-slim-md); height: var(--kreati-btn-slim-md); }
 .k-button--icon-only.k-button--slim.k-button--lg { width: var(--kreati-btn-slim-lg); height: var(--kreati-btn-slim-lg); }
 .k-button--icon-only.k-button--slim.k-button--xl { width: var(--kreati-btn-slim-xl); height: var(--kreati-btn-slim-xl); }
+
+.k-button--icon-only.k-button--compact.k-button--xs { width: var(--kreati-btn-compact-xs); height: var(--kreati-btn-compact-xs); }
+.k-button--icon-only.k-button--compact.k-button--sm { width: var(--kreati-btn-compact-sm); height: var(--kreati-btn-compact-sm); }
+.k-button--icon-only.k-button--compact.k-button--md { width: var(--kreati-btn-compact-md); height: var(--kreati-btn-compact-md); }
+.k-button--icon-only.k-button--compact.k-button--lg { width: var(--kreati-btn-compact-lg); height: var(--kreati-btn-compact-lg); }
+.k-button--icon-only.k-button--compact.k-button--xl { width: var(--kreati-btn-compact-xl); height: var(--kreati-btn-compact-xl); }
 
 /* ============================================
    Rounded

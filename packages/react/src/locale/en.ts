@@ -53,6 +53,7 @@ export const en: KreatiLocale = {
     code: 'Code',
     showPassword: 'Show password',
     hidePassword: 'Hide password',
+    selectAll: 'Select all',
   },
   slider: {
     rangeMin: 'minimum',
@@ -166,5 +167,9 @@ export const en: KreatiLocale = {
     exportCSV: 'Export CSV',
     reorderRow: 'Reorder row',
     reorderColumn: 'Reorder column',
+  },
+  avatarGroup: {
+    groupLabel: 'Group of {count} avatars',
+    overflowLabel: '{count} more',
   },
 };

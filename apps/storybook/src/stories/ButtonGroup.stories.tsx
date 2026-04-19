@@ -122,7 +122,7 @@ export const Mixed: Story = {
     const [bold, setBold] = useState(false);
     return (
       <ButtonGroup>
-        <Button buttonType="outlined">Save</Button>
+        <Button buttonType="outlined" disabled>Save</Button>
         <Button buttonType="outlined">Undo</Button>
         <ToggleButton value="bold" active={bold} onClick={() => setBold(!bold)} label="B" />
       </ButtonGroup>

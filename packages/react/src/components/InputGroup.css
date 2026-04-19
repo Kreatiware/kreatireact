@@ -29,6 +29,12 @@
   border-radius: 0;
 }
 
+/* Fix 1px top border misalignment: the legend's max-height pushes the
+   fieldset content down when the label is not floating */
+.k-input-group__input .k-input__legend {
+  max-height: 0;
+}
+
 /* Remove border on the side touching the addon */
 .k-input-group__input--has-prefix .k-input__fieldset,
 .k-input-group__input--has-prefix .k-input__container {

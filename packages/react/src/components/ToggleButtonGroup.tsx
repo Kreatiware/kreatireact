@@ -30,6 +30,10 @@ export interface ToggleButtonGroupProps {
   orientation?: 'horizontal' | 'vertical';
   /** Button size — passed to each ToggleButton */
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  /** Slim mode — passed to each ToggleButton */
+  slim?: boolean;
+  /** Compact mode — passed to each ToggleButton */
+  compact?: boolean;
   /** Disabled state for all buttons */
   disabled?: boolean;
   /** Additional CSS class names */
@@ -65,6 +69,8 @@ export const ToggleButtonGroup = forwardRef<HTMLDivElement, ToggleButtonGroupPro
       multiple = false,
       orientation = 'horizontal',
       size = 'md',
+      slim = false,
+      compact = false,
       disabled = false,
       className = '',
       style,
@@ -110,6 +116,8 @@ export const ToggleButtonGroup = forwardRef<HTMLDivElement, ToggleButtonGroupPro
             return React.cloneElement(child, {
               active: isActive(val),
               size,
+              slim,
+              compact,
               disabled: disabled || child.props.disabled,
               onClick: () => handleClick(val),
             });
@@ -128,6 +136,8 @@ export const ToggleButtonGroup = forwardRef<HTMLDivElement, ToggleButtonGroupPro
             iconLeft={opt.iconLeft}
             iconRight={opt.iconRight}
             size={size}
+            slim={slim}
+            compact={compact}
             active={isActive(opt.value)}
             disabled={disabled || opt.disabled}
             onClick={() => handleClick(opt.value)}

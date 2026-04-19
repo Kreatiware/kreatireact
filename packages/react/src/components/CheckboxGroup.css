@@ -1,0 +1,6 @@
+.k-checkbox-group__select-all-children {
+  display: flex;
+  flex-direction: inherit;
+  gap: inherit;
+  margin-inline-start: var(--kreati-space-4);
+}
