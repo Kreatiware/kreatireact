@@ -1,5 +1,11 @@
 # @kreatiware/layout
 
+## 0.6.1
+
+### Patch Changes
+
+- ed8b9ae: fix(all): eslint and prettier fixes
+
 ## 0.6.0
 
 ### Minor Changes

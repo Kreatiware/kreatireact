@@ -1,5 +1,11 @@
 # @kreatiware/icons
 
+## 0.13.1
+
+### Patch Changes
+
+- ed8b9ae: fix(all): eslint and prettier fixes
+
 ## 0.13.0
 
 ### Minor Changes
