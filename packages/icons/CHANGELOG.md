@@ -1,5 +1,11 @@
 # @kreatiware/icons
 
+## 0.13.0
+
+### Minor Changes
+
+- a8f3282: fix(react+icons): add icons used by text editor, update docs, update texts editors
+
 ## 0.12.0
 
 ### Minor Changes
