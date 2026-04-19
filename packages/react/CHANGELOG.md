@@ -1,5 +1,15 @@
 # @kreatiware/react
 
+## 0.17.0
+
+### Minor Changes
+
+- a5cd63a: fix(react): fixes in code on components, add avatar group, add missing props"
+
+### Patch Changes
+
+- ed8b9ae: fix(all): eslint and prettier fixes
+
 ## 0.16.0
 
 ### Minor Changes
