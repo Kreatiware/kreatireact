@@ -190,4 +190,17 @@ export interface KreatiLocale {
     groupLabel: string;
     overflowLabel: string;
   };
+  /** Chart components */
+  chart: {
+    resetZoom: string;
+    exportPng: string;
+    exportSvg: string;
+    exportCsv: string;
+    exportJsonTable: string;
+    exportJsonSeries: string;
+    menuLabel: string;
+    filterPlaceholder: string;
+    filterLabel: string;
+    exportLabel: string;
+  };
 }

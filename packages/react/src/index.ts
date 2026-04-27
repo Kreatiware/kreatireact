@@ -311,3 +311,52 @@ import "./components/TreeSelect.css";
 import "./components/FileUpload.css";
 import "./components/Image.css";
 import "./components/DataTable/DataTable.css";
+
+// ─── Chart System ───────────────────────────────────────────────────────────
+export {
+  ChartCanvas,
+  useChartCanvas,
+  Axis,
+  Legend,
+  Crosshair,
+  ConstantLine,
+  ShadedArea,
+  createLinearScale,
+  createLogScale,
+  createCategoryScale,
+  createScale,
+  niceDomain,
+  invertLinear,
+  resolveSeriesColor,
+  getDefaultPalette,
+  dashStyleToArray,
+  CartesianChart,
+  LineChart,
+} from "./components/Chart";
+
+export type {
+  ChartDataPoint,
+  ChartSeries,
+  ChartFill,
+  ChartConstant,
+  ChartShadedArea,
+  ChartAnnotation,
+  ChartAxisConfig,
+  ChartMargins,
+  ChartSeverity,
+  DashStyle,
+  MarkerSymbol,
+  AxisScaleType,
+  ScaleFunction,
+  ChartCanvasProps,
+  AxisProps,
+  LegendProps,
+  CrosshairProps,
+  ConstantLineProps,
+  ShadedAreaProps,
+  CartesianChartProps,
+  CartesianContext,
+  LineChartProps,
+} from "./components/Chart";
+
+import "./components/Chart/Chart.css";

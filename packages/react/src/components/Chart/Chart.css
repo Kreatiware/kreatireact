@@ -1,0 +1,570 @@
+/* ─── Chart — Base ───────────────────────────────────────────────────────── */
+
+.k-chart {
+  font-family: var(--kreati-font-family-body);
+  overflow: visible;
+}
+
+/* ─── Chart — Colors (palette + structural) ──────────────────────────────── */
+
+:root {
+  --kreati-chart-1: #3b82f6;
+  --kreati-chart-2: #ef4444;
+  --kreati-chart-3: #22c55e;
+  --kreati-chart-4: #f59e0b;
+  --kreati-chart-5: #8b5cf6;
+  --kreati-chart-6: #06b6d4;
+  --kreati-chart-7: #ec4899;
+  --kreati-chart-8: #f97316;
+  --kreati-chart-9: #14b8a6;
+  --kreati-chart-10: #6366f1;
+  --kreati-chart-11: #84cc16;
+  --kreati-chart-12: #a855f7;
+
+  --kreati-chart-bg: var(--kreati-surface, #ffffff);
+  --kreati-chart-text: var(--kreati-text-body, var(--kreati-gray-700, #374151));
+  --kreati-chart-axis: var(--kreati-gray-400, #9ca3af);
+  --kreati-chart-grid: var(--kreati-gray-200, #e5e7eb);
+  --kreati-chart-crosshair: var(--kreati-gray-400, #9ca3af);
+  --kreati-chart-tooltip-bg: var(--kreati-gray-900, #111827);
+  --kreati-chart-tooltip-text: var(--kreati-gray-100, #f3f4f6);
+}
+
+/* ─── Chart — Legend ─────────────────────────────────────────────────────── */
+
+.k-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--kreati-space-2);
+  padding: var(--kreati-space-2) 0;
+}
+
+.k-chart-legend--top,
+.k-chart-legend--bottom {
+  justify-content: center;
+}
+
+.k-chart-legend--left,
+.k-chart-legend--right,
+.k-chart-legend--vertical {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.k-chart-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kreati-space-1);
+  padding: var(--kreati-space-1) var(--kreati-space-2);
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--kreati-font-family-body);
+  font-size: var(--kreati-font-size-xs);
+  color: var(--kreati-chart-text);
+  border-radius: var(--kreati-radius-sm);
+  transition: opacity var(--kreati-transition-fast);
+}
+
+.k-chart-legend__item:hover {
+  background: var(--kreati-gray-100);
+}
+
+.k-chart-legend__item--hidden {
+  opacity: 0.4;
+}
+
+.k-chart-legend__item--hidden .k-chart-legend__swatch {
+  background-color: var(--kreati-gray-300) !important;
+}
+
+.k-chart-legend__swatch {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: var(--kreati-radius-xs, 0.125rem);
+  flex-shrink: 0;
+}
+
+.k-chart-legend__label {
+  white-space: nowrap;
+}
+
+/* ─── Chart — Tooltip ────────────────────────────────────────────────────── */
+
+.k-chart-tooltip {
+  position: fixed;
+  z-index: var(--kreati-z-tooltip, 1000);
+  background: var(--kreati-chart-tooltip-bg);
+  color: var(--kreati-chart-tooltip-text);
+  padding: var(--kreati-space-2) var(--kreati-space-3);
+  border-radius: var(--kreati-radius-md);
+  font-size: var(--kreati-font-size-xs);
+  pointer-events: none;
+  box-shadow: var(--kreati-shadow-lg);
+  max-width: 18rem;
+}
+
+.k-chart-tooltip__title {
+  font-weight: var(--kreati-font-weight-semibold);
+  margin-bottom: var(--kreati-space-1);
+}
+
+.k-chart-tooltip__row {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-2);
+  padding: 0.125rem 0;
+}
+
+.k-chart-tooltip__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--kreati-radius-full);
+  flex-shrink: 0;
+}
+
+.k-chart-tooltip--anchored::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0.3125rem solid transparent;
+}
+
+.k-chart-tooltip--arrow-left::after {
+  left: -0.5rem;
+  border-right-color: var(--kreati-chart-tooltip-bg);
+}
+
+.k-chart-tooltip--arrow-right::after {
+  right: -0.5rem;
+  border-left-color: var(--kreati-chart-tooltip-bg);
+}
+
+.k-chart-tooltip__name {
+  flex: 1;
+}
+
+.k-chart-tooltip__value {
+  font-weight: var(--kreati-font-weight-semibold);
+  font-family: var(--kreati-font-family-mono);
+}
+
+/* ─── Chart — Header (title/subtitle) ────────────────────────────────────── */
+
+.k-chart-header {
+  padding: 0 0 var(--kreati-space-2) 0;
+}
+
+.k-chart-header__title {
+  font-size: var(--kreati-font-size-md);
+  font-weight: var(--kreati-font-weight-semibold);
+  color: var(--kreati-chart-text);
+}
+
+.k-chart-header__subtitle {
+  font-size: var(--kreati-font-size-xs);
+  color: var(--kreati-gray-500);
+  margin-top: var(--kreati-space-1);
+}
+
+/* ─── Chart — Inside Legend ──────────────────────────────────────────────── */
+
+.k-chart-legend--inside {
+  position: absolute;
+  z-index: 2;
+  pointer-events: auto;
+}
+
+.k-chart-legend--inside-top-right {
+  top: var(--kreati-space-3);
+  right: var(--kreati-space-3);
+}
+
+.k-chart-legend--inside-top-left {
+  top: var(--kreati-space-3);
+  left: var(--k-chart-margin-left, var(--kreati-space-6));
+}
+
+/* ─── Chart — Navigator ──────────────────────────────────────────────────── */
+
+.k-chart-navigator-wrap {
+  opacity: 0;
+  transform: translateY(var(--kreati-space-2));
+  transition: opacity var(--kreati-transition-slow), transform var(--kreati-transition-slow);
+  pointer-events: none;
+}
+
+.k-chart-navigator-wrap--visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.k-chart-navigator-wrap--inside {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  transform: translateY(var(--kreati-space-2));
+}
+
+.k-chart-navigator-wrap--inside.k-chart-navigator-wrap--visible {
+  transform: translateY(0);
+}
+
+.k-chart-navigator {
+  border-top: 1px solid var(--kreati-chart-axis);
+  border-bottom: 1px solid var(--kreati-chart-axis);
+  overflow: hidden;
+  user-select: none;
+}
+
+.k-chart-navigator__svg {
+  display: block;
+  background: var(--kreati-chart-bg);
+}
+
+.k-chart-navigator__mask {
+  fill: var(--kreati-chart-bg);
+  opacity: 0.7;
+}
+
+.k-chart-navigator__window {
+  fill: transparent;
+  stroke: none;
+}
+
+.k-chart-navigator__handle {
+  fill: var(--kreati-primary-500);
+  opacity: 0.6;
+  rx: 2;
+}
+
+.k-chart-navigator__handle:hover {
+  opacity: 1;
+}
+
+/* ─── Chart — Zoom ───────────────────────────────────────────────────────── */
+
+.k-chart-zoom-select {
+  fill: var(--kreati-primary-alpha-8, rgba(57, 73, 171, 0.08));
+  stroke: var(--kreati-primary-500);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+.k-chart-menu-btn {
+  position: absolute;
+  top: var(--kreati-space-2);
+  right: var(--kreati-space-2);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  color: var(--kreati-chart-text);
+  background: var(--kreati-chart-bg);
+  border: 1px solid var(--kreati-chart-axis);
+  border-radius: var(--kreati-radius-sm);
+  cursor: pointer;
+  transition: background var(--kreati-transition-fast);
+}
+
+.k-chart-menu-btn:hover {
+  background: var(--kreati-surface-hover);
+}
+
+.k-chart-menu-btn:focus-visible {
+  outline: 2px solid var(--kreati-primary-500);
+  outline-offset: 2px;
+}
+
+/* ─── Chart — Responsive & touch ─────────────────────────────────────────── */
+
+.k-cartesian-chart {
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.k-cartesian-chart--resizable {
+  position: relative;
+}
+
+.k-cartesian-chart__resize-handle {
+  position: absolute;
+  z-index: 3;
+  transition: background var(--kreati-transition-fast);
+}
+
+/* Bottom handle (vertical resize) */
+.k-cartesian-chart__resize-handle--bottom {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0.5rem;
+  cursor: ns-resize;
+}
+
+.k-cartesian-chart__resize-handle--bottom::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 2rem;
+  height: 0.1875rem;
+  border-radius: var(--kreati-radius-full);
+  background: var(--kreati-gray-300);
+  transition: background var(--kreati-transition-fast);
+}
+
+/* Right handle (horizontal resize) */
+.k-cartesian-chart__resize-handle--right {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 0.5rem;
+  cursor: ew-resize;
+}
+
+.k-cartesian-chart__resize-handle--right::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.1875rem;
+  height: 2rem;
+  border-radius: var(--kreati-radius-full);
+  background: var(--kreati-gray-300);
+  transition: background var(--kreati-transition-fast);
+}
+
+/* Corner handle (both) */
+.k-cartesian-chart__resize-handle--corner {
+  bottom: 0;
+  right: 0;
+  width: 0.75rem;
+  height: 0.75rem;
+  cursor: nwse-resize;
+}
+
+.k-cartesian-chart__resize-handle--corner::after {
+  content: "";
+  position: absolute;
+  bottom: 0.125rem;
+  right: 0.125rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 2px solid var(--kreati-gray-300);
+  border-bottom: 2px solid var(--kreati-gray-300);
+  transition: border-color var(--kreati-transition-fast);
+}
+
+.k-cartesian-chart__resize-handle:hover,
+.k-cartesian-chart__resize-handle:active {
+  background: var(--kreati-primary-alpha-4);
+}
+
+.k-cartesian-chart__resize-handle:hover::after,
+.k-cartesian-chart__resize-handle:active::after {
+  background: var(--kreati-primary-500);
+}
+
+.k-cartesian-chart__resize-handle--corner:hover::after,
+.k-cartesian-chart__resize-handle--corner:active::after {
+  background: transparent;
+  border-color: var(--kreati-primary-500);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k-cartesian-chart__resize-handle,
+  .k-cartesian-chart__resize-handle::after {
+    transition: none;
+  }
+}
+
+.k-cartesian-chart__svg-wrap {
+  touch-action: none;
+}
+
+.k-chart {
+  max-width: 100%;
+}
+
+.k-chart-axis__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─── Chart — Keyboard focus ─────────────────────────────────────────────── */
+
+.k-cartesian-chart:focus {
+  outline: 2px solid var(--kreati-primary-500);
+  outline-offset: 2px;
+}
+
+.k-cartesian-chart:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.k-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.k-chart-focus-ring {
+  fill: none;
+  stroke: var(--kreati-primary-500);
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+/* ─── Chart — Annotations ────────────────────────────────────────────────── */
+
+.k-chart-annotation__text {
+  font-size: var(--kreati-font-size-xs);
+  font-weight: var(--kreati-font-weight-semibold);
+  font-family: var(--kreati-font-family-body);
+}
+
+.k-chart-annotation__content {
+  font-size: var(--kreati-font-size-xs);
+  font-family: var(--kreati-font-family-body);
+  text-align: center;
+}
+
+/* ─── Chart — Error bars ─────────────────────────────────────────────────── */
+
+.k-chart-error-bars line {
+  stroke-linecap: round;
+}
+
+/* ─── Chart — Data labels ────────────────────────────────────────────────── */
+
+.k-chart-data-label {
+  font-size: var(--kreati-font-size-xs);
+  font-weight: var(--kreati-font-weight-medium);
+  font-family: var(--kreati-font-family-body);
+}
+
+/* ─── Chart — Reduced motion ────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .k-chart *,
+  .k-chart-navigator-wrap {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ─── ChartGroup ─────────────────────────────────────────────────────────── */
+
+.k-chart-group {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+}
+
+.k-chart-group__panel {
+  position: relative;
+}
+
+.k-chart-group__panel + .k-chart-group__panel {
+  margin-top: 0;
+}
+
+.k-chart-group__panels {
+  position: relative;
+}
+
+.k-chart-group__select-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: var(--kreati-primary-alpha-8, rgba(57, 73, 171, 0.08));
+  border-left: 1px solid var(--kreati-primary-500);
+  border-right: 1px solid var(--kreati-primary-500);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.k-chart-group__panel-title {
+  font-size: var(--kreati-font-size-xs);
+  font-weight: var(--kreati-font-weight-semibold);
+  color: var(--kreati-chart-text);
+  padding: var(--kreati-space-1) 0 0 var(--kreati-space-6);
+}
+
+.k-chart-group__toolbar {
+  display: flex;
+  gap: var(--kreati-space-2);
+  padding: var(--kreati-space-1) 0;
+  justify-content: flex-end;
+}
+
+.k-chart-group__export-btn {
+  border: 1px solid var(--kreati-gray-200);
+  background: var(--kreati-surface);
+  color: var(--kreati-chart-text);
+  font-size: var(--kreati-font-size-xs);
+  font-family: var(--kreati-font-family-body);
+  padding: var(--kreati-space-1) var(--kreati-space-2);
+  border-radius: var(--kreati-radius-sm);
+  cursor: pointer;
+  transition: background var(--kreati-transition-fast);
+}
+
+.k-chart-group__export-btn:hover {
+  background: var(--kreati-surface-hover);
+}
+
+/* ─── ChartToolbar ───────────────────────────────────────────────────────── */
+
+.k-chart-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-3);
+  padding: var(--kreati-space-2) 0;
+  flex-wrap: wrap;
+}
+
+.k-chart-toolbar__filter {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-2);
+}
+
+.k-chart-toolbar__label {
+  font-size: var(--kreati-font-size-sm);
+  font-weight: var(--kreati-font-weight-semibold);
+  color: var(--kreati-chart-text);
+  white-space: nowrap;
+}
+
+.k-chart-toolbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-2);
+  margin-left: auto;
+}
+
+/* ─── ChartGroup — Group Tooltip ─────────────────────────────────────────── */
+
+.k-chart-tooltip__header {
+  font-weight: var(--kreati-font-weight-semibold);
+  margin-bottom: var(--kreati-space-1);
+}

@@ -172,4 +172,16 @@ export const es: KreatiLocale = {
     groupLabel: "Grupo de {count} avatares",
     overflowLabel: "{count} mas",
   },
+  chart: {
+    resetZoom: "Restablecer zoom",
+    exportPng: "Exportar como PNG",
+    exportSvg: "Exportar como SVG",
+    exportCsv: "Exportar como CSV",
+    exportJsonTable: "Exportar como JSON (tabla)",
+    exportJsonSeries: "Exportar como JSON (series)",
+    menuLabel: "Menu del grafico",
+    filterPlaceholder: "Filtrar series...",
+    filterLabel: "Series",
+    exportLabel: "Exportar",
+  },
 };

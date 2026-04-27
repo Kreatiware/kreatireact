@@ -109,4 +109,18 @@
   --kreati-shadow-md: 0 0 0 2px rgba(0, 0, 0, 0.3);
   --kreati-shadow-lg: 0 0 0 3px rgba(0, 0, 0, 0.3);
   --kreati-shadow-xl: 0 0 0 3px rgba(0, 0, 0, 0.4);
+
+  /* ─── Chart Palette (high saturation) ─────── */
+  --kreati-chart-1: #0055ff;
+  --kreati-chart-2: #e60000;
+  --kreati-chart-3: #008a00;
+  --kreati-chart-4: #cc8400;
+  --kreati-chart-5: #7700cc;
+  --kreati-chart-6: #007a8a;
+  --kreati-chart-7: #cc0066;
+  --kreati-chart-8: #cc5500;
+  --kreati-chart-9: #008066;
+  --kreati-chart-10: #3300cc;
+  --kreati-chart-11: #558000;
+  --kreati-chart-12: #8800aa;
 }

@@ -109,4 +109,18 @@
   --kreati-shadow-md: 0 4px 8px -1px rgb(0 0 0 / 0.5);
   --kreati-shadow-lg: 0 10px 20px -3px rgb(0 0 0 / 0.5);
   --kreati-shadow-xl: 0 20px 30px -5px rgb(0 0 0 / 0.6);
+
+  /* ─── Chart Palette (blue-tinted brights) ─── */
+  --kreati-chart-1: #4db8e8;
+  --kreati-chart-2: #f472b6;
+  --kreati-chart-3: #34d399;
+  --kreati-chart-4: #fbbf24;
+  --kreati-chart-5: #a78bfa;
+  --kreati-chart-6: #22d3ee;
+  --kreati-chart-7: #fb7185;
+  --kreati-chart-8: #fb923c;
+  --kreati-chart-9: #2dd4bf;
+  --kreati-chart-10: #818cf8;
+  --kreati-chart-11: #a3e635;
+  --kreati-chart-12: #e879f9;
 }

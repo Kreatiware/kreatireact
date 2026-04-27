@@ -151,4 +151,18 @@
   --kreati-shadow-md: 0 4px 6px -1px rgb(18 18 16 / 0.08);
   --kreati-shadow-lg: 0 10px 15px -3px rgb(18 18 16 / 0.1);
   --kreati-shadow-xl: 0 20px 25px -5px rgb(18 18 16 / 0.12);
+
+  /* ─── Chart Palette (anil + gold derived) ─── */
+  --kreati-chart-1: #3949ab;
+  --kreati-chart-2: #d4503a;
+  --kreati-chart-3: #2e8b57;
+  --kreati-chart-4: #dab000;
+  --kreati-chart-5: #7b5ea7;
+  --kreati-chart-6: #0e8c9e;
+  --kreati-chart-7: #c44d7b;
+  --kreati-chart-8: #d47a2e;
+  --kreati-chart-9: #1a9e82;
+  --kreati-chart-10: #5c6bc0;
+  --kreati-chart-11: #6d9b1a;
+  --kreati-chart-12: #9c27b0;
 }
