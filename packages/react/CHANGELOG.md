@@ -1,5 +1,15 @@
 # @kreatiware/react
 
+## 0.18.0
+
+### Minor Changes
+
+- 498723d: feat(charts): add chart core, linechart
+
+### Patch Changes
+
+- 3d07b4a: fix(eslint): eslint fixes
+
 ## 0.17.0
 
 ### Minor Changes
