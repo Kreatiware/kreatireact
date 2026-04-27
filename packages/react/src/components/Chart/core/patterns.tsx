@@ -21,12 +21,21 @@ export const patternFill = (type: PatternType, color: string): string =>
   `url(#${getPatternId(type, color)})`;
 
 /** Renders a single SVG `<pattern>` element. */
-export const ChartPattern: React.FC<{ type: PatternType; color: string }> = ({ type, color }) => {
+export const ChartPattern: React.FC<{ type: PatternType; color: string }> = ({
+  type,
+  color,
+}) => {
   const id = getPatternId(type, color);
   switch (type) {
     case "stripes":
       return (
-        <pattern id={id} width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <pattern
+          id={id}
+          width="6"
+          height="6"
+          patternUnits="userSpaceOnUse"
+          patternTransform="rotate(45)"
+        >
           <rect width="3" height="6" fill={color} />
         </pattern>
       );
@@ -39,7 +48,12 @@ export const ChartPattern: React.FC<{ type: PatternType; color: string }> = ({ t
     case "crosshatch":
       return (
         <pattern id={id} width="8" height="8" patternUnits="userSpaceOnUse">
-          <path d="M0,0 L8,8 M8,0 L0,8" stroke={color} strokeWidth={1.5} fill="none" />
+          <path
+            d="M0,0 L8,8 M8,0 L0,8"
+            stroke={color}
+            strokeWidth={1.5}
+            fill="none"
+          />
         </pattern>
       );
   }

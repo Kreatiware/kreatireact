@@ -42,25 +42,45 @@ export const ConstantLine: React.FC<ConstantLineProps> = ({
   const isHorizontal = type === "horizontal";
   const pos = isHorizontal ? yScale(value) : xScale(value);
 
-  if (pos < 0 || (isHorizontal && pos > plotHeight) || (!isHorizontal && pos > plotWidth)) {
+  if (
+    pos < 0 ||
+    (isHorizontal && pos > plotHeight) ||
+    (!isHorizontal && pos > plotWidth)
+  ) {
     return null;
   }
 
   const labelX = isHorizontal
-    ? labelPosition === "start" ? 4 : labelPosition === "center" ? plotWidth / 2 : plotWidth - 4
+    ? labelPosition === "start"
+      ? 4
+      : labelPosition === "center"
+        ? plotWidth / 2
+        : plotWidth - 4
     : pos;
 
   const labelY = isHorizontal
     ? pos
-    : labelPosition === "start" ? plotHeight - 4 : labelPosition === "center" ? plotHeight / 2 : 4;
+    : labelPosition === "start"
+      ? plotHeight - 4
+      : labelPosition === "center"
+        ? plotHeight / 2
+        : 4;
 
   const textAnchor = isHorizontal
-    ? labelPosition === "start" ? "start" : labelPosition === "center" ? "middle" : "end"
+    ? labelPosition === "start"
+      ? "start"
+      : labelPosition === "center"
+        ? "middle"
+        : "end"
     : "middle";
 
   const yOffset = isHorizontal
-    ? (labelAlign === "below" ? 14 : -4)
-    : (labelAlign === "below" ? 14 : -4);
+    ? labelAlign === "below"
+      ? 14
+      : -4
+    : labelAlign === "below"
+      ? 14
+      : -4;
 
   return (
     <g className={`k-chart-constant ${className}`}>

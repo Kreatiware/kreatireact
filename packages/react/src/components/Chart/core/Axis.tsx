@@ -42,7 +42,9 @@ export const Axis: React.FC<AxisProps> = ({
     categories,
   } = config;
 
-  const bandColors = Array.isArray(bandColorProp) ? bandColorProp : [bandColorProp, "transparent"];
+  const bandColors = Array.isArray(bandColorProp)
+    ? bandColorProp
+    : [bandColorProp, "transparent"];
 
   const isHorizontal = orientation === "top" || orientation === "bottom";
 
@@ -50,7 +52,9 @@ export const Axis: React.FC<AxisProps> = ({
   const autoTickCount = isHorizontal
     ? Math.max(2, Math.floor(plotWidth / 80))
     : Math.max(2, Math.floor(plotHeight / 40));
-  const ticks = scale.ticks(tickCount ?? Math.min(autoTickCount, isHorizontal ? 10 : 8));
+  const ticks = scale.ticks(
+    tickCount ?? Math.min(autoTickCount, isHorizontal ? 10 : 8)
+  );
 
   const formatTick = (value: number): string => {
     if (tickFormat) return tickFormat(value);
@@ -74,49 +78,57 @@ export const Axis: React.FC<AxisProps> = ({
         x1={isHorizontal ? 0 : 0}
         y1={isHorizontal ? (orientation === "bottom" ? plotHeight : 0) : 0}
         x2={isHorizontal ? plotWidth : 0}
-        y2={isHorizontal ? (orientation === "bottom" ? plotHeight : 0) : plotHeight}
+        y2={
+          isHorizontal
+            ? orientation === "bottom"
+              ? plotHeight
+              : 0
+            : plotHeight
+        }
         stroke="var(--kreati-chart-axis)"
         strokeWidth={1}
       />
 
       {/* Alternating bands */}
-      {alternatingBands && ticks.length > 1 && ticks.map((value, i) => {
-        const next = ticks[i + 1];
-        if (next == null) return null;
-        const bandColor = bandColors[i % 2];
-        if (bandColor === "transparent") return null;
-        const p1 = scale(value);
-        const p2 = scale(next);
-        if (isHorizontal) {
+      {alternatingBands &&
+        ticks.length > 1 &&
+        ticks.map((value, i) => {
+          const next = ticks[i + 1];
+          if (next == null) return null;
+          const bandColor = bandColors[i % 2];
+          if (bandColor === "transparent") return null;
+          const p1 = scale(value);
+          const p2 = scale(next);
+          if (isHorizontal) {
+            return (
+              <rect
+                key={`band-${i}`}
+                x={Math.min(p1, p2)}
+                y={0}
+                width={Math.abs(p2 - p1)}
+                height={plotHeight}
+                fill={bandColor}
+                opacity={alternatingBandOpacity}
+                pointerEvents="none"
+              />
+            );
+          }
           return (
             <rect
               key={`band-${i}`}
-              x={Math.min(p1, p2)}
-              y={0}
-              width={Math.abs(p2 - p1)}
-              height={plotHeight}
+              x={0}
+              y={Math.min(p1, p2)}
+              width={plotWidth}
+              height={Math.abs(p2 - p1)}
               fill={bandColor}
               opacity={alternatingBandOpacity}
               pointerEvents="none"
             />
           );
-        }
-        return (
-          <rect
-            key={`band-${i}`}
-            x={0}
-            y={Math.min(p1, p2)}
-            width={plotWidth}
-            height={Math.abs(p2 - p1)}
-            fill={bandColor}
-            opacity={alternatingBandOpacity}
-            pointerEvents="none"
-          />
-        );
-      })}
+        })}
 
       {/* Ticks + labels */}
-      {ticks.map((value) => {
+      {ticks.map(value => {
         const pos = scale(value);
         const gridDash = dashStyleToArray(gridDashStyle);
 

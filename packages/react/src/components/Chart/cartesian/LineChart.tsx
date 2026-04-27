@@ -71,21 +71,39 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
     const [tooltipVisible, setTooltipVisible] = useState(false);
     const [tooltipXLabel, setTooltipXLabel] = useState<string | undefined>();
     const [tooltipAnchored, setTooltipAnchored] = useState(false);
-    const prevFocusRef = useRef<{ si: number | null; pi: number | null }>({ si: null, pi: null });
+    const prevFocusRef = useRef<{ si: number | null; pi: number | null }>({
+      si: null,
+      pi: null,
+    });
     const mouseDownPos = useRef<{ x: number; y: number } | null>(null);
 
     return (
       <div ref={ref} className={className} style={style}>
         <CartesianChart showCrosshair={false} {...cartesianProps}>
-          {({ xScale, yScale, yScales, plotWidth, plotHeight, visibleSeries, getColor, focusedPointIndex, focusedSeriesIndex }) => {
+          {({
+            xScale,
+            yScale,
+            yScales,
+            plotWidth,
+            plotHeight,
+            visibleSeries,
+            getColor,
+            focusedPointIndex,
+            focusedSeriesIndex,
+          }) => {
             const ml = cartesianProps.margins?.left ?? 50;
             const mt = cartesianProps.margins?.top ?? 20;
 
             /** Resolve the Y scale for a series (multi-axis support) */
-            const getYScale = (s: { yAxisId?: string }) => yScales[s.yAxisId ?? "default"] ?? yScale;
+            const getYScale = (s: { yAxisId?: string }) =>
+              yScales[s.yAxisId ?? "default"] ?? yScale;
 
             /** Convert plot coordinates to viewport coordinates using an SVG element */
-            const plotToViewport = (svg: SVGSVGElement, px: number, py: number) => {
+            const plotToViewport = (
+              svg: SVGSVGElement,
+              px: number,
+              py: number
+            ) => {
               const rect = svg.getBoundingClientRect();
               return { x: rect.left + ml + px, y: rect.top + mt + py };
             };
@@ -101,12 +119,22 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
               if (anchor && svg && entries.length > 0) {
                 const e0 = entries[0];
                 const p = e0.point;
-                return plotToViewport(svg, xScale(p.x), getYScale(e0.series)(p.y));
+                return plotToViewport(
+                  svg,
+                  xScale(p.x),
+                  getYScale(e0.series)(p.y)
+                );
               }
               return { x: clientX, y: clientY };
             };
 
-            const handleMouseMove = (plotX: number, plotY: number, clientX: number, clientY: number, svg: SVGSVGElement | null) => {
+            const handleMouseMove = (
+              plotX: number,
+              plotY: number,
+              clientX: number,
+              clientY: number,
+              svg: SVGSVGElement | null
+            ) => {
               if (plotX < 0 || plotX > plotWidth) {
                 setTooltipVisible(false);
                 setActiveX(null);
@@ -124,7 +152,10 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
                 const point = series.data[idx];
                 const px = xScale(point.x);
 
-                if (nearestPixelX === null || Math.abs(px - plotX) < Math.abs(nearestPixelX - plotX)) {
+                if (
+                  nearestPixelX === null ||
+                  Math.abs(px - plotX) < Math.abs(nearestPixelX - plotX)
+                ) {
                   nearestPixelX = px;
                 }
 
@@ -138,9 +169,13 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
               let finalEntries = entries;
               if (tooltipMode === "single" && entries.length > 0) {
                 let closest = entries[0];
-                let minDist = Math.abs(getYScale(closest.series)(closest.point.y) - plotY);
+                let minDist = Math.abs(
+                  getYScale(closest.series)(closest.point.y) - plotY
+                );
                 for (let j = 1; j < entries.length; j++) {
-                  const dist = Math.abs(getYScale(entries[j].series)(entries[j].point.y) - plotY);
+                  const dist = Math.abs(
+                    getYScale(entries[j].series)(entries[j].point.y) - plotY
+                  );
                   if (dist < minDist) {
                     minDist = dist;
                     closest = entries[j];
@@ -154,7 +189,9 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
 
               setTooltipEntries(finalEntries);
               setActiveX(nearestPixelX);
-              setTooltipPos(resolveTooltipPos(svg, finalEntries, clientX, clientY));
+              setTooltipPos(
+                resolveTooltipPos(svg, finalEntries, clientX, clientY)
+              );
               setTooltipVisible(finalEntries.length > 0);
 
               // X label from categories or value
@@ -174,7 +211,7 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
             return (
               <g
                 className="k-chart-lines"
-                onMouseMove={(e) => {
+                onMouseMove={e => {
                   const svg = (e.currentTarget as SVGGElement).ownerSVGElement;
                   if (!svg) return;
                   const rect = svg.getBoundingClientRect();
@@ -183,7 +220,7 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
                   handleMouseMove(plotX, plotY, e.clientX, e.clientY, svg);
                 }}
                 onMouseLeave={handleMouseLeave}
-                onTouchStart={(e) => {
+                onTouchStart={e => {
                   if (e.touches.length !== 1) return;
                   const touch = e.touches[0];
                   const svg = (e.currentTarget as SVGGElement).ownerSVGElement;
@@ -191,12 +228,18 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
                   const rect = svg.getBoundingClientRect();
                   const plotX = touch.clientX - rect.left - ml;
                   const plotY = touch.clientY - rect.top - mt;
-                  handleMouseMove(plotX, plotY, touch.clientX, touch.clientY, svg);
+                  handleMouseMove(
+                    plotX,
+                    plotY,
+                    touch.clientX,
+                    touch.clientY,
+                    svg
+                  );
                 }}
-                onMouseDown={(e) => {
+                onMouseDown={e => {
                   mouseDownPos.current = { x: e.clientX, y: e.clientY };
                 }}
-                onClick={(e) => {
+                onClick={e => {
                   if (!cartesianProps.onPointClick) return;
                   // Suppress click if mouse moved more than 5px (was a drag/zoom/pan)
                   if (mouseDownPos.current) {
@@ -210,7 +253,11 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
                   const plotX = e.clientX - rect.left - ml;
                   const plotY = e.clientY - rect.top - mt;
                   if (plotX < 0 || plotX > plotWidth) return;
-                  let closest: { series: typeof visibleSeries[0]; point: ChartDataPoint; dist: number } | null = null;
+                  let closest: {
+                    series: (typeof visibleSeries)[0];
+                    point: ChartDataPoint;
+                    dist: number;
+                  } | null = null;
                   for (let i = 0; i < visibleSeries.length; i++) {
                     const s = visibleSeries[i];
                     const idx = findNearestPointIndex(s.data, xScale, plotX);
@@ -219,9 +266,11 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
                     const dx = xScale(p.x) - plotX;
                     const dy = getYScale(s)(p.y) - plotY;
                     const dist = dx * dx + dy * dy;
-                    if (!closest || dist < closest.dist) closest = { series: s, point: p, dist };
+                    if (!closest || dist < closest.dist)
+                      closest = { series: s, point: p, dist };
                   }
-                  if (closest) cartesianProps.onPointClick(closest.point, closest.series);
+                  if (closest)
+                    cartesianProps.onPointClick(closest.point, closest.series);
                 }}
               >
                 {/* Full-area invisible rect for mouse tracking */}
@@ -236,7 +285,13 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
 
                 {/* Error bars */}
                 {visibleSeries.map((series, seriesIdx) => {
-                  if (!series.errorMargin && !series.data.some((p) => p.error != null || p.errorHigh != null)) return null;
+                  if (
+                    !series.errorMargin &&
+                    !series.data.some(
+                      p => p.error != null || p.errorHigh != null
+                    )
+                  )
+                    return null;
                   const color = getColor(series, seriesIdx);
                   const ebYScale = getYScale(series);
                   const capW = 4;
@@ -249,8 +304,20 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
                       aria-label={`Error bars for ${series.name}`}
                     >
                       {series.data.map((point, pi) => {
-                        const hi = point.errorHigh ?? (point.error != null ? point.y + point.error : series.errorMargin != null ? point.y + series.errorMargin : null);
-                        const lo = point.errorLow ?? (point.error != null ? point.y - point.error : series.errorMargin != null ? point.y - series.errorMargin : null);
+                        const hi =
+                          point.errorHigh ??
+                          (point.error != null
+                            ? point.y + point.error
+                            : series.errorMargin != null
+                              ? point.y + series.errorMargin
+                              : null);
+                        const lo =
+                          point.errorLow ??
+                          (point.error != null
+                            ? point.y - point.error
+                            : series.errorMargin != null
+                              ? point.y - series.errorMargin
+                              : null);
                         if (hi == null || lo == null) return null;
                         const cx = xScale(point.x);
                         const yHi = ebYScale(hi);
@@ -258,9 +325,33 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
                         if (cx < 0 || cx > plotWidth) return null;
                         return (
                           <g key={pi}>
-                            <line x1={cx} y1={yHi} x2={cx} y2={yLo} stroke={color} strokeWidth={1.5} opacity={0.6} />
-                            <line x1={cx - capW} y1={yHi} x2={cx + capW} y2={yHi} stroke={color} strokeWidth={1.5} opacity={0.6} />
-                            <line x1={cx - capW} y1={yLo} x2={cx + capW} y2={yLo} stroke={color} strokeWidth={1.5} opacity={0.6} />
+                            <line
+                              x1={cx}
+                              y1={yHi}
+                              x2={cx}
+                              y2={yLo}
+                              stroke={color}
+                              strokeWidth={1.5}
+                              opacity={0.6}
+                            />
+                            <line
+                              x1={cx - capW}
+                              y1={yHi}
+                              x2={cx + capW}
+                              y2={yHi}
+                              stroke={color}
+                              strokeWidth={1.5}
+                              opacity={0.6}
+                            />
+                            <line
+                              x1={cx - capW}
+                              y1={yLo}
+                              x2={cx + capW}
+                              y2={yLo}
+                              stroke={color}
+                              strokeWidth={1.5}
+                              opacity={0.6}
+                            />
                           </g>
                         );
                       })}
@@ -274,7 +365,13 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
                     {visibleSeries.map((series, seriesIdx) => {
                       const pat = series.fill?.pattern;
                       if (!pat) return null;
-                      return <ChartPattern key={series.id} type={pat} color={getColor(series, seriesIdx)} />;
+                      return (
+                        <ChartPattern
+                          key={series.id}
+                          type={pat}
+                          color={getColor(series, seriesIdx)}
+                        />
+                      );
                     })}
                   </defs>
                 )}
@@ -290,7 +387,13 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
                   const sYScale = getYScale(series);
                   const path = buildPath(series.data, xScale, sYScale, curve);
                   const areaPath = showArea
-                    ? buildAreaPath(series.data, xScale, sYScale, plotHeight, curve)
+                    ? buildAreaPath(
+                        series.data,
+                        xScale,
+                        sYScale,
+                        plotHeight,
+                        curve
+                      )
                     : "";
                   const areaFillValue = series.fill?.pattern
                     ? patternFill(series.fill.pattern, color)
@@ -308,7 +411,11 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
                         <path
                           d={areaPath}
                           fill={areaFillValue}
-                          opacity={series.fill?.pattern ? (series.fill?.opacity ?? 0.6) : areaOpacity}
+                          opacity={
+                            series.fill?.pattern
+                              ? (series.fill?.opacity ?? 0.6)
+                              : areaOpacity
+                          }
                           pointerEvents="none"
                         />
                       )}
@@ -332,11 +439,18 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
                         ).map((seg, si) => (
                           <path
                             key={si}
-                            d={buildPath(seg.points as ChartDataPoint[], xScale, sYScale, curve)}
+                            d={buildPath(
+                              seg.points as ChartDataPoint[],
+                              xScale,
+                              sYScale,
+                              curve
+                            )}
                             fill="none"
                             stroke={seg.color}
                             strokeWidth={isHovered ? sw + 1 : sw}
-                            strokeDasharray={dashStyleToArray(seg.dashStyle ?? series.dashStyle ?? "solid")}
+                            strokeDasharray={dashStyleToArray(
+                              seg.dashStyle ?? series.dashStyle ?? "solid"
+                            )}
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             pointerEvents="none"
@@ -365,7 +479,12 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
                   const trendData = computeTrendline(series.data, tl);
                   if (trendData.length < 2) return null;
                   const color = tl.color ?? getColor(series, seriesIdx);
-                  const tlPath = buildPath(trendData, xScale, getYScale(series), "linear");
+                  const tlPath = buildPath(
+                    trendData,
+                    xScale,
+                    getYScale(series),
+                    "linear"
+                  );
                   const dash = dashStyleToArray(tl.dashStyle ?? "dash");
                   return (
                     <path
@@ -389,16 +508,27 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
                 {visibleSeries.map((series, seriesIdx) => {
                   if (!series.showDataLabels) return null;
                   const color = getColor(series, seriesIdx);
-                  const fmt = series.dataLabelFormat ?? ((p) => String(p.y));
+                  const fmt = series.dataLabelFormat ?? (p => String(p.y));
                   const dlYScale = getYScale(series);
                   return (
                     <g key={`dl-${series.id}`} pointerEvents="none">
                       {series.data.map((point, pi) => {
                         const cx = xScale(point.x);
                         const cy = dlYScale(point.y);
-                        if (cx < 0 || cx > plotWidth || cy < 0 || cy > plotHeight) return null;
+                        if (
+                          cx < 0 ||
+                          cx > plotWidth ||
+                          cy < 0 ||
+                          cy > plotHeight
+                        )
+                          return null;
                         // Autoflip: horizontal anchor near edges
-                        const anchor = cx < 30 ? "start" : cx > plotWidth - 30 ? "end" : "middle";
+                        const anchor =
+                          cx < 30
+                            ? "start"
+                            : cx > plotWidth - 30
+                              ? "end"
+                              : "middle";
                         // Autoflip: show below point if too close to top
                         const above = cy > 18;
                         return (
@@ -419,17 +549,23 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
                 })}
 
                 {/* Active markers at nearest X */}
-                {showPoints && activeX != null &&
+                {showPoints &&
+                  activeX != null &&
                   visibleSeries.map((series, seriesIdx) => {
                     const color = getColor(series, seriesIdx);
                     const markerSize = series.markerSize ?? pointSize;
-                    const idx = findNearestPointIndex(series.data, xScale, activeX);
+                    const idx = findNearestPointIndex(
+                      series.data,
+                      xScale,
+                      activeX
+                    );
                     if (idx < 0) return null;
                     const point = series.data[idx];
                     const cx = xScale(point.x);
                     const cy = getYScale(series)(point.y);
                     if (cy < 0 || cy > plotHeight) return null;
-                    const dimmed = hoveredSeries != null && hoveredSeries !== series.id;
+                    const dimmed =
+                      hoveredSeries != null && hoveredSeries !== series.id;
 
                     return (
                       <circle
@@ -462,52 +598,74 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
                 )}
 
                 {/* Keyboard focus indicator + tooltip sync */}
-                {focusedSeriesIndex != null && focusedPointIndex != null && (() => {
-                  const s = visibleSeries[focusedSeriesIndex];
-                  if (!s) return null;
-                  const p = s.data[focusedPointIndex];
-                  if (!p) return null;
-                  const cx = xScale(p.x);
-                  const cy = getYScale(s)(p.y);
-                  if (cx < 0 || cx > plotWidth || cy < 0 || cy > plotHeight) return null;
+                {focusedSeriesIndex != null &&
+                  focusedPointIndex != null &&
+                  (() => {
+                    const s = visibleSeries[focusedSeriesIndex];
+                    if (!s) return null;
+                    const p = s.data[focusedPointIndex];
+                    if (!p) return null;
+                    const cx = xScale(p.x);
+                    const cy = getYScale(s)(p.y);
+                    if (cx < 0 || cx > plotWidth || cy < 0 || cy > plotHeight)
+                      return null;
 
-                  // Sync tooltip to keyboard-focused point
-                  if (prevFocusRef.current.si !== focusedSeriesIndex || prevFocusRef.current.pi !== focusedPointIndex) {
-                    prevFocusRef.current = { si: focusedSeriesIndex, pi: focusedPointIndex };
-                    const svg = (document.querySelector(".k-cartesian-chart svg.k-chart") as SVGSVGElement) ?? null;
-                    const vp = svg ? plotToViewport(svg, cx, cy) : { x: 0, y: 0 };
-                    const xVal = p.x;
-                    const categories = cartesianProps.xAxis?.categories;
-                    // Schedule state updates to avoid setting state during render
-                    queueMicrotask(() => {
-                      setTooltipEntries([{ series: s, point: p, color: getColor(s, focusedSeriesIndex) }]);
-                      setTooltipPos(vp);
-                      setTooltipAnchored(true);
-                      setTooltipVisible(true);
-                      setTooltipXLabel(categories?.[xVal] ?? String(xVal));
-                      setActiveX(cx);
-                    });
-                  }
+                    // Sync tooltip to keyboard-focused point
+                    if (
+                      prevFocusRef.current.si !== focusedSeriesIndex ||
+                      prevFocusRef.current.pi !== focusedPointIndex
+                    ) {
+                      prevFocusRef.current = {
+                        si: focusedSeriesIndex,
+                        pi: focusedPointIndex,
+                      };
+                      const svg =
+                        (document.querySelector(
+                          ".k-cartesian-chart svg.k-chart"
+                        ) as SVGSVGElement) ?? null;
+                      const vp = svg
+                        ? plotToViewport(svg, cx, cy)
+                        : { x: 0, y: 0 };
+                      const xVal = p.x;
+                      const categories = cartesianProps.xAxis?.categories;
+                      // Schedule state updates to avoid setting state during render
+                      queueMicrotask(() => {
+                        setTooltipEntries([
+                          {
+                            series: s,
+                            point: p,
+                            color: getColor(s, focusedSeriesIndex),
+                          },
+                        ]);
+                        setTooltipPos(vp);
+                        setTooltipAnchored(true);
+                        setTooltipVisible(true);
+                        setTooltipXLabel(categories?.[xVal] ?? String(xVal));
+                        setActiveX(cx);
+                      });
+                    }
 
-                  return (
-                    <circle
-                      cx={cx}
-                      cy={cy}
-                      r={pointSize + 4}
-                      className="k-chart-focus-ring"
-                      pointerEvents="none"
-                    />
-                  );
-                })()}
+                    return (
+                      <circle
+                        cx={cx}
+                        cy={cy}
+                        r={pointSize + 4}
+                        className="k-chart-focus-ring"
+                        pointerEvents="none"
+                      />
+                    );
+                  })()}
                 {/* Clear tooltip when keyboard focus is lost */}
-                {(focusedSeriesIndex == null || focusedPointIndex == null) && prevFocusRef.current.si != null && (() => {
-                  prevFocusRef.current = { si: null, pi: null };
-                  queueMicrotask(() => {
-                    setTooltipVisible(false);
-                    setActiveX(null);
-                  });
-                  return null;
-                })()}
+                {(focusedSeriesIndex == null || focusedPointIndex == null) &&
+                  prevFocusRef.current.si != null &&
+                  (() => {
+                    prevFocusRef.current = { si: null, pi: null };
+                    queueMicrotask(() => {
+                      setTooltipVisible(false);
+                      setActiveX(null);
+                    });
+                    return null;
+                  })()}
               </g>
             );
           }}
@@ -538,8 +696,11 @@ const buildPath = (
   curve: "linear" | "smooth" | "monotone"
 ): string => {
   if (data.length === 0) return "";
-  const points = data.map((p) => ({ x: xScale(p.x), y: yScale(p.y) }));
-  if (points.length <= 2) return points.map((p, i) => `${i === 0 ? "M" : "L"}${p.x},${p.y}`).join(" ");
+  const points = data.map(p => ({ x: xScale(p.x), y: yScale(p.y) }));
+  if (points.length <= 2)
+    return points
+      .map((p, i) => `${i === 0 ? "M" : "L"}${p.x},${p.y}`)
+      .join(" ");
   if (curve === "smooth") return buildSplinePath(points);
   if (curve === "monotone") return buildMonotonePath(points);
   return points.map((p, i) => `${i === 0 ? "M" : "L"}${p.x},${p.y}`).join(" ");
@@ -590,7 +751,8 @@ const buildSplinePath = (points: { x: number; y: number }[]): string => {
 const buildMonotonePath = (points: { x: number; y: number }[]): string => {
   const n = points.length;
   if (n < 2) return "";
-  if (n === 2) return `M${points[0].x},${points[0].y} L${points[1].x},${points[1].y}`;
+  if (n === 2)
+    return `M${points[0].x},${points[0].y} L${points[1].x},${points[1].y}`;
 
   // Compute slopes between consecutive points
   const dx: number[] = [];

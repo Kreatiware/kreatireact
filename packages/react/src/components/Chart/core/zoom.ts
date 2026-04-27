@@ -53,10 +53,10 @@ export const panZoom = (
 ): ZoomState => {
   const rangeX = current.xMax - current.xMin;
   const rangeY = current.yMax - current.yMin;
-  let xMin = current.xMin - dxFraction * rangeX;
-  let xMax = current.xMax - dxFraction * rangeX;
-  let yMin = current.yMin + dyFraction * rangeY;
-  let yMax = current.yMax + dyFraction * rangeY;
+  const xMin = current.xMin - dxFraction * rangeX;
+  const xMax = current.xMax - dxFraction * rangeX;
+  const yMin = current.yMin + dyFraction * rangeY;
+  const yMax = current.yMax + dyFraction * rangeY;
 
   return clampZoom({ xMin, xMax, yMin, yMax }, fullDomain);
 };
@@ -77,7 +77,7 @@ export const selectZoom = (
   const bottom = Math.max(y1Frac, y2Frac);
 
   // Minimum selection size (5% of range) to prevent accidental micro-zooms
-  if ((right - left) < 0.05 && (bottom - top) < 0.05) return fullDomain;
+  if (right - left < 0.05 && bottom - top < 0.05) return fullDomain;
 
   return {
     xMin: fullDomain.xMin + left * rangeX,
@@ -101,10 +101,22 @@ const clampZoom = (z: ZoomState, full: ZoomState): ZoomState => {
   const rangeX = xMax - xMin;
   const rangeY = yMax - yMin;
 
-  if (xMin < full.xMin) { xMin = full.xMin; xMax = xMin + rangeX; }
-  if (xMax > full.xMax) { xMax = full.xMax; xMin = xMax - rangeX; }
-  if (yMin < full.yMin) { yMin = full.yMin; yMax = yMin + rangeY; }
-  if (yMax > full.yMax) { yMax = full.yMax; yMin = yMax - rangeY; }
+  if (xMin < full.xMin) {
+    xMin = full.xMin;
+    xMax = xMin + rangeX;
+  }
+  if (xMax > full.xMax) {
+    xMax = full.xMax;
+    xMin = xMax - rangeX;
+  }
+  if (yMin < full.yMin) {
+    yMin = full.yMin;
+    yMax = yMin + rangeY;
+  }
+  if (yMax > full.yMax) {
+    yMax = full.yMax;
+    yMin = yMax - rangeY;
+  }
 
   // Don't let it exceed full domain after clamping
   xMin = Math.max(xMin, full.xMin);

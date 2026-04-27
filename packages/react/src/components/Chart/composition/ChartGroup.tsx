@@ -1,16 +1,38 @@
-import React, { forwardRef, useState, useCallback, useRef, useMemo, useImperativeHandle, useEffect } from "react";
+import React, {
+  forwardRef,
+  useState,
+  useCallback,
+  useRef,
+  useMemo,
+  useImperativeHandle,
+  useEffect,
+} from "react";
 import { createPortal } from "react-dom";
 import { LineChart } from "../cartesian/LineChart";
 import type { LineChartProps } from "../cartesian/LineChart";
 import { Legend } from "../core/Legend";
-import { exportPng, exportSvg, exportCsv, exportJsonTable, exportJsonSeries } from "../core/export";
+import {
+  exportPng,
+  exportSvg,
+  exportCsv,
+  exportJsonTable,
+  exportJsonSeries,
+} from "../core/export";
 import type { ZoomState } from "../core/zoom";
 import type { ChartSeries, ChartAxisConfig } from "../core/types";
 import { useKreatiLocale } from "../../../locale/KreatiProvider";
 import "../Chart.css";
 
 /** Configuration for a single panel in a ChartGroup. */
-export interface ChartGroupPanel extends Omit<LineChartProps, "xAxis" | "showLegend" | "zoomMode" | "zoomAxis" | "exportFormats" | "showMenuButton"> {
+export interface ChartGroupPanel extends Omit<
+  LineChartProps,
+  | "xAxis"
+  | "showLegend"
+  | "zoomMode"
+  | "zoomAxis"
+  | "exportFormats"
+  | "showMenuButton"
+> {
   /** Panel title displayed above the chart */
   title?: string;
   /** Panel height in pixels. Default: 200 */
@@ -100,11 +122,16 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
     // Shared zoom state — use external if provided
     const [internalZoom, setInternalZoom] = useState<ZoomState | null>(null);
     const sharedZoom = externalZoom !== undefined ? externalZoom : internalZoom;
-    const setSharedZoom = useCallback((z: ZoomState | null | ((prev: ZoomState | null) => ZoomState | null)) => {
-      const next = typeof z === "function" ? z(sharedZoom) : z;
-      if (externalZoomChange) externalZoomChange(next);
-      if (externalZoom === undefined) setInternalZoom(next);
-    }, [sharedZoom, externalZoomChange, externalZoom]);
+    const setSharedZoom = useCallback(
+      (
+        z: ZoomState | null | ((prev: ZoomState | null) => ZoomState | null)
+      ) => {
+        const next = typeof z === "function" ? z(sharedZoom) : z;
+        if (externalZoomChange) externalZoomChange(next);
+        if (externalZoom === undefined) setInternalZoom(next);
+      },
+      [sharedZoom, externalZoomChange, externalZoom]
+    );
 
     // Shared crosshair X in data coordinates
     const [crosshairX, setCrosshairX] = useState<number | null>(null);
@@ -113,33 +140,46 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
     const [activePanel, setActivePanel] = useState<number | null>(null);
 
     // Group tooltip state
-    const [groupTooltipPos, setGroupTooltipPos] = useState<{ x: number; y: number } | null>(null);
+    const [groupTooltipPos, setGroupTooltipPos] = useState<{
+      x: number;
+      y: number;
+    } | null>(null);
     const groupTooltipRef = useRef<HTMLDivElement>(null);
 
     // Selection overlay — use ref for direct DOM updates (no render lag)
     const selectOverlayRef = useRef<HTMLDivElement>(null);
     const isDraggingRef = useRef(false);
-    const handleSelectChange = useCallback((range: { x1: number; x2: number; plotLeft: number; plotWidth: number } | null) => {
-      const el = selectOverlayRef.current;
-      if (!el) return;
-      if (range) {
-        isDraggingRef.current = true;
-        el.style.display = "block";
-        el.style.left = `${range.plotLeft + range.x1}px`;
-        el.style.width = `${range.x2 - range.x1}px`;
-      } else {
-        isDraggingRef.current = false;
-        el.style.display = "none";
-      }
-    }, []);
+    const handleSelectChange = useCallback(
+      (
+        range: {
+          x1: number;
+          x2: number;
+          plotLeft: number;
+          plotWidth: number;
+        } | null
+      ) => {
+        const el = selectOverlayRef.current;
+        if (!el) return;
+        if (range) {
+          isDraggingRef.current = true;
+          el.style.display = "block";
+          el.style.left = `${range.plotLeft + range.x1}px`;
+          el.style.width = `${range.x2 - range.x1}px`;
+        } else {
+          isDraggingRef.current = false;
+          el.style.display = "none";
+        }
+      },
+      []
+    );
 
     // Unified hidden series
-    const allSeries = panels.flatMap((p) => p.series ?? []);
+    const allSeries = panels.flatMap(p => p.series ?? []);
     const [hiddenIds, setHiddenIds] = useState<Set<string>>(
-      () => new Set(allSeries.filter((s) => s.hidden).map((s) => s.id))
+      () => new Set(allSeries.filter(s => s.hidden).map(s => s.id))
     );
     const toggleSeries = useCallback((id: string) => {
-      setHiddenIds((prev) => {
+      setHiddenIds(prev => {
         const next = new Set(prev);
         if (next.has(id)) next.delete(id);
         else next.add(id);
@@ -150,21 +190,38 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
     // Build group tooltip entries from crosshairX
     const groupTooltipEntries = useMemo(() => {
       if (tooltipMode !== "group" || crosshairX == null) return [];
-      const entries: { name: string; value: number; color: string; unit?: string }[] = [];
+      const entries: {
+        name: string;
+        value: number;
+        color: string;
+        unit?: string;
+      }[] = [];
       let paletteIdx = 0;
-      panels.forEach((panel) => {
+      panels.forEach(panel => {
         const panelSeries = panel.series ?? [];
-        panelSeries.forEach((s) => {
-          if (hiddenIds.has(s.id)) { paletteIdx++; return; }
+        panelSeries.forEach(s => {
+          if (hiddenIds.has(s.id)) {
+            paletteIdx++;
+            return;
+          }
           let nearest = s.data[0];
           let minDist = Infinity;
           for (const p of s.data) {
             const d = Math.abs(p.x - crosshairX);
-            if (d < minDist) { minDist = d; nearest = p; }
+            if (d < minDist) {
+              minDist = d;
+              nearest = p;
+            }
           }
           if (nearest) {
-            const color = s.color ?? `var(--kreati-chart-${(paletteIdx % 12) + 1})`;
-            entries.push({ name: s.name, value: nearest.y, color, unit: s.unit });
+            const color =
+              s.color ?? `var(--kreati-chart-${(paletteIdx % 12) + 1})`;
+            entries.push({
+              name: s.name,
+              value: nearest.y,
+              color,
+              unit: s.unit,
+            });
           }
           paletteIdx++;
         });
@@ -176,7 +233,7 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
       (zoom: ZoomState | null) => {
         if (synchronized) {
           if (zoom) {
-            setSharedZoom((prev) => ({
+            setSharedZoom(prev => ({
               xMin: zoom.xMin,
               xMax: zoom.xMax,
               yMin: prev?.yMin ?? zoom.yMin,
@@ -206,10 +263,17 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
         const el = containerRef.current;
         if (!el) return;
         if (format === "png" || format === "svg") {
-          const panelEls = Array.from(el.querySelectorAll(".k-chart-group__panel")) as HTMLElement[];
-          const svgs = Array.from(el.querySelectorAll("svg.k-chart")) as SVGSVGElement[];
+          const panelEls = Array.from(
+            el.querySelectorAll(".k-chart-group__panel")
+          ) as HTMLElement[];
+          const svgs = Array.from(
+            el.querySelectorAll("svg.k-chart")
+          ) as SVGSVGElement[];
           if (svgs.length === 0) return;
-          if (svgs.length === 1 && !panelEls[0]?.querySelector(".k-chart-group__panel-title")) {
+          if (
+            svgs.length === 1 &&
+            !panelEls[0]?.querySelector(".k-chart-group__panel-title")
+          ) {
             if (format === "png") exportPng(svgs[0]);
             else exportSvg(svgs[0]);
             return;
@@ -220,9 +284,10 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
           const titleH = 18;
 
           // Collect panel info
-          const panelInfo: { title?: string; svgIdx: number; svgH: number }[] = [];
+          const panelInfo: { title?: string; svgIdx: number; svgH: number }[] =
+            [];
           let svgIdx = 0;
-          panelEls.forEach((pe) => {
+          panelEls.forEach(pe => {
             const titleEl = pe.querySelector(".k-chart-group__panel-title");
             const svg = pe.querySelector("svg.k-chart") as SVGSVGElement | null;
             if (!svg) return;
@@ -235,9 +300,14 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
           });
 
           let totalH = 0;
-          panelInfo.forEach((p) => { totalH += (p.title ? titleH : 0) + p.svgH; });
+          panelInfo.forEach(p => {
+            totalH += (p.title ? titleH : 0) + p.svgH;
+          });
 
-          const merged = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          const merged = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "svg"
+          );
           merged.setAttribute("xmlns", "http://www.w3.org/2000/svg");
           merged.setAttribute("width", String(width));
           merged.setAttribute("height", String(totalH));
@@ -246,19 +316,36 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
           const inlineStyles = (src: Element, tgt: Element) => {
             const cs = window.getComputedStyle(src);
             const te = tgt as SVGElement;
-            for (const p of ["fill", "stroke", "stroke-width", "stroke-dasharray", "font-size", "font-family", "font-weight", "opacity", "color"]) {
+            for (const p of [
+              "fill",
+              "stroke",
+              "stroke-width",
+              "stroke-dasharray",
+              "font-size",
+              "font-family",
+              "font-weight",
+              "opacity",
+              "color",
+            ]) {
               const v = cs.getPropertyValue(p);
               if (v) te.style.setProperty(p, v);
             }
-            for (let j = 0; j < src.children.length && j < tgt.children.length; j++) {
+            for (
+              let j = 0;
+              j < src.children.length && j < tgt.children.length;
+              j++
+            ) {
               inlineStyles(src.children[j], tgt.children[j]);
             }
           };
 
           let yOff = 0;
-          panelInfo.forEach((p) => {
+          panelInfo.forEach(p => {
             if (p.title) {
-              const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+              const t = document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "text"
+              );
               t.setAttribute("x", "8");
               t.setAttribute("y", String(yOff + 13));
               t.setAttribute("fill", textColor);
@@ -271,9 +358,16 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
             }
             const svg = svgs[p.svgIdx];
             const clone = svg.cloneNode(true) as SVGSVGElement;
-            clone.querySelectorAll(".k-chart-menu-btn, .k-chart-zoom-select, .k-chart-focus-ring").forEach((e) => e.remove());
+            clone
+              .querySelectorAll(
+                ".k-chart-menu-btn, .k-chart-zoom-select, .k-chart-focus-ring"
+              )
+              .forEach(e => e.remove());
             inlineStyles(svg, clone);
-            const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            const g = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "g"
+            );
             g.setAttribute("transform", `translate(0,${yOff})`);
             while (clone.firstChild) g.appendChild(clone.firstChild);
             merged.appendChild(g);
@@ -284,13 +378,22 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
           const download = (blob: Blob, name: string) => {
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
-            a.href = url; a.download = name; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            a.href = url;
+            a.download = name;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
             URL.revokeObjectURL(url);
           };
           if (format === "svg") {
-            download(new Blob([svgData], { type: "image/svg+xml;charset=utf-8" }), "chart.svg");
+            download(
+              new Blob([svgData], { type: "image/svg+xml;charset=utf-8" }),
+              "chart.svg"
+            );
           } else {
-            const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+            const blob = new Blob([svgData], {
+              type: "image/svg+xml;charset=utf-8",
+            });
             const url = URL.createObjectURL(blob);
             const img = new Image();
             img.onload = () => {
@@ -303,20 +406,26 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
               ctx.scale(scale, scale);
               ctx.drawImage(img, 0, 0, width, totalH);
               URL.revokeObjectURL(url);
-              canvas.toBlob((pngBlob) => { if (pngBlob) download(pngBlob, "chart.png"); }, "image/png");
+              canvas.toBlob(pngBlob => {
+                if (pngBlob) download(pngBlob, "chart.png");
+              }, "image/png");
             };
             img.src = url;
           }
         }
         if (format === "csv") {
-          const vis = allSeries.filter((s) => !hiddenIds.has(s.id));
+          const vis = allSeries.filter(s => !hiddenIds.has(s.id));
           exportCsv(vis, xAxis?.categories, xAxis?.label);
         }
         if (format === "json-table") {
-          exportJsonTable(allSeries.filter((s) => !hiddenIds.has(s.id)), xAxis?.categories, xAxis?.label);
+          exportJsonTable(
+            allSeries.filter(s => !hiddenIds.has(s.id)),
+            xAxis?.categories,
+            xAxis?.label
+          );
         }
         if (format === "json-series") {
-          exportJsonSeries(allSeries.filter((s) => !hiddenIds.has(s.id)));
+          exportJsonSeries(allSeries.filter(s => !hiddenIds.has(s.id)));
         }
       },
       [allSeries, hiddenIds, xAxis]
@@ -328,9 +437,13 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
       let maxRight = 0;
       for (const p of panels) {
         const yAxesCfg = p.yAxis;
-        const axes = Array.isArray(yAxesCfg) ? yAxesCfg : yAxesCfg ? [yAxesCfg] : [{}];
-        const leftCount = axes.filter((a) => a.side !== "right").length;
-        const rightCount = axes.filter((a) => a.side === "right").length;
+        const axes = Array.isArray(yAxesCfg)
+          ? yAxesCfg
+          : yAxesCfg
+            ? [yAxesCfg]
+            : [{}];
+        const leftCount = axes.filter(a => a.side !== "right").length;
+        const rightCount = axes.filter(a => a.side === "right").length;
         if (leftCount > maxLeft) maxLeft = leftCount;
         if (rightCount > maxRight) maxRight = rightCount;
       }
@@ -343,22 +456,29 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
     // Assign consistent colors to all series for legend
     const coloredSeries = allSeries.map((s, i) => ({
       ...s,
-      ...(!s.color && !s.severity ? { color: `var(--kreati-chart-${(i % 12) + 1})` } : {}),
+      ...(!s.color && !s.severity
+        ? { color: `var(--kreati-chart-${(i % 12) + 1})` }
+        : {}),
     }));
 
-    const legend = showLegend && synchronized && allSeries.length > 1 ? (
-      <Legend
-        series={coloredSeries}
-        hiddenIds={hiddenIds}
-        onToggle={toggleSeries}
-        position={legendPosition === "top" ? "top" : "bottom"}
-        palette={palette}
-      />
-    ) : null;
+    const legend =
+      showLegend && synchronized && allSeries.length > 1 ? (
+        <Legend
+          series={coloredSeries}
+          hiddenIds={hiddenIds}
+          onToggle={toggleSeries}
+          position={legendPosition === "top" ? "top" : "bottom"}
+          palette={palette}
+        />
+      ) : null;
 
-    useImperativeHandle(ref, () => ({
-      export: (format: string) => handleExport(format),
-    }), [handleExport]);
+    useImperativeHandle(
+      ref,
+      () => ({
+        export: (format: string) => handleExport(format),
+      }),
+      [handleExport]
+    );
 
     return (
       <div
@@ -373,91 +493,168 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
         <div
           ref={panelsRef}
           className="k-chart-group__panels"
-          onMouseMove={tooltipMode === "group" ? (e) => setGroupTooltipPos({ x: e.clientX, y: e.clientY }) : undefined}
-          onMouseLeave={tooltipMode === "group" ? () => setGroupTooltipPos(null) : undefined}
+          onMouseMove={
+            tooltipMode === "group"
+              ? e => setGroupTooltipPos({ x: e.clientX, y: e.clientY })
+              : undefined
+          }
+          onMouseLeave={
+            tooltipMode === "group" ? () => setGroupTooltipPos(null) : undefined
+          }
         >
-        {panels.map((panel, idx) => {
-          const { title: panelTitle, height: panelHeight = 200, showXLabels, keepEmpty = false, series: panelSeries = [], ...rest } = panel;
+          {panels.map((panel, idx) => {
+            const {
+              title: panelTitle,
+              height: panelHeight = 200,
+              showXLabels,
+              keepEmpty = false,
+              series: panelSeries = [],
+              ...rest
+            } = panel;
 
-          // Hide panel if all its series are hidden
-          const hasVisible = panelSeries.some((s) => !hiddenIds.has(s.id));
-          if (!hasVisible && !keepEmpty) return null;
+            // Hide panel if all its series are hidden
+            const hasVisible = panelSeries.some(s => !hiddenIds.has(s.id));
+            if (!hasVisible && !keepEmpty) return null;
 
-          // Determine if this is the last visible panel
-          const visiblePanels = panels.filter((p, i) => {
-            const ps = p.series ?? [];
-            return ps.some((s) => !hiddenIds.has(s.id)) || p.keepEmpty || i === idx;
-          });
-          const isLastVisible = visiblePanels[visiblePanels.length - 1] === panel;
-          const showX = showXLabels ?? isLastVisible;
+            // Determine if this is the last visible panel
+            const visiblePanels = panels.filter((p, i) => {
+              const ps = p.series ?? [];
+              return (
+                ps.some(s => !hiddenIds.has(s.id)) || p.keepEmpty || i === idx
+              );
+            });
+            const isLastVisible =
+              visiblePanels[visiblePanels.length - 1] === panel;
+            const showX = showXLabels ?? isLastVisible;
 
-          // Palette offset so each panel gets unique colors
-          const paletteOffset = panels.slice(0, idx).reduce((sum, p) => sum + (p.series?.length ?? 0), 0);
+            // Palette offset so each panel gets unique colors
+            const paletteOffset = panels
+              .slice(0, idx)
+              .reduce((sum, p) => sum + (p.series?.length ?? 0), 0);
 
-          // Filter hidden series
-          const filteredSeries = panelSeries.map((s, si) => ({
-            ...s,
-            ...(hiddenIds.has(s.id) ? { hidden: true } : {}),
-            // Assign color from global palette position if not explicitly set
-            ...(!s.color && !s.severity ? { color: `var(--kreati-chart-${((paletteOffset + si) % 12) + 1})` } : {}),
-          }));
+            // Filter hidden series
+            const filteredSeries = panelSeries.map((s, si) => ({
+              ...s,
+              ...(hiddenIds.has(s.id) ? { hidden: true } : {}),
+              // Assign color from global palette position if not explicitly set
+              ...(!s.color && !s.severity
+                ? {
+                    color: `var(--kreati-chart-${((paletteOffset + si) % 12) + 1})`,
+                  }
+                : {}),
+            }));
 
-          // X axis: hide labels and ticks on non-last panels
-          const panelXAxis: ChartAxisConfig = {
-            ...xAxis,
-            ...(!showX ? { label: undefined, ticks: 0 } : {}),
-          };
+            // X axis: hide labels and ticks on non-last panels
+            const panelXAxis: ChartAxisConfig = {
+              ...xAxis,
+              ...(!showX ? { label: undefined, ticks: 0 } : {}),
+            };
 
-          // Reduce bottom margin on non-last panels (no X labels/ticks)
-          const panelMargins = {
-            left: unifiedMargins.left,
-            right: unifiedMargins.right,
-            ...(!showX ? { bottom: 5 } : {}),
-            ...(rest.margins ?? {}),
-          };
+            // Reduce bottom margin on non-last panels (no X labels/ticks)
+            const panelMargins = {
+              left: unifiedMargins.left,
+              right: unifiedMargins.right,
+              ...(!showX ? { bottom: 5 } : {}),
+              ...(rest.margins ?? {}),
+            };
 
-          return (
-            <div
-              key={idx}
-              className="k-chart-group__panel"
-              role="region"
-              aria-label={panelTitle ?? `Panel ${idx + 1}`}
-              onMouseEnter={() => { if (!isDraggingRef.current) setActivePanel(idx); }}
-              onMouseLeave={() => { if (!isDraggingRef.current) { setActivePanel(null); setCrosshairX(null); handleSelectChange(null); } }}
-            >
-              {panelTitle && (
-                <div className="k-chart-group__panel-title">{panelTitle}</div>
-              )}
-              <LineChart
-                {...rest}
-                series={filteredSeries}
-                xAxis={panelXAxis}
-                height={panelHeight}
-                margins={panelMargins}
-                showLegend={!synchronized}
-                zoomMode={zoomMode}
-                zoomAxis={zoomAxis}
-                controlledZoom={synchronized ? sharedZoom : undefined}
-                onZoomChange={handleZoomChange}
-                showCrosshair={showCrosshair && activePanel === idx}
-                syncCrosshairX={showCrosshair && synchronized && activePanel !== idx ? crosshairX : null}
-                onCrosshairChange={synchronized ? handleCrosshairChange(idx) : undefined}
-                onSelectChange={synchronized && activePanel === idx ? handleSelectChange : undefined}
-                hideSelection={!!synchronized}
-                tooltipMode={tooltipMode === "group" ? "custom" as "single" : tooltipMode}
-                tooltipRender={tooltipMode === "group" ? () => null : undefined}
-                exportFormats={!synchronized ? exportFormats as ("png" | "svg" | "csv" | "json-table" | "json-series")[] : []}
-                showMenuButton={!synchronized ? "auto" : idx === 0 && exportFormats.length > 0 ? true : idx === 0 ? "auto" : false}
-                contextMenuItems={synchronized && exportFormats.length > 0 ? exportFormats.map((fmt) => ({
-                  key: `group-export-${fmt}`,
-                  label: fmt === "png" ? t.exportPng : fmt === "svg" ? t.exportSvg : fmt === "csv" ? t.exportCsv : fmt === "json-table" ? t.exportJsonTable : t.exportJsonSeries,
-                  command: () => handleExport(fmt),
-                })) : undefined}
-                palette={palette}
-              />
-            </div>
-          );
-        })}
+            return (
+              <div
+                key={idx}
+                className="k-chart-group__panel"
+                role="region"
+                aria-label={panelTitle ?? `Panel ${idx + 1}`}
+                onMouseEnter={() => {
+                  if (!isDraggingRef.current) setActivePanel(idx);
+                }}
+                onMouseLeave={() => {
+                  if (!isDraggingRef.current) {
+                    setActivePanel(null);
+                    setCrosshairX(null);
+                    handleSelectChange(null);
+                  }
+                }}
+              >
+                {panelTitle && (
+                  <div className="k-chart-group__panel-title">{panelTitle}</div>
+                )}
+                <LineChart
+                  {...rest}
+                  series={filteredSeries}
+                  xAxis={panelXAxis}
+                  height={panelHeight}
+                  margins={panelMargins}
+                  showLegend={!synchronized}
+                  zoomMode={zoomMode}
+                  zoomAxis={zoomAxis}
+                  controlledZoom={synchronized ? sharedZoom : undefined}
+                  onZoomChange={handleZoomChange}
+                  showCrosshair={showCrosshair && activePanel === idx}
+                  syncCrosshairX={
+                    showCrosshair && synchronized && activePanel !== idx
+                      ? crosshairX
+                      : null
+                  }
+                  onCrosshairChange={
+                    synchronized ? handleCrosshairChange(idx) : undefined
+                  }
+                  onSelectChange={
+                    synchronized && activePanel === idx
+                      ? handleSelectChange
+                      : undefined
+                  }
+                  hideSelection={!!synchronized}
+                  tooltipMode={
+                    tooltipMode === "group"
+                      ? ("custom" as "single")
+                      : tooltipMode
+                  }
+                  tooltipRender={
+                    tooltipMode === "group" ? () => null : undefined
+                  }
+                  exportFormats={
+                    !synchronized
+                      ? (exportFormats as (
+                          | "png"
+                          | "svg"
+                          | "csv"
+                          | "json-table"
+                          | "json-series"
+                        )[])
+                      : []
+                  }
+                  showMenuButton={
+                    !synchronized
+                      ? "auto"
+                      : idx === 0 && exportFormats.length > 0
+                        ? true
+                        : idx === 0
+                          ? "auto"
+                          : false
+                  }
+                  contextMenuItems={
+                    synchronized && exportFormats.length > 0
+                      ? exportFormats.map(fmt => ({
+                          key: `group-export-${fmt}`,
+                          label:
+                            fmt === "png"
+                              ? t.exportPng
+                              : fmt === "svg"
+                                ? t.exportSvg
+                                : fmt === "csv"
+                                  ? t.exportCsv
+                                  : fmt === "json-table"
+                                    ? t.exportJsonTable
+                                    : t.exportJsonSeries,
+                          command: () => handleExport(fmt),
+                        }))
+                      : undefined
+                  }
+                  palette={palette}
+                />
+              </div>
+            );
+          })}
 
           {/* Selection overlay across all panels */}
           {synchronized && (
@@ -472,34 +669,44 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
         {legendPosition === "bottom" && legend}
 
         {/* Group tooltip portal */}
-        {tooltipMode === "group" && groupTooltipPos && groupTooltipEntries.length > 0 && crosshairX != null && createPortal(
-          <div
-            ref={groupTooltipRef}
-            className="k-chart-tooltip"
-            style={{
-              position: "fixed",
-              left: groupTooltipPos.x + 12,
-              top: groupTooltipPos.y - 10,
-              pointerEvents: "none",
-              zIndex: 9999,
-            }}
-          >
-            <div className="k-chart-tooltip__header">
-              {xAxis?.categories?.[Math.round(crosshairX)] ?? String(Math.round(crosshairX))}
-            </div>
-            {groupTooltipEntries.map((entry) => (
-              <div key={entry.name} className="k-chart-tooltip__row">
-                <span className="k-chart-tooltip__dot" style={{ backgroundColor: entry.color }} />
-                <span className="k-chart-tooltip__name">{entry.name}</span>
-                <span className="k-chart-tooltip__value">
-                  {typeof entry.value === "number" ? entry.value.toFixed(1) : entry.value}
-                  {entry.unit ? ` ${entry.unit}` : ""}
-                </span>
+        {tooltipMode === "group" &&
+          groupTooltipPos &&
+          groupTooltipEntries.length > 0 &&
+          crosshairX != null &&
+          createPortal(
+            <div
+              ref={groupTooltipRef}
+              className="k-chart-tooltip"
+              style={{
+                position: "fixed",
+                left: groupTooltipPos.x + 12,
+                top: groupTooltipPos.y - 10,
+                pointerEvents: "none",
+                zIndex: 9999,
+              }}
+            >
+              <div className="k-chart-tooltip__header">
+                {xAxis?.categories?.[Math.round(crosshairX)] ??
+                  String(Math.round(crosshairX))}
               </div>
-            ))}
-          </div>,
-          document.body
-        )}
+              {groupTooltipEntries.map(entry => (
+                <div key={entry.name} className="k-chart-tooltip__row">
+                  <span
+                    className="k-chart-tooltip__dot"
+                    style={{ backgroundColor: entry.color }}
+                  />
+                  <span className="k-chart-tooltip__name">{entry.name}</span>
+                  <span className="k-chart-tooltip__value">
+                    {typeof entry.value === "number"
+                      ? entry.value.toFixed(1)
+                      : entry.value}
+                    {entry.unit ? ` ${entry.unit}` : ""}
+                  </span>
+                </div>
+              ))}
+            </div>,
+            document.body
+          )}
       </div>
     );
   }

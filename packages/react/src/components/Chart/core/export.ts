@@ -9,10 +9,18 @@ import type { ChartSeries } from "./types";
  */
 
 /** Exports the chart SVG element as a PNG image. */
-export const exportPng = (svgElement: SVGSVGElement, title?: string, subtitle?: string, filename = "chart.png"): void => {
+export const exportPng = (
+  svgElement: SVGSVGElement,
+  title?: string,
+  subtitle?: string,
+  filename = "chart.png"
+): void => {
   const svg = cloneForExport(svgElement, title, subtitle);
   const { width } = svgElement.getBoundingClientRect();
-  const height = parseFloat(svg.getAttribute("height") || String(svgElement.getBoundingClientRect().height));
+  const height = parseFloat(
+    svg.getAttribute("height") ||
+      String(svgElement.getBoundingClientRect().height)
+  );
 
   const data = new XMLSerializer().serializeToString(svg);
   const blob = new Blob([data], { type: "image/svg+xml;charset=utf-8" });
@@ -29,7 +37,7 @@ export const exportPng = (svgElement: SVGSVGElement, title?: string, subtitle?: 
     ctx.scale(scale, scale);
     ctx.drawImage(img, 0, 0, width, height);
     URL.revokeObjectURL(url);
-    canvas.toBlob((pngBlob) => {
+    canvas.toBlob(pngBlob => {
       if (pngBlob) downloadBlob(pngBlob, filename);
     }, "image/png");
   };
@@ -37,7 +45,12 @@ export const exportPng = (svgElement: SVGSVGElement, title?: string, subtitle?: 
 };
 
 /** Exports the chart SVG element as an SVG file. */
-export const exportSvg = (svgElement: SVGSVGElement, title?: string, subtitle?: string, filename = "chart.svg"): void => {
+export const exportSvg = (
+  svgElement: SVGSVGElement,
+  title?: string,
+  subtitle?: string,
+  filename = "chart.svg"
+): void => {
   const svg = cloneForExport(svgElement, title, subtitle);
   const data = new XMLSerializer().serializeToString(svg);
   const blob = new Blob([data], { type: "image/svg+xml;charset=utf-8" });
@@ -45,15 +58,21 @@ export const exportSvg = (svgElement: SVGSVGElement, title?: string, subtitle?: 
 };
 
 /** Exports chart series data as CSV. */
-export const exportCsv = (series: ChartSeries[], xCategories?: string[], xLabel?: string, separator = ";", filename = "chart.csv"): void => {
-  const maxLen = Math.max(...series.map((s) => s.data.length), 0);
-  const header = [xLabel || "X", ...series.map((s) => s.name)].join(separator);
+export const exportCsv = (
+  series: ChartSeries[],
+  xCategories?: string[],
+  xLabel?: string,
+  separator = ";",
+  filename = "chart.csv"
+): void => {
+  const maxLen = Math.max(...series.map(s => s.data.length), 0);
+  const header = [xLabel || "X", ...series.map(s => s.name)].join(separator);
   const rows: string[] = [header];
 
   for (let i = 0; i < maxLen; i++) {
     const xVal = series[0]?.data[i]?.x;
     const xLabel = xCategories?.[xVal ?? i] ?? String(xVal ?? i);
-    const values = series.map((s) => s.data[i]?.y ?? "");
+    const values = series.map(s => s.data[i]?.y ?? "");
     rows.push([xLabel, ...values].join(separator));
   }
 
@@ -62,15 +81,20 @@ export const exportCsv = (series: ChartSeries[], xCategories?: string[], xLabel?
 };
 
 /** Exports chart data as flat JSON table (one object per data point). */
-export const exportJsonTable = (series: ChartSeries[], xCategories?: string[], xLabel?: string, filename = "chart.json"): void => {
-  const maxLen = Math.max(...series.map((s) => s.data.length), 0);
+export const exportJsonTable = (
+  series: ChartSeries[],
+  xCategories?: string[],
+  xLabel?: string,
+  filename = "chart.json"
+): void => {
+  const maxLen = Math.max(...series.map(s => s.data.length), 0);
   const key = xLabel || "X";
   const rows: Record<string, string | number>[] = [];
 
   for (let i = 0; i < maxLen; i++) {
     const xVal = series[0]?.data[i]?.x;
     const row: Record<string, string | number> = {
-      [key]: xCategories?.[xVal ?? i] ?? (xVal ?? i),
+      [key]: xCategories?.[xVal ?? i] ?? xVal ?? i,
     };
     for (const s of series) {
       row[s.name] = s.data[i]?.y ?? "";
@@ -78,27 +102,48 @@ export const exportJsonTable = (series: ChartSeries[], xCategories?: string[], x
     rows.push(row);
   }
 
-  const blob = new Blob([JSON.stringify(rows, null, 2)], { type: "application/json;charset=utf-8" });
+  const blob = new Blob([JSON.stringify(rows, null, 2)], {
+    type: "application/json;charset=utf-8",
+  });
   downloadBlob(blob, filename);
 };
 
 /** Exports chart data as JSON grouped by series. */
-export const exportJsonSeries = (series: ChartSeries[], filename = "chart.json"): void => {
-  const data = series.map((s) => ({
+export const exportJsonSeries = (
+  series: ChartSeries[],
+  filename = "chart.json"
+): void => {
+  const data = series.map(s => ({
     id: s.id,
     name: s.name,
     unit: s.unit,
-    data: s.data.map((p) => ({ x: p.x, y: p.y, ...(p.label ? { label: p.label } : {}) })),
+    data: s.data.map(p => ({
+      x: p.x,
+      y: p.y,
+      ...(p.label ? { label: p.label } : {}),
+    })),
   }));
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json;charset=utf-8" });
+  const blob = new Blob([JSON.stringify(data, null, 2)], {
+    type: "application/json;charset=utf-8",
+  });
   downloadBlob(blob, filename);
 };
 
 /** Clones SVG for export, removing interactive UI elements, optionally prepending title/subtitle. */
-const cloneForExport = (svgElement: SVGSVGElement, title?: string, subtitle?: string): SVGSVGElement => {
+const cloneForExport = (
+  svgElement: SVGSVGElement,
+  title?: string,
+  subtitle?: string
+): SVGSVGElement => {
   const svg = svgElement.cloneNode(true) as SVGSVGElement;
-  svg.querySelectorAll(".k-chart-menu-btn, .k-chart-zoom-select, .k-chart-focus-ring").forEach((el) => el.remove());
-  svg.querySelectorAll("[pointer-events]").forEach((el) => el.removeAttribute("pointer-events"));
+  svg
+    .querySelectorAll(
+      ".k-chart-menu-btn, .k-chart-zoom-select, .k-chart-focus-ring"
+    )
+    .forEach(el => el.remove());
+  svg
+    .querySelectorAll("[pointer-events]")
+    .forEach(el => el.removeAttribute("pointer-events"));
   inlineStyles(svgElement, svg);
 
   const { width, height } = svgElement.getBoundingClientRect();
@@ -181,7 +226,17 @@ const downloadBlob = (blob: Blob, filename: string): void => {
 const inlineStyles = (source: Element, target: Element): void => {
   const computed = window.getComputedStyle(source);
   const targetEl = target as SVGElement | HTMLElement;
-  const important = ["fill", "stroke", "stroke-width", "stroke-dasharray", "font-size", "font-family", "font-weight", "opacity", "color"];
+  const important = [
+    "fill",
+    "stroke",
+    "stroke-width",
+    "stroke-dasharray",
+    "font-size",
+    "font-family",
+    "font-weight",
+    "opacity",
+    "color",
+  ];
   for (const prop of important) {
     const val = computed.getPropertyValue(prop);
     if (val) targetEl.style.setProperty(prop, val);

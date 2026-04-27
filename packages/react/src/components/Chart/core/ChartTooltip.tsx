@@ -79,7 +79,7 @@ export const ChartTooltip: React.FC<ChartTooltipProps> = ({
   ) : (
     <>
       {xLabel && <div className="k-chart-tooltip__title">{xLabel}</div>}
-      {entries.map((entry) => (
+      {entries.map(entry => (
         <div key={entry.series.id} className="k-chart-tooltip__row">
           <span
             className="k-chart-tooltip__dot"

@@ -1,4 +1,11 @@
-import React, { forwardRef, useRef, useState, useEffect, useCallback, useImperativeHandle } from "react";
+import React, {
+  forwardRef,
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useImperativeHandle,
+} from "react";
 import type { ChartMargins } from "./types";
 
 export interface ChartCanvasProps {
@@ -9,11 +16,21 @@ export interface ChartCanvasProps {
   /** Margins around the plot area */
   margins?: Partial<ChartMargins>;
   /** Fires with mouse position in data-space coordinates */
-  onMouseMove?: (event: { plotX: number; plotY: number; clientX: number; clientY: number }) => void;
+  onMouseMove?: (event: {
+    plotX: number;
+    plotY: number;
+    clientX: number;
+    clientY: number;
+  }) => void;
   /** Fires when mouse leaves the plot area */
   onMouseLeave?: () => void;
   /** Fires on click within the plot area */
-  onClick?: (event: { plotX: number; plotY: number; clientX: number; clientY: number }) => void;
+  onClick?: (event: {
+    plotX: number;
+    plotY: number;
+    clientX: number;
+    clientY: number;
+  }) => void;
   /** ARIA label for the chart */
   ariaLabel?: string;
   /** Additional CSS class names */
@@ -24,7 +41,12 @@ export interface ChartCanvasProps {
   children?: React.ReactNode;
 }
 
-const DEFAULT_MARGINS: ChartMargins = { top: 20, right: 20, bottom: 40, left: 50 };
+const DEFAULT_MARGINS: ChartMargins = {
+  top: 20,
+  right: 20,
+  bottom: 40,
+  left: 50,
+};
 
 /**
  * ChartCanvas — base SVG wrapper for all chart types.
@@ -53,7 +75,9 @@ export const ChartCanvas = forwardRef<SVGSVGElement, ChartCanvasProps>(
     const svgRef = useRef<SVGSVGElement>(null);
     useImperativeHandle(ref, () => svgRef.current as SVGSVGElement);
 
-    const [svgWidth, setSvgWidth] = useState(typeof width === "number" ? width : 0);
+    const [svgWidth, setSvgWidth] = useState(
+      typeof width === "number" ? width : 0
+    );
     const margins: ChartMargins = { ...DEFAULT_MARGINS, ...marginsProp };
 
     useEffect(() => {
@@ -63,7 +87,7 @@ export const ChartCanvas = forwardRef<SVGSVGElement, ChartCanvasProps>(
       }
       const el = svgRef.current?.parentElement;
       if (!el) return;
-      const observer = new ResizeObserver((entries) => {
+      const observer = new ResizeObserver(entries => {
         const entry = entries[0];
         if (entry) setSvgWidth(entry.contentRect.width);
       });
@@ -119,7 +143,12 @@ export const ChartCanvas = forwardRef<SVGSVGElement, ChartCanvasProps>(
       >
         <defs>
           <clipPath id={`${base}-clip`}>
-            <rect x={-8} y={-8} width={plotWidth + 16} height={plotHeight + 16} />
+            <rect
+              x={-8}
+              y={-8}
+              width={plotWidth + 16}
+              height={plotHeight + 16}
+            />
           </clipPath>
         </defs>
         <g transform={`translate(${margins.left},${margins.top})`}>

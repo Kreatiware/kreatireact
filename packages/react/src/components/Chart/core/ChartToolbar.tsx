@@ -103,7 +103,7 @@ export const ChartToolbar = forwardRef<HTMLDivElement, ChartToolbarProps>(
 
     // MultiSelect options from series
     const options: SelectOption[] = useMemo(
-      () => series.map((s) => ({ value: s.id, label: s.name })),
+      () => series.map(s => ({ value: s.id, label: s.name })),
       [series]
     );
 
@@ -113,40 +113,52 @@ export const ChartToolbar = forwardRef<HTMLDivElement, ChartToolbarProps>(
 
     // Export menu items
     const exportItems = useMemo(
-      () => exportFormats.map((fmt) => ({
-        key: fmt,
-        label: fmt === "png" ? t.exportPng : fmt === "svg" ? t.exportSvg : fmt === "csv" ? t.exportCsv : fmt === "json-table" ? t.exportJsonTable : t.exportJsonSeries,
-      })),
+      () =>
+        exportFormats.map(fmt => ({
+          key: fmt,
+          label:
+            fmt === "png"
+              ? t.exportPng
+              : fmt === "svg"
+                ? t.exportSvg
+                : fmt === "csv"
+                  ? t.exportCsv
+                  : fmt === "json-table"
+                    ? t.exportJsonTable
+                    : t.exportJsonSeries,
+        })),
       [exportFormats, t]
     );
 
     // Build elements
-    const filterEl = series.length > 0 ? (
-      <MultiSelect
-        options={options}
-        value={visibleIds}
-        onChange={handleFilterChange}
-        placeholder={t.filterPlaceholder}
-        size="sm"
-        chipDisplay
-        filterable
-        clearable
-        fullWidth
-        {...filterProps}
-      />
-    ) : null;
+    const filterEl =
+      series.length > 0 ? (
+        <MultiSelect
+          options={options}
+          value={visibleIds}
+          onChange={handleFilterChange}
+          placeholder={t.filterPlaceholder}
+          size="sm"
+          chipDisplay
+          filterable
+          clearable
+          fullWidth
+          {...filterProps}
+        />
+      ) : null;
 
     // Combined: single DropdownButton with reset zoom as main + exports in dropdown
-    const actionButtonEl = (onResetZoom || exportFormats.length > 0) ? (
-      <DropdownButton
-        label={t.resetZoom}
-        items={exportItems}
-        onClick={hasZoom ? onResetZoom : undefined}
-        onItemSelect={(key) => onExport?.(key)}
-        size="sm"
-        {...actionButtonProps}
-      />
-    ) : null;
+    const actionButtonEl =
+      onResetZoom || exportFormats.length > 0 ? (
+        <DropdownButton
+          label={t.resetZoom}
+          items={exportItems}
+          onClick={hasZoom ? onResetZoom : undefined}
+          onItemSelect={key => onExport?.(key)}
+          size="sm"
+          {...actionButtonProps}
+        />
+      ) : null;
 
     // Split: separate reset zoom button + export dropdown
     const resetZoomEl = onResetZoom ? (
@@ -159,31 +171,49 @@ export const ChartToolbar = forwardRef<HTMLDivElement, ChartToolbarProps>(
       />
     ) : null;
 
-    const exportButtonEl = exportFormats.length > 0 ? (
-      <DropdownButton
-        label={t.exportLabel}
-        iconLeft={<DownloadIcon />}
-        items={exportItems}
-        onClick={() => onExport?.(exportFormats[0])}
-        onItemSelect={(key) => onExport?.(key)}
-        size="sm"
-        {...exportButtonProps}
-      />
-    ) : null;
+    const exportButtonEl =
+      exportFormats.length > 0 ? (
+        <DropdownButton
+          label={t.exportLabel}
+          iconLeft={<DownloadIcon />}
+          items={exportItems}
+          onClick={() => onExport?.(exportFormats[0])}
+          onItemSelect={key => onExport?.(key)}
+          size="sm"
+          {...exportButtonProps}
+        />
+      ) : null;
 
     const actionsEl = actions ?? null;
 
     if (toolbarRender) {
       return (
         <div ref={ref} className={`k-chart-toolbar ${className}`} style={style}>
-          {toolbarRender({ filter: filterEl, actionButton: actionButtonEl, resetZoom: resetZoomEl, exportButton: exportButtonEl, actions: actionsEl })}
+          {toolbarRender({
+            filter: filterEl,
+            actionButton: actionButtonEl,
+            resetZoom: resetZoomEl,
+            exportButton: exportButtonEl,
+            actions: actionsEl,
+          })}
         </div>
       );
     }
 
     return (
-      <div ref={ref} className={`k-chart-toolbar ${className}`} style={style} role="toolbar" aria-label="Chart toolbar">
-        {filterEl && <div className="k-chart-toolbar__filter"><label className="k-chart-toolbar__label">{t.filterLabel}</label>{filterEl}</div>}
+      <div
+        ref={ref}
+        className={`k-chart-toolbar ${className}`}
+        style={style}
+        role="toolbar"
+        aria-label="Chart toolbar"
+      >
+        {filterEl && (
+          <div className="k-chart-toolbar__filter">
+            <label className="k-chart-toolbar__label">{t.filterLabel}</label>
+            {filterEl}
+          </div>
+        )}
         <div className="k-chart-toolbar__actions">
           {layout === "combined" ? (
             actionButtonEl

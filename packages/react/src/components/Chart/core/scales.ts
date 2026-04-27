@@ -143,9 +143,9 @@ export const niceDomain = (
   const niceMax = Math.ceil(max / step) * step;
   const threshold = step * 0.15;
   // Extra tick above if data is very close to ceiling
-  const paddedMax = (niceMax - max) < threshold ? niceMax + step : niceMax;
+  const paddedMax = niceMax - max < threshold ? niceMax + step : niceMax;
   // Extra tick below if data is very close to floor (but never below 0 if all positive)
-  let paddedMin = (min - niceMin) < threshold ? niceMin - step : niceMin;
+  let paddedMin = min - niceMin < threshold ? niceMin - step : niceMin;
   if (min >= 0) paddedMin = Math.max(paddedMin, 0);
   return [paddedMin, paddedMax];
 };

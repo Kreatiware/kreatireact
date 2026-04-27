@@ -25,7 +25,12 @@ export type MarkerSymbol =
 export type AxisScaleType = "linear" | "logarithmic" | "datetime" | "category";
 
 /** Trendline type for automatic regression/smoothing. */
-export type TrendlineType = "linear" | "polynomial" | "exponential" | "moving-average" | "custom";
+export type TrendlineType =
+  | "linear"
+  | "polynomial"
+  | "exponential"
+  | "moving-average"
+  | "custom";
 
 /** Trendline configuration for a series. */
 export interface ChartTrendline {

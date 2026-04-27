@@ -65,7 +65,10 @@ export const splitByZones = (
     } else {
       const crossings: { t: number }[] = [];
       for (const z of sorted) {
-        if ((prev.y < z.value && curr.y >= z.value) || (prev.y >= z.value && curr.y < z.value)) {
+        if (
+          (prev.y < z.value && curr.y >= z.value) ||
+          (prev.y >= z.value && curr.y < z.value)
+        ) {
           crossings.push({ t: (z.value - prev.y) / (curr.y - prev.y) });
         }
       }
@@ -77,7 +80,10 @@ export const splitByZones = (
         const intersection = { x: ix, y: iy };
         current.points.push(intersection);
         segments.push(current);
-        current = { points: [intersection], ...getZone(iy + (curr.y > prev.y ? 0.001 : -0.001)) };
+        current = {
+          points: [intersection],
+          ...getZone(iy + (curr.y > prev.y ? 0.001 : -0.001)),
+        };
       }
       current.points.push(curr);
     }

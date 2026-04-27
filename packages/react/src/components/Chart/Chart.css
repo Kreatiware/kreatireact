@@ -191,7 +191,9 @@
 .k-chart-navigator-wrap {
   opacity: 0;
   transform: translateY(var(--kreati-space-2));
-  transition: opacity var(--kreati-transition-slow), transform var(--kreati-transition-slow);
+  transition:
+    opacity var(--kreati-transition-slow),
+    transform var(--kreati-transition-slow);
   pointer-events: none;
 }
 
