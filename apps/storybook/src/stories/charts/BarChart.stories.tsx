@@ -2,9 +2,6 @@ import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { BarChart } from "../../../../../packages/react/src/components/Chart/cartesian/BarChart";
 import { LineChart } from "../../../../../packages/react/src/components/Chart/cartesian/LineChart";
-import { CartesianChart } from "../../../../../packages/react/src/components/Chart/cartesian/CartesianChart";
-import { ChartTooltip } from "../../../../../packages/react/src/components/Chart/core/ChartTooltip";
-import type { TooltipEntry } from "../../../../../packages/react/src/components/Chart/core/ChartTooltip";
 import type { ChartSeries, ChartDataPoint } from "../../../../../packages/react/src/components/Chart/core/types";
 
 const meta = {
@@ -644,210 +641,43 @@ export const GroupedVsStacked: Story = {
 
 // ─── 17. Mixed: Bars + Line in same SVG ─────────────────────────────────────
 
-const barSeries: ChartSeries[] = [
-  {
-    id: "revenue",
-    name: "Revenue",
-    data: [
-      { x: 0, y: 120 },
-      { x: 1, y: 200 },
-      { x: 2, y: 150 },
-      { x: 3, y: 280 },
-    ],
-  },
-  {
-    id: "costs",
-    name: "Costs",
-    data: [
-      { x: 0, y: 90 },
-      { x: 1, y: 130 },
-      { x: 2, y: 110 },
-      { x: 3, y: 170 },
-    ],
-  },
-];
-
-const lineSeries: ChartSeries = {
-  id: "profit-trend",
-  name: "Profit",
-  data: [
-    { x: 0, y: 30 },
-    { x: 1, y: 70 },
-    { x: 2, y: 40 },
-    { x: 3, y: 110 },
-  ],
-  color: "var(--kreati-severity-success)",
-};
-
-const allMixedSeries = [...barSeries, lineSeries];
-
-const MixedBarLine = () => {
-  const [tooltip, setTooltip] = React.useState<{
-    entries: TooltipEntry[];
-    x: number;
-    y: number;
-    visible: boolean;
-    xLabel?: string;
-  }>({ entries: [], x: 0, y: 0, visible: false });
-
-  return (
-    <>
-      <CartesianChart
-        series={allMixedSeries}
-        xAxis={{ label: "Quarter", categories: quarters, type: "category" }}
-        yAxis={{ label: "Amount ($K)", min: 0 }}
-        title="Revenue & Costs (Bars) + Profit (Line)"
-        height={350}
-        zoomMode="both"
-        exportFormats={["png", "svg", "csv"]}
-        clipMargin={0}
-      >
-        {({ xScale, yScale, plotWidth, plotHeight, visibleSeries, getColor, focusedSeriesIndex, focusedPointIndex }) => {
-          // Split series by type
-          const bars = visibleSeries.filter(s => s.id !== "profit-trend");
-          const lines = visibleSeries.filter(s => s.id === "profit-trend");
-
-          // Bar geometry
-          const catCount = 4;
-          const catSize = plotWidth / catCount;
-          const usable = catSize * 0.8;
-          const barCount = bars.length;
-          const gap = usable * 0.1;
-          const bw = barCount > 0 ? (usable - gap * (barCount - 1)) / barCount : usable;
-
-          // Spline path builder
-          const buildPath = (data: ChartDataPoint[]) => {
-            const pts = data.map(p => ({ x: xScale(p.x), y: yScale(p.y) }));
-            if (pts.length < 3) return pts.map((p, i) => `${i ? "L" : "M"}${p.x},${p.y}`).join(" ");
-            let d = `M${pts[0].x},${pts[0].y}`;
-            for (let i = 0; i < pts.length - 1; i++) {
-              const p0 = pts[Math.max(i - 1, 0)];
-              const p1 = pts[i];
-              const p2 = pts[i + 1];
-              const p3 = pts[Math.min(i + 2, pts.length - 1)];
-              const t = 1 / 6;
-              d += ` C${p1.x + (p2.x - p0.x) * t},${p1.y + (p2.y - p0.y) * t} ${p2.x - (p3.x - p1.x) * t},${p2.y - (p3.y - p1.y) * t} ${p2.x},${p2.y}`;
-            }
-            return d;
-          };
-
-          return (
-            <g
-              onMouseMove={e => {
-                const svg = (e.currentTarget as SVGGElement).ownerSVGElement;
-                if (!svg) return;
-                const rect = svg.getBoundingClientRect();
-                const ml = 50;
-                const mt = 20;
-                const plotX = e.clientX - rect.left - ml;
-                if (plotX < 0 || plotX > plotWidth) {
-                  setTooltip(prev => ({ ...prev, visible: false }));
-                  return;
-                }
-                // Find nearest category
-                const catIdx = Math.round((plotX / plotWidth) * (catCount - 1));
-                const entries: TooltipEntry[] = allMixedSeries
-                  .filter(s => visibleSeries.some(vs => vs.id === s.id))
-                  .map((s, i) => {
-                    const p = s.data.find(d => d.x === catIdx);
-                    return p ? { series: s, point: p, color: getColor(s, i) } : null;
-                  })
-                  .filter((e): e is TooltipEntry => e != null);
-                setTooltip({
-                  entries,
-                  x: e.clientX,
-                  y: e.clientY,
-                  visible: entries.length > 0,
-                  xLabel: quarters[catIdx],
-                });
-              }}
-              onMouseLeave={() => setTooltip(prev => ({ ...prev, visible: false }))}
-            >
-              {/* Invisible hit area */}
-              <rect x={0} y={0} width={plotWidth} height={plotHeight} fill="transparent" />
-
-              {/* Bars */}
-              {/* Bars */}
-              {bars.map((series, si) => {
-                const color = getColor(series, si);
-                return (
-                  <g key={series.id}>
-                    {series.data.map((p, pi) => {
-                      const cx = xScale(p.x);
-                      const groupW = bw * barCount + gap * (barCount - 1);
-                      const offset = -groupW / 2 + si * (bw + gap);
-                      const barY = yScale(p.y);
-                      const baseY = yScale(0);
-                      const globalIdx = visibleSeries.indexOf(series);
-                      const isFocused = focusedSeriesIndex === globalIdx && focusedPointIndex === pi;
-                      return (
-                        <rect
-                          key={pi}
-                          x={cx + offset}
-                          y={Math.min(barY, baseY)}
-                          width={bw}
-                          height={Math.abs(baseY - barY)}
-                          fill={color}
-                          rx={3}
-                          ry={3}
-                          stroke={isFocused ? "var(--kreati-chart-text)" : undefined}
-                          strokeWidth={isFocused ? 3 : undefined}
-                        />
-                      );
-                    })}
-                  </g>
-                );
-              })}
-
-              {/* Line */}
-              {lines.map((series, si) => {
-                const color = getColor(series, barSeries.length + si);
-                return (
-                  <g key={series.id}>
-                    <path
-                      d={buildPath(series.data)}
-                      fill="none"
-                      stroke={color}
-                      strokeWidth={3}
-                      strokeLinecap="round"
-                    />
-                    {series.data.map((p, pi) => {
-                      const globalIdx = visibleSeries.indexOf(series);
-                      const isFocused = focusedSeriesIndex === globalIdx && focusedPointIndex === pi;
-                      return (
-                        <circle
-                          key={pi}
-                          cx={xScale(p.x)}
-                          cy={yScale(p.y)}
-                          r={isFocused ? 8 : 5}
-                          fill={color}
-                          stroke={isFocused ? "var(--kreati-chart-text)" : "var(--kreati-chart-bg)"}
-                          strokeWidth={isFocused ? 3 : 2.5}
-                        />
-                      );
-                    })}
-                  </g>
-                );
-              })}
-            </g>
-          );
-        }}
-      </CartesianChart>
-      <ChartTooltip
-        entries={tooltip.entries}
-        x={tooltip.x}
-        y={tooltip.y}
-        visible={tooltip.visible}
-        xLabel={tooltip.xLabel}
-      />
-    </>
-  );
-};
+import { MixedChart as MixedChartComp } from "../../../../../packages/react/src/components/Chart/cartesian/MixedChart";
 
 export const MixedBarAndLine: Story = {
   name: "17.1 — Mixed: Bars + Line (Same Axes, Zoom, Export)",
   args: { series: [] },
-  render: () => <MixedBarLine />,
+  render: () => (
+    <MixedChartComp
+      series={[
+        {
+          id: "revenue",
+          name: "Revenue",
+          data: [{ x: 0, y: 120 }, { x: 1, y: 200 }, { x: 2, y: 150 }, { x: 3, y: 280 }],
+        },
+        {
+          id: "costs",
+          name: "Costs",
+          data: [{ x: 0, y: 90 }, { x: 1, y: 130 }, { x: 2, y: 110 }, { x: 3, y: 170 }],
+        },
+        {
+          id: "profit-trend",
+          name: "Profit",
+          data: [{ x: 0, y: 30 }, { x: 1, y: 70 }, { x: 2, y: 40 }, { x: 3, y: 110 }],
+          color: "var(--kreati-severity-success)",
+        },
+      ]}
+      layers={[
+        { type: "bar", seriesIds: ["revenue", "costs"], barRadius: 3 },
+        { type: "line", seriesIds: ["profit-trend"], strokeWidth: 3 },
+      ]}
+      xAxis={{ label: "Quarter", categories: quarters, type: "category" }}
+      yAxis={{ label: "Amount ($K)", min: 0 }}
+      title="Revenue & Costs (Bars) + Profit (Line)"
+      height={350}
+      zoomMode="both"
+      exportFormats={["png", "svg", "csv"]}
+    />
+  ),
 };
 
 // ─── 18. Keyboard Navigation ────────────────────────────────────────────────

@@ -3,6 +3,7 @@ import { CartesianChart } from "./CartesianChart";
 import type { CartesianChartProps } from "./CartesianChart";
 import { ChartTooltip } from "../core/ChartTooltip";
 import type { TooltipMode, TooltipEntry } from "../core/ChartTooltip";
+import { StrictClip } from "../core/ChartCanvas";
 import { ChartPattern, patternFill } from "../core/patterns";
 import { niceDomain } from "../core/scales";
 import type { ChartDataPoint, ChartSeries } from "../core/types";
@@ -190,7 +191,6 @@ export const BarChart = forwardRef<HTMLDivElement, BarChartProps>(
           xAxis={resolvedXAxis}
           yAxis={resolvedYAxis}
           zoomAxis={cartesianProps.zoomAxis ?? (isHorizontal ? "x" : "y")}
-          clipMargin={0}
         >
           {({
             xScale,
@@ -515,129 +515,133 @@ export const BarChart = forwardRef<HTMLDivElement, BarChartProps>(
                   })}
 
                 {/* Pattern definitions */}
-                <defs>
+                <StrictClip>
+                  <defs>
+                    {visibleSeries.map((series, seriesIdx) => {
+                      const pat = series.fill?.pattern;
+                      if (!pat) return null;
+                      return (
+                        <ChartPattern
+                          key={series.id}
+                          type={pat}
+                          color={getColor(series, seriesIdx)}
+                        />
+                      );
+                    })}
+                  </defs>
+
                   {visibleSeries.map((series, seriesIdx) => {
-                    const pat = series.fill?.pattern;
-                    if (!pat) return null;
+                    const color = getColor(series, seriesIdx);
+                    const fillValue = series.fill?.pattern
+                      ? patternFill(series.fill.pattern, color)
+                      : color;
+                    const fillOpacity = series.fill?.opacity ?? 1;
+
                     return (
-                      <ChartPattern
+                      <g
                         key={series.id}
-                        type={pat}
-                        color={getColor(series, seriesIdx)}
-                      />
+                        className={`k-chart-bar-series${isHorizontal ? " k-chart-bar-series--horizontal" : ""} ${series.className || ""}`}
+                      >
+                        {series.data.map((point, pointIdx) => {
+                          const barRect = getBarRect(
+                            seriesIdx,
+                            point,
+                            series,
+                            pointIdx
+                          );
+                          if (!barRect) return null;
+                          const { x, y, width: bw, height: bh } = barRect;
+                          if (bw <= 0 || bh <= 0) return null;
+
+                          const isHovered =
+                            hoveredBar?.seriesId === series.id &&
+                            hoveredBar?.pointIdx === pointIdx;
+                          const isDimmed = hoveredBar != null && !isHovered;
+                          const isFocused =
+                            focusedSeriesIndex === seriesIdx &&
+                            focusedPointIndex === pointIdx;
+                          const pointColor = point.color ?? fillValue;
+                          const useRadius =
+                            barRadius > 0 &&
+                            (groupMode === "grouped" ||
+                              seriesIdx === visibleSeries.length - 1);
+
+                          return (
+                            <rect
+                              key={pointIdx}
+                              x={x}
+                              y={y}
+                              width={bw}
+                              height={bh}
+                              rx={
+                                useRadius
+                                  ? Math.min(barRadius, bw / 2, bh / 2)
+                                  : 0
+                              }
+                              ry={
+                                useRadius
+                                  ? Math.min(barRadius, bw / 2, bh / 2)
+                                  : 0
+                              }
+                              fill={point.color ? point.color : pointColor}
+                              fillOpacity={fillOpacity}
+                              stroke={
+                                isFocused
+                                  ? "var(--kreati-chart-text)"
+                                  : undefined
+                              }
+                              strokeWidth={isFocused ? 3 : undefined}
+                              opacity={isDimmed ? 0.3 : isFocused ? 1 : 1}
+                              className={point.className}
+                              style={
+                                {
+                                  transformOrigin: isHorizontal
+                                    ? `${valueScale(0)}px ${y + bh / 2}px`
+                                    : `${x + bw / 2}px ${valueScale(0)}px`,
+                                  "--k-bar-i":
+                                    seriesIdx * visibleSeries[0]?.data.length +
+                                    pointIdx,
+                                  ...point.style,
+                                } as React.CSSProperties
+                              }
+                              role="img"
+                              aria-label={`${series.name}: ${cartesianProps.xAxis?.categories?.[getCat(point)] ?? getCat(point)} = ${getVal(point)}`}
+                              onMouseEnter={e =>
+                                handleBarMouseEnter(
+                                  e,
+                                  series,
+                                  seriesIdx,
+                                  point,
+                                  pointIdx
+                                )
+                              }
+                              onMouseLeave={handleBarMouseLeave}
+                              onMouseMove={handleBarMouseMove}
+                              onClick={e => {
+                                if (!cartesianProps.onPointClick) return;
+                                if (mouseDownPos.current) {
+                                  const dx = e.clientX - mouseDownPos.current.x;
+                                  const dy = e.clientY - mouseDownPos.current.y;
+                                  if (dx * dx + dy * dy > 25) return;
+                                }
+                                e.stopPropagation();
+                                cartesianProps.onPointClick(
+                                  originalPoint(point),
+                                  series
+                                );
+                              }}
+                              cursor={
+                                cartesianProps.onPointClick
+                                  ? "pointer"
+                                  : undefined
+                              }
+                            />
+                          );
+                        })}
+                      </g>
                     );
                   })}
-                </defs>
-
-                {visibleSeries.map((series, seriesIdx) => {
-                  const color = getColor(series, seriesIdx);
-                  const fillValue = series.fill?.pattern
-                    ? patternFill(series.fill.pattern, color)
-                    : color;
-                  const fillOpacity = series.fill?.opacity ?? 1;
-
-                  return (
-                    <g
-                      key={series.id}
-                      className={`k-chart-bar-series${isHorizontal ? " k-chart-bar-series--horizontal" : ""} ${series.className || ""}`}
-                    >
-                      {series.data.map((point, pointIdx) => {
-                        const barRect = getBarRect(
-                          seriesIdx,
-                          point,
-                          series,
-                          pointIdx
-                        );
-                        if (!barRect) return null;
-                        const { x, y, width: bw, height: bh } = barRect;
-                        if (bw <= 0 || bh <= 0) return null;
-
-                        const isHovered =
-                          hoveredBar?.seriesId === series.id &&
-                          hoveredBar?.pointIdx === pointIdx;
-                        const isDimmed = hoveredBar != null && !isHovered;
-                        const isFocused =
-                          focusedSeriesIndex === seriesIdx &&
-                          focusedPointIndex === pointIdx;
-                        const pointColor = point.color ?? fillValue;
-                        const useRadius =
-                          barRadius > 0 &&
-                          (groupMode === "grouped" ||
-                            seriesIdx === visibleSeries.length - 1);
-
-                        return (
-                          <rect
-                            key={pointIdx}
-                            x={x}
-                            y={y}
-                            width={bw}
-                            height={bh}
-                            rx={
-                              useRadius
-                                ? Math.min(barRadius, bw / 2, bh / 2)
-                                : 0
-                            }
-                            ry={
-                              useRadius
-                                ? Math.min(barRadius, bw / 2, bh / 2)
-                                : 0
-                            }
-                            fill={point.color ? point.color : pointColor}
-                            fillOpacity={fillOpacity}
-                            stroke={
-                              isFocused ? "var(--kreati-chart-text)" : undefined
-                            }
-                            strokeWidth={isFocused ? 3 : undefined}
-                            opacity={isDimmed ? 0.3 : isFocused ? 1 : 1}
-                            className={point.className}
-                            style={
-                              {
-                                transformOrigin: isHorizontal
-                                  ? `${valueScale(0)}px ${y + bh / 2}px`
-                                  : `${x + bw / 2}px ${valueScale(0)}px`,
-                                "--k-bar-i":
-                                  seriesIdx * visibleSeries[0]?.data.length +
-                                  pointIdx,
-                                ...point.style,
-                              } as React.CSSProperties
-                            }
-                            role="img"
-                            aria-label={`${series.name}: ${cartesianProps.xAxis?.categories?.[getCat(point)] ?? getCat(point)} = ${getVal(point)}`}
-                            onMouseEnter={e =>
-                              handleBarMouseEnter(
-                                e,
-                                series,
-                                seriesIdx,
-                                point,
-                                pointIdx
-                              )
-                            }
-                            onMouseLeave={handleBarMouseLeave}
-                            onMouseMove={handleBarMouseMove}
-                            onClick={e => {
-                              if (!cartesianProps.onPointClick) return;
-                              if (mouseDownPos.current) {
-                                const dx = e.clientX - mouseDownPos.current.x;
-                                const dy = e.clientY - mouseDownPos.current.y;
-                                if (dx * dx + dy * dy > 25) return;
-                              }
-                              e.stopPropagation();
-                              cartesianProps.onPointClick(
-                                originalPoint(point),
-                                series
-                              );
-                            }}
-                            cursor={
-                              cartesianProps.onPointClick
-                                ? "pointer"
-                                : undefined
-                            }
-                          />
-                        );
-                      })}
-                    </g>
-                  );
-                })}
+                </StrictClip>
 
                 {/* Data labels */}
                 {showDataLabels &&

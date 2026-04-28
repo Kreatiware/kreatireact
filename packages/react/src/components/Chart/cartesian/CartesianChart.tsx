@@ -6,7 +6,7 @@ import React, {
   useEffect,
   forwardRef,
 } from "react";
-import { ChartCanvas } from "../core/ChartCanvas";
+import { ChartCanvas, useChartCanvas } from "../core/ChartCanvas";
 import { Axis } from "../core/Axis";
 import "../Chart.css";
 import { Legend } from "../core/Legend";
@@ -93,8 +93,6 @@ export interface CartesianChartProps {
   margins?: Partial<ChartMargins>;
   /** ARIA label */
   ariaLabel?: string;
-  /** Clip path margin in px. Default: 8 (room for line markers). Use 0 for bar charts. */
-  clipMargin?: number;
   /** Callback when a data point is clicked or activated via Enter key */
   onPointClick?: (point: ChartDataPoint, series: ChartSeries) => void;
   /** Zoom mode. Default: false (disabled) */
@@ -200,7 +198,6 @@ export const CartesianChart = forwardRef<HTMLDivElement, CartesianChartProps>(
       palette,
       margins,
       ariaLabel,
-      clipMargin,
       onPointClick,
       zoomMode = false,
       controlledZoom,
@@ -1212,7 +1209,6 @@ export const CartesianChart = forwardRef<HTMLDivElement, CartesianChartProps>(
                   height={clampedHeight}
                   margins={effectiveMargins}
                   ariaLabel={ariaLabel}
-                  clipMargin={clipMargin}
                   onMouseMove={e => {
                     setMousePos({ plotX: e.plotX, plotY: e.plotY });
                     if (onCrosshairChange) {
@@ -1368,7 +1364,7 @@ export const CartesianChart = forwardRef<HTMLDivElement, CartesianChartProps>(
                   ))}
 
                   {/* Chart content */}
-                  <g clipPath="url(#k-chart-clip)">{children(ctx)}</g>
+                  <ClippedGroup>{children(ctx)}</ClippedGroup>
 
                   {/* Constants */}
                   {constants?.map(c => (
@@ -1613,3 +1609,11 @@ export const CartesianChart = forwardRef<HTMLDivElement, CartesianChartProps>(
 );
 
 CartesianChart.displayName = "CartesianChart";
+
+/** Internal component — soft clip (8px margin) for markers and labels at edges. */
+const ClippedGroup: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const { softClipId } = useChartCanvas();
+  return <g clipPath={`url(#${softClipId})`}>{children}</g>;
+};

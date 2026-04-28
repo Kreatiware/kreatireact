@@ -333,6 +333,9 @@ export {
   CartesianChart,
   LineChart,
   BarChart,
+  AreaChart,
+  MixedChart,
+  ScatterChart,
 } from "./components/Chart";
 
 export type {
@@ -359,6 +362,10 @@ export type {
   CartesianContext,
   LineChartProps,
   BarChartProps,
+  AreaChartProps,
+  MixedChartProps,
+  MixedChartLayer,
+  ScatterChartProps,
 } from "./components/Chart";
 
 import "./components/Chart/Chart.css";

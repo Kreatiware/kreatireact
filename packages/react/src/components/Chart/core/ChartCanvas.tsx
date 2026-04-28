@@ -37,8 +37,6 @@ export interface ChartCanvasProps {
   className?: string;
   /** Inline styles */
   style?: React.CSSProperties;
-  /** Extra padding on the clip path in px. Default: 8 (room for markers). Set 0 for bar charts. */
-  clipMargin?: number;
   /** Chart content (series, overlays, etc.) */
   children?: React.ReactNode;
 }
@@ -49,6 +47,8 @@ const DEFAULT_MARGINS: ChartMargins = {
   bottom: 40,
   left: 50,
 };
+
+let clipCounter = 0;
 
 /**
  * ChartCanvas — base SVG wrapper for all chart types.
@@ -70,7 +70,6 @@ export const ChartCanvas = forwardRef<SVGSVGElement, ChartCanvasProps>(
       ariaLabel,
       className = "",
       style,
-      clipMargin = 8,
       children,
     },
     ref
@@ -131,6 +130,9 @@ export const ChartCanvas = forwardRef<SVGSVGElement, ChartCanvasProps>(
     );
 
     const base = "k-chart";
+    const clipIdRef = useRef(`${base}-clip-${++clipCounter}`);
+    const clipId = clipIdRef.current;
+    const softClipId = `${clipId}-soft`;
 
     return (
       <svg
@@ -145,18 +147,27 @@ export const ChartCanvas = forwardRef<SVGSVGElement, ChartCanvasProps>(
         onClick={handleClick}
       >
         <defs>
-          <clipPath id={`${base}-clip`}>
+          <clipPath id={clipId}>
+            <rect x={0} y={0} width={plotWidth} height={plotHeight} />
+          </clipPath>
+          <clipPath id={softClipId}>
             <rect
-              x={-clipMargin}
-              y={-clipMargin}
-              width={plotWidth + clipMargin * 2}
-              height={plotHeight + clipMargin * 2}
+              x={-32}
+              y={-32}
+              width={plotWidth + 64}
+              height={plotHeight + 64}
             />
           </clipPath>
         </defs>
         <g transform={`translate(${margins.left},${margins.top})`}>
           <ChartCanvasContext.Provider
-            value={{ width: plotWidth, height: plotHeight, margins }}
+            value={{
+              width: plotWidth,
+              height: plotHeight,
+              margins,
+              clipId,
+              softClipId,
+            }}
           >
             {children}
           </ChartCanvasContext.Provider>
@@ -174,12 +185,16 @@ interface ChartCanvasContextValue {
   width: number;
   height: number;
   margins: ChartMargins;
+  clipId: string;
+  softClipId: string;
 }
 
 export const ChartCanvasContext = React.createContext<ChartCanvasContextValue>({
   width: 0,
   height: 0,
   margins: DEFAULT_MARGINS,
+  clipId: "k-chart-clip",
+  softClipId: "k-chart-clip-soft",
 });
 
 /**
@@ -187,4 +202,12 @@ export const ChartCanvasContext = React.createContext<ChartCanvasContextValue>({
  */
 export const useChartCanvas = (): ChartCanvasContextValue => {
   return React.useContext(ChartCanvasContext);
+};
+
+/** Wraps children in the exact plot-area clipPath. Use for paths/lines/areas that must clip precisely at axes during zoom. */
+export const StrictClip: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const { clipId } = React.useContext(ChartCanvasContext);
+  return <g clipPath={`url(#${clipId})`}>{children}</g>;
 };

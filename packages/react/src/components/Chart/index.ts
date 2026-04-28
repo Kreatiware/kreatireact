@@ -16,7 +16,7 @@ export type {
   ScaleFunction,
 } from "./core/types";
 
-export { ChartCanvas, useChartCanvas } from "./core/ChartCanvas";
+export { ChartCanvas, useChartCanvas, StrictClip } from "./core/ChartCanvas";
 export type { ChartCanvasProps } from "./core/ChartCanvas";
 
 export { ChartTooltip, findNearestPointIndex } from "./core/ChartTooltip";
@@ -73,6 +73,9 @@ export { resolveSeriesColor, getDefaultPalette } from "./core/colors";
 export { dashStyleToArray, splitByZones } from "./core/utils";
 export type { ZoneSegment } from "./core/utils";
 
+export { buildPath, buildAreaPath, buildStackedAreaPath } from "./core/paths";
+export type { CurveType } from "./core/paths";
+
 export { CartesianChart } from "./cartesian/CartesianChart";
 export type {
   CartesianChartProps,
@@ -84,6 +87,34 @@ export type { LineChartProps } from "./cartesian/LineChart";
 
 export { BarChart } from "./cartesian/BarChart";
 export type { BarChartProps } from "./cartesian/BarChart";
+
+export { AreaChart } from "./cartesian/AreaChart";
+export type { AreaChartProps } from "./cartesian/AreaChart";
+
+export { MixedChart } from "./cartesian/MixedChart";
+export type { MixedChartProps, MixedChartLayer } from "./cartesian/MixedChart";
+
+export { LineChartContent } from "./cartesian/LineChartContent";
+export type { LineChartContentProps } from "./cartesian/LineChartContent";
+
+export { BarChartContent } from "./cartesian/BarChartContent";
+export type { BarChartContentProps } from "./cartesian/BarChartContent";
+
+export { ScatterChart } from "./cartesian/ScatterChart";
+export type { ScatterChartProps } from "./cartesian/ScatterChart";
+
+export { AreaChartContent } from "./cartesian/AreaChartContent";
+export type { AreaChartContentProps } from "./cartesian/AreaChartContent";
+
+export { ScatterChartContent } from "./cartesian/ScatterChartContent";
+export type { ScatterChartContentProps } from "./cartesian/ScatterChartContent";
+
+export type {
+  ChartContentBaseProps,
+  ChartContentTooltipHandlers,
+} from "./cartesian/chartContentTypes";
+
+export { renderMarker, MARKER_SYMBOLS } from "./core/markers";
 
 export { ChartGroup } from "./composition/ChartGroup";
 export type {

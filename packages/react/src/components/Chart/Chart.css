@@ -2,7 +2,7 @@
 
 .k-chart {
   font-family: var(--kreati-font-family-body);
-  overflow: visible;
+  overflow: hidden;
 }
 
 /* ─── Chart — Colors (palette + structural) ──────────────────────────────── */
@@ -120,6 +120,12 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: var(--kreati-radius-full);
+  flex-shrink: 0;
+}
+
+.k-chart-tooltip__marker {
+  width: 0.5rem;
+  height: 0.5rem;
   flex-shrink: 0;
 }
 
@@ -569,7 +575,8 @@
 
 /* ─── LineChart — Series transition ───────────────────────────────────────── */
 
-.k-chart-line-series {
+.k-chart-line-series,
+.k-chart-area-series {
   transition: opacity var(--kreati-transition-fast);
 }
 
@@ -605,9 +612,17 @@
   }
 }
 
+/* ─── ScatterChart — Transitions ─────────────────────────────────────────── */
+
+.k-chart-scatter-series {
+  transition: opacity var(--kreati-transition-fast);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .k-chart-bar-series rect,
-  .k-chart-line-series {
+  .k-chart-line-series,
+  .k-chart-area-series,
+  .k-chart-scatter-series {
     animation: none;
     transition: none;
   }

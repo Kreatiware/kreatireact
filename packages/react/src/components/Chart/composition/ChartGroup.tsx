@@ -12,6 +12,10 @@ import { LineChart } from "../cartesian/LineChart";
 import type { LineChartProps } from "../cartesian/LineChart";
 import { BarChart } from "../cartesian/BarChart";
 import type { BarChartProps } from "../cartesian/BarChart";
+import { AreaChart } from "../cartesian/AreaChart";
+import type { AreaChartProps } from "../cartesian/AreaChart";
+import { ScatterChart } from "../cartesian/ScatterChart";
+import type { ScatterChartProps } from "../cartesian/ScatterChart";
 import { Legend } from "../core/Legend";
 import {
   exportPng,
@@ -37,7 +41,7 @@ type GroupOmitted =
 /** Configuration for a single panel in a ChartGroup. */
 export interface ChartGroupPanel extends Omit<LineChartProps, GroupOmitted> {
   /** Chart type for this panel. Default: 'line' */
-  type?: "line" | "bar";
+  type?: "line" | "bar" | "area" | "scatter";
   /** BarChart-specific: grouping mode */
   groupMode?: BarChartProps["groupMode"];
   /** BarChart-specific: orientation */
@@ -52,6 +56,20 @@ export interface ChartGroupPanel extends Omit<LineChartProps, GroupOmitted> {
   showDataLabels?: BarChartProps["showDataLabels"];
   /** BarChart-specific: show category dividers */
   showCategoryDividers?: BarChartProps["showCategoryDividers"];
+  /** AreaChart-specific: stacking mode */
+  stackMode?: AreaChartProps["stackMode"];
+  /** AreaChart-specific: area fill opacity */
+  areaOpacity?: AreaChartProps["areaOpacity"];
+  /** AreaChart-specific: show line on top of area */
+  showLine?: AreaChartProps["showLine"];
+  /** ScatterChart-specific: marker size */
+  scatterMarkerSize?: ScatterChartProps["markerSize"];
+  /** ScatterChart-specific: enable bubble mode */
+  bubbleMode?: ScatterChartProps["bubbleMode"];
+  /** ScatterChart-specific: min bubble radius */
+  bubbleMin?: ScatterChartProps["bubbleMin"];
+  /** ScatterChart-specific: max bubble radius */
+  bubbleMax?: ScatterChartProps["bubbleMax"];
   /** Panel title displayed above the chart */
   title?: string;
   /** Panel height in pixels. Default: 200 */
@@ -537,6 +555,13 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
               barWidth,
               showDataLabels,
               showCategoryDividers,
+              stackMode,
+              areaOpacity,
+              showLine,
+              scatterMarkerSize,
+              bubbleMode,
+              bubbleMin,
+              bubbleMax,
               ...rest
             } = panel;
 
@@ -684,6 +709,29 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
                         barWidth={barWidth}
                         showDataLabels={showDataLabels}
                         showCategoryDividers={showCategoryDividers}
+                      />
+                    );
+                  }
+                  if (panelType === "area") {
+                    return (
+                      <AreaChart
+                        {...(sharedProps as AreaChartProps)}
+                        stackMode={stackMode}
+                        areaOpacity={areaOpacity}
+                        showLine={showLine}
+                        showDataLabels={showDataLabels}
+                      />
+                    );
+                  }
+                  if (panelType === "scatter") {
+                    return (
+                      <ScatterChart
+                        {...(sharedProps as ScatterChartProps)}
+                        markerSize={scatterMarkerSize}
+                        bubbleMode={bubbleMode}
+                        bubbleMin={bubbleMin}
+                        bubbleMax={bubbleMax}
+                        showDataLabels={showDataLabels}
                       />
                     );
                   }

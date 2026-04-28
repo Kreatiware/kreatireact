@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import type { ChartDataPoint, ChartSeries } from "./types";
+import type { ChartDataPoint, ChartSeries, MarkerSymbol } from "./types";
+import { renderMarker } from "./markers";
 
 export type TooltipMode = "shared" | "panel" | "single" | "custom";
 
@@ -8,6 +9,8 @@ export interface TooltipEntry {
   series: ChartSeries;
   point: ChartDataPoint;
   color: string;
+  /** Resolved marker symbol for this entry (auto-assigned or explicit). */
+  markerSymbol?: MarkerSymbol;
 }
 
 export interface ChartTooltipProps {
@@ -81,10 +84,27 @@ export const ChartTooltip: React.FC<ChartTooltipProps> = ({
       {xLabel && <div className="k-chart-tooltip__title">{xLabel}</div>}
       {entries.map(entry => (
         <div key={entry.series.id} className="k-chart-tooltip__row">
-          <span
-            className="k-chart-tooltip__dot"
-            style={{ backgroundColor: entry.color }}
-          />
+          {(() => {
+            const symbol = entry.markerSymbol ?? entry.series.markerSymbol;
+            if (symbol && symbol !== "circle" && symbol !== "none") {
+              return (
+                <svg
+                  className="k-chart-tooltip__marker"
+                  width="10"
+                  height="10"
+                  viewBox="0 0 10 10"
+                >
+                  {renderMarker(symbol, 5, 5, 4, { fill: entry.color })}
+                </svg>
+              );
+            }
+            return (
+              <span
+                className="k-chart-tooltip__dot"
+                style={{ backgroundColor: entry.color }}
+              />
+            );
+          })()}
           <span className="k-chart-tooltip__name">{entry.series.name}</span>
           <span className="k-chart-tooltip__value">
             {entry.point.y}
