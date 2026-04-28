@@ -1,5 +1,12 @@
 # @kreatiware/react
 
+## 0.20.0
+
+### Minor Changes
+
+- 7afc3ed: feat(charts: add Mixed chart logic
+- fd316f3: feat(charts): add area chart, scatterChart, Mixed Chart
+
 ## 0.19.0
 
 ### Minor Changes
