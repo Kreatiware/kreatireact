@@ -1,5 +1,11 @@
 # @kreatiware/react
 
+## 0.19.0
+
+### Minor Changes
+
+- fc616ea: feat(charts): add Barchart
+
 ## 0.18.0
 
 ### Minor Changes
