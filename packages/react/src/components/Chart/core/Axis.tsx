@@ -33,12 +33,13 @@ export const Axis: React.FC<AxisProps> = ({
   const {
     label,
     ticks: tickCount,
+    tickInterval,
     tickFormat,
     showGrid,
     gridDashStyle = "solid",
     alternatingBands = false,
-    alternatingBandColor: bandColorProp = "var(--kreati-chart-grid)",
-    alternatingBandOpacity = 0.08,
+    alternatingBandColor: bandColorProp = "var(--kreati-gray-400, #9ca3af)",
+    alternatingBandOpacity = 0.12,
     categories,
   } = config;
 
@@ -48,13 +49,24 @@ export const Axis: React.FC<AxisProps> = ({
 
   const isHorizontal = orientation === "top" || orientation === "bottom";
 
-  // Auto-reduce ticks based on available space
-  const autoTickCount = isHorizontal
-    ? Math.max(2, Math.floor(plotWidth / 80))
-    : Math.max(2, Math.floor(plotHeight / 40));
-  const ticks = scale.ticks(
-    tickCount ?? Math.min(autoTickCount, isHorizontal ? 10 : 8)
-  );
+  // Generate ticks: tickInterval > tickCount > auto
+  const ticks = (() => {
+    if (tickInterval) {
+      const [d0, d1] = scale.domain();
+      const start = Math.ceil(d0 / tickInterval) * tickInterval;
+      const result: number[] = [];
+      for (let v = start; v <= d1; v += tickInterval) {
+        result.push(Math.round(v * 1e10) / 1e10);
+      }
+      return result;
+    }
+    const autoTickCount = isHorizontal
+      ? Math.max(2, Math.floor(plotWidth / 80))
+      : Math.max(2, Math.floor(plotHeight / 40));
+    return scale.ticks(
+      tickCount ?? Math.min(autoTickCount, isHorizontal ? 10 : 8)
+    );
+  })();
 
   const formatTick = (value: number): string => {
     if (tickFormat) return tickFormat(value);
@@ -91,41 +103,91 @@ export const Axis: React.FC<AxisProps> = ({
 
       {/* Alternating bands */}
       {alternatingBands &&
-        ticks.length > 1 &&
-        ticks.map((value, i) => {
-          const next = ticks[i + 1];
-          if (next == null) return null;
-          const bandColor = bandColors[i % 2];
-          if (bandColor === "transparent") return null;
-          const p1 = scale(value);
-          const p2 = scale(next);
-          if (isHorizontal) {
+        ticks.length > 0 &&
+        (() => {
+          // For category axes, draw bands covering each category slot
+          const isCategory = config.type === "category";
+          if (isCategory) {
+            return ticks.map((value, i) => {
+              const bandColor = bandColors[i % 2];
+              if (bandColor === "transparent") return null;
+              const center = scale(value);
+              const halfSlot =
+                ticks.length > 1
+                  ? Math.abs(scale(ticks[1]) - scale(ticks[0])) / 2
+                  : (isHorizontal ? plotWidth : plotHeight) / 2;
+              const p1 = center - halfSlot;
+              const p2 = center + halfSlot;
+              if (isHorizontal) {
+                return (
+                  <rect
+                    key={`band-${i}`}
+                    x={Math.max(0, Math.min(p1, p2))}
+                    y={0}
+                    width={Math.min(
+                      Math.abs(p2 - p1),
+                      plotWidth - Math.max(0, Math.min(p1, p2))
+                    )}
+                    height={plotHeight}
+                    fill={bandColor}
+                    opacity={alternatingBandOpacity}
+                    pointerEvents="none"
+                  />
+                );
+              }
+              return (
+                <rect
+                  key={`band-${i}`}
+                  x={0}
+                  y={Math.max(0, Math.min(p1, p2))}
+                  width={plotWidth}
+                  height={Math.min(
+                    Math.abs(p2 - p1),
+                    plotHeight - Math.max(0, Math.min(p1, p2))
+                  )}
+                  fill={bandColor}
+                  opacity={alternatingBandOpacity}
+                  pointerEvents="none"
+                />
+              );
+            });
+          }
+          // For numeric axes, draw bands between consecutive ticks
+          return ticks.map((value, i) => {
+            const next = ticks[i + 1];
+            if (next == null) return null;
+            const bandColor = bandColors[i % 2];
+            if (bandColor === "transparent") return null;
+            const p1 = scale(value);
+            const p2 = scale(next);
+            if (isHorizontal) {
+              return (
+                <rect
+                  key={`band-${i}`}
+                  x={Math.min(p1, p2)}
+                  y={0}
+                  width={Math.abs(p2 - p1)}
+                  height={plotHeight}
+                  fill={bandColor}
+                  opacity={alternatingBandOpacity}
+                  pointerEvents="none"
+                />
+              );
+            }
             return (
               <rect
                 key={`band-${i}`}
-                x={Math.min(p1, p2)}
-                y={0}
-                width={Math.abs(p2 - p1)}
-                height={plotHeight}
+                x={0}
+                y={Math.min(p1, p2)}
+                width={plotWidth}
+                height={Math.abs(p2 - p1)}
                 fill={bandColor}
                 opacity={alternatingBandOpacity}
                 pointerEvents="none"
               />
             );
-          }
-          return (
-            <rect
-              key={`band-${i}`}
-              x={0}
-              y={Math.min(p1, p2)}
-              width={plotWidth}
-              height={Math.abs(p2 - p1)}
-              fill={bandColor}
-              opacity={alternatingBandOpacity}
-              pointerEvents="none"
-            />
-          );
-        })}
+          });
+        })()}
 
       {/* Ticks + labels */}
       {ticks.map(value => {

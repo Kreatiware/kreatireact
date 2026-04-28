@@ -10,6 +10,8 @@ import React, {
 import { createPortal } from "react-dom";
 import { LineChart } from "../cartesian/LineChart";
 import type { LineChartProps } from "../cartesian/LineChart";
+import { BarChart } from "../cartesian/BarChart";
+import type { BarChartProps } from "../cartesian/BarChart";
 import { Legend } from "../core/Legend";
 import {
   exportPng,
@@ -23,16 +25,33 @@ import type { ChartSeries, ChartAxisConfig } from "../core/types";
 import { useKreatiLocale } from "../../../locale/KreatiProvider";
 import "../Chart.css";
 
-/** Configuration for a single panel in a ChartGroup. */
-export interface ChartGroupPanel extends Omit<
-  LineChartProps,
+/** Omitted props that ChartGroup controls. */
+type GroupOmitted =
   | "xAxis"
   | "showLegend"
   | "zoomMode"
   | "zoomAxis"
   | "exportFormats"
-  | "showMenuButton"
-> {
+  | "showMenuButton";
+
+/** Configuration for a single panel in a ChartGroup. */
+export interface ChartGroupPanel extends Omit<LineChartProps, GroupOmitted> {
+  /** Chart type for this panel. Default: 'line' */
+  type?: "line" | "bar";
+  /** BarChart-specific: grouping mode */
+  groupMode?: BarChartProps["groupMode"];
+  /** BarChart-specific: orientation */
+  orientation?: BarChartProps["orientation"];
+  /** BarChart-specific: border radius */
+  barRadius?: BarChartProps["barRadius"];
+  /** BarChart-specific: gap between bars */
+  barGap?: BarChartProps["barGap"];
+  /** BarChart-specific: bar width */
+  barWidth?: BarChartProps["barWidth"];
+  /** BarChart-specific: show data labels */
+  showDataLabels?: BarChartProps["showDataLabels"];
+  /** BarChart-specific: show category dividers */
+  showCategoryDividers?: BarChartProps["showCategoryDividers"];
   /** Panel title displayed above the chart */
   title?: string;
   /** Panel height in pixels. Default: 200 */
@@ -280,7 +299,8 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
           }
 
           const width = svgs[0].getBoundingClientRect().width;
-          const textColor = window.getComputedStyle(el).color || "#333";
+          const textColor =
+            window.getComputedStyle(el).color || "var(--kreati-chart-text)";
           const titleH = 18;
 
           // Collect panel info
@@ -509,6 +529,14 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
               showXLabels,
               keepEmpty = false,
               series: panelSeries = [],
+              type: panelType = "line",
+              groupMode,
+              orientation,
+              barRadius,
+              barGap,
+              barWidth,
+              showDataLabels,
+              showCategoryDividers,
               ...rest
             } = panel;
 
@@ -578,42 +606,38 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
                 {panelTitle && (
                   <div className="k-chart-group__panel-title">{panelTitle}</div>
                 )}
-                <LineChart
-                  {...rest}
-                  series={filteredSeries}
-                  xAxis={panelXAxis}
-                  height={panelHeight}
-                  margins={panelMargins}
-                  showLegend={!synchronized}
-                  zoomMode={zoomMode}
-                  zoomAxis={zoomAxis}
-                  controlledZoom={synchronized ? sharedZoom : undefined}
-                  onZoomChange={handleZoomChange}
-                  showCrosshair={showCrosshair && activePanel === idx}
-                  syncCrosshairX={
-                    showCrosshair && synchronized && activePanel !== idx
-                      ? crosshairX
-                      : null
-                  }
-                  onCrosshairChange={
-                    synchronized ? handleCrosshairChange(idx) : undefined
-                  }
-                  onSelectChange={
-                    synchronized && activePanel === idx
-                      ? handleSelectChange
-                      : undefined
-                  }
-                  hideSelection={!!synchronized}
-                  tooltipMode={
-                    tooltipMode === "group"
-                      ? ("custom" as "single")
-                      : tooltipMode
-                  }
-                  tooltipRender={
-                    tooltipMode === "group" ? () => null : undefined
-                  }
-                  exportFormats={
-                    !synchronized
+                {(() => {
+                  const sharedProps = {
+                    ...rest,
+                    series: filteredSeries,
+                    xAxis: panelXAxis,
+                    height: panelHeight,
+                    margins: panelMargins,
+                    showLegend: !synchronized,
+                    zoomMode,
+                    zoomAxis,
+                    controlledZoom: synchronized ? sharedZoom : undefined,
+                    onZoomChange: handleZoomChange,
+                    showCrosshair: showCrosshair && activePanel === idx,
+                    syncCrosshairX:
+                      showCrosshair && synchronized && activePanel !== idx
+                        ? crosshairX
+                        : null,
+                    onCrosshairChange: synchronized
+                      ? handleCrosshairChange(idx)
+                      : undefined,
+                    onSelectChange:
+                      synchronized && activePanel === idx
+                        ? handleSelectChange
+                        : undefined,
+                    hideSelection: !!synchronized,
+                    tooltipMode:
+                      tooltipMode === "group"
+                        ? ("custom" as "single")
+                        : tooltipMode,
+                    tooltipRender:
+                      tooltipMode === "group" ? () => null : undefined,
+                    exportFormats: !synchronized
                       ? (exportFormats as (
                           | "png"
                           | "svg"
@@ -621,37 +645,50 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
                           | "json-table"
                           | "json-series"
                         )[])
-                      : []
-                  }
-                  showMenuButton={
-                    !synchronized
-                      ? "auto"
+                      : [],
+                    showMenuButton: !synchronized
+                      ? ("auto" as const)
                       : idx === 0 && exportFormats.length > 0
-                        ? true
+                        ? (true as const)
                         : idx === 0
-                          ? "auto"
-                          : false
+                          ? ("auto" as const)
+                          : (false as const),
+                    contextMenuItems:
+                      synchronized && exportFormats.length > 0
+                        ? exportFormats.map(fmt => ({
+                            key: `group-export-${fmt}`,
+                            label:
+                              fmt === "png"
+                                ? t.exportPng
+                                : fmt === "svg"
+                                  ? t.exportSvg
+                                  : fmt === "csv"
+                                    ? t.exportCsv
+                                    : fmt === "json-table"
+                                      ? t.exportJsonTable
+                                      : t.exportJsonSeries,
+                            command: () => handleExport(fmt),
+                          }))
+                        : undefined,
+                    palette,
+                  };
+
+                  if (panelType === "bar") {
+                    return (
+                      <BarChart
+                        {...(sharedProps as BarChartProps)}
+                        groupMode={groupMode}
+                        orientation={orientation}
+                        barRadius={barRadius}
+                        barGap={barGap}
+                        barWidth={barWidth}
+                        showDataLabels={showDataLabels}
+                        showCategoryDividers={showCategoryDividers}
+                      />
+                    );
                   }
-                  contextMenuItems={
-                    synchronized && exportFormats.length > 0
-                      ? exportFormats.map(fmt => ({
-                          key: `group-export-${fmt}`,
-                          label:
-                            fmt === "png"
-                              ? t.exportPng
-                              : fmt === "svg"
-                                ? t.exportSvg
-                                : fmt === "csv"
-                                  ? t.exportCsv
-                                  : fmt === "json-table"
-                                    ? t.exportJsonTable
-                                    : t.exportJsonSeries,
-                          command: () => handleExport(fmt),
-                        }))
-                      : undefined
-                  }
-                  palette={palette}
-                />
+                  return <LineChart {...sharedProps} />;
+                })()}
               </div>
             );
           })}

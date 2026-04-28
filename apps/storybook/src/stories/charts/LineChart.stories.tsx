@@ -554,6 +554,32 @@ export const DatetimeAxis: Story = {
   },
 };
 
+const fiveMinData = Array.from({ length: 60 }, (_, i) => ({
+  x: new Date(2026, 3, 27, 8, 0, 0).getTime() + i * 60 * 1000,
+  y: 20 + Math.sin(i / 5) * 8 + Math.random() * 3,
+}));
+
+export const DatetimeTickInterval: Story = {
+  name: "8.2b — Datetime with tickInterval (5 min)",
+  args: {
+    series: [
+      { id: "sensor", name: "Temperature", data: fiveMinData, unit: "°C" },
+    ],
+    xAxis: {
+      type: "datetime" as const,
+      label: "Time",
+      tickInterval: 5 * 60 * 1000,
+      tickFormat: (ms: number) => {
+        const d = new Date(ms);
+        return `${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}`;
+      },
+    },
+    yAxis: { label: "Temperature (°C)" },
+    height: 320,
+    title: "Sensor readings — ticks every 5 minutes",
+  },
+};
+
 export const CustomTickFormat: Story = {
   name: "8.3 — Custom Tick Format",
   args: {

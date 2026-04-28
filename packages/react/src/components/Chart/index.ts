@@ -82,6 +82,9 @@ export type {
 export { LineChart } from "./cartesian/LineChart";
 export type { LineChartProps } from "./cartesian/LineChart";
 
+export { BarChart } from "./cartesian/BarChart";
+export type { BarChartProps } from "./cartesian/BarChart";
+
 export { ChartGroup } from "./composition/ChartGroup";
 export type {
   ChartGroupProps,

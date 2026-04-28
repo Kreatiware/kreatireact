@@ -404,7 +404,6 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
                       key={series.id}
                       className={`k-chart-line-series ${series.className || ""}`}
                       opacity={isDimmed ? 0.2 : 1}
-                      style={{ transition: "opacity 0.2s ease" }}
                     >
                       {/* Area fill */}
                       {showArea && (

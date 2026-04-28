@@ -68,22 +68,36 @@ export const createLogScale = (
 
 /**
  * Creates a category scale mapping indices to evenly spaced positions.
+ * Respects the domain for zoom support — only maps indices within [d0, d1].
  */
 export const createCategoryScale = (
   categories: string[],
-  range: [number, number]
+  range: [number, number],
+  domain?: [number, number]
 ): ScaleFunction => {
   const count = categories.length || 1;
+  // Add half-band padding so categories are centered in their slots
+  const halfBand = 0.5;
+  const d0 = domain ? domain[0] - halfBand : -halfBand;
+  const d1 = domain ? domain[1] + halfBand : count - 1 + halfBand;
   const [r0, r1] = range;
-  const step = (r1 - r0) / count;
+  const dSpan = d1 - d0 || 1;
+  const rSpan = r1 - r0;
 
   const scale = (index: number): number => {
-    return r0 + index * step + step / 2;
+    return r0 + ((index - d0) / dSpan) * rSpan;
   };
 
-  scale.domain = () => [0, count - 1] as [number, number];
+  scale.domain = () => [d0, d1] as [number, number];
   scale.range = () => range;
-  scale.ticks = (): number[] => categories.map((_, i) => i);
+  scale.ticks = (tickCount?: number): number[] => {
+    if (tickCount === 0) return [];
+    const result: number[] = [];
+    const start = Math.max(0, Math.ceil(d0 + halfBand));
+    const end = Math.min(count - 1, Math.floor(d1 - halfBand));
+    for (let i = start; i <= end; i++) result.push(i);
+    return result;
+  };
 
   return scale;
 };
@@ -101,7 +115,7 @@ export const createScale = (
     case "logarithmic":
       return createLogScale(domain, range);
     case "category":
-      return createCategoryScale(categories || [], range);
+      return createCategoryScale(categories || [], range, domain);
     case "datetime":
     case "linear":
     default:

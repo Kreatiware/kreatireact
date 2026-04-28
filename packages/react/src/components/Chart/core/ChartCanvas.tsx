@@ -37,6 +37,8 @@ export interface ChartCanvasProps {
   className?: string;
   /** Inline styles */
   style?: React.CSSProperties;
+  /** Extra padding on the clip path in px. Default: 8 (room for markers). Set 0 for bar charts. */
+  clipMargin?: number;
   /** Chart content (series, overlays, etc.) */
   children?: React.ReactNode;
 }
@@ -68,6 +70,7 @@ export const ChartCanvas = forwardRef<SVGSVGElement, ChartCanvasProps>(
       ariaLabel,
       className = "",
       style,
+      clipMargin = 8,
       children,
     },
     ref
@@ -144,10 +147,10 @@ export const ChartCanvas = forwardRef<SVGSVGElement, ChartCanvasProps>(
         <defs>
           <clipPath id={`${base}-clip`}>
             <rect
-              x={-8}
-              y={-8}
-              width={plotWidth + 16}
-              height={plotHeight + 16}
+              x={-clipMargin}
+              y={-clipMargin}
+              width={plotWidth + clipMargin * 2}
+              height={plotHeight + clipMargin * 2}
             />
           </clipPath>
         </defs>

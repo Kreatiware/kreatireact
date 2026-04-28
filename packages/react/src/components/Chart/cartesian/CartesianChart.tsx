@@ -93,6 +93,8 @@ export interface CartesianChartProps {
   margins?: Partial<ChartMargins>;
   /** ARIA label */
   ariaLabel?: string;
+  /** Clip path margin in px. Default: 8 (room for line markers). Use 0 for bar charts. */
+  clipMargin?: number;
   /** Callback when a data point is clicked or activated via Enter key */
   onPointClick?: (point: ChartDataPoint, series: ChartSeries) => void;
   /** Zoom mode. Default: false (disabled) */
@@ -198,6 +200,7 @@ export const CartesianChart = forwardRef<HTMLDivElement, CartesianChartProps>(
       palette,
       margins,
       ariaLabel,
+      clipMargin,
       onPointClick,
       zoomMode = false,
       controlledZoom,
@@ -494,7 +497,7 @@ export const CartesianChart = forwardRef<HTMLDivElement, CartesianChartProps>(
         const range: [number, number] = ax.inverted
           ? [0, Math.max(plotHeight, 0)]
           : [Math.max(plotHeight, 0), 0];
-        scales[id] = createScale(ax.type || "linear", d, range);
+        scales[id] = createScale(ax.type || "linear", d, range, ax.categories);
       }
       return scales;
     }, [yAxes, yDomains, yDomain, plotHeight, zoomState, activeZoom]);
@@ -502,8 +505,15 @@ export const CartesianChart = forwardRef<HTMLDivElement, CartesianChartProps>(
     const yScale = yScales[yAxes[0].id ?? "default"];
 
     const getColor = useCallback(
-      (s: ChartSeries, i: number) => resolveSeriesColor(s, i, palette),
-      [palette]
+      (s: ChartSeries, _i: number) => {
+        const originalIndex = series.findIndex(o => o.id === s.id);
+        return resolveSeriesColor(
+          s,
+          originalIndex === -1 ? _i : originalIndex,
+          palette
+        );
+      },
+      [series, palette]
     );
 
     const announcePoint = useCallback(
@@ -1028,9 +1038,12 @@ export const CartesianChart = forwardRef<HTMLDivElement, CartesianChartProps>(
         role="figure"
         aria-label={ariaLabel ?? title ?? "Chart"}
         onKeyDown={handleKeyDown}
-        onBlur={() => {
-          setFocusedSeriesIndex(null);
-          setFocusedPointIndex(null);
+        onBlur={e => {
+          // Only clear focus if leaving the chart entirely, not moving to a child
+          if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+            setFocusedSeriesIndex(null);
+            setFocusedPointIndex(null);
+          }
         }}
       >
         {/* Screen reader announcements */}
@@ -1143,7 +1156,10 @@ export const CartesianChart = forwardRef<HTMLDivElement, CartesianChartProps>(
                             : undefined,
                 }}
                 onWheel={handleWheel}
-                onMouseDown={handleSvgMouseDown}
+                onMouseDown={e => {
+                  containerRef.current?.focus();
+                  handleSvgMouseDown(e);
+                }}
                 onMouseUp={handleSvgMouseUp}
                 onMouseLeave={() => {
                   if (!selectStart) handleSvgMouseUp();
@@ -1196,6 +1212,7 @@ export const CartesianChart = forwardRef<HTMLDivElement, CartesianChartProps>(
                   height={clampedHeight}
                   margins={effectiveMargins}
                   ariaLabel={ariaLabel}
+                  clipMargin={clipMargin}
                   onMouseMove={e => {
                     setMousePos({ plotX: e.plotX, plotY: e.plotY });
                     if (onCrosshairChange) {

@@ -332,6 +332,7 @@ export {
   dashStyleToArray,
   CartesianChart,
   LineChart,
+  BarChart,
 } from "./components/Chart";
 
 export type {
@@ -357,6 +358,7 @@ export type {
   CartesianChartProps,
   CartesianContext,
   LineChartProps,
+  BarChartProps,
 } from "./components/Chart";
 
 import "./components/Chart/Chart.css";

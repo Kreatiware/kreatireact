@@ -406,12 +406,8 @@
 
 /* ─── Chart — Keyboard focus ─────────────────────────────────────────────── */
 
-.k-cartesian-chart:focus {
-  outline: 2px solid var(--kreati-primary-500);
-  outline-offset: 2px;
-}
-
-.k-cartesian-chart:focus:not(:focus-visible) {
+.k-cartesian-chart:focus,
+.k-cartesian-chart:focus-visible {
   outline: none;
 }
 
@@ -569,4 +565,50 @@
 .k-chart-tooltip__header {
   font-weight: var(--kreati-font-weight-semibold);
   margin-bottom: var(--kreati-space-1);
+}
+
+/* ─── LineChart — Series transition ───────────────────────────────────────── */
+
+.k-chart-line-series {
+  transition: opacity var(--kreati-transition-fast);
+}
+
+/* ─── BarChart — Entry Animation ─────────────────────────────────────────── */
+
+.k-chart-bar-series rect {
+  animation: k-bar-grow var(--kreati-bar-animation-duration, 0.6s) ease-out both;
+  animation-delay: calc(
+    var(--k-bar-i, 0) * var(--kreati-bar-animation-stagger, 50ms)
+  );
+  transition: opacity var(--kreati-transition-fast);
+}
+
+@keyframes k-bar-grow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.k-chart-bar-series--horizontal rect {
+  animation-name: k-bar-grow-h;
+}
+
+@keyframes k-bar-grow-h {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k-chart-bar-series rect,
+  .k-chart-line-series {
+    animation: none;
+    transition: none;
+  }
 }
