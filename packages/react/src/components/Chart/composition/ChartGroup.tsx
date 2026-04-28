@@ -16,6 +16,8 @@ import { AreaChart } from "../cartesian/AreaChart";
 import type { AreaChartProps } from "../cartesian/AreaChart";
 import { ScatterChart } from "../cartesian/ScatterChart";
 import type { ScatterChartProps } from "../cartesian/ScatterChart";
+import { MixedChart } from "../cartesian/MixedChart";
+import type { MixedChartProps } from "../cartesian/MixedChart";
 import { Legend } from "../core/Legend";
 import {
   exportPng,
@@ -41,7 +43,7 @@ type GroupOmitted =
 /** Configuration for a single panel in a ChartGroup. */
 export interface ChartGroupPanel extends Omit<LineChartProps, GroupOmitted> {
   /** Chart type for this panel. Default: 'line' */
-  type?: "line" | "bar" | "area" | "scatter";
+  type?: "line" | "bar" | "area" | "scatter" | "mixed";
   /** BarChart-specific: grouping mode */
   groupMode?: BarChartProps["groupMode"];
   /** BarChart-specific: orientation */
@@ -70,6 +72,8 @@ export interface ChartGroupPanel extends Omit<LineChartProps, GroupOmitted> {
   bubbleMin?: ScatterChartProps["bubbleMin"];
   /** ScatterChart-specific: max bubble radius */
   bubbleMax?: ScatterChartProps["bubbleMax"];
+  /** MixedChart-specific: layer definitions */
+  layers?: MixedChartProps["layers"];
   /** Panel title displayed above the chart */
   title?: string;
   /** Panel height in pixels. Default: 200 */
@@ -562,6 +566,7 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
               bubbleMode,
               bubbleMin,
               bubbleMax,
+              layers: panelLayers,
               ...rest
             } = panel;
 
@@ -732,6 +737,14 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
                         bubbleMin={bubbleMin}
                         bubbleMax={bubbleMax}
                         showDataLabels={showDataLabels}
+                      />
+                    );
+                  }
+                  if (panelType === "mixed" && panelLayers) {
+                    return (
+                      <MixedChart
+                        {...(sharedProps as MixedChartProps)}
+                        layers={panelLayers}
                       />
                     );
                   }

@@ -706,7 +706,6 @@ export const ChartGroupSynced: StoryObj = {
       synchronized
       zoomMode="both"
       exportFormats={["png", "csv"]}
-      height={180}
     />
   ),
 };
@@ -745,7 +744,6 @@ export const ChartGroupIndependent: StoryObj = {
       ]}
       xAxis={{ categories: months }}
       synchronized={false}
-      height={180}
     />
   ),
 };

@@ -183,5 +183,7 @@ export const en: KreatiLocale = {
     filterPlaceholder: "Filter series...",
     filterLabel: "Series",
     exportLabel: "Export",
+    tooltipSingle: "Single",
+    tooltipShared: "Shared",
   },
 };

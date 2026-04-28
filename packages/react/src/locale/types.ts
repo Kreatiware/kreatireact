@@ -202,5 +202,7 @@ export interface KreatiLocale {
     filterPlaceholder: string;
     filterLabel: string;
     exportLabel: string;
+    tooltipSingle: string;
+    tooltipShared: string;
   };
 }

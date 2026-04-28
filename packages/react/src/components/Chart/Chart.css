@@ -129,6 +129,43 @@
   flex-shrink: 0;
 }
 
+/* ─── Tooltip Toggle ─────────────────────────────────────────────────────── */
+
+.k-chart-tooltip-toggle {
+  display: flex;
+  gap: var(--kreati-space-1);
+  justify-content: flex-end;
+  padding-bottom: var(--kreati-space-2);
+}
+
+.k-chart-tooltip-toggle__btn {
+  font-family: var(--kreati-font-family-body);
+  font-size: var(--kreati-font-size-xs);
+  padding: var(--kreati-space-1) var(--kreati-space-2);
+  border: 1px solid var(--kreati-chart-axis);
+  border-radius: var(--kreati-radius-sm);
+  background: var(--kreati-chart-bg);
+  color: var(--kreati-chart-text);
+  cursor: pointer;
+  transition:
+    background var(--kreati-transition-fast),
+    border-color var(--kreati-transition-fast);
+}
+
+.k-chart-tooltip-toggle__btn:hover {
+  background: var(--kreati-primary-alpha-4);
+}
+
+.k-chart-tooltip-toggle__btn--active {
+  background: var(--kreati-primary-500);
+  color: var(--kreati-text-on-primary, #fff);
+  border-color: var(--kreati-primary-500);
+}
+
+.k-chart-tooltip-toggle__btn--active:hover {
+  background: var(--kreati-primary-600, var(--kreati-primary-500));
+}
+
 .k-chart-tooltip--anchored::after {
   content: "";
   position: absolute;
@@ -392,7 +429,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .k-cartesian-chart__resize-handle,
-  .k-cartesian-chart__resize-handle::after {
+  .k-cartesian-chart__resize-handle::after,
+  .k-chart-tooltip-toggle__btn {
     transition: none;
   }
 }
@@ -582,7 +620,8 @@
 
 /* ─── BarChart — Entry Animation ─────────────────────────────────────────── */
 
-.k-chart-bar-series rect {
+.k-chart-bar-series rect,
+.k-chart-bar-series path {
   animation: k-bar-grow var(--kreati-bar-animation-duration, 0.6s) ease-out both;
   animation-delay: calc(
     var(--k-bar-i, 0) * var(--kreati-bar-animation-stagger, 50ms)
@@ -599,7 +638,8 @@
   }
 }
 
-.k-chart-bar-series--horizontal rect {
+.k-chart-bar-series--horizontal rect,
+.k-chart-bar-series--horizontal path {
   animation-name: k-bar-grow-h;
 }
 
@@ -620,6 +660,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .k-chart-bar-series rect,
+  .k-chart-bar-series path,
   .k-chart-line-series,
   .k-chart-area-series,
   .k-chart-scatter-series {

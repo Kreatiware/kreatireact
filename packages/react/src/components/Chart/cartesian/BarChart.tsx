@@ -5,6 +5,7 @@ import { ChartTooltip } from "../core/ChartTooltip";
 import type { TooltipMode, TooltipEntry } from "../core/ChartTooltip";
 import { StrictClip } from "../core/ChartCanvas";
 import { ChartPattern, patternFill } from "../core/patterns";
+import { roundedBarPath } from "../core/barPath";
 import { niceDomain } from "../core/scales";
 import type { ChartDataPoint, ChartSeries } from "../core/types";
 
@@ -566,75 +567,84 @@ export const BarChart = forwardRef<HTMLDivElement, BarChartProps>(
                             (groupMode === "grouped" ||
                               seriesIdx === visibleSeries.length - 1);
 
-                          return (
+                          // Determine which end gets rounded corners
+                          const roundPos = isHorizontal
+                            ? getVal(point) >= 0
+                              ? "right"
+                              : "left"
+                            : getVal(point) >= 0
+                              ? "top"
+                              : "bottom";
+
+                          const sharedProps = {
+                            fill: point.color ? point.color : pointColor,
+                            fillOpacity,
+                            stroke: isFocused
+                              ? "var(--kreati-chart-text)"
+                              : undefined,
+                            strokeWidth: isFocused ? 3 : undefined,
+                            opacity: isDimmed ? 0.3 : 1,
+                            className: point.className,
+                            style: {
+                              transformOrigin: isHorizontal
+                                ? `${valueScale(0)}px ${y + bh / 2}px`
+                                : `${x + bw / 2}px ${valueScale(0)}px`,
+                              "--k-bar-i":
+                                seriesIdx * visibleSeries[0]?.data.length +
+                                pointIdx,
+                              ...point.style,
+                            } as React.CSSProperties,
+                            role: "img" as const,
+                            "aria-label": `${series.name}: ${cartesianProps.xAxis?.categories?.[getCat(point)] ?? getCat(point)} = ${getVal(point)}`,
+                            onMouseEnter: (e: React.MouseEvent) =>
+                              handleBarMouseEnter(
+                                e,
+                                series,
+                                seriesIdx,
+                                point,
+                                pointIdx
+                              ),
+                            onMouseLeave: handleBarMouseLeave,
+                            onMouseMove: handleBarMouseMove,
+                            onClick: (e: React.MouseEvent) => {
+                              if (!cartesianProps.onPointClick) return;
+                              if (mouseDownPos.current) {
+                                const dx = e.clientX - mouseDownPos.current.x;
+                                const dy = e.clientY - mouseDownPos.current.y;
+                                if (dx * dx + dy * dy > 25) return;
+                              }
+                              e.stopPropagation();
+                              cartesianProps.onPointClick(
+                                originalPoint(point),
+                                series
+                              );
+                            },
+                            cursor: cartesianProps.onPointClick
+                              ? "pointer"
+                              : undefined,
+                          };
+
+                          return useRadius ? (
+                            <path
+                              key={pointIdx}
+                              d={roundedBarPath(
+                                x,
+                                y,
+                                bw,
+                                bh,
+                                barRadius,
+                                roundPos as "top" | "bottom" | "left" | "right"
+                              )}
+                              {...sharedProps}
+                            />
+                          ) : (
                             <rect
                               key={pointIdx}
                               x={x}
                               y={y}
                               width={bw}
                               height={bh}
-                              rx={
-                                useRadius
-                                  ? Math.min(barRadius, bw / 2, bh / 2)
-                                  : 0
-                              }
-                              ry={
-                                useRadius
-                                  ? Math.min(barRadius, bw / 2, bh / 2)
-                                  : 0
-                              }
-                              fill={point.color ? point.color : pointColor}
-                              fillOpacity={fillOpacity}
-                              stroke={
-                                isFocused
-                                  ? "var(--kreati-chart-text)"
-                                  : undefined
-                              }
-                              strokeWidth={isFocused ? 3 : undefined}
-                              opacity={isDimmed ? 0.3 : isFocused ? 1 : 1}
-                              className={point.className}
-                              style={
-                                {
-                                  transformOrigin: isHorizontal
-                                    ? `${valueScale(0)}px ${y + bh / 2}px`
-                                    : `${x + bw / 2}px ${valueScale(0)}px`,
-                                  "--k-bar-i":
-                                    seriesIdx * visibleSeries[0]?.data.length +
-                                    pointIdx,
-                                  ...point.style,
-                                } as React.CSSProperties
-                              }
-                              role="img"
-                              aria-label={`${series.name}: ${cartesianProps.xAxis?.categories?.[getCat(point)] ?? getCat(point)} = ${getVal(point)}`}
-                              onMouseEnter={e =>
-                                handleBarMouseEnter(
-                                  e,
-                                  series,
-                                  seriesIdx,
-                                  point,
-                                  pointIdx
-                                )
-                              }
-                              onMouseLeave={handleBarMouseLeave}
-                              onMouseMove={handleBarMouseMove}
-                              onClick={e => {
-                                if (!cartesianProps.onPointClick) return;
-                                if (mouseDownPos.current) {
-                                  const dx = e.clientX - mouseDownPos.current.x;
-                                  const dy = e.clientY - mouseDownPos.current.y;
-                                  if (dx * dx + dy * dy > 25) return;
-                                }
-                                e.stopPropagation();
-                                cartesianProps.onPointClick(
-                                  originalPoint(point),
-                                  series
-                                );
-                              }}
-                              cursor={
-                                cartesianProps.onPointClick
-                                  ? "pointer"
-                                  : undefined
-                              }
+                              {...sharedProps}
                             />
                           );
                         })}

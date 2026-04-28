@@ -10,7 +10,9 @@ import { dashStyleToArray, splitByZones } from "../core/utils";
 import { computeTrendline } from "../core/trendline";
 import { ChartPattern, patternFill } from "../core/patterns";
 import { renderMarker, MARKER_SYMBOLS } from "../core/markers";
+import { roundedBarPath } from "../core/barPath";
 import { niceDomain } from "../core/scales";
+import { useKreatiLocale } from "../../../locale/KreatiProvider";
 import type {
   ChartDataPoint,
   ChartSeries,
@@ -54,6 +56,8 @@ export interface MixedChartProps extends Omit<CartesianChartProps, "children"> {
   tooltipMode?: "single" | "shared" | "custom";
   tooltipRender?: (entries: TooltipEntry[]) => React.ReactNode;
   tooltipFollowCursor?: boolean;
+  /** Show a toggle button to switch between single and shared tooltip modes. Default: false */
+  tooltipToggle?: boolean;
 }
 
 /**
@@ -80,9 +84,10 @@ export const MixedChart = forwardRef<HTMLDivElement, MixedChartProps>(
   (
     {
       layers,
-      tooltipMode = "single",
+      tooltipMode: tooltipModeProp = "single",
       tooltipRender,
       tooltipFollowCursor = false,
+      tooltipToggle = false,
       className = "",
       style,
       ...cartesianProps
@@ -96,7 +101,18 @@ export const MixedChart = forwardRef<HTMLDivElement, MixedChartProps>(
     const [tooltipVisible, setTooltipVisible] = useState(false);
     const [tooltipXLabel, setTooltipXLabel] = useState<string | undefined>();
     const [tooltipAnchored, setTooltipAnchored] = useState(false);
+    const [internalMode, setInternalMode] = useState<"single" | "shared">(
+      tooltipModeProp === "custom" ? "single" : tooltipModeProp
+    );
+    const tooltipMode = tooltipToggle ? internalMode : tooltipModeProp;
     const mouseDownPos = useRef<{ x: number; y: number } | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const prevFocusRef = useRef<{ si: number | null; pi: number | null }>({
+      si: null,
+      pi: null,
+    });
+    const locale = useKreatiLocale();
+    const t = locale.chart;
 
     // Force category type when categories are provided (same as BarChart)
     const xAxisConfig = cartesianProps.xAxis?.categories
@@ -104,7 +120,39 @@ export const MixedChart = forwardRef<HTMLDivElement, MixedChartProps>(
       : cartesianProps.xAxis;
 
     return (
-      <div ref={ref} className={className} style={style}>
+      <div
+        ref={node => {
+          (
+            containerRef as React.MutableRefObject<HTMLDivElement | null>
+          ).current = node;
+          if (typeof ref === "function") ref(node);
+          else if (ref)
+            (ref as React.MutableRefObject<HTMLDivElement | null>).current =
+              node;
+        }}
+        className={className}
+        style={style}
+      >
+        {tooltipToggle && (
+          <div className="k-chart-tooltip-toggle">
+            <button
+              type="button"
+              className={`k-chart-tooltip-toggle__btn ${tooltipMode === "single" ? "k-chart-tooltip-toggle__btn--active" : ""}`}
+              onClick={() => setInternalMode("single")}
+              aria-pressed={tooltipMode === "single"}
+            >
+              {t.tooltipSingle}
+            </button>
+            <button
+              type="button"
+              className={`k-chart-tooltip-toggle__btn ${tooltipMode === "shared" ? "k-chart-tooltip-toggle__btn--active" : ""}`}
+              onClick={() => setInternalMode("shared")}
+              aria-pressed={tooltipMode === "shared"}
+            >
+              {t.tooltipShared}
+            </button>
+          </div>
+        )}
         <CartesianChart {...cartesianProps} xAxis={xAxisConfig}>
           {ctx => {
             const {
@@ -122,6 +170,55 @@ export const MixedChart = forwardRef<HTMLDivElement, MixedChartProps>(
 
             const getYScale = (s: { yAxisId?: string }): ScaleFunction =>
               yScales[s.yAxisId ?? "default"] ?? yScale;
+
+            // Keyboard tooltip sync
+            const { focusedSeriesIndex: fsi, focusedPointIndex: fpi } = ctx;
+            if (
+              fsi != null &&
+              fpi != null &&
+              (fsi !== prevFocusRef.current.si ||
+                fpi !== prevFocusRef.current.pi)
+            ) {
+              prevFocusRef.current = { si: fsi, pi: fpi };
+              const s = visibleSeries[fsi];
+              if (s) {
+                const p = s.data[fpi];
+                if (p) {
+                  queueMicrotask(() => {
+                    setTooltipEntries([
+                      { series: s, point: p, color: getColor(s, fsi) },
+                    ]);
+                    setHoveredSeries(s.id);
+                    setTooltipAnchored(true);
+                    setTooltipXLabel(cats?.[p.x] ?? String(p.x));
+                    setTooltipVisible(true);
+                    const svg = containerRef.current?.querySelector(
+                      "svg.k-chart"
+                    ) as SVGSVGElement | null;
+                    if (svg) {
+                      const sYS = getYScale(s);
+                      const svgRect = svg.getBoundingClientRect();
+                      setTooltipPos({
+                        x: svgRect.left + ml + xScale(p.x),
+                        y: svgRect.top + mt + sYS(p.y),
+                      });
+                    }
+                  });
+                }
+              }
+            } else if (fsi == null && prevFocusRef.current.si != null) {
+              prevFocusRef.current = { si: null, pi: null };
+              queueMicrotask(() => {
+                setTooltipVisible(false);
+                setHoveredSeries(null);
+              });
+            }
+
+            // Layer priority map: series in later layers get higher priority for tooltip/click
+            const layerPriority: Record<string, number> = {};
+            layers.forEach((l, li) => {
+              for (const sid of l.seriesIds) layerPriority[sid] = li;
+            });
 
             const handleMouseMove = (e: React.MouseEvent) => {
               const svg = (e.currentTarget as SVGGElement).ownerSVGElement;
@@ -161,13 +258,19 @@ export const MixedChart = forwardRef<HTMLDivElement, MixedChartProps>(
                 let minDist = Math.abs(
                   getYScale(closest.series)(closest.point.y) - plotY
                 );
+                let closestPriority = layerPriority[closest.series.id] ?? 0;
                 for (let j = 1; j < entries.length; j++) {
                   const dist = Math.abs(
                     getYScale(entries[j].series)(entries[j].point.y) - plotY
                   );
-                  if (dist < minDist) {
+                  const priority = layerPriority[entries[j].series.id] ?? 0;
+                  if (
+                    dist < minDist ||
+                    (dist === minDist && priority > closestPriority)
+                  ) {
                     minDist = dist;
                     closest = entries[j];
+                    closestPriority = priority;
                   }
                 }
                 finalEntries = [closest];
@@ -237,7 +340,13 @@ export const MixedChart = forwardRef<HTMLDivElement, MixedChartProps>(
                     const ddx = xScale(p.x) - plotX;
                     const ddy = getYScale(s)(p.y) - plotY;
                     const dist = ddx * ddx + ddy * ddy;
-                    if (!closest || dist < closest.dist)
+                    if (
+                      !closest ||
+                      dist < closest.dist ||
+                      (dist === closest.dist &&
+                        (layerPriority[s.id] ?? 0) >
+                          (layerPriority[closest.series.id] ?? 0))
+                    )
                       closest = { series: s, point: p, dist };
                   }
                   if (closest)
@@ -478,35 +587,80 @@ const MixedBarLayer: React.FC<BarLayerProps> = ({
               const useR =
                 barRadius > 0 &&
                 (groupMode === "grouped" || si === series.length - 1);
+              const roundPos = p.y >= 0 ? "top" : "bottom";
 
-              return (
+              const barProps = {
+                fill: p.color ?? fillValue,
+                opacity: isDimmed ? 0.3 : 1,
+                stroke: isFocused ? "var(--kreati-chart-text)" : undefined,
+                strokeWidth: isFocused ? 3 : undefined,
+                style: {
+                  transformOrigin: `${barX + barW / 2}px ${yScale(0)}px`,
+                  "--k-bar-i": si * s.data.length + pi,
+                } as React.CSSProperties,
+                role: "img" as const,
+                "aria-label": `${s.name}: ${categories?.[p.x] ?? p.x} = ${p.y}`,
+              };
+
+              return useR ? (
+                <path
+                  key={pi}
+                  d={roundedBarPath(
+                    barX,
+                    barY,
+                    barW,
+                    barH,
+                    barRadius,
+                    roundPos
+                  )}
+                  {...barProps}
+                />
+              ) : (
                 <rect
                   key={pi}
                   x={barX}
                   y={barY}
                   width={barW}
                   height={barH}
-                  rx={useR ? Math.min(barRadius, barW / 2, barH / 2) : 0}
-                  ry={useR ? Math.min(barRadius, barW / 2, barH / 2) : 0}
-                  fill={p.color ?? fillValue}
-                  opacity={isDimmed ? 0.3 : 1}
-                  stroke={isFocused ? "var(--kreati-chart-text)" : undefined}
-                  strokeWidth={isFocused ? 3 : undefined}
-                  style={
-                    {
-                      transformOrigin: `${barX + barW / 2}px ${yScale(0)}px`,
-                      "--k-bar-i": si * s.data.length + pi,
-                    } as React.CSSProperties
-                  }
-                  role="img"
-                  aria-label={`${s.name}: ${categories?.[p.x] ?? p.x} = ${p.y}`}
+                  {...barProps}
                 />
               );
             })}
           </g>
         );
       })}
-      {/* Reset stacked accumulators were consumed during render */}
+      {/* Data labels */}
+      {layer.showDataLabels &&
+        series.map((s, si) => {
+          const color = getColor(s, si);
+          const fmt = s.dataLabelFormat ?? ((p: ChartDataPoint) => String(p.y));
+          return (
+            <g key={`dl-${s.id}`}>
+              {s.data.map((p, pi) => {
+                const cx = xScale(p.x);
+                const y0 = yScale(0);
+                const y1 = yScale(p.y);
+                const above = p.y >= 0;
+                const labelY = above
+                  ? Math.min(y0, y1) - 6
+                  : Math.max(y0, y1) + 14;
+                if (cx < 0 || cx > plotWidth) return null;
+                return (
+                  <text
+                    key={pi}
+                    x={cx}
+                    y={labelY}
+                    className="k-chart-data-label"
+                    textAnchor="middle"
+                    fill={color}
+                  >
+                    {fmt(p)}
+                  </text>
+                );
+              })}
+            </g>
+          );
+        })}
     </g>
   );
 };
@@ -542,6 +696,7 @@ const MixedLineLayer: React.FC<LineLayerProps> = ({
   const showPts = layer.showPoints !== false;
   const showArea = layer.showArea ?? false;
   const areaOp = layer.areaOpacity ?? 0.15;
+  const showDL = layer.showDataLabels ?? false;
 
   const getYS = (s: { yAxisId?: string }) =>
     yScales[s.yAxisId ?? "default"] ?? yScale;
@@ -559,6 +714,76 @@ const MixedLineLayer: React.FC<LineLayerProps> = ({
           })}
         </defs>
       )}
+
+      {/* Error bars */}
+      {series.map((s, si) => {
+        if (
+          !s.errorMargin &&
+          !s.data.some(p => p.error != null || p.errorHigh != null)
+        )
+          return null;
+        const color = getColor(s, si);
+        const sYS = getYS(s);
+        const capW = 4;
+        return (
+          <g key={`eb-${s.id}`} className="k-chart-error-bars">
+            {s.data.map((p, pi) => {
+              const hi =
+                p.errorHigh ??
+                (p.error != null
+                  ? p.y + p.error
+                  : s.errorMargin != null
+                    ? p.y + s.errorMargin
+                    : null);
+              const lo =
+                p.errorLow ??
+                (p.error != null
+                  ? p.y - p.error
+                  : s.errorMargin != null
+                    ? p.y - s.errorMargin
+                    : null);
+              if (hi == null || lo == null) return null;
+              const cx = xScale(p.x);
+              const yHi = sYS(hi);
+              const yLo = sYS(lo);
+              if (cx < 0 || cx > plotWidth) return null;
+              return (
+                <g key={pi}>
+                  <line
+                    x1={cx}
+                    y1={yHi}
+                    x2={cx}
+                    y2={yLo}
+                    stroke={color}
+                    strokeWidth={1.5}
+                    opacity={0.6}
+                  />
+                  <line
+                    x1={cx - capW}
+                    y1={yHi}
+                    x2={cx + capW}
+                    y2={yHi}
+                    stroke={color}
+                    strokeWidth={1.5}
+                    opacity={0.6}
+                  />
+                  <line
+                    x1={cx - capW}
+                    y1={yLo}
+                    x2={cx + capW}
+                    y2={yLo}
+                    stroke={color}
+                    strokeWidth={1.5}
+                    opacity={0.6}
+                  />
+                </g>
+              );
+            })}
+          </g>
+        );
+      })}
+
+      {/* Series paths */}
       {series.map((s, si) => {
         const color = getColor(s, si);
         const sYS = getYS(s);
@@ -581,18 +806,44 @@ const MixedLineLayer: React.FC<LineLayerProps> = ({
                 opacity={s.fill?.pattern ? (s.fill?.opacity ?? 0.6) : areaOp}
               />
             )}
-            <path
-              d={path}
-              fill="none"
-              stroke={color}
-              strokeWidth={isHovered ? sw + 1 : sw}
-              strokeDasharray={dashStyleToArray(s.dashStyle ?? "solid")}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+            {/* Color zones or single path */}
+            {s.zones && s.zones.length > 0 ? (
+              splitByZones(s.data, s.zones, color, s.dashStyle).map(
+                (seg, sgi) => (
+                  <path
+                    key={sgi}
+                    d={buildPath(
+                      seg.points as ChartDataPoint[],
+                      xScale,
+                      sYS,
+                      crv
+                    )}
+                    fill="none"
+                    stroke={seg.color}
+                    strokeWidth={isHovered ? sw + 1 : sw}
+                    strokeDasharray={dashStyleToArray(
+                      seg.dashStyle ?? s.dashStyle ?? "solid"
+                    )}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                )
+              )
+            ) : (
+              <path
+                d={path}
+                fill="none"
+                stroke={color}
+                strokeWidth={isHovered ? sw + 1 : sw}
+                strokeDasharray={dashStyleToArray(s.dashStyle ?? "solid")}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            )}
           </g>
         );
       })}
+
       {/* Trendlines */}
       {series.map((s, si) => {
         if (!s.trendline) return null;
@@ -613,6 +864,39 @@ const MixedLineLayer: React.FC<LineLayerProps> = ({
           />
         );
       })}
+
+      {/* Data labels */}
+      {showDL &&
+        series.map((s, si) => {
+          const color = getColor(s, si);
+          const fmt = s.dataLabelFormat ?? ((p: ChartDataPoint) => String(p.y));
+          const sYS = getYS(s);
+          return (
+            <g key={`dl-${s.id}`}>
+              {s.data.map((p, pi) => {
+                const cx = xScale(p.x);
+                const cy = sYS(p.y);
+                if (cx < 0 || cx > plotWidth || cy < 0 || cy > plotHeight)
+                  return null;
+                const anchor =
+                  cx < 30 ? "start" : cx > plotWidth - 30 ? "end" : "middle";
+                return (
+                  <text
+                    key={pi}
+                    x={cx}
+                    y={cy > 18 ? cy - 10 : cy + 16}
+                    className="k-chart-data-label"
+                    textAnchor={anchor}
+                    fill={color}
+                  >
+                    {fmt(p)}
+                  </text>
+                );
+              })}
+            </g>
+          );
+        })}
+
       {/* Markers at active X */}
       {showPts &&
         activeX != null &&
@@ -785,6 +1069,63 @@ const MixedAreaLayer: React.FC<LineLayerProps & { layer: MixedChartLayer }> = ({
             />
           );
         })}
+
+      {/* Trendlines */}
+      {series.map((s, si) => {
+        if (!s.trendline) return null;
+        const tl = s.trendline;
+        const td = computeTrendline(s.data, tl);
+        if (td.length < 2) return null;
+        const color = tl.color ?? getColor(s, si);
+        return (
+          <path
+            key={`tl-${s.id}`}
+            d={buildPath(td, xScale, getYS(s), "linear")}
+            fill="none"
+            stroke={color}
+            strokeWidth={tl.lineWidth ?? 2}
+            strokeDasharray={dashStyleToArray(tl.dashStyle ?? "dash")}
+            strokeLinecap="round"
+            opacity={0.7}
+          />
+        );
+      })}
+
+      {/* Data labels */}
+      {layer.showDataLabels &&
+        series.map((s, si) => {
+          const color = getColor(s, si);
+          const fmt = s.dataLabelFormat ?? ((p: ChartDataPoint) => String(p.y));
+          const sYS = getYS(s);
+          return (
+            <g key={`dl-${s.id}`}>
+              {s.data.map((p, pi) => {
+                const cx = xScale(p.x);
+                let cy = sYS(p.y);
+                if (isStacked && stackedSeries) {
+                  const tp = stackedSeries[si]?.top.find(t => t.x === p.x);
+                  if (tp) cy = sYS(tp.y);
+                }
+                if (cx < 0 || cx > plotWidth || cy < 0 || cy > plotHeight)
+                  return null;
+                const anchor =
+                  cx < 30 ? "start" : cx > plotWidth - 30 ? "end" : "middle";
+                return (
+                  <text
+                    key={pi}
+                    x={cx}
+                    y={cy > 18 ? cy - 10 : cy + 16}
+                    className="k-chart-data-label"
+                    textAnchor={anchor}
+                    fill={color}
+                  >
+                    {fmt(p)}
+                  </text>
+                );
+              })}
+            </g>
+          );
+        })}
     </g>
   );
 };
@@ -916,6 +1257,60 @@ const MixedScatterLayer: React.FC<ScatterLayerProps> = ({
           </g>
         );
       })}
+
+      {/* Trendlines */}
+      {series.map((s, si) => {
+        if (!s.trendline) return null;
+        const tl = s.trendline;
+        const td = computeTrendline(s.data, tl);
+        if (td.length < 2) return null;
+        const color = tl.color ?? getColor(s, si);
+        return (
+          <path
+            key={`tl-${s.id}`}
+            d={buildPath(td, xScale, getYS(s), "linear")}
+            fill="none"
+            stroke={color}
+            strokeWidth={tl.lineWidth ?? 2}
+            strokeDasharray={dashStyleToArray(tl.dashStyle ?? "dash")}
+            strokeLinecap="round"
+            opacity={0.7}
+          />
+        );
+      })}
+
+      {/* Data labels */}
+      {layer.showDataLabels &&
+        series.map((s, si) => {
+          const color = getColor(s, si);
+          const fmt = s.dataLabelFormat ?? ((p: ChartDataPoint) => String(p.y));
+          const sYS = getYS(s);
+          return (
+            <g key={`dl-${s.id}`}>
+              {s.data.map((p, pi) => {
+                const cx = xScale(p.x);
+                const cy = sYS(p.y);
+                if (cx < 0 || cx > plotWidth || cy < 0 || cy > plotHeight)
+                  return null;
+                const r = getRadius(p, s);
+                const anchor =
+                  cx < 30 ? "start" : cx > plotWidth - 30 ? "end" : "middle";
+                return (
+                  <text
+                    key={pi}
+                    x={cx}
+                    y={cy > r + 14 ? cy - r - 6 : cy + r + 14}
+                    className="k-chart-data-label"
+                    textAnchor={anchor}
+                    fill={color}
+                  >
+                    {fmt(p)}
+                  </text>
+                );
+              })}
+            </g>
+          );
+        })}
     </g>
   );
 };
