@@ -1,5 +1,12 @@
 # @kreatiware/react
 
+## 0.22.0
+
+### Minor Changes
+
+- ba44441: feat(charts): add specialized charts, fix esports
+- da83ad7: fix(react): fix security issues
+
 ## 0.21.0
 
 ### Minor Changes
