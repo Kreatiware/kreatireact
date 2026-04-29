@@ -1,5 +1,11 @@
 # @kreatiware/react
 
+## 0.21.0
+
+### Minor Changes
+
+- f5c762a: feat(charts): add radial charts
+
 ## 0.20.0
 
 ### Minor Changes
