@@ -103,7 +103,7 @@ export interface RadarChartProps {
     value: number
   ) => void;
   /** Export formats. Default: [] */
-  exportFormats?: ("png" | "svg" | "csv")[];
+  exportFormats?: ("png" | "svg" | "csv" | "json")[];
   /** Include title in exports. Default: true */
   exportTitle?: boolean;
   /** CSV separator. Default: ";" */
@@ -529,6 +529,23 @@ export const RadarChart = forwardRef<HTMLDivElement, RadarChartProps>(
           document.body.removeChild(a);
           URL.revokeObjectURL(url);
         }
+        if (key === "export-json") {
+          const rows = visibleSeries.map(s => ({
+            name: s.name,
+            values: Object.fromEntries(axes.map((a, i) => [a, s.values[i]])),
+          }));
+          const blob = new Blob([JSON.stringify(rows, null, 2)], {
+            type: "application/json",
+          });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "chart.json";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
       },
       [visibleSeries, axes, title, subtitle, exportTitle, csvSeparator]
     );
@@ -542,6 +559,11 @@ export const RadarChart = forwardRef<HTMLDivElement, RadarChartProps>(
         items.push({ key: "export-svg", label: t.exportSvg });
       if (exportFormats.includes("csv"))
         items.push({ key: "export-csv", label: t.exportCsv });
+      if (exportFormats.includes("json"))
+        items.push({
+          key: "export-json",
+          label: t.exportJsonTable || "Export JSON",
+        });
       if (contextMenuItems?.length) {
         if (items.length > 0)
           items.push({ key: "divider-custom", separator: true });

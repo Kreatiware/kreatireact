@@ -82,7 +82,7 @@ export interface PolarAreaChartProps {
   /** Callback when a sector is clicked. */
   onSliceClick?: (item: PolarDataItem, index: number) => void;
   /** Export formats. Default: [] */
-  exportFormats?: ("png" | "svg" | "csv")[];
+  exportFormats?: ("png" | "svg" | "csv" | "json")[];
   /** Include title in exports. Default: true */
   exportTitle?: boolean;
   /** CSV separator. Default: ";" */
@@ -406,6 +406,24 @@ export const PolarAreaChart = forwardRef<HTMLDivElement, PolarAreaChartProps>(
           document.body.removeChild(a);
           URL.revokeObjectURL(url);
         }
+        if (key === "export-json") {
+          const rows = visibleData.map(d => ({
+            name: d.name,
+            value: d.value,
+            percentage: +(total > 0 ? ((d.value / total) * 100).toFixed(1) : 0),
+          }));
+          const blob = new Blob([JSON.stringify(rows, null, 2)], {
+            type: "application/json",
+          });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "chart.json";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
       },
       [visibleData, title, subtitle, exportTitle, csvSeparator, total]
     );
@@ -418,6 +436,11 @@ export const PolarAreaChart = forwardRef<HTMLDivElement, PolarAreaChartProps>(
         items.push({ key: "export-svg", label: t.exportSvg });
       if (exportFormats.includes("csv"))
         items.push({ key: "export-csv", label: t.exportCsv });
+      if (exportFormats.includes("json"))
+        items.push({
+          key: "export-json",
+          label: t.exportJsonTable || "Export JSON",
+        });
       if (contextMenuItems?.length) {
         if (items.length > 0)
           items.push({ key: "divider-custom", separator: true });

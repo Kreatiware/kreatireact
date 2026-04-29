@@ -89,7 +89,7 @@ export interface PieChartProps {
   /** Callback when a slice is clicked. */
   onSliceClick?: (item: PieDataItem, index: number) => void;
   /** Export formats available in context menu. Default: [] */
-  exportFormats?: ("png" | "svg" | "csv")[];
+  exportFormats?: ("png" | "svg" | "csv" | "json")[];
   /** Include title in exports. Default: true */
   exportTitle?: boolean;
   /** CSV separator. Default: ";" */
@@ -462,6 +462,25 @@ export const PieChart = forwardRef<HTMLDivElement, PieChartProps>(
           document.body.removeChild(a);
           URL.revokeObjectURL(url);
         }
+        if (key === "export-json") {
+          const total = visibleData.reduce((s, d) => s + d.value, 0);
+          const rows = visibleData.map(d => ({
+            name: d.name,
+            value: d.value,
+            percentage: +((d.value / total) * 100).toFixed(1),
+          }));
+          const blob = new Blob([JSON.stringify(rows, null, 2)], {
+            type: "application/json",
+          });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "chart.json";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
       },
       [visibleData, title, subtitle, exportTitle, csvSeparator]
     );
@@ -475,6 +494,11 @@ export const PieChart = forwardRef<HTMLDivElement, PieChartProps>(
         items.push({ key: "export-svg", label: t.exportSvg });
       if (exportFormats.includes("csv"))
         items.push({ key: "export-csv", label: t.exportCsv });
+      if (exportFormats.includes("json"))
+        items.push({
+          key: "export-json",
+          label: t.exportJsonTable || "Export JSON",
+        });
       if (contextMenuItems?.length) {
         if (items.length > 0)
           items.push({ key: "divider-custom", separator: true });

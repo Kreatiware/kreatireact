@@ -354,6 +354,10 @@ export {
   RadarChart,
   PolarAreaChart,
   GaugeChart,
+  HeatmapChart,
+  FunnelChart,
+  TreemapChart,
+  SankeyChart,
 } from "./components/Chart";
 
 export type {
@@ -394,6 +398,16 @@ export type {
   GaugeChartProps,
   GaugeZone,
   GaugeNeedleStyle,
+  HeatmapChartProps,
+  HeatmapCell,
+  HeatmapColorStop,
+  FunnelChartProps,
+  FunnelStage,
+  TreemapChartProps,
+  TreemapNode,
+  SankeyChartProps,
+  SankeyNode,
+  SankeyLink,
 } from "./components/Chart";
 
 import "./components/Chart/Chart.css";

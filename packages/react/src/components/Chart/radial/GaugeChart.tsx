@@ -85,7 +85,7 @@ export interface GaugeChartProps {
   /** Chart subtitle. */
   subtitle?: string;
   /** Export formats. Default: [] */
-  exportFormats?: ("png" | "svg" | "csv")[];
+  exportFormats?: ("png" | "svg" | "csv" | "json")[];
   /** Include title in exports. Default: true */
   exportTitle?: boolean;
   /** Show menu button. Default: "auto" */
@@ -404,8 +404,39 @@ export const GaugeChart = forwardRef<HTMLDivElement, GaugeChartProps>(
             exportTitle ? title : undefined,
             exportTitle ? subtitle : undefined
           );
+        if (key === "export-csv") {
+          const rows = [["Value", "Min", "Max", "Unit"].join(";")];
+          rows.push(
+            [String(value), String(min), String(max), unit || ""].join(";")
+          );
+          const blob = new Blob([rows.join("\n")], {
+            type: "text/csv;charset=utf-8",
+          });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "gauge.csv";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
+        if (key === "export-json") {
+          const obj = { value, min, max, unit: unit || "", label: label || "" };
+          const blob = new Blob([JSON.stringify(obj, null, 2)], {
+            type: "application/json",
+          });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "gauge.json";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
       },
-      [title, subtitle, exportTitle]
+      [title, subtitle, exportTitle, value, min, max, unit, label]
     );
 
     const menuItems: MenuItem[] = useMemo(() => {
@@ -414,6 +445,13 @@ export const GaugeChart = forwardRef<HTMLDivElement, GaugeChartProps>(
         items.push({ key: "export-png", label: t.exportPng });
       if (exportFormats.includes("svg"))
         items.push({ key: "export-svg", label: t.exportSvg });
+      if (exportFormats.includes("csv"))
+        items.push({ key: "export-csv", label: t.exportCsv });
+      if (exportFormats.includes("json"))
+        items.push({
+          key: "export-json",
+          label: t.exportJsonTable || "Export JSON",
+        });
       if (contextMenuItems?.length) {
         if (items.length > 0)
           items.push({ key: "divider-custom", separator: true });

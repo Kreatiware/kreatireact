@@ -1157,3 +1157,231 @@
     padding: 0 var(--kreati-space-3);
   }
 }
+
+/* ─── Heatmap ──────────────────────────────────────────────────────── */
+.k-heatmap-cell {
+  transition: opacity var(--kreati-transition-fast);
+}
+
+.k-heatmap-title {
+  font-size: var(--kreati-font-size-sm);
+  font-weight: var(--kreati-font-weight-semibold);
+  fill: var(--kreati-chart-text);
+}
+
+.k-heatmap-subtitle {
+  font-size: var(--kreati-font-size-xs);
+  fill: var(--kreati-chart-text);
+  opacity: 0.7;
+}
+
+.k-heatmap-label {
+  font-size: var(--kreati-font-size-xs);
+  fill: var(--kreati-chart-text);
+}
+
+.k-heatmap-legend-label {
+  font-size: var(--kreati-font-size-xxs);
+  fill: var(--kreati-chart-text);
+}
+
+.k-heatmap-value {
+  font-size: var(--kreati-font-size-xs);
+  pointer-events: none;
+}
+
+.k-heatmap-value--sm {
+  font-size: var(--kreati-font-size-xxs);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k-heatmap-cell {
+    transition: none;
+  }
+}
+
+/* ─── Funnel ───────────────────────────────────────────────────────── */
+.k-funnel-stage {
+  transition: opacity var(--kreati-transition-fast);
+}
+
+.k-funnel-stage path {
+  transition: opacity var(--kreati-transition-fast);
+}
+
+.k-funnel-title {
+  font-size: var(--kreati-font-size-sm);
+  font-weight: var(--kreati-font-weight-semibold);
+  fill: var(--kreati-chart-text);
+}
+
+.k-funnel-subtitle {
+  font-size: var(--kreati-font-size-xs);
+  fill: var(--kreati-chart-text);
+  opacity: 0.7;
+}
+
+.k-funnel-label {
+  font-size: var(--kreati-font-size-xs);
+  color: var(--kreati-white);
+  font-weight: var(--kreati-font-weight-medium);
+  line-height: 1.2;
+  word-break: break-word;
+  box-sizing: border-box;
+}
+
+.k-funnel-label--name {
+  font-size: var(--kreati-font-size-xs);
+  fill: var(--kreati-chart-text);
+  font-weight: var(--kreati-font-weight-medium);
+}
+
+.k-funnel-label--value {
+  font-size: var(--kreati-font-size-xxs);
+  fill: var(--kreati-chart-text);
+  opacity: 0.7;
+}
+
+@keyframes k-funnel-enter {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+.k-funnel-stage {
+  transform-origin: center;
+  animation: k-funnel-enter var(--kreati-transition-slow) ease both;
+  animation-delay: calc(var(--k-funnel-i, 0) * 80ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k-funnel-stage {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* ─── Treemap ──────────────────────────────────────────────────────── */
+.k-treemap-cell {
+  transition: opacity var(--kreati-transition-fast);
+}
+
+.k-treemap-title {
+  font-size: var(--kreati-font-size-sm);
+  font-weight: var(--kreati-font-weight-semibold);
+  fill: var(--kreati-chart-text);
+}
+
+.k-treemap-subtitle {
+  font-size: var(--kreati-font-size-xs);
+  fill: var(--kreati-chart-text);
+  opacity: 0.7;
+}
+
+.k-treemap-label {
+  display: flex;
+  flex-direction: column;
+  color: var(--kreati-gray-900);
+  line-height: 1.2;
+  word-break: break-word;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding: var(--kreati-space-2) var(--kreati-space-3);
+}
+
+.k-treemap-label--top-left {
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.k-treemap-label--center {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.k-treemap-label--light {
+  color: var(--kreati-white);
+}
+
+.k-treemap-label__name {
+  font-size: var(--kreati-font-size-xs);
+  font-weight: var(--kreati-font-weight-medium);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.k-treemap-label__value {
+  font-size: var(--kreati-font-size-xxs);
+  opacity: 0.8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes k-treemap-enter {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.k-treemap-cell {
+  transform-origin: center;
+  animation: k-treemap-enter var(--kreati-transition-slow) ease both;
+  animation-delay: calc(var(--k-treemap-i, 0) * 30ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k-treemap-cell {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* ─── Sankey ───────────────────────────────────────────────────────── */
+.k-sankey-link {
+  transition: stroke-opacity var(--kreati-transition-fast);
+}
+
+.k-sankey-node rect {
+  transition: opacity var(--kreati-transition-fast);
+}
+
+.k-sankey-title {
+  font-size: var(--kreati-font-size-sm);
+  font-weight: var(--kreati-font-weight-semibold);
+  fill: var(--kreati-chart-text);
+}
+
+.k-sankey-subtitle {
+  font-size: var(--kreati-font-size-xs);
+  fill: var(--kreati-chart-text);
+  opacity: 0.7;
+}
+
+.k-sankey-label {
+  font-size: var(--kreati-font-size-xs);
+  fill: var(--kreati-chart-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k-sankey-link,
+  .k-sankey-node rect {
+    transition: none;
+  }
+}

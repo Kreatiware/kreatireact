@@ -31,6 +31,9 @@ import type { ChartSeries, ChartAxisConfig } from "../core/types";
 import { useKreatiLocale } from "../../../locale/KreatiProvider";
 import "../Chart.css";
 
+const EXPORT_TITLE_FONT_SIZE = "11";
+const EXPORT_TITLE_FONT_WEIGHT = "600";
+
 /** Omitted props that ChartGroup controls. */
 type GroupOmitted =
   | "xAxis"
@@ -391,8 +394,8 @@ export const ChartGroup = forwardRef<ChartGroupRef, ChartGroupProps>(
               t.setAttribute("x", "8");
               t.setAttribute("y", String(yOff + 13));
               t.setAttribute("fill", textColor);
-              t.setAttribute("font-size", "11");
-              t.setAttribute("font-weight", "600");
+              t.setAttribute("font-size", EXPORT_TITLE_FONT_SIZE);
+              t.setAttribute("font-weight", EXPORT_TITLE_FONT_WEIGHT);
               t.setAttribute("font-family", "Inter, sans-serif");
               t.textContent = p.title;
               merged.appendChild(t);

@@ -151,3 +151,26 @@ export type {
   GaugeZone,
   GaugeNeedleStyle,
 } from "./radial/GaugeChart";
+
+export { HeatmapChart } from "./specialized/HeatmapChart";
+export type {
+  HeatmapChartProps,
+  HeatmapCell,
+  HeatmapColorStop,
+} from "./specialized/HeatmapChart";
+
+export { FunnelChart } from "./specialized/FunnelChart";
+export type { FunnelChartProps, FunnelStage } from "./specialized/FunnelChart";
+
+export { TreemapChart } from "./specialized/TreemapChart";
+export type {
+  TreemapChartProps,
+  TreemapNode,
+} from "./specialized/TreemapChart";
+
+export { SankeyChart } from "./specialized/SankeyChart";
+export type {
+  SankeyChartProps,
+  SankeyNode,
+  SankeyLink,
+} from "./specialized/SankeyChart";
