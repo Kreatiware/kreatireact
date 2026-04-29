@@ -185,5 +185,6 @@ export const en: KreatiLocale = {
     exportLabel: "Export",
     tooltipSingle: "Single",
     tooltipShared: "Shared",
+    othersLabel: "Others",
   },
 };

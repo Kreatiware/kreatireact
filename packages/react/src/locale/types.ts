@@ -204,5 +204,6 @@ export interface KreatiLocale {
     exportLabel: string;
     tooltipSingle: string;
     tooltipShared: string;
+    othersLabel: string;
   };
 }

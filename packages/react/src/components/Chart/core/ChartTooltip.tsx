@@ -64,6 +64,8 @@ export const ChartTooltip: React.FC<ChartTooltipProps> = ({
       left = x - rect.width - OFFSET;
       side = "right";
     }
+    // Clamp: don't go past left edge
+    if (left < 8) left = 8;
     // Flip vertical if overflows bottom
     if (top + rect.height > vh - 8) {
       top = vh - rect.height - 8;

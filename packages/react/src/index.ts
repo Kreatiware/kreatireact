@@ -336,6 +336,11 @@ export {
   AreaChart,
   MixedChart,
   ScatterChart,
+  PieChart,
+  DonutChart,
+  RadarChart,
+  PolarAreaChart,
+  GaugeChart,
 } from "./components/Chart";
 
 export type {
@@ -366,6 +371,16 @@ export type {
   MixedChartProps,
   MixedChartLayer,
   ScatterChartProps,
+  PieChartProps,
+  PieDataItem,
+  DonutChartProps,
+  RadarChartProps,
+  RadarSeries,
+  PolarAreaChartProps,
+  PolarDataItem,
+  GaugeChartProps,
+  GaugeZone,
+  GaugeNeedleStyle,
 } from "./components/Chart";
 
 import "./components/Chart/Chart.css";

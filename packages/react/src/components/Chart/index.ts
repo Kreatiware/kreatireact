@@ -116,3 +116,38 @@ export type {
 
 export { ChartPattern, getPatternId, patternFill } from "./core/patterns";
 export type { PatternType } from "./core/patterns";
+
+export { PieChart, DonutChart } from "./radial/PieChart";
+export type {
+  PieChartProps,
+  PieDataItem,
+  DonutChartProps,
+} from "./radial/PieChart";
+
+export { computeSlices, arcPath, labelPosition, degToRad } from "./core/arc";
+export type { ArcSlice } from "./core/arc";
+
+export { RadarChart } from "./radial/RadarChart";
+export type { RadarChartProps, RadarSeries } from "./radial/RadarChart";
+
+export {
+  axisAngles,
+  polarToCartesian,
+  computeRadarPoints,
+  radarPolygonPath,
+  gridPath,
+} from "./core/radar";
+export type { RadarPoint } from "./core/radar";
+
+export { PolarAreaChart } from "./radial/PolarAreaChart";
+export type {
+  PolarAreaChartProps,
+  PolarDataItem,
+} from "./radial/PolarAreaChart";
+
+export { GaugeChart } from "./radial/GaugeChart";
+export type {
+  GaugeChartProps,
+  GaugeZone,
+  GaugeNeedleStyle,
+} from "./radial/GaugeChart";
