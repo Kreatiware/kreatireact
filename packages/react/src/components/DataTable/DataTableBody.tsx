@@ -461,9 +461,11 @@ export const DataTableBody = <T extends Record<string, unknown>>({
                 ? col.onDelete
                 : preset === "copy"
                   ? (r: T) => {
-                      navigator.clipboard?.writeText(
-                        JSON.stringify(r, null, 2)
-                      );
+                      navigator.clipboard
+                        ?.writeText(JSON.stringify(r, null, 2))
+                        .catch(() => {
+                          /* clipboard unavailable */
+                        });
                     }
                   : col.onView;
         items.push(

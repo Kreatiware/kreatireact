@@ -404,10 +404,15 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
     const [copied, setCopied] = useState(false);
 
     const handleCopy = useCallback(() => {
-      navigator.clipboard.writeText(code).then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      });
+      navigator.clipboard
+        .writeText(code)
+        .then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        })
+        .catch(() => {
+          /* clipboard unavailable */
+        });
     }, [code]);
 
     const tokens = tokenize(code, language);

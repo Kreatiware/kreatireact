@@ -3,6 +3,7 @@ import "./Breadcrumb.css";
 import { MenuItem } from "../types/navigation";
 import { renderMenuIcon } from "./resolveIcon";
 import { CHEVRON_RIGHT_PATH } from "./iconPaths";
+import { sanitizeUrl } from "./sanitizeUrl";
 
 /**
  * Props for the Breadcrumb component
@@ -118,8 +119,13 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
               <li key={item.key} className={`${base}__item`}>
                 {hasLink ? (
                   <a
-                    href={item.url}
+                    href={sanitizeUrl(item.url)}
                     target={item.target}
+                    rel={
+                      item.target === "_blank"
+                        ? "noopener noreferrer"
+                        : undefined
+                    }
                     className={linkClasses}
                     style={item.style}
                     onClick={e => handleClick(item, e)}

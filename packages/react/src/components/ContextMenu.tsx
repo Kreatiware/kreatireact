@@ -11,6 +11,7 @@ import { MenuItem } from "../types/navigation";
 import { renderMenuIcon } from "./resolveIcon";
 import { CHEVRON_RIGHT_PATH } from "./iconPaths";
 import { useLayerZIndex } from "./LayerContext";
+import { sanitizeUrl } from "./sanitizeUrl";
 
 /**
  * Props for the ContextMenu component
@@ -287,9 +288,12 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
         }
         if (item.command) item.command(item);
         if (item.url) {
-          if (item.target === "_blank")
-            window.open(item.url, "_blank", "noopener");
-          else window.location.href = item.url;
+          const safe = sanitizeUrl(item.url);
+          if (safe) {
+            if (item.target === "_blank")
+              window.open(safe, "_blank", "noopener");
+            else window.location.href = safe;
+          }
         }
         onItemSelect?.(item.key, item);
         close();

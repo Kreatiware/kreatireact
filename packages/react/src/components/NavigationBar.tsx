@@ -8,6 +8,7 @@ import React, {
 import "./NavigationBar.css";
 import { MenuItem, NavigationRouter } from "../types/navigation";
 import { CHEVRON_DOWN_PATH, HAMBURGER_RECTS } from "./iconPaths";
+import { sanitizeUrl } from "./sanitizeUrl";
 import { Drawer } from "./Drawer";
 import { SideMenu } from "./SideMenu";
 
@@ -157,8 +158,10 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
       }
 
       if (useRouter && router && item.url) {
+        const safe = sanitizeUrl(item.url);
+        if (!safe) return;
         event.preventDefault();
-        router.push(item.url);
+        router.push(safe);
         setOpenDropdown(null);
         return;
       }
@@ -233,8 +236,9 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
         item.url && !item.command && !useRouter && !hasDropdown ? (
           <a
             key={item.key}
-            href={item.url}
+            href={sanitizeUrl(item.url)}
             target={item.target}
+            rel={item.target === "_blank" ? "noopener noreferrer" : undefined}
             className={itemClasses}
             style={item.style}
             onClick={e => handleItemClick(item, e)}
@@ -293,8 +297,13 @@ export const NavigationBar = forwardRef<HTMLElement, NavigationBarProps>(
                   return (
                     <a
                       key={subItem.key}
-                      href={subItem.url || "#"}
+                      href={sanitizeUrl(subItem.url) || "#"}
                       target={subItem.target}
+                      rel={
+                        subItem.target === "_blank"
+                          ? "noopener noreferrer"
+                          : undefined
+                      }
                       role="menuitem"
                       className={`kreati-navbar__dropdown-item ${
                         subItem.disabled

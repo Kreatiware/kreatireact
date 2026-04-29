@@ -3,6 +3,7 @@ import "./SideMenu.css";
 import { MenuItem } from "../types/navigation";
 import { renderMenuIcon } from "./resolveIcon";
 import { CHEVRON_DOWN_PATH } from "./iconPaths";
+import { sanitizeUrl } from "./sanitizeUrl";
 
 /**
  * Props for the SideMenu component
@@ -158,10 +159,13 @@ export const SideMenu = forwardRef<HTMLElement, SideMenuProps>(
         }
         if (item.command) item.command(item);
         if (item.url) {
-          if (item.target === "_blank") {
-            window.open(item.url, "_blank", "noopener");
-          } else {
-            window.location.href = item.url;
+          const safe = sanitizeUrl(item.url);
+          if (safe) {
+            if (item.target === "_blank") {
+              window.open(safe, "_blank", "noopener");
+            } else {
+              window.location.href = safe;
+            }
           }
         }
         onItemSelect?.(item.key, item);

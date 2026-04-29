@@ -42,7 +42,13 @@ export const useLocalStorage = <T>(
   );
 
   const raw = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-  const value: T = JSON.parse(raw);
+
+  let value: T;
+  try {
+    value = JSON.parse(raw);
+  } catch {
+    value = initialRef.current;
+  }
 
   const setValue = useCallback(
     (next: T | ((prev: T) => T)) => {

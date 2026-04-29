@@ -421,10 +421,15 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
     }, [format, showAlpha]);
 
     const handleCopy = useCallback(() => {
-      navigator.clipboard.writeText(colorStr).then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 1500);
-      });
+      navigator.clipboard
+        .writeText(colorStr)
+        .then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 1500);
+        })
+        .catch(() => {
+          /* clipboard unavailable */
+        });
     }, [colorStr]);
 
     // Update text input when format or color changes (not during typing)

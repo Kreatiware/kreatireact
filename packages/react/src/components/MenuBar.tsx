@@ -16,6 +16,7 @@ import {
 import { ContextMenu } from "./ContextMenu";
 import { Drawer } from "./Drawer";
 import { SideMenu } from "./SideMenu";
+import { sanitizeUrl } from "./sanitizeUrl";
 
 /**
  * Props for the MenuBar component
@@ -171,9 +172,12 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
         if (!item.items || item.items.length === 0) {
           if (item.command) item.command(item);
           if (item.url) {
-            if (item.target === "_blank")
-              window.open(item.url, "_blank", "noopener");
-            else window.location.href = item.url;
+            const safe = sanitizeUrl(item.url);
+            if (safe) {
+              if (item.target === "_blank")
+                window.open(safe, "_blank", "noopener");
+              else window.location.href = safe;
+            }
           }
           onItemSelect?.(item.key, item);
           closeAll();

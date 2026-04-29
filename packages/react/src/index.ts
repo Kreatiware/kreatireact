@@ -104,6 +104,19 @@ export { CodeBlock } from "./components/CodeBlock";
 export type { CodeBlockProps, CodeLanguage } from "./components/CodeBlock";
 export { TextEditor } from "./components/TextEditor";
 export type { TextEditorProps } from "./components/TextEditor";
+export {
+  htmlToDocument,
+  documentToHtml,
+  sanitizePastedHtml,
+  documentCharCount,
+} from "./components/TextEditorModel";
+export type {
+  EditorDocument,
+  EditorBlockNode,
+  EditorTextNode,
+  EditorNode,
+  EditorMark,
+} from "./components/TextEditorModel";
 export { Select } from "./components/Select";
 export type {
   SelectProps,
@@ -384,3 +397,5 @@ export type {
 } from "./components/Chart";
 
 import "./components/Chart/Chart.css";
+
+export { sanitizeUrl } from "./components/sanitizeUrl";

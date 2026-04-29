@@ -29,6 +29,14 @@ import {
   BG_COLOR_PATH,
   FONT_FAMILY_PATH,
 } from "./iconPaths";
+import { sanitizeUrl } from "./sanitizeUrl";
+import {
+  htmlToDocument,
+  documentToHtml,
+  sanitizePastedHtml,
+  documentCharCount,
+  EditorDocument,
+} from "./TextEditorModel";
 
 export interface TextEditorProps {
   /** HTML content (controlled) */
@@ -186,6 +194,21 @@ const COLOR_PALETTE = [
   "#0f78a5",
 ];
 
+/** Remove a CSS property from all descendant spans, cleaning up empty wrappers */
+const clearNestedStyle = (root: HTMLElement, styleProp: string) => {
+  root.querySelectorAll("span").forEach(span => {
+    if (span.style.getPropertyValue(styleProp)) {
+      span.style.removeProperty(styleProp);
+      // If span has no remaining styles, unwrap it
+      if (!span.getAttribute("style")?.trim()) {
+        const parent = span.parentNode;
+        while (span.firstChild) parent?.insertBefore(span.firstChild, span);
+        span.remove();
+      }
+    }
+  });
+};
+
 /** Wrap selection in a styled span, or insert empty styled span if collapsed */
 const wrapStyle = (styleProp: string, value: string, editorEl: HTMLElement) => {
   const sel = window.getSelection();
@@ -216,6 +239,8 @@ const wrapStyle = (styleProp: string, value: string, editorEl: HTMLElement) => {
     span.appendChild(frag);
     range.insertNode(span);
   }
+  // Remove conflicting inner styles so the new one takes effect
+  clearNestedStyle(span, styleProp);
   sel.removeAllRanges();
   const r = document.createRange();
   r.selectNodeContents(span);
@@ -469,14 +494,14 @@ const toggleList = (listTag: string, editorEl: HTMLElement) => {
 const MAX_HISTORY = 100;
 
 interface HistoryState {
-  html: string;
+  doc: EditorDocument;
 }
 
 /**
- * TextEditor component — a WYSIWYG rich text editor built from scratch.
- * Uses contentEditable with the Selection/Range API.
- * Supports bold, italic, underline, strikethrough, headings, lists,
- * links, inline code, blockquote, and undo/redo.
+ * TextEditor component — a WYSIWYG rich text editor built with a JSON
+ * document model for security. Uses contentEditable for input capture,
+ * but the source of truth is a typed node tree. HTML is derived from
+ * the model, never stored as raw innerHTML.
  *
  * @example
  * ```tsx
@@ -539,23 +564,39 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
     const [fontFamilyOpen, setFontFamilyOpen] = useState(false);
     const [charCount, setCharCount] = useState(0);
 
+    // Document model — source of truth
+    const docRef = useRef<EditorDocument>([
+      { kind: "block", type: "paragraph", children: [] },
+    ]);
+
     // Undo/redo history
     const historyRef = useRef<HistoryState[]>([]);
     const historyIndexRef = useRef(-1);
     const isUndoRedoRef = useRef(false);
 
+    /** Sync DOM → document model, push history, emit onChange */
+    const syncFromDom = useCallback(() => {
+      if (!editorRef.current) return;
+      const html = editorRef.current.innerHTML;
+      docRef.current = htmlToDocument(html);
+      return docRef.current;
+    }, []);
+
     const pushHistory = useCallback(() => {
       if (!editorRef.current || isUndoRedoRef.current) return;
-      const html = editorRef.current.innerHTML;
+      const doc = syncFromDom();
+      if (!doc) return;
       const idx = historyIndexRef.current;
+      const docJson = JSON.stringify(doc);
       // Don't push if same as current
-      if (idx >= 0 && historyRef.current[idx]?.html === html) return;
+      if (idx >= 0 && JSON.stringify(historyRef.current[idx]?.doc) === docJson)
+        return;
       // Truncate forward history
       historyRef.current = historyRef.current.slice(0, idx + 1);
-      historyRef.current.push({ html });
+      historyRef.current.push({ doc: JSON.parse(docJson) });
       if (historyRef.current.length > MAX_HISTORY) historyRef.current.shift();
       historyIndexRef.current = historyRef.current.length - 1;
-    }, []);
+    }, [syncFromDom]);
 
     const handleUndo = useCallback(() => {
       if (historyIndexRef.current <= 0) return;
@@ -563,9 +604,11 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
       historyIndexRef.current--;
       const state = historyRef.current[historyIndexRef.current];
       if (editorRef.current && state) {
-        editorRef.current.innerHTML = state.html;
-        setCharCount(editorRef.current.textContent?.length ?? 0);
-        onChange?.(state.html);
+        docRef.current = state.doc;
+        const html = documentToHtml(state.doc);
+        editorRef.current.innerHTML = html;
+        setCharCount(documentCharCount(state.doc));
+        onChange?.(html);
       }
       isUndoRedoRef.current = false;
     }, [onChange]);
@@ -576,29 +619,34 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
       historyIndexRef.current++;
       const state = historyRef.current[historyIndexRef.current];
       if (editorRef.current && state) {
-        editorRef.current.innerHTML = state.html;
-        setCharCount(editorRef.current.textContent?.length ?? 0);
-        onChange?.(state.html);
+        docRef.current = state.doc;
+        const html = documentToHtml(state.doc);
+        editorRef.current.innerHTML = html;
+        setCharCount(documentCharCount(state.doc));
+        onChange?.(html);
       }
       isUndoRedoRef.current = false;
     }, [onChange]);
 
     useEffect(() => {
-      if (
-        isControlled &&
-        editorRef.current &&
-        editorRef.current.innerHTML !== value
-      ) {
-        editorRef.current.innerHTML = value;
+      if (isControlled && editorRef.current && value !== undefined) {
+        // Compare against model output, not raw innerHTML
+        const currentModelHtml = documentToHtml(docRef.current);
+        if (currentModelHtml !== value) {
+          docRef.current = htmlToDocument(value);
+          const safeHtml = documentToHtml(docRef.current);
+          editorRef.current.innerHTML = safeHtml;
+        }
       }
     }, [value, isControlled]);
 
     useEffect(() => {
       if (editorRef.current) {
-        if (!isControlled && defaultValue) {
-          editorRef.current.innerHTML = defaultValue;
-        }
-        setCharCount(editorRef.current.textContent?.length ?? 0);
+        const initial = isControlled ? value || "" : defaultValue || "";
+        docRef.current = htmlToDocument(initial);
+        const safeHtml = documentToHtml(docRef.current);
+        editorRef.current.innerHTML = safeHtml;
+        setCharCount(documentCharCount(docRef.current));
         // Initialize history
         pushHistory();
       }
@@ -620,9 +668,11 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
           const text = el.textContent?.trim();
           if (!text) el.remove();
         });
-      setCharCount(editorRef.current.textContent?.length ?? 0);
+      // Sync DOM → document model → safe HTML
+      docRef.current = htmlToDocument(editorRef.current.innerHTML);
+      setCharCount(documentCharCount(docRef.current));
       pushHistory();
-      onChange?.(editorRef.current.innerHTML);
+      onChange?.(documentToHtml(docRef.current));
     }, [onChange, pushHistory]);
 
     const updateActiveFormats = useCallback(() => {
@@ -737,7 +787,9 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
       const range = sel.getRangeAt(0);
 
       const a = document.createElement("a");
-      a.href = linkUrl;
+      const safeUrl = sanitizeUrl(linkUrl);
+      if (!safeUrl) return;
+      a.href = safeUrl;
       a.target = "_blank";
       a.rel = "noopener noreferrer";
 
@@ -793,6 +845,68 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
       const mod = e.ctrlKey || e.metaKey;
+
+      // Escape: release focus from editor
+      if (e.key === "Escape") {
+        editorRef.current?.blur();
+        return;
+      }
+
+      // Tab handling
+      if (e.key === "Tab" && !mod) {
+        e.preventDefault();
+        const sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0 || !editorRef.current) return;
+
+        let node = sel.anchorNode as HTMLElement;
+        if (node.nodeType === Node.TEXT_NODE) node = node.parentElement!;
+        const li = node.closest("li") as HTMLElement | null;
+
+        if (li && editorRef.current.contains(li)) {
+          const list = li.parentElement;
+          if (e.shiftKey) {
+            // Outdent: move li out of nested list
+            const parentLi = list?.parentElement?.closest("li");
+            if (parentLi && list) {
+              parentLi.after(li);
+              if (list.children.length === 0) list.remove();
+              selectNodeContents(li);
+            }
+          } else {
+            // Indent: wrap li in a nested list inside previous sibling
+            const prev = li.previousElementSibling;
+            if (prev && list) {
+              const tag = list.tagName;
+              let nested = prev.querySelector(
+                `:scope > ${tag.toLowerCase()}`
+              ) as HTMLElement | null;
+              if (!nested) {
+                nested = document.createElement(tag);
+                prev.appendChild(nested);
+              }
+              nested.appendChild(li);
+              selectNodeContents(li);
+            }
+          }
+          emitChange();
+        } else if (!e.shiftKey) {
+          // Outside list: insert tab as inline-block span
+          const range = sel.getRangeAt(0);
+          range.deleteContents();
+          const tab = document.createElement("span");
+          tab.style.whiteSpace = "pre";
+          tab.textContent = "\t";
+          range.insertNode(tab);
+          const r = document.createRange();
+          r.setStartAfter(tab);
+          r.collapse(true);
+          sel.removeAllRanges();
+          sel.addRange(r);
+          emitChange();
+        }
+        return;
+      }
+
       if (mod && e.key === "b") {
         e.preventDefault();
         handleAction("bold");
@@ -813,6 +927,36 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
         handleRedo();
       }
     };
+
+    /** Sanitize pasted content through the document model */
+    const handlePaste = useCallback(
+      (e: React.ClipboardEvent) => {
+        e.preventDefault();
+        const html = e.clipboardData.getData("text/html");
+        const text = e.clipboardData.getData("text/plain");
+
+        const sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) return;
+        const range = sel.getRangeAt(0);
+        range.deleteContents();
+
+        if (html) {
+          // Sanitize through document model — strips scripts, event handlers, etc.
+          const safeHtml = sanitizePastedHtml(html);
+          const parsed = new DOMParser().parseFromString(safeHtml, "text/html");
+          const frag = document.createDocumentFragment();
+          while (parsed.body.firstChild)
+            frag.appendChild(parsed.body.firstChild);
+          range.insertNode(frag);
+        } else if (text) {
+          range.insertNode(document.createTextNode(text));
+        }
+
+        sel.collapseToEnd();
+        emitChange();
+      },
+      [emitChange]
+    );
 
     const overLimit = maxChars !== undefined && charCount > maxChars;
 
@@ -1405,6 +1549,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
             data-placeholder={placeholder}
             suppressContentEditableWarning
             onInput={emitChange}
+            onPaste={handlePaste}
             onKeyDown={handleKeyDown}
             onSelect={() => {
               savedRange.current = saveSelection();
@@ -1431,7 +1576,7 @@ export const TextEditor = forwardRef<HTMLDivElement, TextEditorProps>(
               <input
                 type="hidden"
                 name={name}
-                value={editorRef.current?.innerHTML ?? ""}
+                value={documentToHtml(docRef.current)}
               />
             )}
           </div>

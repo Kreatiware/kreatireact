@@ -705,7 +705,11 @@ export const DataTable = forwardRef<
               })
               .join("\t")
         );
-        navigator.clipboard?.writeText([header, ...rows].join("\n"));
+        navigator.clipboard
+          ?.writeText([header, ...rows].join("\n"))
+          .catch(() => {
+            /* clipboard unavailable */
+          });
       },
       resetSort: () => {
         setInternalSortField(undefined);
