@@ -4,6 +4,7 @@
    lower contrast, friendly and approachable.
    ============================================ */
 [data-kreati-theme="soft"] {
+  --kreati-autofill-bg: #fef0ec;
   --kreati-primary-50: #fef3f0;
   --kreati-primary-100: #fde4dc;
   --kreati-primary-200: #fbc8b8;

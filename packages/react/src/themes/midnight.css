@@ -4,6 +4,7 @@
    Discord, GitHub dark inspired.
    ============================================ */
 [data-kreati-theme="midnight"] {
+  --kreati-autofill-bg: rgba(212, 96, 63, 0.08);
   --kreati-primary-50: #0c2d48;
   --kreati-primary-100: #0e3b5e;
   --kreati-primary-200: #114974;

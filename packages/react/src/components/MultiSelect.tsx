@@ -540,7 +540,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
     const triggerContent =
       chipDisplay && hasValue ? (
         <span className={`${base}__chips`}>
-          {selectedOptions.map(opt =>
+          {selectedOptions.slice(0, maxSelectedLabels).map(opt =>
             chipTemplate ? (
               chipTemplate(opt, () => removeChip(opt.value))
             ) : (
@@ -565,6 +565,15 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
                 )}
               </span>
             )
+          )}
+          {selectedOptions.length > maxSelectedLabels && (
+            <span
+              className={`${base}__chip ${base}__chip--${size} ${base}__chip--overflow`}
+            >
+              <span className={`${base}__chip-label`}>
+                +{selectedOptions.length - maxSelectedLabels}
+              </span>
+            </span>
           )}
         </span>
       ) : (

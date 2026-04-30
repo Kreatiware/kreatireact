@@ -119,6 +119,7 @@ export const KreatiProvider: React.FC<KreatiProviderProps> = ({
       emptyState: { ...en.emptyState, ...locale.emptyState },
       textEditor: { ...en.textEditor, ...locale.textEditor },
       avatarGroup: { ...en.avatarGroup, ...locale.avatarGroup },
+      kanban: { ...en.kanban, ...locale.kanban },
       chart: { ...en.chart, ...locale.chart },
     };
   }, [locale]);

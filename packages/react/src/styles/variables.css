@@ -690,6 +690,47 @@
   --kreati-timeline-item-spacing: var(--kreati-space-6);
 
   /* ─── Component Tokens — CodeBlock ─────────────────────────────────── */
+
+  /* ─── Component Tokens — Kanban ──────────────────────────────────────── */
+
+  /* ─── Chart — Default Palette ──────────────────────────────────────── */
+  --kreati-chart-1: #3b82f6;
+  --kreati-chart-2: #ef4444;
+  --kreati-chart-3: #22c55e;
+  --kreati-chart-4: #f59e0b;
+  --kreati-chart-5: #8b5cf6;
+  --kreati-chart-6: #06b6d4;
+  --kreati-chart-7: #ec4899;
+  --kreati-chart-8: #f97316;
+  --kreati-chart-9: #14b8a6;
+  --kreati-chart-10: #6366f1;
+  --kreati-chart-11: #84cc16;
+  --kreati-chart-12: #a855f7;
+  --kreati-chart-bg: var(--kreati-surface, #ffffff);
+  --kreati-chart-text: var(--kreati-text-body, var(--kreati-gray-700, #374151));
+  --kreati-chart-axis: var(--kreati-gray-400, #9ca3af);
+  --kreati-chart-grid: var(--kreati-gray-200, #e5e7eb);
+  --kreati-chart-crosshair: var(--kreati-gray-400, #9ca3af);
+  --kreati-chart-tooltip-bg: var(--kreati-gray-900, #111827);
+  --kreati-chart-tooltip-text: var(--kreati-gray-100, #f3f4f6);
+
+  --kreati-kanban-column-bg: var(--kreati-gray-50);
+  --kreati-kanban-column-border: var(--kreati-gray-200);
+  --kreati-kanban-column-radius: var(--kreati-radius-lg);
+  --kreati-kanban-column-min-width: 17rem;
+  --kreati-kanban-column-max-width: 22rem;
+  --kreati-kanban-column-gap: var(--kreati-space-4);
+  --kreati-kanban-card-bg: var(--kreati-surface);
+  --kreati-kanban-card-border: var(--kreati-gray-200);
+  --kreati-kanban-card-radius: var(--kreati-radius-md);
+  --kreati-kanban-card-shadow-hover: var(--kreati-shadow-md);
+  --kreati-kanban-card-gap: var(--kreati-space-2);
+  --kreati-kanban-header-padding: var(--kreati-space-3) var(--kreati-space-4);
+  --kreati-kanban-cards-padding: var(--kreati-space-3);
+  --kreati-kanban-priority-size: 3px;
+  --kreati-kanban-drop-indicator-color: var(--kreati-severity-primary);
+  --kreati-kanban-drop-indicator-height: 2px;
+
   --kreati-code-bg: var(--kreati-gray-900);
   --kreati-code-color: var(--kreati-gray-100);
   --kreati-code-header-bg: var(--kreati-gray-800);

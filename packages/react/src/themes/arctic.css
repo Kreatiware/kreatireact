@@ -4,6 +4,7 @@
    professional tech feel. Figma/Slack inspired.
    ============================================ */
 [data-kreati-theme="arctic"] {
+  --kreati-autofill-bg: #e8f4fc;
   --kreati-primary-50: #eef4fb;
   --kreati-primary-100: #d4e4f7;
   --kreati-primary-200: #a9c9ef;

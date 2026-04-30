@@ -284,6 +284,11 @@
   text-overflow: ellipsis;
 }
 
+.k-multiselect__chip--overflow {
+  background-color: var(--kreati-gray-100);
+  color: var(--kreati-text-secondary);
+}
+
 .k-multiselect__chip-remove {
   display: inline-flex;
   align-items: center;

@@ -219,6 +219,21 @@ export type { FileUploadProps } from "./components/FileUpload";
 export { Image } from "./components/Image";
 export type { ImageProps } from "./components/Image";
 
+export { Kanban } from "./components/Kanban";
+export type {
+  KanbanProps,
+  KanbanCard,
+  KanbanColumn,
+  KanbanSwimlane,
+  KanbanTag,
+  KanbanMoveEvent,
+  KanbanSeverity,
+  KanbanAssignee,
+  KanbanChecklistItem,
+  KanbanCardData,
+  KanbanCardSlots,
+} from "./components/KanbanTypes";
+
 export { DataTable } from "./components/DataTable";
 export type {
   DataTableProps,
@@ -323,6 +338,7 @@ import "./components/Tree.css";
 import "./components/TreeSelect.css";
 import "./components/FileUpload.css";
 import "./components/Image.css";
+import "./components/Kanban.css";
 import "./components/DataTable/DataTable.css";
 
 // ─── Chart System ───────────────────────────────────────────────────────────

@@ -4,6 +4,7 @@
    true black backgrounds, minimal shadows.
    ============================================ */
 [data-kreati-theme="abyss"] {
+  --kreati-autofill-bg: rgba(66, 191, 239, 0.1);
   --kreati-primary-50: #0a2a3d;
   --kreati-primary-100: #0c3650;
   --kreati-primary-200: #0f4263;

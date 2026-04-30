@@ -4,6 +4,7 @@
    light text, adjusted severity colors for contrast.
    ============================================ */
 [data-kreati-theme="dark"] {
+  --kreati-autofill-bg: rgba(0, 102, 204, 0.12);
   /* ─── Primary ─────────────────────────────── */
   --kreati-primary-50: #0b3a4f;
   --kreati-primary-100: #0d4a63;

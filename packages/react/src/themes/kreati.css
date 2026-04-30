@@ -11,6 +11,7 @@
    - Warm whites: approachable, human, not sterile
    ============================================ */
 [data-kreati-theme="kreati"] {
+  --kreati-autofill-bg: #ebedf8;
   /* ─── Primary (Añil — artistic depth) ─────── */
   --kreati-primary-50: #ebedf8;
   --kreati-primary-100: #c2c8e9;

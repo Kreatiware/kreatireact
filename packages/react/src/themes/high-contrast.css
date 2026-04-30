@@ -4,6 +4,7 @@
    bold borders, no subtle colors. WCAG AAA.
    ============================================ */
 [data-kreati-theme="high-contrast"] {
+  --kreati-autofill-bg: rgba(57, 73, 171, 0.15);
   --kreati-primary-50: #e6f2ff;
   --kreati-primary-100: #b3d9ff;
   --kreati-primary-200: #80bfff;

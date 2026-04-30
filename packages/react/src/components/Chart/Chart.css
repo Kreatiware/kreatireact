@@ -6,29 +6,7 @@
 }
 
 /* ─── Chart — Colors (palette + structural) ──────────────────────────────── */
-
-:root {
-  --kreati-chart-1: #3b82f6;
-  --kreati-chart-2: #ef4444;
-  --kreati-chart-3: #22c55e;
-  --kreati-chart-4: #f59e0b;
-  --kreati-chart-5: #8b5cf6;
-  --kreati-chart-6: #06b6d4;
-  --kreati-chart-7: #ec4899;
-  --kreati-chart-8: #f97316;
-  --kreati-chart-9: #14b8a6;
-  --kreati-chart-10: #6366f1;
-  --kreati-chart-11: #84cc16;
-  --kreati-chart-12: #a855f7;
-
-  --kreati-chart-bg: var(--kreati-surface, #ffffff);
-  --kreati-chart-text: var(--kreati-text-body, var(--kreati-gray-700, #374151));
-  --kreati-chart-axis: var(--kreati-gray-400, #9ca3af);
-  --kreati-chart-grid: var(--kreati-gray-200, #e5e7eb);
-  --kreati-chart-crosshair: var(--kreati-gray-400, #9ca3af);
-  --kreati-chart-tooltip-bg: var(--kreati-gray-900, #111827);
-  --kreati-chart-tooltip-text: var(--kreati-gray-100, #f3f4f6);
-}
+/* Default palette defined in variables.css — theme overrides in theme files */
 
 /* ─── Chart — Legend ─────────────────────────────────────────────────────── */
 
