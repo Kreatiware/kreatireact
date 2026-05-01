@@ -794,10 +794,9 @@ export const PieChart = forwardRef<HTMLDivElement, PieChartProps>(
                   );
                 })}
 
-              {/* Center content for donut — hidden when a slice is active */}
+              {/* Center content for donut */}
               {innerRadius > 0 &&
                 (centerLabel || centerTemplate) &&
-                activeIndex === null &&
                 (() => {
                   const holeDiameter = innerR * 2 * 0.7;
                   const centerContent = centerTemplate

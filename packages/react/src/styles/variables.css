@@ -731,6 +731,19 @@
   --kreati-kanban-drop-indicator-color: var(--kreati-severity-primary);
   --kreati-kanban-drop-indicator-height: 2px;
 
+  /* ─── Component Tokens — Gantt ──────────────────────────────────────── */
+  --kreati-gantt-bg: var(--kreati-surface);
+  --kreati-gantt-border: var(--kreati-gray-200);
+  --kreati-gantt-radius: var(--kreati-radius-md);
+  --kreati-gantt-header-bg: var(--kreati-gray-50);
+  --kreati-gantt-row-border: var(--kreati-gray-100);
+  --kreati-gantt-row-hover: var(--kreati-primary-alpha-4);
+  --kreati-gantt-row-selected: var(--kreati-primary-alpha-6);
+  --kreati-gantt-grid-line: var(--kreati-gray-100);
+  --kreati-gantt-weekend-bg: var(--kreati-black-alpha-5);
+  --kreati-gantt-bar-radius: 0.25rem;
+  --kreati-gantt-dependency-color: var(--kreati-gray-400);
+
   --kreati-code-bg: var(--kreati-gray-900);
   --kreati-code-color: var(--kreati-gray-100);
   --kreati-code-header-bg: var(--kreati-gray-800);

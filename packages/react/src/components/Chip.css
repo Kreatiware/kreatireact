@@ -15,6 +15,10 @@
 /* ============================================
    Sizes
    ============================================ */
+.k-chip--xs {
+  padding: 0.0625rem var(--kreati-space-1);
+  font-size: var(--kreati-font-size-xxs);
+}
 .k-chip--sm {
   padding: var(--kreati-chip-padding-sm);
   font-size: var(--kreati-font-size-xxs);
@@ -26,6 +30,10 @@
 .k-chip--lg {
   padding: var(--kreati-chip-padding-lg);
   font-size: var(--kreati-font-size-base);
+}
+.k-chip--xl {
+  padding: var(--kreati-space-2) var(--kreati-space-4);
+  font-size: var(--kreati-font-size-lg);
 }
 
 /* ============================================

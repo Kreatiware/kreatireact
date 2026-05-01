@@ -234,6 +234,28 @@ export type {
   KanbanCardSlots,
 } from "./components/KanbanTypes";
 
+export { Gantt } from "./components/Gantt";
+export type {
+  GanttProps,
+  GanttTask,
+  GanttColumn,
+  GanttColumnDef,
+  GanttPresetColumn,
+  GanttSeverity,
+  GanttTaskType,
+  GanttDependencyType,
+  GanttViewMode,
+  GanttDependency,
+  GanttDependencyInput,
+  GanttAssignee,
+  GanttEditSlots,
+  GanttToolbarSlots,
+  GanttExportFormat,
+  GanttTaskChangeEvent,
+  GanttProgressChangeEvent,
+  GanttRef,
+} from "./components/GanttTypes";
+
 export { DataTable } from "./components/DataTable";
 export type {
   DataTableProps,
@@ -339,6 +361,7 @@ import "./components/TreeSelect.css";
 import "./components/FileUpload.css";
 import "./components/Image.css";
 import "./components/Kanban.css";
+import "./components/Gantt.css";
 import "./components/DataTable/DataTable.css";
 
 // ─── Chart System ───────────────────────────────────────────────────────────

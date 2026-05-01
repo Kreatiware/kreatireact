@@ -1,0 +1,1137 @@
+/* ─── Gantt Container ──────────────────────────────────────────────────────── */
+
+.k-gantt {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 0.0625rem solid var(--kreati-gantt-border, var(--kreati-gray-200));
+  border-radius: var(--kreati-gantt-radius, var(--kreati-radius-md));
+  background: var(--kreati-gantt-bg, var(--kreati-surface));
+  font-family: var(--kreati-font-family-body);
+  font-size: var(--kreati-font-size-sm);
+  color: var(--kreati-text-body);
+  position: relative;
+}
+
+/* ─── Toolbar ──────────────────────────────────────────────────────────────── */
+
+.k-gantt__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--kreati-space-2);
+  padding: var(--kreati-space-2) var(--kreati-space-3);
+  border-bottom: 0.0625rem solid
+    var(--kreati-gantt-border, var(--kreati-gray-200));
+  background: var(--kreati-gantt-header-bg, var(--kreati-gray-50));
+  min-height: 2.5rem;
+}
+
+.k-gantt__toolbar-left,
+.k-gantt__toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-2);
+}
+
+.k-gantt__toolbar-left > *,
+.k-gantt__toolbar-right > * {
+  flex-shrink: 0;
+}
+
+.k-gantt__toolbar-daterange {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-1);
+  max-width: 16rem;
+}
+
+.k-gantt__toolbar-filter {
+  width: 10rem;
+}
+
+/* ─── Body (table + chart) ─────────────────────────────────────────────────── */
+
+.k-gantt__body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ─── Left Table Panel ─────────────────────────────────────────────────────── */
+
+.k-gantt__table-wrap {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-right: 0.0625rem solid
+    var(--kreati-gantt-border, var(--kreati-gray-200));
+  display: flex;
+  flex-direction: column;
+  width: var(--k-gantt-table-w);
+}
+
+.k-gantt__table-header {
+  display: flex;
+  flex-direction: column;
+  background: var(--kreati-gantt-header-bg, var(--kreati-gray-50));
+  border-bottom: 0.0625rem solid
+    var(--kreati-gantt-border, var(--kreati-gray-200));
+  font-weight: var(--kreati-font-weight-semibold);
+  font-size: var(--kreati-font-size-xs);
+  color: var(--kreati-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--kreati-tracking-wide);
+  flex-shrink: 0;
+}
+
+.k-gantt__table-header-cols {
+  display: flex;
+  height: var(--k-gantt-header-h);
+  align-items: center;
+}
+
+.k-gantt__table-header-cell {
+  width: var(--k-gantt-col-w);
+  padding: var(--kreati-space-2) var(--kreati-space-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.k-gantt__table-header-cell--flex {
+  flex: 1;
+  min-width: 0;
+  width: auto;
+  padding-left: 2.25rem;
+}
+
+.k-gantt__table-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: none;
+}
+
+.k-gantt__table-row {
+  display: flex;
+  align-items: center;
+  height: var(--k-gantt-row-h);
+  border-bottom: 0.0625rem solid
+    var(--kreati-gantt-row-border, var(--kreati-gray-100));
+  cursor: pointer;
+  transition: background var(--kreati-transition-fast);
+}
+
+.k-gantt__table-row:hover,
+.k-gantt__table-row--hover {
+  background: var(--kreati-gantt-row-hover, var(--kreati-primary-alpha-4));
+}
+
+.k-gantt__table-row--selected {
+  background: var(--kreati-gantt-row-selected, var(--kreati-primary-alpha-6));
+}
+
+.k-gantt__table-row--dragging {
+  opacity: 0.4;
+}
+
+.k-gantt__table-row--drop-above {
+  box-shadow: inset 0 2px 0 var(--kreati-severity-primary);
+}
+
+.k-gantt__table-row--drop-below {
+  box-shadow: inset 0 -2px 0 var(--kreati-severity-primary);
+}
+
+.k-gantt__table-row--drop-child {
+  box-shadow: inset 0 0 0 2px var(--kreati-severity-info);
+  background: var(--kreati-primary-alpha-4);
+}
+
+.k-gantt__table-row[draggable="true"] {
+  cursor: grab;
+}
+
+.k-gantt__table-row[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.k-gantt__table-cell {
+  width: var(--k-gantt-col-w);
+  padding: 0 var(--kreati-space-3);
+  white-space: nowrap;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.k-gantt__table-cell--flex {
+  flex: 1;
+  min-width: 0;
+  width: auto;
+}
+
+.k-gantt__table-header-cell:not(.k-gantt__table-header-cell--flex) {
+  justify-content: center;
+}
+
+.k-gantt__table-cell:not(.k-gantt__table-cell--flex) {
+  justify-content: center;
+  text-overflow: ellipsis;
+}
+
+.k-gantt__table-cell .k-gantt__cell-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.k-gantt__table-header-cell:not(.k-gantt__table-header-cell--flex)
+  .k-gantt__cell-text {
+  text-align: center;
+}
+
+.k-gantt__cell-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.k-gantt__expand-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--kreati-text-secondary);
+  border-radius: var(--kreati-radius-sm);
+  flex-shrink: 0;
+  transition:
+    transform var(--kreati-transition-fast),
+    background var(--kreati-transition-fast);
+}
+
+.k-gantt__expand-btn:hover {
+  background: var(--kreati-primary-alpha-6);
+}
+
+.k-gantt__expand-btn:focus-visible {
+  outline: 2px solid var(--kreati-severity-primary);
+  outline-offset: -1px;
+}
+
+.k-gantt__expand-btn svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  transition: transform var(--kreati-transition-fast);
+}
+
+.k-gantt__expand-btn--expanded svg {
+  transform: rotate(90deg);
+}
+
+.k-gantt__task-indent {
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--k-gantt-indent);
+}
+
+.k-gantt__expand-spacer {
+  display: inline-block;
+  width: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* ─── Splitter ─────────────────────────────────────────────────────────────── */
+
+.k-gantt__splitter {
+  width: 0.25rem;
+  cursor: col-resize;
+  background: var(--kreati-gantt-border, var(--kreati-gray-200));
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  transition: background var(--kreati-transition-fast);
+}
+
+.k-gantt__splitter:hover,
+.k-gantt__splitter--active {
+  background: var(--kreati-severity-primary);
+}
+
+/* ─── Right Chart Panel ────────────────────────────────────────────────────── */
+
+.k-gantt__chart-wrap {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  position: relative;
+}
+
+.k-gantt__chart-scroll {
+  flex: 1;
+  overflow: auto;
+  overscroll-behavior: none;
+}
+
+.k-gantt__chart-header {
+  background: var(--kreati-gantt-header-bg, var(--kreati-gray-50));
+  border-bottom: 0.0625rem solid
+    var(--kreati-gantt-border, var(--kreati-gray-200));
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.k-gantt__chart-header-row {
+  display: flex;
+  height: calc(var(--k-gantt-header-h, 3.25rem) / 2);
+  align-items: center;
+}
+
+.k-gantt__chart-header-row--upper {
+  border-bottom: 0.0625rem solid
+    var(--kreati-gantt-border, var(--kreati-gray-200));
+}
+
+.k-gantt__chart-header-cell {
+  width: var(--k-gantt-cell-w);
+  min-width: var(--k-gantt-cell-w);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--kreati-font-size-xs);
+  font-weight: var(--kreati-font-weight-semibold);
+  color: var(--kreati-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  border-right: 0.0625rem solid
+    var(--kreati-gantt-border, var(--kreati-gray-200));
+  flex-shrink: 0;
+}
+
+.k-gantt__chart-header-cell--lower {
+  font-weight: var(--kreati-font-weight-normal);
+  font-size: var(--kreati-font-size-xxs);
+  color: var(--kreati-text-muted);
+}
+
+.k-gantt__chart-header-cell--weekend {
+  background: var(--kreati-gantt-weekend-bg, var(--kreati-black-alpha-5));
+}
+
+.k-gantt__chart-header-cell--today {
+  color: var(--kreati-severity-primary);
+  font-weight: var(--kreati-font-weight-semibold);
+}
+
+.k-gantt__chart-scroll {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+}
+
+/* ─── SVG Chart Area ───────────────────────────────────────────────────────── */
+
+.k-gantt__chart-svg {
+  display: block;
+}
+
+/* Grid lines */
+.k-gantt__grid-line {
+  stroke: var(--kreati-gantt-grid-line, var(--kreati-gray-100));
+  stroke-width: 0.0625rem;
+}
+
+.k-gantt__grid-line--weekend {
+  fill: var(--kreati-gantt-weekend-bg, var(--kreati-black-alpha-5));
+}
+
+/* Row backgrounds */
+.k-gantt__row-bg {
+  fill: transparent;
+  cursor: pointer;
+}
+
+.k-gantt__row-bg:hover {
+  fill: var(--kreati-gantt-row-hover, var(--kreati-primary-alpha-4));
+}
+
+/* ─── Task Bars ────────────────────────────────────────────────────────────── */
+
+.k-gantt__bar-group {
+  cursor: pointer;
+}
+
+.k-gantt--dragging {
+  cursor: grabbing !important;
+}
+
+.k-gantt--dragging * {
+  cursor: grabbing !important;
+}
+
+.k-gantt__bar-group:focus-visible {
+  outline: none;
+}
+
+.k-gantt__bar-group:focus-visible .k-gantt__bar {
+  stroke: var(--kreati-text-primary);
+  stroke-width: 2;
+}
+
+.k-gantt__resize-handle {
+  fill: transparent;
+  cursor: ew-resize;
+}
+
+.k-gantt__bar {
+  rx: var(--kreati-gantt-bar-radius, 0.25rem);
+  ry: var(--kreati-gantt-bar-radius, 0.25rem);
+  transition: opacity var(--kreati-transition-fast);
+}
+
+.k-gantt__bar--primary {
+  fill: var(--kreati-severity-primary);
+  opacity: 0.3;
+}
+.k-gantt__bar--secondary {
+  fill: var(--kreati-severity-secondary);
+  opacity: 0.3;
+}
+.k-gantt__bar--success {
+  fill: var(--kreati-severity-success);
+  opacity: 0.3;
+}
+.k-gantt__bar--info {
+  fill: var(--kreati-severity-info);
+  opacity: 0.3;
+}
+.k-gantt__bar--warning {
+  fill: var(--kreati-severity-warning);
+  opacity: 0.3;
+}
+.k-gantt__bar--help {
+  fill: var(--kreati-severity-help);
+  opacity: 0.3;
+}
+.k-gantt__bar--danger {
+  fill: var(--kreati-severity-danger);
+  opacity: 0.3;
+}
+.k-gantt__bar--accent {
+  fill: var(--kreati-severity-accent);
+  opacity: 0.3;
+}
+
+.k-gantt__bar-progress {
+  rx: var(--kreati-gantt-bar-radius, 0.25rem);
+  ry: var(--kreati-gantt-bar-radius, 0.25rem);
+  fill: var(--kreati-severity-primary);
+}
+
+.k-gantt__bar-progress--primary {
+  fill: var(--kreati-severity-primary);
+}
+.k-gantt__bar-progress--secondary {
+  fill: var(--kreati-severity-secondary);
+}
+.k-gantt__bar-progress--success {
+  fill: var(--kreati-severity-success);
+}
+.k-gantt__bar-progress--info {
+  fill: var(--kreati-severity-info);
+}
+.k-gantt__bar-progress--warning {
+  fill: var(--kreati-severity-warning);
+}
+.k-gantt__bar-progress--help {
+  fill: var(--kreati-severity-help);
+}
+.k-gantt__bar-progress--danger {
+  fill: var(--kreati-severity-danger);
+}
+.k-gantt__bar-progress--accent {
+  fill: var(--kreati-severity-accent);
+}
+
+.k-gantt__bar-label {
+  font-size: var(--kreati-font-size-xxs);
+  fill: var(--kreati-text-body);
+  pointer-events: none;
+  dominant-baseline: central;
+}
+
+.k-gantt__bar-label--inside {
+  fill: var(--kreati-text-on-primary, #fff);
+  font-weight: var(--kreati-font-weight-semibold);
+}
+
+.k-gantt__bar-progress-label {
+  font-size: var(--kreati-font-size-xxs);
+  font-weight: var(--kreati-font-weight-semibold);
+  fill: var(--kreati-text-on-primary, #fff);
+  pointer-events: none;
+}
+
+/* ─── Progress Handle ──────────────────────────────────────────────────────── */
+
+.k-gantt__progress-handle {
+  fill: var(--kreati-white);
+  stroke: var(--kreati-gray-400);
+  stroke-width: 1;
+  cursor: ew-resize;
+  opacity: 0;
+  transition: opacity var(--kreati-transition-fast);
+}
+
+.k-gantt__bar-group:hover .k-gantt__progress-handle,
+.k-gantt__progress-handle--active {
+  opacity: 1;
+}
+
+/* ─── Resize Handles ───────────────────────────────────────────────────────── */
+
+.k-gantt__resize-handle {
+  fill: transparent;
+  cursor: ew-resize;
+}
+
+/* ─── Milestone ────────────────────────────────────────────────────────────── */
+
+.k-gantt__milestone {
+  transition: opacity var(--kreati-transition-fast);
+}
+
+.k-gantt__milestone--primary {
+  fill: var(--kreati-severity-primary);
+}
+.k-gantt__milestone--secondary {
+  fill: var(--kreati-severity-secondary);
+}
+.k-gantt__milestone--success {
+  fill: var(--kreati-severity-success);
+}
+.k-gantt__milestone--info {
+  fill: var(--kreati-severity-info);
+}
+.k-gantt__milestone--warning {
+  fill: var(--kreati-severity-warning);
+}
+.k-gantt__milestone--help {
+  fill: var(--kreati-severity-help);
+}
+.k-gantt__milestone--danger {
+  fill: var(--kreati-severity-danger);
+}
+.k-gantt__milestone--accent {
+  fill: var(--kreati-severity-accent);
+}
+
+/* ─── Summary Bar ──────────────────────────────────────────────────────────── */
+
+.k-gantt__summary {
+  fill: var(--kreati-gray-600);
+}
+
+.k-gantt__summary-end {
+  fill: var(--kreati-gray-600);
+}
+
+.k-gantt__summary--primary,
+.k-gantt__summary-end--primary {
+  fill: var(--kreati-severity-primary);
+}
+.k-gantt__summary--secondary,
+.k-gantt__summary-end--secondary {
+  fill: var(--kreati-gray-600);
+}
+.k-gantt__summary--success,
+.k-gantt__summary-end--success {
+  fill: var(--kreati-severity-success);
+}
+.k-gantt__summary--info,
+.k-gantt__summary-end--info {
+  fill: var(--kreati-severity-info);
+}
+.k-gantt__summary--warning,
+.k-gantt__summary-end--warning {
+  fill: var(--kreati-severity-warning);
+}
+.k-gantt__summary--help,
+.k-gantt__summary-end--help {
+  fill: var(--kreati-severity-help);
+}
+.k-gantt__summary--danger,
+.k-gantt__summary-end--danger {
+  fill: var(--kreati-severity-danger);
+}
+.k-gantt__summary--accent,
+.k-gantt__summary-end--accent {
+  fill: var(--kreati-severity-accent);
+}
+
+/* ─── Dependency Arrows ────────────────────────────────────────────────────── */
+
+.k-gantt__dependency {
+  fill: none;
+  stroke: var(--kreati-gantt-dependency-color, var(--kreati-gray-400));
+  stroke-width: 1.5;
+}
+
+.k-gantt__dependency-hit {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 10;
+  cursor: pointer;
+}
+
+.k-gantt__dependency-arrow {
+  fill: var(--kreati-gantt-dependency-color, var(--kreati-gray-400));
+  stroke: none;
+}
+
+.k-gantt__dep-delete {
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity var(--kreati-transition-fast);
+}
+
+.k-gantt__dep-group:hover .k-gantt__dep-delete {
+  opacity: 1;
+}
+
+.k-gantt__dep-group:hover .k-gantt__dependency {
+  stroke: var(--kreati-severity-danger);
+}
+
+.k-gantt__dep-group:hover .k-gantt__dependency-arrow {
+  fill: var(--kreati-severity-danger);
+}
+
+.k-gantt__dep-delete-bg {
+  fill: var(--kreati-severity-danger);
+}
+
+.k-gantt__dep-delete-x {
+  stroke: var(--kreati-white);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+/* ─── Today Marker ─────────────────────────────────────────────────────────── */
+
+.k-gantt__today-line {
+  stroke: var(--kreati-severity-danger);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+.k-gantt__today-label {
+  font-size: var(--kreati-font-size-xxs);
+  fill: var(--kreati-severity-danger);
+  font-weight: var(--kreati-font-weight-semibold);
+}
+
+/* ─── Tooltip ──────────────────────────────────────────────────────────────── */
+
+.k-gantt__tooltip {
+  position: fixed;
+  z-index: var(--kreati-z-tooltip, 1100);
+  background: var(--kreati-tooltip-bg);
+  color: var(--kreati-tooltip-color);
+  padding: var(--kreati-space-2) var(--kreati-space-3);
+  border-radius: var(--kreati-tooltip-radius);
+  font-size: var(--kreati-font-size-xs);
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: var(--kreati-shadow-md);
+  max-width: 20rem;
+}
+
+.k-gantt__tooltip-title {
+  font-weight: var(--kreati-font-weight-semibold);
+  margin-bottom: var(--kreati-space-1);
+}
+
+.k-gantt__tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--kreati-space-4);
+}
+
+.k-gantt__tooltip-label {
+  color: var(--kreati-gray-400);
+}
+
+/* ─── Reduced Motion ───────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .k-gantt__bar,
+  .k-gantt__milestone,
+  .k-gantt__expand-btn svg,
+  .k-gantt__progress-handle,
+  .k-gantt__table-row,
+  .k-gantt__splitter,
+  .k-gantt__table-toggle,
+  .k-gantt__opt-btn,
+  .k-gantt__link-connector,
+  .k-gantt__navigator,
+  .k-gantt__navigator-viewport,
+  .k-gantt__dep-delete {
+    transition: none;
+  }
+}
+
+/* ─── Responsive ───────────────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .k-gantt__toolbar {
+    flex-wrap: wrap;
+  }
+}
+
+/* ─── Link Connectors ────────────────────────────────────────────── */
+
+.k-gantt__link-connector {
+  fill: var(--kreati-severity-primary);
+  stroke: var(--kreati-white);
+  stroke-width: 1.5;
+  opacity: 0;
+  cursor: crosshair;
+  transition: opacity var(--kreati-transition-fast);
+}
+
+.k-gantt__bar-group:hover .k-gantt__link-connector {
+  opacity: 1;
+}
+
+.k-gantt__link-connector:hover {
+  r: 7;
+  fill: var(--kreati-severity-info);
+}
+
+.k-gantt__link-drag-line {
+  stroke: var(--kreati-severity-primary);
+  stroke-width: 2;
+  stroke-dasharray: 6 3;
+  fill: none;
+  pointer-events: none;
+}
+
+/* ─── Add Row Button ─────────────────────────────────────────────── */
+
+.k-gantt__add-row {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-2);
+  width: 100%;
+  padding: var(--kreati-space-2) var(--kreati-space-3);
+  border: none;
+  border-top: 1px dashed var(--kreati-gray-300);
+  background: transparent;
+  color: var(--kreati-text-muted);
+  font-size: var(--kreati-font-size-xs);
+  cursor: pointer;
+  transition:
+    background var(--kreati-transition-fast),
+    color var(--kreati-transition-fast);
+}
+
+.k-gantt__add-row:hover {
+  background: var(--kreati-primary-alpha-4);
+  color: var(--kreati-severity-primary);
+}
+
+/* ─── Table Collapse ─────────────────────────────────────────────── */
+
+.k-gantt__table-wrap--collapsed {
+  width: 2rem !important;
+  min-width: 2rem;
+}
+
+.k-gantt__table-toggle {
+  position: absolute;
+  top: var(--kreati-space-2);
+  left: var(--kreati-space-1);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid var(--kreati-gray-300);
+  border-radius: var(--kreati-radius-sm);
+  background: var(--kreati-surface);
+  color: var(--kreati-text-secondary);
+  cursor: pointer;
+  transition: background var(--kreati-transition-fast);
+}
+
+.k-gantt__table-toggle:hover {
+  background: var(--kreati-surface-hover);
+}
+
+/* ─── Milestone Flags ─────────────────────────────────────────────── */
+
+.k-gantt__flag-line {
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+.k-gantt__flag-line--primary {
+  stroke: var(--kreati-severity-primary);
+}
+.k-gantt__flag-line--secondary {
+  stroke: var(--kreati-severity-secondary);
+}
+.k-gantt__flag-line--success {
+  stroke: var(--kreati-severity-success);
+}
+.k-gantt__flag-line--info {
+  stroke: var(--kreati-severity-info);
+}
+.k-gantt__flag-line--warning {
+  stroke: var(--kreati-severity-warning);
+}
+.k-gantt__flag-line--help {
+  stroke: var(--kreati-severity-help);
+}
+.k-gantt__flag-line--danger {
+  stroke: var(--kreati-severity-danger);
+}
+.k-gantt__flag-line--accent {
+  stroke: var(--kreati-severity-accent);
+}
+
+.k-gantt__flag-bg--primary {
+  fill: var(--kreati-severity-primary);
+}
+.k-gantt__flag-bg--secondary {
+  fill: var(--kreati-severity-secondary);
+}
+.k-gantt__flag-bg--success {
+  fill: var(--kreati-severity-success);
+}
+.k-gantt__flag-bg--info {
+  fill: var(--kreati-severity-info);
+}
+.k-gantt__flag-bg--warning {
+  fill: var(--kreati-severity-warning);
+}
+.k-gantt__flag-bg--help {
+  fill: var(--kreati-severity-help);
+}
+.k-gantt__flag-bg--danger {
+  fill: var(--kreati-severity-danger);
+}
+.k-gantt__flag-bg--accent {
+  fill: var(--kreati-severity-accent);
+}
+
+.k-gantt__flag-label {
+  font-size: var(--kreati-font-size-xxs);
+  fill: var(--kreati-white);
+  font-weight: var(--kreati-font-weight-semibold);
+  pointer-events: none;
+}
+
+.k-gantt__flags-overlay {
+  position: relative;
+}
+
+.k-gantt__flags-row {
+  position: relative;
+  height: 1rem;
+}
+
+.k-gantt__flag-tag {
+  position: absolute;
+  top: 0;
+  padding: 0 var(--kreati-space-3) 0 var(--kreati-space-2);
+  font-size: var(--kreati-font-size-xxs);
+  font-weight: var(--kreati-font-weight-semibold);
+  color: var(--kreati-white);
+  white-space: nowrap;
+  pointer-events: auto;
+  line-height: 1rem;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 0.5rem) 50%, 100% 100%, 0 100%);
+}
+
+.k-gantt__chart-header-row--flags {
+  overflow: hidden;
+  border-top: 0.0625rem solid var(--kreati-gantt-border, var(--kreati-gray-200));
+  height: 1rem;
+}
+
+.k-gantt__table-header-flags {
+  height: 1rem;
+  width: 100%;
+}
+
+.k-gantt__flag-tag--primary {
+  background: var(--kreati-severity-primary);
+}
+.k-gantt__flag-tag--secondary {
+  background: var(--kreati-severity-secondary);
+}
+.k-gantt__flag-tag--success {
+  background: var(--kreati-severity-success);
+}
+.k-gantt__flag-tag--info {
+  background: var(--kreati-severity-info);
+}
+.k-gantt__flag-tag--warning {
+  background: var(--kreati-severity-warning);
+}
+.k-gantt__flag-tag--help {
+  background: var(--kreati-severity-help);
+}
+.k-gantt__flag-tag--danger {
+  background: var(--kreati-severity-danger);
+}
+.k-gantt__flag-tag--accent {
+  background: var(--kreati-severity-accent);
+}
+
+/* ─── Baseline ───────────────────────────────────────────────────── */
+
+.k-gantt__bar-baseline {
+  fill: var(--kreati-gray-400);
+  opacity: 0.5;
+  rx: var(--kreati-gantt-bar-radius, 0.25rem);
+}
+
+/* ─── Critical Path ──────────────────────────────────────────────── */
+
+.k-gantt__bar-critical {
+  fill: none;
+  stroke: var(--kreati-severity-danger);
+  stroke-width: 2;
+  stroke-dasharray: 4 2;
+  rx: var(--kreati-gantt-bar-radius, 0.25rem);
+  pointer-events: none;
+}
+
+/* ─── Navigator ──────────────────────────────────────────────────── */
+
+.k-gantt__navigator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2.5rem;
+  background: var(--kreati-gantt-header-bg, var(--kreati-gray-50));
+  border-top: 0.0625rem solid var(--kreati-gantt-border, var(--kreati-gray-200));
+  overflow: hidden;
+  z-index: 3;
+  opacity: 1;
+  transition: opacity var(--kreati-transition-fast);
+}
+
+.k-gantt__navigator--auto {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.k-gantt__chart-wrap:hover .k-gantt__navigator--auto {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Hide horizontal scrollbar when navigator is present */
+.k-gantt__chart-wrap:has(.k-gantt__navigator) .k-gantt__chart-scroll {
+  scrollbar-width: none;
+}
+
+.k-gantt__chart-wrap:has(.k-gantt__navigator)
+  .k-gantt__chart-scroll::-webkit-scrollbar {
+  height: 0;
+}
+
+.k-gantt__navigator-svg {
+  display: block;
+}
+
+.k-gantt__navigator-bar {
+  fill: var(--kreati-severity-primary);
+  opacity: 0.4;
+}
+
+.k-gantt__navigator-bar--critical {
+  fill: var(--kreati-severity-danger);
+  opacity: 0.6;
+}
+
+.k-gantt__navigator-viewport {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: var(--kreati-primary-alpha-8);
+  border-left: 2px solid var(--kreati-severity-primary);
+  border-right: 2px solid var(--kreati-severity-primary);
+  cursor: grab;
+  box-sizing: border-box;
+}
+
+.k-gantt__navigator-viewport:active {
+  cursor: grabbing;
+}
+
+/* ─── Context Menu ───────────────────────────────────────────────── */
+
+.k-gantt__ctx-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--kreati-z-overlay);
+}
+
+.k-gantt__ctx-delete {
+  color: var(--kreati-severity-danger);
+}
+
+/* ─── Preset Columns ─────────────────────────────────────────────── */
+
+.k-gantt__preset-duration {
+  font-size: var(--kreati-font-size-xs);
+  color: var(--kreati-text-secondary);
+  display: block;
+  text-align: center;
+}
+
+.k-gantt__preset-dial {
+  display: block;
+  margin: 0 auto;
+  --kreati-dial-text-size: 2.8em;
+}
+
+.k-gantt__preset-options {
+  display: flex;
+  gap: var(--kreati-space-1);
+  align-items: center;
+}
+
+.k-gantt__opt-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: none;
+  border-radius: var(--kreati-radius-sm);
+  background: transparent;
+  color: var(--kreati-text-secondary);
+  cursor: pointer;
+  transition:
+    background var(--kreati-transition-fast),
+    color var(--kreati-transition-fast);
+}
+
+.k-gantt__opt-btn:hover {
+  background: var(--kreati-surface-hover);
+  color: var(--kreati-text-primary);
+}
+
+.k-gantt__opt-btn--danger:hover {
+  background: var(--kreati-severity-danger);
+  color: var(--kreati-white);
+}
+
+/* ─── Edit Dialog ────────────────────────────────────────────────── */
+
+.k-gantt__edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kreati-space-3);
+}
+
+.k-gantt__edit-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--kreati-space-3);
+  min-width: 0;
+}
+
+.k-gantt__edit-row > * {
+  min-width: 0;
+}
+
+.k-gantt__edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--kreati-space-2);
+  margin-top: var(--kreati-space-2);
+}
+
+/* ─── Edit Dependencies ──────────────────────────────────────────── */
+
+.k-gantt__edit-deps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kreati-space-2);
+}
+
+.k-gantt__edit-deps-label {
+  font-size: var(--kreati-font-size-xs);
+  font-weight: var(--kreati-font-weight-semibold);
+  color: var(--kreati-text-secondary);
+}
+
+.k-gantt__edit-dep-row {
+  display: flex;
+  align-items: center;
+  gap: var(--kreati-space-2);
+}
+
+.k-gantt__edit-dep-name {
+  flex: 1;
+  font-size: var(--kreati-font-size-sm);
+  color: var(--kreati-text-body);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.k-gantt__edit-dep-add {
+  margin-top: var(--kreati-space-1);
+}
+
+.k-gantt__edit-dep-row--readonly {
+  opacity: 0.7;
+}
+
+.k-gantt__edit-dep-type {
+  font-size: var(--kreati-font-size-xs);
+  color: var(--kreati-text-muted);
+  padding: 0 var(--kreati-space-2);
+}
+
+/* ─── Delete Confirm ─────────────────────────────────────────────── */
+
+.k-gantt__delete-confirm p {
+  margin: 0 0 var(--kreati-space-2);
+  font-size: var(--kreati-font-size-sm);
+  color: var(--kreati-text-body);
+}
+
+.k-gantt__delete-task-name {
+  font-weight: var(--kreati-font-weight-semibold);
+  color: var(--kreati-text-primary);
+}

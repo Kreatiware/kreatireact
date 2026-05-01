@@ -139,6 +139,18 @@
   height: 1.125rem;
 }
 
+.k-segmented--xl .k-segmented__option {
+  height: calc(
+    var(--kreati-input-height-xl) - var(--kreati-segmented-track-padding) * 2
+  );
+  font-size: var(--kreati-font-size-lg);
+  padding: 0 var(--kreati-space-6);
+}
+.k-segmented--xl .k-segmented__icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
 /* ─── Severity — subtle variant: white pill, active text colored ────── */
 .k-segmented--subtle.k-segmented--primary .k-segmented__option--active {
   color: var(--kreati-severity-primary);
@@ -223,6 +235,9 @@
 }
 .k-segmented--slim.k-segmented--lg .k-segmented__option {
   height: 2rem;
+}
+.k-segmented--slim.k-segmented--xl .k-segmented__option {
+  height: 2.25rem;
 }
 
 /* ─── Rounded (pill) variant ────────────────────────────────────────── */

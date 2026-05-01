@@ -814,7 +814,8 @@
 /* ─── PieChart — Entry Animation ─────────────────────────────────────────── */
 
 .k-pie-slice {
-  animation: k-pie-grow var(--kreati-pie-animation-duration, 0.6s) ease-out both;
+  animation: k-pie-grow var(--kreati-pie-animation-duration, 0.6s) ease-out
+    backwards;
   animation-delay: calc(
     var(--k-pie-i, 0) * var(--kreati-pie-animation-stagger, 60ms)
   );
@@ -828,10 +829,6 @@
   from {
     opacity: 0;
     transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
   }
 }
 
@@ -1225,15 +1222,11 @@
     transform: scaleX(0);
     opacity: 0;
   }
-  to {
-    transform: scaleX(1);
-    opacity: 1;
-  }
 }
 
 .k-funnel-stage {
   transform-origin: center;
-  animation: k-funnel-enter var(--kreati-transition-slow) ease both;
+  animation: k-funnel-enter var(--kreati-transition-slow) ease backwards;
   animation-delay: calc(var(--k-funnel-i, 0) * 80ms);
 }
 
@@ -1312,15 +1305,11 @@
     transform: scale(0.8);
     opacity: 0;
   }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
 }
 
 .k-treemap-cell {
   transform-origin: center;
-  animation: k-treemap-enter var(--kreati-transition-slow) ease both;
+  animation: k-treemap-enter var(--kreati-transition-slow) ease backwards;
   animation-delay: calc(var(--k-treemap-i, 0) * 30ms);
 }
 

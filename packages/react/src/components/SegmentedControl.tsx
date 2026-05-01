@@ -34,7 +34,7 @@ export interface SegmentedControlProps {
   /** Visual variant. 'default' = severity-colored pill + white text, 'subtle' = white pill + colored text. Default: 'default' */
   variant?: "default" | "subtle";
   /** Size variant. Default: 'md' */
-  size?: "xs" | "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Severity color for the active indicator. Default: 'primary' */
   severity?:
     | "primary"

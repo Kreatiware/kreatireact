@@ -121,6 +121,7 @@ export const KreatiProvider: React.FC<KreatiProviderProps> = ({
       avatarGroup: { ...en.avatarGroup, ...locale.avatarGroup },
       kanban: { ...en.kanban, ...locale.kanban },
       chart: { ...en.chart, ...locale.chart },
+      gantt: { ...en.gantt, ...locale.gantt },
     };
   }, [locale]);
 

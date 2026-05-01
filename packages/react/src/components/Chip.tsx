@@ -15,7 +15,7 @@ export interface ChipProps {
     | "error"
     | "outline";
   /** Chip size */
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** Leading icon */
   icon?: React.ReactNode;
   /** Show remove button */

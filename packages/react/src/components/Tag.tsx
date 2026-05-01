@@ -24,6 +24,8 @@ export interface TagProps {
   onRemove?: () => void;
   /** Rounded pill shape (default: true) */
   rounded?: boolean;
+  /** Size variant. Default: 'md' */
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /**
    * Custom render replacing the tag content.
    *
@@ -63,6 +65,7 @@ export const Tag = forwardRef<HTMLSpanElement, TagProps>(
       removable = false,
       onRemove,
       rounded = false,
+      size,
       contentTemplate,
       className = "",
       style,
@@ -78,6 +81,7 @@ export const Tag = forwardRef<HTMLSpanElement, TagProps>(
       base,
       `${base}--${severity}`,
       rounded && `${base}--rounded`,
+      size && `${base}--${size}`,
       className,
     ]
       .filter(Boolean)

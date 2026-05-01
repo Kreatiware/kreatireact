@@ -12,6 +12,29 @@
   max-width: 100%;
 }
 
+/* ─── Sizes ──────────────────────────────────────────────────────── */
+
+.k-tag--xs {
+  padding: 0.0625rem var(--kreati-space-1);
+  font-size: var(--kreati-font-size-xxs);
+}
+.k-tag--sm {
+  padding: var(--kreati-space-1) var(--kreati-space-2);
+  font-size: var(--kreati-font-size-xxs);
+}
+.k-tag--md {
+  padding: var(--kreati-space-1) var(--kreati-space-2);
+  font-size: var(--kreati-font-size-xs);
+}
+.k-tag--lg {
+  padding: var(--kreati-space-2) var(--kreati-space-3);
+  font-size: var(--kreati-font-size-sm);
+}
+.k-tag--xl {
+  padding: var(--kreati-space-2) var(--kreati-space-4);
+  font-size: var(--kreati-font-size-base);
+}
+
 .k-tag__text {
   overflow: hidden;
   text-overflow: ellipsis;
