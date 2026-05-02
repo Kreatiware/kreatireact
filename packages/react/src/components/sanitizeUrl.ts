@@ -18,3 +18,17 @@ export const sanitizeUrl = (url: string | undefined): string => {
   }
   return url;
 };
+
+/**
+ * Validates a CSS color value and rejects dangerous patterns.
+ * Blocks `url()`, `expression()`, `env()`, and `attr()` injections.
+ *
+ * @param value - The CSS value to validate
+ * @returns The original value if safe, or `""` if dangerous
+ */
+export const sanitizeCssValue = (value: string | undefined): string => {
+  if (!value) return "";
+  const lower = value.toLowerCase().replace(/\s/g, "");
+  if (/url\s*\(|expression\s*\(|env\s*\(|attr\s*\(/.test(lower)) return "";
+  return value;
+};

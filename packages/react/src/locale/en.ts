@@ -288,4 +288,23 @@ export const en: KreatiLocale = {
     dependsOn: "Depends on",
     requiredBy: "Required by",
   },
+  documentViewer: {
+    viewerLabel: "Document viewer",
+    controls: "Document controls",
+    zoomIn: "Zoom in",
+    zoomOut: "Zoom out",
+    rotate: "Rotate",
+    resetView: "Reset view",
+    download: "Download",
+    print: "Print",
+    fullscreen: "Fullscreen",
+    exitFullscreen: "Exit fullscreen",
+    noDocument: "No document to display",
+  },
+  qrCode: {
+    label: "QR Code",
+  },
+  barcode: {
+    label: "Barcode",
+  },
 };

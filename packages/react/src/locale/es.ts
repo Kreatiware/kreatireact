@@ -289,4 +289,23 @@ export const es: KreatiLocale = {
     dependsOn: "Depende de",
     requiredBy: "Requerido por",
   },
+  documentViewer: {
+    viewerLabel: "Visor de documentos",
+    controls: "Controles del documento",
+    zoomIn: "Acercar",
+    zoomOut: "Alejar",
+    rotate: "Rotar",
+    resetView: "Restablecer vista",
+    download: "Descargar",
+    print: "Imprimir",
+    fullscreen: "Pantalla completa",
+    exitFullscreen: "Salir de pantalla completa",
+    noDocument: "No hay documento para mostrar",
+  },
+  qrCode: {
+    label: "Codigo QR",
+  },
+  barcode: {
+    label: "Codigo de barras",
+  },
 };

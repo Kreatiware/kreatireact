@@ -1541,6 +1541,27 @@ export const Redo: React.FC<IconProps> = ({
 );
 
 /**
+ * Rotate icon — clockwise rotation arrow
+ * @author ai — Pending designer review
+ */
+export const Rotate: React.FC<IconProps> = ({
+  size = 24,
+  color = "currentColor",
+  className = "",
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={color}
+    className={className}
+    aria-hidden="true"
+  >
+    <path d="M12,5V1L7,6l5,5V7c3.31,0,6,2.69,6,6s-2.69,6-6,6-6-2.69-6-6H4c0,4.42,3.58,8,8,8s8-3.58,8-8-3.58-8-8-8Z" />
+  </svg>
+);
+
+/**
  * TextColor icon — text color formatting (A with colored underline)
  * @author ai — Pending designer review
  */

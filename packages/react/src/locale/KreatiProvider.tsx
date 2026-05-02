@@ -122,6 +122,9 @@ export const KreatiProvider: React.FC<KreatiProviderProps> = ({
       kanban: { ...en.kanban, ...locale.kanban },
       chart: { ...en.chart, ...locale.chart },
       gantt: { ...en.gantt, ...locale.gantt },
+      documentViewer: { ...en.documentViewer, ...locale.documentViewer },
+      qrCode: { ...en.qrCode, ...locale.qrCode },
+      barcode: { ...en.barcode, ...locale.barcode },
     };
   }, [locale]);
 

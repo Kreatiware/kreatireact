@@ -76,6 +76,7 @@ export {
   Blockquote,
   Undo,
   Redo,
+  Rotate,
   TextColor,
   BgColor,
   FontFamily,

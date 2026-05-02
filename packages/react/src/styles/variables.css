@@ -744,6 +744,14 @@
   --kreati-gantt-bar-radius: 0.25rem;
   --kreati-gantt-dependency-color: var(--kreati-gray-400);
 
+  /* ─── Component Tokens — QRCode ──────────────────────────────────────── */
+  --kreati-qr-fg: var(--kreati-gray-900);
+  --kreati-qr-bg: var(--kreati-white);
+
+  /* ─── Component Tokens — Barcode ─────────────────────────────────────── */
+  --kreati-barcode-fg: var(--kreati-gray-900);
+  --kreati-barcode-bg: var(--kreati-white);
+
   --kreati-code-bg: var(--kreati-gray-900);
   --kreati-code-color: var(--kreati-gray-100);
   --kreati-code-header-bg: var(--kreati-gray-800);

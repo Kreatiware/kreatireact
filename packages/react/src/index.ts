@@ -451,4 +451,25 @@ export type {
 
 import "./components/Chart/Chart.css";
 
-export { sanitizeUrl } from "./components/sanitizeUrl";
+export { sanitizeUrl, sanitizeCssValue } from "./components/sanitizeUrl";
+
+export { QRCode } from "./components/QRCode";
+export type { QRCodeProps, QRCodeRef } from "./components/QRCode";
+export type { ECLevel } from "./components/qr/tables";
+import "./components/QRCode.css";
+
+export { Barcode } from "./components/Barcode";
+export type {
+  BarcodeProps,
+  BarcodeRef,
+  BarcodeFormat,
+} from "./components/Barcode";
+import "./components/Barcode.css";
+
+export { DocumentViewer } from "./components/DocumentViewer";
+export type {
+  DocumentViewerProps,
+  DocumentViewerRef,
+  DocumentType,
+} from "./components/DocumentViewer";
+import "./components/DocumentViewer.css";

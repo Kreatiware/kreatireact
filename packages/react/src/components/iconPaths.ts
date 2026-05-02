@@ -193,6 +193,14 @@ export const UNDO_PATH =
 export const REDO_PATH =
   "M18.33,10.73c-1.78-1.69-4.18-2.73-6.83-2.73-4.06,0-7.47,2.39-8.99,5.83l2.24.93c1.15-2.6,3.73-4.41,6.76-4.41,2.07,0,3.91.82,5.24,2.15l-3.18,3.18h8.94V6.74l-3.17,3.18Z";
 
+/** @author ai — Pending designer review */
+export const REFRESH_PATH =
+  "M17.65,6.35C16.2,4.9,14.21,4,12,4c-4.42,0-7.99,3.58-7.99,8s3.57,8,7.99,8c3.73,0,6.84-2.55,7.73-6h-2.08c-.82,2.33-3.04,4-5.65,4-3.31,0-6-2.69-6-6s2.69-6,6-6c1.66,0,3.14.69,4.22,1.78L13,11h7V4l-2.35,2.35Z";
+
+/** @author ai — Pending designer review */
+export const ROTATE_PATH =
+  "M12,5V1L7,6l5,5V7c3.31,0,6,2.69,6,6s-2.69,6-6,6-6-2.69-6-6H4c0,4.42,3.58,8,8,8s8-3.58,8-8-3.58-8-8-8Z";
+
 /** Text color icon (A with colored underline) @author ai — Pending designer review */
 export const TEXT_COLOR_PATH =
   "M11,2 L5.5,18 H8.2 L9.5,14 H14.5 L15.8,18 H18.5 L13,2 H11 Z M10.2,12 L12,6.5 L13.8,12 H10.2 Z";

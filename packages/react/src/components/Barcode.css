@@ -1,0 +1,11 @@
+/* ─── Barcode ─────────────────────────────────────────────────────────── */
+
+.k-barcode {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.k-barcode__text {
+  font-family: var(--kreati-font-family-mono);
+  letter-spacing: var(--kreati-tracking-wide);
+}

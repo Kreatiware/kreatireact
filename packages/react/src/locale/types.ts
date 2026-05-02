@@ -308,4 +308,26 @@ export interface KreatiLocale {
     dependsOn: string;
     requiredBy: string;
   };
+  /** DocumentViewer component */
+  documentViewer: {
+    viewerLabel: string;
+    controls: string;
+    zoomIn: string;
+    zoomOut: string;
+    rotate: string;
+    resetView: string;
+    download: string;
+    print: string;
+    fullscreen: string;
+    exitFullscreen: string;
+    noDocument: string;
+  };
+  /** QRCode component */
+  qrCode: {
+    label: string;
+  };
+  /** Barcode component */
+  barcode: {
+    label: string;
+  };
 }
