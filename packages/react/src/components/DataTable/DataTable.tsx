@@ -685,10 +685,13 @@ export const DataTable = forwardRef<
         if (!table) return;
         const win = window.open("", "_blank");
         if (!win) return;
-        win.document.write(
-          `<html><head><title>${exportFilename}</title><style>table{border-collapse:collapse;width:100%;font-family:sans-serif}th,td{border:1px solid var(--kreati-gray-200, #e5e7eb);padding:8px;text-align:left}th{background:var(--kreati-severity-primary, #0f78a5);color:var(--kreati-severity-primary-text, #fff)}tr:nth-child(even){background:var(--kreati-gray-50, #f9fafb)}</style></head><body>${table.outerHTML}</body></html>`
-        );
-        win.document.close();
+        const doc = win.document;
+        doc.title = (exportFilename || "DataTable").replace(/[<>&"]/g, "");
+        const style = doc.createElement("style");
+        style.textContent =
+          "table{border-collapse:collapse;width:100%;font-family:sans-serif}th,td{border:1px solid #e5e7eb;padding:8px;text-align:left}th{background:#0f78a5;color:#fff}tr:nth-child(even){background:#f9fafb}";
+        doc.head.appendChild(style);
+        doc.body.innerHTML = table.outerHTML;
         win.print();
       },
       copyToClipboard: () => {
@@ -886,10 +889,16 @@ export const DataTable = forwardRef<
                         if (!table) return;
                         const win = window.open("", "_blank");
                         if (!win) return;
-                        win.document.write(
-                          `<html><head><title>${exportFilename}</title><style>table{border-collapse:collapse;width:100%;font-family:sans-serif}th,td{border:1px solid #ddd;padding:8px;text-align:left}th{background:#0f78a5;color:#fff}tr:nth-child(even){background:#f9fafb}</style></head><body>${table.outerHTML}</body></html>`
+                        const doc = win.document;
+                        doc.title = (exportFilename || "DataTable").replace(
+                          /[<>&"]/g,
+                          ""
                         );
-                        win.document.close();
+                        const style = doc.createElement("style");
+                        style.textContent =
+                          "table{border-collapse:collapse;width:100%;font-family:sans-serif}th,td{border:1px solid #ddd;padding:8px;text-align:left}th{background:#0f78a5;color:#fff}tr:nth-child(even){background:#f9fafb}";
+                        doc.head.appendChild(style);
+                        doc.body.innerHTML = table.outerHTML;
                         win.print();
                       }}
                     />

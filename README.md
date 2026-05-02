@@ -1,144 +1,179 @@
-# Ecosistema Kreati
+# Kreati
 
-> Herramientas frontend modernas para desarrolladores React — zero dependencies
+> A complete React UI ecosystem — 83+ components, 71 icons, 592 CSS utilities. Zero external dependencies.
 
-## Paquetes
+Built AI-first with human review: every component was designed, coded, and tested using AI-assisted development, then reviewed and refined by the Kreatiware team. The result is a consistent, accessible, and secure component library ready for production.
 
-### [@kreatiware/react](./packages/react)
-55+ componentes React tipados con ARIA/WCAG 2.1 AA, sistema de locale, y 8 temas.
+## Packages
 
-```bash
-npm install @kreatiware/react
-```
+| Package | Description | Install |
+|---------|-------------|---------|
+| **@kreatiware/react** | 83+ React components with TypeScript, ARIA, 8 themes, locale system | `npm i @kreatiware/react` |
+| **@kreatiware/icons** | 71 SVG icon components with name resolver | `npm i @kreatiware/icons` |
+| **@kreatiware/layout** | 592 CSS utility classes (flex, grid, spacing, typography) | `npm i @kreatiware/layout` |
 
-### [@kreatiware/icons](./packages/icons)
-54 iconos vectoriales SVG con componentes React y resolver por nombre.
-
-```bash
-npm install @kreatiware/icons
-```
-
-### [@kreatiware/layout](./packages/layout)
-Sistema de utilities CSS para Flexbox, Grid, Spacing y tipografia responsive.
-
-```bash
-npm install @kreatiware/layout
-```
-
-## Inicio Rapido
+## Quick Start
 
 ```tsx
-import { Button, Input, DataTable, KreatiProvider } from '@kreatiware/react';
+import { Button, DataTable, KreatiProvider, es } from '@kreatiware/react';
 import { ArrowRight } from '@kreatiware/icons';
 import '@kreatiware/react/dist/style.css';
-import '@kreatiware/react/themes/dark.css'; // optional: import themes you need
+import '@kreatiware/react/themes/dark.css';
 import '@kreatiware/layout/dist/index.css';
 
-function App() {
-  return (
-    <KreatiProvider locale={es} theme="auto">
-      <DataTable
-        value={data}
-        columns={columns}
-        paginator
-        rows={10}
-        toolbar={['search', 'export', 'print']}
-        selectionMode="checkbox"
-        stripedRows
-      />
-    </KreatiProvider>
-  );
-}
+const App = () => (
+  <KreatiProvider locale={es} theme="auto">
+    <Button label="Get started" severity="primary" iconRight={<ArrowRight size={16} />} />
+  </KreatiProvider>
+);
 ```
 
-## Componentes
+## Components
 
-### Formularios
+### Form (18)
 Input, InputMask, InputGroup, Textarea, Select, MultiSelect, AutoComplete, Checkbox, CheckboxGroup, Radio, RadioGroup, Switch, Slider, Calendar, ColorPicker, FileUpload, Rating, Dial
 
-### Feedback & Overlay
+### Feedback & Overlay (10)
 Dialog, Drawer, Tooltip, Popover, Toast, Message, MessageList, Spinner, ProgressBar, Skeleton
 
-### Layout & Data
-Card, Panel, Accordion, Tabs, TabMenu, Divider, Breadcrumb, Pagination, Avatar, Tag, Timeline, Tree, TreeSelect, Stepper, ScrollBar, ScrollArea, Image, List, DataTable
+### Layout & Data (22)
+Card, Panel, Accordion, Tabs, TabMenu, Divider, Breadcrumb, Pagination, Avatar, AvatarGroup, Tag, Timeline, Tree, TreeSelect, Stepper, ScrollBar, ScrollArea, Image, List, Carousel, EmptyState, ItemPicker/Transfer
 
-### Navegacion
-NavigationBar, MenuBar, ContextMenu, DockMenu, SideMenu, TabMenu
+### Navigation (5)
+NavigationBar, MenuBar, ContextMenu, DockMenu, SideMenu
 
-### Botones
+### Buttons (6)
 Button, ButtonGroup, DropdownButton, SpeedDial, ToggleButton, ToggleButtonGroup
 
-### Base
-Badge, Chip, HeroSection, DynamicSvg, FieldWrapper
+### Rich Content (3)
+TextEditor (WYSIWYG), CodeBlock, SegmentedControl
 
-## DataTable
+### Data (1)
+DataTable — sorting, filtering, selection, inline editing, drag & drop, frozen columns, virtual scroll, tree mode, CSV/print/copy export, full keyboard navigation
 
-Componente completo de tabla de datos con:
-- Columnas dinamicas con templates personalizables
-- Sort single/multiple, filtros globales y por columna
-- Seleccion (click, checkbox), filas deshabilitables
-- Edicion inline (celda y fila) con editores custom
-- Drag & drop para reordenar filas y columnas
-- Frozen columns, column groups, row grouping
-- Row expansion y tree mode
-- Virtual scroll (10,000+ filas)
-- Resize de columnas, filas y celdas
-- Toolbar preset (search, export, print, copy)
-- Paginator customizable, column visibility
-- CSV export, print, copy to clipboard
-- ScrollBar de Kreati customizable
-- ARIA completo y navegacion por teclado
+### Charts (17)
+LineChart, BarChart, AreaChart, ScatterChart, MixedChart, PieChart, DonutChart, RadarChart, PolarAreaChart, GaugeChart, HeatmapChart, FunnelChart, TreemapChart, SankeyChart, ChartGroup, ChartToolbar, CartesianChart
 
-## Iconos (54)
+### Project Management (2)
+**Kanban** — drag & drop, swimlanes, column management, card CRUD with Dialog, slots, uncontrolled/controlled
 
-Chevrons, Arrows, Check, Times, Search, Plus, Minus, Filter, Sort, Eye, EyeOff, Mail, Lock, Phone, Clock, Calendar, User, Star, Heart, Bell, Home, Settings, Grid, List, Image, Folder, File, Upload, Download, Share, Copy, Print, Pencil, Trash, Refresh, ExternalLink, y mas.
+**Gantt** — task/milestone/summary bars, dependencies (FS/SS/FF/SF), critical path, baseline, auto-schedule, zoom, navigator, undo/redo, export
 
-## Temas
+### Specialized (3)
+**QRCode** — native Reed-Solomon SVG generation, error correction levels, logo support, export PNG/SVG
 
-8 temas incluidos. Importa solo los que necesites:
+**Barcode** — Code128, EAN-13, EAN-8, UPC-A, Code39, export PNG/SVG
 
-| Tema | Tipo | Import |
-|------|------|--------|
-| Light | Default | (built-in) |
-| Dark | Dark | `@kreatiware/react/themes/dark.css` |
-| Midnight | Dark | `@kreatiware/react/themes/midnight.css` |
-| Abyss | Dark (OLED) | `@kreatiware/react/themes/abyss.css` |
-| Soft | Light (warm) | `@kreatiware/react/themes/soft.css` |
-| Arctic | Light (cool) | `@kreatiware/react/themes/arctic.css` |
-| High Contrast | Accessibility | `@kreatiware/react/themes/high-contrast.css` |
-| Kreati | Brand | `@kreatiware/react/themes/kreati.css` |
+**DocumentViewer** — PDF (iframe), image (zoom/pan/rotate), text (line numbers)
+
+### Foundation (4)
+Badge, Chip, HeroSection, DynamicSvg
+
+### Hooks (4)
+useOverlayPosition, useLayerZIndex, useMediaQuery, useLocalStorage
+
+## Themes
+
+8 built-in themes. Import only what you need:
 
 ```tsx
-// Auto dark mode (follows system preference)
+// Auto dark mode (follows prefers-color-scheme)
 <KreatiProvider theme="auto">
 
-// Manual theme
+// Specific theme
 <KreatiProvider theme="midnight">
 
-// Toggle programmatically
-const { resolvedTheme, setTheme } = useKreatiTheme();
+// All themes at once
+import '@kreatiware/react/themes/all.css';
 ```
 
-## Desarrollo
+| Theme | Style | Accent |
+|-------|-------|--------|
+| Light | Default | Amber |
+| Dark | Dark | Orange |
+| Midnight | Dark blue | Lavender |
+| Abyss | OLED black | Emerald |
+| Soft | Warm light | Gold |
+| Arctic | Cool light | Teal |
+| High Contrast | Accessibility | Orange |
+| Kreati | Brand | Golden |
+
+## Internationalization
+
+Built-in English and Spanish. Add any language:
+
+```tsx
+import { KreatiProvider, es } from '@kreatiware/react';
+
+<KreatiProvider locale={es}>
+  <App />
+</KreatiProvider>
+```
+
+25 locale namespaces covering all components with user-facing text, including ARIA labels.
+
+## Design Principles
+
+- **Zero dependencies** — React is the only peer dependency
+- **TypeScript strict** — every prop typed with interfaces
+- **Accessible** — WCAG 2.1 AA, ARIA, keyboard navigation, 4.5:1 contrast, prefers-reduced-motion
+- **Secure** — URL sanitization, CSS injection prevention, no dangerouslySetInnerHTML/eval/innerHTML, defensive clipboard and storage handling
+- **Themeable** — CSS variables only, never hardcoded values
+- **Tree-shakeable** — import only what you use
+- **SSR/RSC compatible** — "use client" directive via build banner
+- **Form compatible** — works with Formik and React Hook Form out of the box
+
+## Icons
+
+71 SVG icons available as individual components or via name resolver:
+
+```tsx
+import { Search, ChevronDown } from '@kreatiware/icons';
+import { Icon } from '@kreatiware/icons';
+
+<Search size={20} color="currentColor" />
+<Icon name="chevron-down" size={16} />
+```
+
+## Layout Utilities
+
+592 CSS classes for rapid layout without writing custom CSS:
+
+```html
+<div class="k-flex k-justify-between k-items-center k-gap-4 k-p-4">
+  <h1 class="k-text-2xl k-font-display k-font-bold">Title</h1>
+  <span class="k-text-sm k-text-secondary">Subtitle</span>
+</div>
+```
+
+Responsive breakpoints: `sm` (640px), `md` (768px), `lg` (1024px), `xl` (1280px).
+
+Custom prefix CLI: `npx kreati-layout --prefix="x" --output="./layout.css"`
+
+## Development
 
 ```bash
-npm install          # Instalar dependencias
-npm run dev          # Desarrollo
-npm run build        # Build todos los paquetes
-npm run storybook    # Storybook
-npm run lint         # Linting
+npm install          # Install dependencies
+npm run dev          # Development mode
+npm run build        # Build all packages
+npm run storybook    # Storybook (230+ stories)
+npm run lint         # Lint packages
+npm run format       # Prettier
+npm run fix          # Lint + format combined
 ```
 
-## Roadmap
+## AI-First Development
 
-- [x] **Fundacion**: Infraestructura, sistema de diseno, componentes base
-- [x] **Etapa 1**: Formularios (18 componentes)
-- [x] **Etapa 2**: Feedback & Overlay (10 componentes)
-- [x] **Etapa 3**: Layout & Data Display (19 componentes + DataTable)
-- [ ] **Etapa 4**: Temas & Dark Mode (ThemeProvider, dark mode, tema Corporate)
-- [ ] **Etapa 5**: Distribucion npm publico & v1.0
-- [ ] **Etapa 6**: Premium & Monetizacion
+Kreati was built using AI-assisted development from the ground up. Every component — from the initial architecture to the final implementation — was designed and coded with AI, then reviewed and validated by the development team. This approach enabled:
 
-## Licencia
+- Consistent patterns across 83+ components
+- Comprehensive ARIA and keyboard navigation on every interactive element
+- Security hardening (URL sanitization, CSS injection prevention, SVG sanitization) applied systematically
+- Full locale coverage with 25 namespaces
+- 230+ Storybook stories for visual testing
 
-MIT - Brian - Kreatiware
+The documentation serves as a knowledge base for the Kreati AI Agent — a subscription-based coding assistant specialized in the Kreati ecosystem.
+
+## License
+
+MIT — [Kreatiware](https://kreatiware.com)

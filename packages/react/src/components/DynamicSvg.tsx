@@ -9,6 +9,7 @@ import React, {
   useImperativeHandle,
 } from "react";
 import "./DynamicSvg.css";
+import { sanitizeUrl } from "./sanitizeUrl";
 
 /** SVG presentational attributes that can be applied to elements */
 export interface SvgElementStyle {
@@ -351,7 +352,7 @@ export const DynamicSvg = forwardRef<HTMLSpanElement, DynamicSvgProps>(
 
     // Fetch SVG content
     useEffect(() => {
-      const source = src || url;
+      const source = sanitizeUrl(src || url);
       if (!source) return;
 
       setLoading(true);
@@ -383,6 +384,14 @@ export const DynamicSvg = forwardRef<HTMLSpanElement, DynamicSvgProps>(
       const svg = doc.querySelector("svg");
 
       if (!svg) return null;
+
+      // Security: strip dangerous elements and attributes from fetched SVG
+      svg.querySelectorAll("script, foreignObject").forEach(el => el.remove());
+      svg.querySelectorAll("*").forEach(el => {
+        for (const attr of Array.from(el.attributes)) {
+          if (attr.name.startsWith("on")) el.removeAttribute(attr.name);
+        }
+      });
 
       const overriddenIds = new Set<string>();
       const overriddenClasses = new Set<string>();
