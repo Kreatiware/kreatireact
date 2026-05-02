@@ -1,5 +1,11 @@
 # @kreatiware/icons
 
+## 0.14.0
+
+### Minor Changes
+
+- 6b7cdeb: feat(react+icons): add icons, add qrcode, barcode, doc viewer componentes
+
 ## 0.13.1
 
 ### Patch Changes

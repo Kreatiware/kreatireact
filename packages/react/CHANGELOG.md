@@ -1,5 +1,13 @@
 # @kreatiware/react
 
+## 0.23.0
+
+### Minor Changes
+
+- 6eca530: feat(charts): add gantt
+- 6b7cdeb: feat(react+icons): add icons, add qrcode, barcode, doc viewer componentes
+- 03fe263: feat(react): Add Kanban, fix them graphs variables
+
 ## 0.22.0
 
 ### Minor Changes
