@@ -1,6 +1,6 @@
 {
   "name": "@kreatiware/icons",
-  "version": "0.14.0",
+  "version": "1.0.0",
   "description": "Librería de iconos vectoriales SVG optimizados",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
