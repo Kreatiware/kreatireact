@@ -1,5 +1,11 @@
 # @kreatiware/react
 
+## 1.0.0
+
+### Major Changes
+
+- 8e582b8: chore(all): release packages private
+
 ## 0.23.0
 
 ### Minor Changes
