@@ -64,7 +64,7 @@ export interface DataTableActionItem {
 }
 
 /** Column definition */
-export interface DataTableColumn<T = Record<string, unknown>> {
+export interface DataTableColumn<T = object> {
   /** Field key to access row data */
   field: string;
   /** Column header text */
@@ -152,11 +152,11 @@ export interface DataTableColumn<T = Record<string, unknown>> {
 }
 
 /** Row class/style callback */
-export type RowClassCallback<T = Record<string, unknown>> = (
+export type RowClassCallback<T = object> = (
   row: T,
   rowIndex: number
 ) => string | undefined;
-export type RowStyleCallback<T = Record<string, unknown>> = (
+export type RowStyleCallback<T = object> = (
   row: T,
   rowIndex: number
 ) => React.CSSProperties | undefined;
@@ -173,7 +173,7 @@ export interface DataTableLazyEvent {
 }
 
 /** Row edit event */
-export interface DataTableRowEditEvent<T = Record<string, unknown>> {
+export interface DataTableRowEditEvent<T = object> {
   row: T;
   rowIndex: number;
   field: string;
@@ -182,7 +182,7 @@ export interface DataTableRowEditEvent<T = Record<string, unknown>> {
 }
 
 /** Cell edit event */
-export interface DataTableCellEditEvent<T = Record<string, unknown>> {
+export interface DataTableCellEditEvent<T = object> {
   row: T;
   rowIndex: number;
   field: string;
@@ -193,13 +193,13 @@ export interface DataTableCellEditEvent<T = Record<string, unknown>> {
 export type ExportFormat = "csv";
 
 /** Row expansion template */
-export type RowExpansionTemplate<T = Record<string, unknown>> = (
+export type RowExpansionTemplate<T = object> = (
   row: T,
   rowIndex: number
 ) => React.ReactNode;
 
 /** DataTable props */
-export interface DataTableProps<T = Record<string, unknown>> {
+export interface DataTableProps<T = object> {
   /** Data array */
   value: T[];
   /** Column definitions */

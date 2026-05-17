@@ -102,7 +102,7 @@ interface BodyProps<T> {
   frozenRightOffsets?: Record<string, number>;
 }
 
-export const DataTableBody = <T extends Record<string, unknown>>({
+export const DataTableBody = <T extends object>({
   data,
   columns,
   dataKey,

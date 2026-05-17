@@ -5,7 +5,7 @@ import type { FilterMatchMode } from "./types";
  * e.g. getFieldValue(row, 'address.city') => row.address.city
  */
 export const getFieldValue = (
-  obj: Record<string, unknown>,
+  obj: object,
   field: string
 ): unknown => {
   return field.split(".").reduce<unknown>((acc, key) => {
@@ -53,7 +53,7 @@ export const matchFilter = (
 };
 
 /** Generate CSV string from data */
-export const generateCSV = <T extends Record<string, unknown>>(
+export const generateCSV = <T extends object>(
   data: T[],
   columns: { field: string; header?: string }[]
 ): string => {

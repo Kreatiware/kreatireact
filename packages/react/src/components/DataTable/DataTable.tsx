@@ -60,7 +60,7 @@ import "./DataTable.css";
  */
 export const DataTable = forwardRef<
   DataTableRef,
-  DataTableProps<Record<string, unknown>>
+  DataTableProps<object>
 >(
   (
     {
@@ -1089,7 +1089,7 @@ export const DataTable = forwardRef<
       </div>
     );
   }
-) as <T extends Record<string, unknown>>(
+) as <T extends object>(
   props: DataTableProps<T> & { ref?: React.Ref<DataTableRef> }
 ) => React.ReactElement;
 
