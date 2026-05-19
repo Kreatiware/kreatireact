@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import "./Breadcrumb.css";
 import { MenuItem } from "../types/navigation";
 import { renderMenuIcon } from "./resolveIcon";
@@ -49,98 +49,45 @@ const defaultSeparator = (
  * ]} />
  * ```
  */
-export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
-  ({ items, separator, className = "", style }, ref) => {
-    const base = "k-breadcrumb";
-    const visibleItems = items.filter(item => item.visible !== false);
+export const Breadcrumb = ({
+  items,
+  separator,
+  className = "",
+  style,
+  ref,
+}: BreadcrumbProps & { ref?: React.Ref<HTMLElement> }) => {
+  const base = "k-breadcrumb";
+  const visibleItems = items.filter(item => item.visible !== false);
 
-    const resolvedSeparator = separator
-      ? typeof separator === "string"
-        ? renderMenuIcon(separator, 14) || <span>{separator}</span>
-        : separator
-      : defaultSeparator;
+  const resolvedSeparator = separator
+    ? typeof separator === "string"
+      ? renderMenuIcon(separator, 14) || <span>{separator}</span>
+      : separator
+    : defaultSeparator;
 
-    const classes = [base, className].filter(Boolean).join(" ");
+  const classes = [base, className].filter(Boolean).join(" ");
 
-    const handleClick = (item: MenuItem, e: React.MouseEvent) => {
-      if (item.disabled) {
-        e.preventDefault();
-        return;
-      }
-      if (item.command) {
-        e.preventDefault();
-        item.command(item);
-      }
-    };
+  const handleClick = (item: MenuItem, e: React.MouseEvent) => {
+    if (item.disabled) {
+      e.preventDefault();
+      return;
+    }
+    if (item.command) {
+      e.preventDefault();
+      item.command(item);
+    }
+  };
 
-    return (
-      <nav ref={ref} className={classes} style={style} aria-label="Breadcrumb">
-        <ol className={`${base}__list`}>
-          {visibleItems.map((item, index) => {
-            const isLast = index === visibleItems.length - 1;
+  return (
+    <nav ref={ref} className={classes} style={style} aria-label="Breadcrumb">
+      <ol className={`${base}__list`}>
+        {visibleItems.map((item, index) => {
+          const isLast = index === visibleItems.length - 1;
 
-            if (item.template) {
-              return (
-                <li key={item.key} className={`${base}__item`}>
-                  {item.template(item)}
-                  {!isLast && (
-                    <span className={`${base}__separator`} aria-hidden="true">
-                      {resolvedSeparator}
-                    </span>
-                  )}
-                </li>
-              );
-            }
-
-            const isDisabled = item.disabled;
-            const hasLink = item.url && !isLast && !isDisabled;
-
-            const linkClasses = [
-              `${base}__link`,
-              isLast && `${base}__link--current`,
-              isDisabled && `${base}__link--disabled`,
-              item.className,
-            ]
-              .filter(Boolean)
-              .join(" ");
-
-            const content = (
-              <>
-                {item.icon && (
-                  <span className={`${base}__icon`} aria-hidden="true">
-                    {renderMenuIcon(item.icon, 14)}
-                  </span>
-                )}
-                <span>{item.label}</span>
-              </>
-            );
-
+          if (item.template) {
             return (
               <li key={item.key} className={`${base}__item`}>
-                {hasLink ? (
-                  <a
-                    href={sanitizeUrl(item.url)}
-                    target={item.target}
-                    rel={
-                      item.target === "_blank"
-                        ? "noopener noreferrer"
-                        : undefined
-                    }
-                    className={linkClasses}
-                    style={item.style}
-                    onClick={e => handleClick(item, e)}
-                  >
-                    {content}
-                  </a>
-                ) : (
-                  <span
-                    className={linkClasses}
-                    style={item.style}
-                    aria-current={isLast ? "page" : undefined}
-                  >
-                    {content}
-                  </span>
-                )}
+                {item.template(item)}
                 {!isLast && (
                   <span className={`${base}__separator`} aria-hidden="true">
                     {resolvedSeparator}
@@ -148,11 +95,64 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
                 )}
               </li>
             );
-          })}
-        </ol>
-      </nav>
-    );
-  }
-);
+          }
 
-Breadcrumb.displayName = "Breadcrumb";
+          const isDisabled = item.disabled;
+          const hasLink = item.url && !isLast && !isDisabled;
+
+          const linkClasses = [
+            `${base}__link`,
+            isLast && `${base}__link--current`,
+            isDisabled && `${base}__link--disabled`,
+            item.className,
+          ]
+            .filter(Boolean)
+            .join(" ");
+
+          const content = (
+            <>
+              {item.icon && (
+                <span className={`${base}__icon`} aria-hidden="true">
+                  {renderMenuIcon(item.icon, 14)}
+                </span>
+              )}
+              <span>{item.label}</span>
+            </>
+          );
+
+          return (
+            <li key={item.key} className={`${base}__item`}>
+              {hasLink ? (
+                <a
+                  href={sanitizeUrl(item.url)}
+                  target={item.target}
+                  rel={
+                    item.target === "_blank" ? "noopener noreferrer" : undefined
+                  }
+                  className={linkClasses}
+                  style={item.style}
+                  onClick={e => handleClick(item, e)}
+                >
+                  {content}
+                </a>
+              ) : (
+                <span
+                  className={linkClasses}
+                  style={item.style}
+                  aria-current={isLast ? "page" : undefined}
+                >
+                  {content}
+                </span>
+              )}
+              {!isLast && (
+                <span className={`${base}__separator`} aria-hidden="true">
+                  {resolvedSeparator}
+                </span>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+};

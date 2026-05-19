@@ -61,7 +61,7 @@ export const Basic: Story = {
     return (
       <DataTable
         value={sampleData as unknown as Record<string, unknown>[]}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         paginator
         rows={10}
         hoverRows
@@ -86,10 +86,10 @@ export const WithSelection: Story = {
     return (
       <DataTable
         value={sampleData.slice(0, 15) as unknown as Record<string, unknown>[]}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         selectionMode="checkbox"
         selection={selection}
-        onSelectionChange={setSelection}
+        onSelectionChange={setSelection as any}
         dataKey="id"
       />
     );
@@ -108,7 +108,7 @@ export const MultiSort: Story = {
     return (
       <DataTable
         value={sampleData as unknown as Record<string, unknown>[]}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         sortMode="multiple"
         paginator
         rows={10}
@@ -137,7 +137,7 @@ export const WithActions: Story = {
     return (
       <DataTable
         value={sampleData.slice(0, 10) as unknown as Record<string, unknown>[]}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
       />
     );
   },
@@ -156,7 +156,7 @@ export const InlineEdit: Story = {
     return (
       <DataTable
         value={data}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         editMode="cell"
         onCellEditComplete={({ rowIndex, field, newValue }: DataTableCellEditEvent) => {
           const newData = [...data];
@@ -181,7 +181,7 @@ export const Toolbar: Story = {
     return (
       <DataTable
         value={sampleData as unknown as Record<string, unknown>[]}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         paginator
         rows={10}
         toolbar={['search', 'export', 'print', 'copy']}
@@ -202,7 +202,7 @@ export const WithPaginatorOptions: Story = {
     return (
       <DataTable
         value={sampleData as unknown as Record<string, unknown>[]}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         paginator
         rows={5}
         rowsPerPageOptions={[5, 10, 25, 50]}
@@ -228,7 +228,7 @@ export const Scrollable: Story = {
     return (
       <DataTable
         value={sampleData as unknown as Record<string, unknown>[]}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         scrollable
         scrollHeight="300px"
         stickyHeader
@@ -250,7 +250,7 @@ export const ReorderableRows: Story = {
     return (
       <DataTable
         value={data}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         reorderableRows
         onRowReorder={setData}
         dataKey="id"
@@ -273,7 +273,7 @@ export const ReorderableColumns: Story = {
     return (
       <DataTable
         value={sampleData.slice(0, 10) as unknown as Record<string, unknown>[]}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         reorderableColumns
         dataKey="id"
         hoverRows
@@ -302,10 +302,10 @@ export const InsideDialog: Story = {
         <Dialog visible={open} onHide={() => setOpen(false)} header="User Management" size="xl" maximizable>
           <DataTable
             value={sampleData.slice(0, 20) as unknown as Record<string, unknown>[]}
-            columns={columns as unknown as DataTableColumn[]}
+            columns={columns as any}
             selectionMode="checkbox"
             selection={selection}
-            onSelectionChange={setSelection}
+            onSelectionChange={setSelection as any}
             dataKey="id"
             paginator
             rows={5}
@@ -340,7 +340,7 @@ export const WithContextMenu: Story = {
       <ContextMenu items={menuItems} onItemSelect={(key) => alert(`Action: ${key}`)}>
         <DataTable
           value={sampleData.slice(0, 15) as unknown as Record<string, unknown>[]}
-          columns={columns as unknown as DataTableColumn[]}
+          columns={columns as any}
           hoverRows
           selectionMode="single"
           dataKey="id"
@@ -410,7 +410,7 @@ export const FullCustomization: Story = {
       <DataTable
         ref={tableRef}
         value={sampleData as unknown as Record<string, unknown>[]}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         paginator
         rows={8}
         rowsPerPageOptions={[5, 8, 15, 25]}
@@ -480,7 +480,7 @@ export const LazyLoading: Story = {
     return (
       <DataTable
         value={data}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         lazy
         loading={loading}
         paginator
@@ -508,7 +508,7 @@ export const ColumnGroups: Story = {
     return (
       <DataTable
         value={sampleData.slice(0, 10) as unknown as Record<string, unknown>[]}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         showColumnLines
       />
     );
@@ -535,19 +535,19 @@ export const Sizes: Story = {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
         <div>
           <p style={{ marginBottom: 4, fontSize: 12, fontWeight: 600 }}>Small</p>
-          <DataTable value={smData} columns={columns as unknown as DataTableColumn[]} size="sm" editMode="cell" onCellEditComplete={onEdit(setSmData)} dataKey="id" />
+          <DataTable value={smData} columns={columns as any} size="sm" editMode="cell" onCellEditComplete={onEdit(setSmData)} dataKey="id" />
         </div>
         <div>
           <p style={{ marginBottom: 4, fontSize: 12, fontWeight: 600 }}>Medium (default)</p>
-          <DataTable value={mdData} columns={columns as unknown as DataTableColumn[]} size="md" editMode="cell" onCellEditComplete={onEdit(setMdData)} dataKey="id" />
+          <DataTable value={mdData} columns={columns as any} size="md" editMode="cell" onCellEditComplete={onEdit(setMdData)} dataKey="id" />
         </div>
         <div>
           <p style={{ marginBottom: 4, fontSize: 12, fontWeight: 600 }}>Large</p>
-          <DataTable value={lgData} columns={columns as unknown as DataTableColumn[]} size="lg" editMode="cell" onCellEditComplete={onEdit(setLgData)} dataKey="id" />
+          <DataTable value={lgData} columns={columns as any} size="lg" editMode="cell" onCellEditComplete={onEdit(setLgData)} dataKey="id" />
         </div>
         <div>
           <p style={{ marginBottom: 4, fontSize: 12, fontWeight: 600 }}>Medium + Slim</p>
-          <DataTable value={slimData} columns={columns as unknown as DataTableColumn[]} size="md" slim editMode="cell" onCellEditComplete={onEdit(setSlimData)} dataKey="id" />
+          <DataTable value={slimData} columns={columns as any} size="md" slim editMode="cell" onCellEditComplete={onEdit(setSlimData)} dataKey="id" />
         </div>
       </div>
     );
@@ -562,7 +562,7 @@ export const Loading: Story = {
       { field: 'role', header: 'Role' },
     ];
 
-    return <DataTable value={[]} columns={columns as unknown as DataTableColumn[]} loading />;
+    return <DataTable value={[]} columns={columns as any} loading />;
   },
 };
 
@@ -578,10 +578,10 @@ export const DisabledRows: Story = {
     return (
       <DataTable
         value={sampleData.slice(0, 12) as unknown as Record<string, unknown>[]}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         selectionMode="checkbox"
         selection={selection}
-        onSelectionChange={setSelection}
+        onSelectionChange={setSelection as any}
         disabledRows={(row) => (row as unknown as User).status === 'Inactive'}
         dataKey="id"
       />
@@ -604,7 +604,7 @@ export const ColumnFooters: Story = {
     return (
       <DataTable
         value={data as unknown as Record<string, unknown>[]}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         showColumnLines
       />
     );
@@ -626,7 +626,7 @@ export const StickyHeaderScroll: Story = {
     return (
       <DataTable
         value={sampleData as unknown as Record<string, unknown>[]}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         scrollable
         scrollHeight="300px"
         stickyHeader
@@ -652,7 +652,7 @@ export const FrozenColumnsScroll: Story = {
     return (
       <DataTable
         value={sampleData.slice(0, 30) as unknown as Record<string, unknown>[]}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         scrollable
         scrollHeight="350px"
         stickyHeader
@@ -698,7 +698,7 @@ export const RowEdit: Story = {
     return (
       <DataTable
         value={data}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         editMode="row"
         onRowEditComplete={({ rowIndex, newValue }) => {
           const newData = [...data];
@@ -727,7 +727,7 @@ export const RowExpansion: Story = {
     return (
       <DataTable
         value={data}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         rowExpansionTemplate={(row) => (
           <div style={{ padding: '8px 0' }}>
             <p style={{ margin: 0, fontSize: 13 }}>Details for <strong>{(row as unknown as User).name}</strong></p>
@@ -787,7 +787,7 @@ export const TreeMode: Story = {
     return (
       <DataTable
         value={data as unknown as Record<string, unknown>[]}
-        columns={columns}
+        columns={columns as any}
         childrenField="children"
         expandedRows={expanded}
         onExpandedRowsChange={setExpanded}
@@ -826,7 +826,7 @@ export const VirtualScroll: Story = {
         <p style={{ marginBottom: 8, fontSize: 12, color: 'var(--kreati-gray-500)' }}>10,000 rows — only visible rows are rendered</p>
         <DataTable
           value={largeData as unknown as Record<string, unknown>[]}
-          columns={columns}
+          columns={columns as any}
           virtualScroll
           virtualScrollItemHeight={40}
           scrollable
@@ -857,7 +857,7 @@ export const Resizable: Story = {
         </p>
         <DataTable
           value={sampleData.slice(0, 8) as unknown as Record<string, unknown>[]}
-          columns={columns as unknown as DataTableColumn[]}
+          columns={columns as any}
           resizable
           resizableRows
           hoverRows
@@ -884,7 +884,7 @@ export const ResizableCellLevel: Story = {
         </p>
         <DataTable
           value={sampleData.slice(0, 6) as unknown as Record<string, unknown>[]}
-          columns={columns as unknown as DataTableColumn[]}
+          columns={columns as any}
           resizable
           resizableRows
           hoverRows
@@ -907,7 +907,7 @@ export const RowGrouping: Story = {
     return (
       <DataTable
         value={sampleData.slice(0, 20) as unknown as Record<string, unknown>[]}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         groupByField="role"
         groupHeaderTemplate={(val, rows) => (
           <span>{String(val)} <Chip variant="primary" size="sm">{`${rows.length}`}</Chip></span>
@@ -942,7 +942,7 @@ export const ColumnVisibility: Story = {
         </div>
         <DataTable
           value={sampleData.slice(0, 10) as unknown as Record<string, unknown>[]}
-          columns={cols as unknown as DataTableColumn[]}
+          columns={cols as any}
           dataKey="id"
           hoverRows
         />
@@ -967,7 +967,7 @@ export const MultipleFrozenColumns: Story = {
     return (
       <DataTable
         value={sampleData.slice(0, 20) as unknown as Record<string, unknown>[]}
-        columns={columns as unknown as DataTableColumn[]}
+        columns={columns as any}
         scrollable
         scrollHeight="350px"
         stickyHeader

@@ -1,10 +1,4 @@
-import React, {
-  forwardRef,
-  useState,
-  useCallback,
-  useRef,
-  useEffect,
-} from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { Input } from "./Input";
 import type { InputProps } from "./Input";
 
@@ -63,157 +57,150 @@ const isSlot = (ch: string) => ch in SLOT_REGEX;
  * <InputMask mask="aaa-9999" label="Plate" />
  * ```
  */
-export const InputMask = forwardRef<HTMLInputElement, InputMaskProps>(
-  (
-    {
-      mask,
-      value: controlledValue,
-      defaultValue,
-      onChange,
-      showMaskPlaceholder = true,
-      placeholderChar = "_",
-      placeholder,
-      onKeyDown,
-      ...inputProps
-    },
-    ref
-  ) => {
-    const isControlled = controlledValue !== undefined;
-    const innerRef = useRef<HTMLInputElement>(null);
+export const InputMask = ({
+  mask,
+  value: controlledValue,
+  defaultValue,
+  onChange,
+  showMaskPlaceholder = true,
+  placeholderChar = "_",
+  placeholder,
+  onKeyDown,
+  ref,
+  ...inputProps
+}: InputMaskProps & { ref?: React.Ref<HTMLInputElement> }) => {
+  const isControlled = controlledValue !== undefined;
+  const innerRef = useRef<HTMLInputElement>(null);
 
-    const applyMask = useCallback(
-      (raw: string): string => {
-        let result = "";
-        let rawIdx = 0;
-        for (let i = 0; i < mask.length && rawIdx < raw.length; i++) {
-          const maskCh = mask[i];
-          if (isSlot(maskCh)) {
-            const regex = SLOT_REGEX[maskCh];
-            if (regex.test(raw[rawIdx])) {
-              result += raw[rawIdx];
-              rawIdx++;
-            } else {
-              rawIdx++;
-              i--;
-            }
+  const applyMask = useCallback(
+    (raw: string): string => {
+      let result = "";
+      let rawIdx = 0;
+      for (let i = 0; i < mask.length && rawIdx < raw.length; i++) {
+        const maskCh = mask[i];
+        if (isSlot(maskCh)) {
+          const regex = SLOT_REGEX[maskCh];
+          if (regex.test(raw[rawIdx])) {
+            result += raw[rawIdx];
+            rawIdx++;
           } else {
-            result += maskCh;
-            if (raw[rawIdx] === maskCh) rawIdx++;
+            rawIdx++;
+            i--;
           }
+        } else {
+          result += maskCh;
+          if (raw[rawIdx] === maskCh) rawIdx++;
         }
-        return result;
-      },
-      [mask]
-    );
-
-    const extractRaw = useCallback(
-      (formatted: string): string => {
-        let raw = "";
-        for (let i = 0; i < formatted.length && i < mask.length; i++) {
-          if (isSlot(mask[i])) raw += formatted[i];
-        }
-        return raw;
-      },
-      [mask]
-    );
-
-    const getMaskPlaceholder = useCallback((): string => {
-      return mask
-        .split("")
-        .map(ch => (isSlot(ch) ? placeholderChar : ch))
-        .join("");
-    }, [mask, placeholderChar]);
-
-    const initialFormatted = applyMask(defaultValue || controlledValue || "");
-    const [internalValue, setInternalValue] = useState(initialFormatted);
-
-    const displayValue = isControlled
-      ? applyMask(controlledValue)
-      : internalValue;
-
-    const setCursorAfterFormat = useCallback(
-      (el: HTMLInputElement, prevRaw: string, nextFormatted: string) => {
-        const nextRaw = extractRaw(nextFormatted);
-        const addedChars = nextRaw.length - prevRaw.length;
-        let rawCount = 0;
-        let cursorPos = 0;
-        const targetRawPos = Math.max(0, prevRaw.length + addedChars);
-
-        for (let i = 0; i < nextFormatted.length && i < mask.length; i++) {
-          if (isSlot(mask[i])) {
-            rawCount++;
-            if (rawCount === targetRawPos) {
-              cursorPos = i + 1;
-              break;
-            }
-          }
-        }
-
-        if (rawCount < targetRawPos) cursorPos = nextFormatted.length;
-
-        requestAnimationFrame(() => {
-          el.setSelectionRange(cursorPos, cursorPos);
-        });
-      },
-      [mask, extractRaw]
-    );
-
-    const handleChange = useCallback(
-      (e: React.ChangeEvent<HTMLInputElement>) => {
-        const inputVal = e.target.value;
-        const prevRaw = extractRaw(displayValue);
-        const formatted = applyMask(inputVal);
-        const raw = extractRaw(formatted);
-
-        if (!isControlled) setInternalValue(formatted);
-        onChange?.(raw, formatted);
-
-        if (innerRef.current) {
-          setCursorAfterFormat(innerRef.current, prevRaw, formatted);
-        }
-      },
-      [
-        applyMask,
-        extractRaw,
-        displayValue,
-        isControlled,
-        onChange,
-        setCursorAfterFormat,
-      ]
-    );
-
-    const handleKeyDown = useCallback(
-      (e: React.KeyboardEvent<HTMLInputElement>) => {
-        onKeyDown?.(e);
-      },
-      [onKeyDown]
-    );
-
-    useEffect(() => {
-      if (ref) {
-        if (typeof ref === "function") ref(innerRef.current);
-        else
-          (ref as React.MutableRefObject<HTMLInputElement | null>).current =
-            innerRef.current;
       }
-    }, [ref]);
+      return result;
+    },
+    [mask]
+  );
 
-    return (
-      <Input
-        {...inputProps}
-        ref={innerRef}
-        type="text"
-        value={displayValue}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        placeholder={
-          placeholder ||
-          (showMaskPlaceholder ? getMaskPlaceholder() : undefined)
+  const extractRaw = useCallback(
+    (formatted: string): string => {
+      let raw = "";
+      for (let i = 0; i < formatted.length && i < mask.length; i++) {
+        if (isSlot(mask[i])) raw += formatted[i];
+      }
+      return raw;
+    },
+    [mask]
+  );
+
+  const getMaskPlaceholder = useCallback((): string => {
+    return mask
+      .split("")
+      .map(ch => (isSlot(ch) ? placeholderChar : ch))
+      .join("");
+  }, [mask, placeholderChar]);
+
+  const initialFormatted = applyMask(defaultValue || controlledValue || "");
+  const [internalValue, setInternalValue] = useState(initialFormatted);
+
+  const displayValue = isControlled
+    ? applyMask(controlledValue)
+    : internalValue;
+
+  const setCursorAfterFormat = useCallback(
+    (el: HTMLInputElement, prevRaw: string, nextFormatted: string) => {
+      const nextRaw = extractRaw(nextFormatted);
+      const addedChars = nextRaw.length - prevRaw.length;
+      let rawCount = 0;
+      let cursorPos = 0;
+      const targetRawPos = Math.max(0, prevRaw.length + addedChars);
+
+      for (let i = 0; i < nextFormatted.length && i < mask.length; i++) {
+        if (isSlot(mask[i])) {
+          rawCount++;
+          if (rawCount === targetRawPos) {
+            cursorPos = i + 1;
+            break;
+          }
         }
-        maxLength={mask.length}
-      />
-    );
-  }
-);
+      }
 
-InputMask.displayName = "InputMask";
+      if (rawCount < targetRawPos) cursorPos = nextFormatted.length;
+
+      requestAnimationFrame(() => {
+        el.setSelectionRange(cursorPos, cursorPos);
+      });
+    },
+    [mask, extractRaw]
+  );
+
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const inputVal = e.target.value;
+      const prevRaw = extractRaw(displayValue);
+      const formatted = applyMask(inputVal);
+      const raw = extractRaw(formatted);
+
+      if (!isControlled) setInternalValue(formatted);
+      onChange?.(raw, formatted);
+
+      if (innerRef.current) {
+        setCursorAfterFormat(innerRef.current, prevRaw, formatted);
+      }
+    },
+    [
+      applyMask,
+      extractRaw,
+      displayValue,
+      isControlled,
+      onChange,
+      setCursorAfterFormat,
+    ]
+  );
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      onKeyDown?.(e);
+    },
+    [onKeyDown]
+  );
+
+  useEffect(() => {
+    if (ref) {
+      if (typeof ref === "function") ref(innerRef.current);
+      else
+        (ref as React.MutableRefObject<HTMLInputElement | null>).current =
+          innerRef.current;
+    }
+  }, [ref]);
+
+  return (
+    <Input
+      {...inputProps}
+      ref={innerRef}
+      type="text"
+      value={displayValue}
+      onChange={handleChange}
+      onKeyDown={handleKeyDown}
+      placeholder={
+        placeholder || (showMaskPlaceholder ? getMaskPlaceholder() : undefined)
+      }
+      maxLength={mask.length}
+    />
+  );
+};

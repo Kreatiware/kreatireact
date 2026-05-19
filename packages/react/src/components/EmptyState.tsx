@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import "./EmptyState.css";
 import { useKreatiLocale } from "../locale";
 
@@ -33,33 +33,35 @@ export interface EmptyStateProps {
  * />
  * ```
  */
-export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
-  (
-    { icon, title, description, actions, size = "md", className, style },
-    ref
-  ) => {
-    const locale = useKreatiLocale();
-    const resolvedTitle = title ?? locale?.emptyState?.title ?? "No data";
-    const resolvedDesc =
-      description ??
-      locale?.emptyState?.description ??
-      "There are no items to display.";
+export const EmptyState = ({
+  icon,
+  title,
+  description,
+  actions,
+  size = "md",
+  className,
+  style,
+  ref,
+}: EmptyStateProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const locale = useKreatiLocale();
+  const resolvedTitle = title ?? locale?.emptyState?.title ?? "No data";
+  const resolvedDesc =
+    description ??
+    locale?.emptyState?.description ??
+    "There are no items to display.";
 
-    return (
-      <div
-        ref={ref}
-        className={`k-empty-state k-empty-state--${size} ${className || ""}`}
-        style={style}
-        role="status"
-        aria-live="polite"
-      >
-        {icon && <div className="k-empty-state__icon">{icon}</div>}
-        <h3 className="k-empty-state__title">{resolvedTitle}</h3>
-        <p className="k-empty-state__description">{resolvedDesc}</p>
-        {actions && <div className="k-empty-state__actions">{actions}</div>}
-      </div>
-    );
-  }
-);
-
-EmptyState.displayName = "EmptyState";
+  return (
+    <div
+      ref={ref}
+      className={`k-empty-state k-empty-state--${size} ${className || ""}`}
+      style={style}
+      role="status"
+      aria-live="polite"
+    >
+      {icon && <div className="k-empty-state__icon">{icon}</div>}
+      <h3 className="k-empty-state__title">{resolvedTitle}</h3>
+      <p className="k-empty-state__description">{resolvedDesc}</p>
+      {actions && <div className="k-empty-state__actions">{actions}</div>}
+    </div>
+  );
+};

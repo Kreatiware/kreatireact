@@ -1,4 +1,4 @@
-import React, { forwardRef, useId, useState, useCallback } from "react";
+import React, { useId, useState, useCallback } from "react";
 import { Radio } from "./Radio";
 import { FieldWrapper } from "./FieldWrapper";
 
@@ -80,114 +80,105 @@ export interface RadioGroupProps {
  * />
  * ```
  */
-export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
-  (
-    {
-      options,
-      value: controlledValue,
-      defaultValue,
-      onChange,
-      orientation = "vertical",
-      size = "md",
-      label,
-      helperText,
-      error,
-      success = false,
-      helperSeverity,
-      disabled = false,
-      required = false,
-      fullWidth = false,
-      name,
-      onBlur,
-      className = "",
-      style,
+export const RadioGroup = ({
+  options,
+  value: controlledValue,
+  defaultValue,
+  onChange,
+  orientation = "vertical",
+  size = "md",
+  label,
+  helperText,
+  error,
+  success = false,
+  helperSeverity,
+  disabled = false,
+  required = false,
+  fullWidth = false,
+  name,
+  onBlur,
+  className = "",
+  style,
+  ref,
+}: RadioGroupProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const autoId = useId();
+  const groupId = name || autoId;
+  const isControlled = controlledValue !== undefined;
+  const [internalValue, setInternalValue] = useState<string | number | null>(
+    defaultValue ?? null
+  );
+  const selected = isControlled ? controlledValue : internalValue;
+
+  const hasError = !!error;
+  const errorMessage = typeof error === "boolean" ? undefined : error;
+  const base = "k-radio-group";
+
+  const handleChange = useCallback(
+    (optionValue: string | number) => {
+      if (!isControlled) setInternalValue(optionValue);
+      onChange?.(optionValue);
     },
-    ref
-  ) => {
-    const autoId = useId();
-    const groupId = name || autoId;
-    const isControlled = controlledValue !== undefined;
-    const [internalValue, setInternalValue] = useState<string | number | null>(
-      defaultValue ?? null
-    );
-    const selected = isControlled ? controlledValue : internalValue;
+    [isControlled, onChange]
+  );
 
-    const hasError = !!error;
-    const errorMessage = typeof error === "boolean" ? undefined : error;
-    const base = "k-radio-group";
+  const groupClasses = [`${base}__options`, `${base}__options--${orientation}`]
+    .filter(Boolean)
+    .join(" ");
 
-    const handleChange = useCallback(
-      (optionValue: string | number) => {
-        if (!isControlled) setInternalValue(optionValue);
-        onChange?.(optionValue);
-      },
-      [isControlled, onChange]
-    );
-
-    const groupClasses = [
-      `${base}__options`,
-      `${base}__options--${orientation}`,
-    ]
-      .filter(Boolean)
-      .join(" ");
-
-    const content = (
-      <div
-        className={groupClasses}
-        role="radiogroup"
-        aria-labelledby={label ? `${groupId}-label` : undefined}
-        aria-required={required || undefined}
-        aria-invalid={hasError || undefined}
-      >
-        {options.map(opt => (
-          <Radio
-            key={opt.value}
-            value={opt.value}
-            label={opt.label}
-            name={name || groupId}
-            size={size}
-            checked={selected === opt.value}
-            disabled={disabled || opt.disabled}
-            onChange={() => handleChange(opt.value)}
-            onBlur={onBlur}
-          />
-        ))}
-      </div>
-    );
-
-    const hasWrapper = !!(label || helperText || errorMessage);
-
-    if (!hasWrapper) {
-      return (
-        <div ref={ref} className={`${base} ${className}`.trim()} style={style}>
-          {content}
-        </div>
-      );
-    }
-
-    return (
-      <div
-        ref={ref}
-        className={`${base} ${fullWidth ? `${base}--full-width` : ""} ${className}`.trim()}
-        style={style}
-      >
-        <FieldWrapper
-          label={label}
-          htmlFor={groupId}
-          required={required}
-          helperText={helperText}
-          error={errorMessage}
-          success={success}
-          helperSeverity={helperSeverity}
+  const content = (
+    <div
+      className={groupClasses}
+      role="radiogroup"
+      aria-labelledby={label ? `${groupId}-label` : undefined}
+      aria-required={required || undefined}
+      aria-invalid={hasError || undefined}
+    >
+      {options.map(opt => (
+        <Radio
+          key={opt.value}
+          value={opt.value}
+          label={opt.label}
+          name={name || groupId}
           size={size}
-          disabled={disabled}
-          fullWidth={fullWidth}
-        >
-          {content}
-        </FieldWrapper>
+          checked={selected === opt.value}
+          disabled={disabled || opt.disabled}
+          onChange={() => handleChange(opt.value)}
+          onBlur={onBlur}
+        />
+      ))}
+    </div>
+  );
+
+  const hasWrapper = !!(label || helperText || errorMessage);
+
+  if (!hasWrapper) {
+    return (
+      <div ref={ref} className={`${base} ${className}`.trim()} style={style}>
+        {content}
       </div>
     );
   }
-);
 
-RadioGroup.displayName = "RadioGroup";
+  return (
+    <div
+      ref={ref}
+      className={`${base} ${fullWidth ? `${base}--full-width` : ""} ${className}`.trim()}
+      style={style}
+    >
+      <FieldWrapper
+        label={label}
+        htmlFor={groupId}
+        required={required}
+        helperText={helperText}
+        error={errorMessage}
+        success={success}
+        helperSeverity={helperSeverity}
+        size={size}
+        disabled={disabled}
+        fullWidth={fullWidth}
+      >
+        {content}
+      </FieldWrapper>
+    </div>
+  );
+};

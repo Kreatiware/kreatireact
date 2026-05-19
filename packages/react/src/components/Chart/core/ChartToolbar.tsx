@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from "react";
+import React, { useMemo } from "react";
 import { MultiSelect } from "../../MultiSelect";
 import type { MultiSelectProps } from "../../MultiSelect";
 import type { SelectOption } from "../../Select";
@@ -77,157 +77,151 @@ const DownloadIcon = () => (
  * customizable via override props or fully replaceable via toolbarRender.
  * Uses internal Kreati components (MultiSelect, Button, DropdownButton).
  */
-export const ChartToolbar = forwardRef<HTMLDivElement, ChartToolbarProps>(
-  (
-    {
-      series = [],
-      visibleIds,
-      onVisibilityChange,
-      hasZoom = false,
-      onResetZoom,
-      exportFormats = [],
-      onExport,
-      filterProps,
-      actionButtonProps,
-      resetZoomProps,
-      exportButtonProps,
-      layout = "combined",
-      actions,
-      toolbarRender,
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const t = useKreatiLocale().chart;
+export const ChartToolbar = ({
+  series = [],
+  visibleIds,
+  onVisibilityChange,
+  hasZoom = false,
+  onResetZoom,
+  exportFormats = [],
+  onExport,
+  filterProps,
+  actionButtonProps,
+  resetZoomProps,
+  exportButtonProps,
+  layout = "combined",
+  actions,
+  toolbarRender,
+  className = "",
+  style,
+  ref,
+}: ChartToolbarProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const t = useKreatiLocale().chart;
 
-    // MultiSelect options from series
-    const options: SelectOption[] = useMemo(
-      () => series.map(s => ({ value: s.id, label: s.name })),
-      [series]
-    );
+  // MultiSelect options from series
+  const options: SelectOption[] = useMemo(
+    () => series.map(s => ({ value: s.id, label: s.name })),
+    [series]
+  );
 
-    const handleFilterChange = (values: Array<string | number>) => {
-      if (onVisibilityChange) onVisibilityChange(values.map(String));
-    };
+  const handleFilterChange = (values: Array<string | number>) => {
+    if (onVisibilityChange) onVisibilityChange(values.map(String));
+  };
 
-    // Export menu items
-    const exportItems = useMemo(
-      () =>
-        exportFormats.map(fmt => ({
-          key: fmt,
-          label:
-            fmt === "png"
-              ? t.exportPng
-              : fmt === "svg"
-                ? t.exportSvg
-                : fmt === "csv"
-                  ? t.exportCsv
-                  : fmt === "json-table"
-                    ? t.exportJsonTable
-                    : t.exportJsonSeries,
-        })),
-      [exportFormats, t]
-    );
+  // Export menu items
+  const exportItems = useMemo(
+    () =>
+      exportFormats.map(fmt => ({
+        key: fmt,
+        label:
+          fmt === "png"
+            ? t.exportPng
+            : fmt === "svg"
+              ? t.exportSvg
+              : fmt === "csv"
+                ? t.exportCsv
+                : fmt === "json-table"
+                  ? t.exportJsonTable
+                  : t.exportJsonSeries,
+      })),
+    [exportFormats, t]
+  );
 
-    // Build elements
-    const filterEl =
-      series.length > 0 ? (
-        <MultiSelect
-          options={options}
-          value={visibleIds}
-          onChange={handleFilterChange}
-          placeholder={t.filterPlaceholder}
-          size="sm"
-          chipDisplay
-          filterable
-          clearable
-          fullWidth
-          {...filterProps}
-        />
-      ) : null;
-
-    // Combined: single DropdownButton with reset zoom as main + exports in dropdown
-    const actionButtonEl =
-      onResetZoom || exportFormats.length > 0 ? (
-        <DropdownButton
-          label={t.resetZoom}
-          items={exportItems}
-          onClick={hasZoom ? onResetZoom : undefined}
-          onItemSelect={key => onExport?.(key)}
-          size="sm"
-          {...actionButtonProps}
-        />
-      ) : null;
-
-    // Split: separate reset zoom button + export dropdown
-    const resetZoomEl = onResetZoom ? (
-      <Button
-        label={t.resetZoom}
+  // Build elements
+  const filterEl =
+    series.length > 0 ? (
+      <MultiSelect
+        options={options}
+        value={visibleIds}
+        onChange={handleFilterChange}
+        placeholder={t.filterPlaceholder}
         size="sm"
-        onClick={onResetZoom}
-        disabled={!hasZoom}
-        {...resetZoomProps}
+        chipDisplay
+        filterable
+        clearable
+        fullWidth
+        {...filterProps}
       />
     ) : null;
 
-    const exportButtonEl =
-      exportFormats.length > 0 ? (
-        <DropdownButton
-          label={t.exportLabel}
-          iconLeft={<DownloadIcon />}
-          items={exportItems}
-          onClick={() => onExport?.(exportFormats[0])}
-          onItemSelect={key => onExport?.(key)}
-          size="sm"
-          {...exportButtonProps}
-        />
-      ) : null;
+  // Combined: single DropdownButton with reset zoom as main + exports in dropdown
+  const actionButtonEl =
+    onResetZoom || exportFormats.length > 0 ? (
+      <DropdownButton
+        label={t.resetZoom}
+        items={exportItems}
+        onClick={hasZoom ? onResetZoom : undefined}
+        onItemSelect={key => onExport?.(key)}
+        size="sm"
+        {...actionButtonProps}
+      />
+    ) : null;
 
-    const actionsEl = actions ?? null;
+  // Split: separate reset zoom button + export dropdown
+  const resetZoomEl = onResetZoom ? (
+    <Button
+      label={t.resetZoom}
+      size="sm"
+      onClick={onResetZoom}
+      disabled={!hasZoom}
+      {...resetZoomProps}
+    />
+  ) : null;
 
-    if (toolbarRender) {
-      return (
-        <div ref={ref} className={`k-chart-toolbar ${className}`} style={style}>
-          {toolbarRender({
-            filter: filterEl,
-            actionButton: actionButtonEl,
-            resetZoom: resetZoomEl,
-            exportButton: exportButtonEl,
-            actions: actionsEl,
-          })}
-        </div>
-      );
-    }
+  const exportButtonEl =
+    exportFormats.length > 0 ? (
+      <DropdownButton
+        label={t.exportLabel}
+        iconLeft={<DownloadIcon />}
+        items={exportItems}
+        onClick={() => onExport?.(exportFormats[0])}
+        onItemSelect={key => onExport?.(key)}
+        size="sm"
+        {...exportButtonProps}
+      />
+    ) : null;
 
+  const actionsEl = actions ?? null;
+
+  if (toolbarRender) {
     return (
-      <div
-        ref={ref}
-        className={`k-chart-toolbar ${className}`}
-        style={style}
-        role="toolbar"
-        aria-label="Chart toolbar"
-      >
-        {filterEl && (
-          <div className="k-chart-toolbar__filter">
-            <label className="k-chart-toolbar__label">{t.filterLabel}</label>
-            {filterEl}
-          </div>
-        )}
-        <div className="k-chart-toolbar__actions">
-          {layout === "combined" ? (
-            actionButtonEl
-          ) : (
-            <>
-              {resetZoomEl}
-              {exportButtonEl}
-            </>
-          )}
-          {actionsEl}
-        </div>
+      <div ref={ref} className={`k-chart-toolbar ${className}`} style={style}>
+        {toolbarRender({
+          filter: filterEl,
+          actionButton: actionButtonEl,
+          resetZoom: resetZoomEl,
+          exportButton: exportButtonEl,
+          actions: actionsEl,
+        })}
       </div>
     );
   }
-);
 
-ChartToolbar.displayName = "ChartToolbar";
+  return (
+    <div
+      ref={ref}
+      className={`k-chart-toolbar ${className}`}
+      style={style}
+      role="toolbar"
+      aria-label="Chart toolbar"
+    >
+      {filterEl && (
+        <div className="k-chart-toolbar__filter">
+          <label className="k-chart-toolbar__label">{t.filterLabel}</label>
+          {filterEl}
+        </div>
+      )}
+      <div className="k-chart-toolbar__actions">
+        {layout === "combined" ? (
+          actionButtonEl
+        ) : (
+          <>
+            {resetZoomEl}
+            {exportButtonEl}
+          </>
+        )}
+        {actionsEl}
+      </div>
+    </div>
+  );
+};

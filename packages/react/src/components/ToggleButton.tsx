@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import "./ToggleButton.css";
 
 export interface ToggleButtonProps {
@@ -43,56 +43,50 @@ export interface ToggleButtonProps {
  * <ToggleButton label="On" iconLeft={<Check size={14} />} active />
  * ```
  */
-export const ToggleButton = forwardRef<HTMLButtonElement, ToggleButtonProps>(
-  (
-    {
-      active = false,
-      value,
-      label,
-      iconLeft,
-      iconRight,
-      size = "md",
-      disabled = false,
-      raised = false,
-      slim = false,
-      compact = false,
-      onClick,
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const base = "k-toggle-btn";
-    const classes = [
-      base,
-      `${base}--${size}`,
-      active && `${base}--active`,
-      raised && `${base}--raised`,
-      slim && `${base}--slim`,
-      compact && `${base}--compact`,
-      disabled && `${base}--disabled`,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+export const ToggleButton = ({
+  active = false,
+  value,
+  label,
+  iconLeft,
+  iconRight,
+  size = "md",
+  disabled = false,
+  raised = false,
+  slim = false,
+  compact = false,
+  onClick,
+  className = "",
+  style,
+  ref,
+}: ToggleButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+  const base = "k-toggle-btn";
+  const classes = [
+    base,
+    `${base}--${size}`,
+    active && `${base}--active`,
+    raised && `${base}--raised`,
+    slim && `${base}--slim`,
+    compact && `${base}--compact`,
+    disabled && `${base}--disabled`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    return (
-      <button
-        ref={ref}
-        type="button"
-        className={classes}
-        style={style}
-        disabled={disabled}
-        onClick={onClick}
-        aria-pressed={active}
-        data-value={value}
-      >
-        {iconLeft && <span className={`${base}__icon`}>{iconLeft}</span>}
-        {label && <span className={`${base}__label`}>{label}</span>}
-        {iconRight && <span className={`${base}__icon`}>{iconRight}</span>}
-      </button>
-    );
-  }
-);
-
-ToggleButton.displayName = "ToggleButton";
+  return (
+    <button
+      ref={ref}
+      type="button"
+      className={classes}
+      style={style}
+      disabled={disabled}
+      onClick={onClick}
+      aria-pressed={active}
+      data-value={value}
+    >
+      {iconLeft && <span className={`${base}__icon`}>{iconLeft}</span>}
+      {label && <span className={`${base}__label`}>{label}</span>}
+      {iconRight && <span className={`${base}__icon`}>{iconRight}</span>}
+    </button>
+  );
+};

@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useRef } from "react";
+import React, { useImperativeHandle, useRef } from "react";
 import "./Skeleton.css";
 
 /** Shape of the skeleton placeholder */
@@ -43,72 +43,66 @@ export interface SkeletonProps {
  * <Skeleton shape="text" lines={3} />
  * ```
  */
-export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
-  (
-    {
-      shape = "rectangle",
-      width,
-      height,
-      lines = 3,
-      lineGap,
-      borderRadius,
-      animation = "shimmer",
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const elRef = useRef<HTMLDivElement>(null);
-    useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
+export const Skeleton = ({
+  shape = "rectangle",
+  width,
+  height,
+  lines = 3,
+  lineGap,
+  borderRadius,
+  animation = "shimmer",
+  className = "",
+  style,
+  ref,
+}: SkeletonProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const elRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
 
-    const base = "k-skeleton";
+  const base = "k-skeleton";
 
-    if (shape === "text") {
-      const cls = [base, `${base}--text`, className].filter(Boolean).join(" ");
-      return (
-        <div
-          ref={elRef}
-          className={cls}
-          style={{ gap: lineGap, ...style }}
-          aria-hidden="true"
-        >
-          {Array.from({ length: lines }, (_, i) => (
-            <div
-              key={i}
-              className={`${base}__line ${base}--${animation}`}
-              style={{
-                width: i === lines - 1 ? "60%" : "100%",
-                borderRadius,
-              }}
-            />
-          ))}
-        </div>
-      );
-    }
-
-    const isCircle = shape === "circle";
-    const resolvedWidth = width ?? (isCircle ? 48 : "100%");
-    const resolvedHeight = height ?? (isCircle ? resolvedWidth : "1em");
-    const resolvedRadius = borderRadius ?? (isCircle ? "50%" : undefined);
-
-    const cls = [base, `${base}--${animation}`, className]
-      .filter(Boolean)
-      .join(" ");
-
+  if (shape === "text") {
+    const cls = [base, `${base}--text`, className].filter(Boolean).join(" ");
     return (
       <div
         ref={elRef}
         className={cls}
-        style={{
-          width: resolvedWidth,
-          height: resolvedHeight,
-          borderRadius: resolvedRadius,
-          ...style,
-        }}
+        style={{ gap: lineGap, ...style }}
         aria-hidden="true"
-      />
+      >
+        {Array.from({ length: lines }, (_, i) => (
+          <div
+            key={i}
+            className={`${base}__line ${base}--${animation}`}
+            style={{
+              width: i === lines - 1 ? "60%" : "100%",
+              borderRadius,
+            }}
+          />
+        ))}
+      </div>
     );
   }
-);
 
-Skeleton.displayName = "Skeleton";
+  const isCircle = shape === "circle";
+  const resolvedWidth = width ?? (isCircle ? 48 : "100%");
+  const resolvedHeight = height ?? (isCircle ? resolvedWidth : "1em");
+  const resolvedRadius = borderRadius ?? (isCircle ? "50%" : undefined);
+
+  const cls = [base, `${base}--${animation}`, className]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div
+      ref={elRef}
+      className={cls}
+      style={{
+        width: resolvedWidth,
+        height: resolvedHeight,
+        borderRadius: resolvedRadius,
+        ...style,
+      }}
+      aria-hidden="true"
+    />
+  );
+};

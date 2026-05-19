@@ -1,9 +1,4 @@
-import React, {
-  forwardRef,
-  Children,
-  cloneElement,
-  isValidElement,
-} from "react";
+import React, { Children, cloneElement, isValidElement } from "react";
 import type { AvatarProps } from "./Avatar";
 import { useKreatiLocale } from "../locale";
 import "./AvatarGroup.css";
@@ -44,76 +39,70 @@ export interface AvatarGroupProps {
  * </AvatarGroup>
  * ```
  */
-export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
-  (
-    {
-      max,
-      size,
-      shape,
-      overflowTemplate,
-      onOverflowClick,
-      className = "",
-      style,
-      children,
-    },
-    ref
-  ) => {
-    const locale = useKreatiLocale();
-    const base = "k-avatar-group";
-    const items = Children.toArray(children).filter(isValidElement);
-    const total = items.length;
-    const visible = max != null && max < total ? items.slice(0, max) : items;
-    const overflowCount = max != null && max < total ? total - max : 0;
+export const AvatarGroup = ({
+  max,
+  size,
+  shape,
+  overflowTemplate,
+  onOverflowClick,
+  className = "",
+  style,
+  children,
+  ref,
+}: AvatarGroupProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const locale = useKreatiLocale();
+  const base = "k-avatar-group";
+  const items = Children.toArray(children).filter(isValidElement);
+  const total = items.length;
+  const visible = max != null && max < total ? items.slice(0, max) : items;
+  const overflowCount = max != null && max < total ? total - max : 0;
 
-    return (
-      <div
-        ref={ref}
-        className={`${base} ${className}`}
-        style={style}
-        role="group"
-        aria-label={locale.avatarGroup.groupLabel.replace(
-          "{count}",
-          String(total)
-        )}
-      >
-        {visible.map((child, i) =>
-          cloneElement(child as React.ReactElement<AvatarProps>, {
-            key: i,
-            ...(size && { size }),
-            ...(shape && { shape }),
-          })
-        )}
-        {overflowCount > 0 && (
-          <span
-            className={`${base}__overflow k-avatar k-avatar--${size || "md"} k-avatar--${shape || "circle"}`}
-            role="button"
-            tabIndex={onOverflowClick ? 0 : undefined}
-            aria-label={locale.avatarGroup.overflowLabel.replace(
-              "{count}",
-              String(overflowCount)
-            )}
-            onClick={
-              onOverflowClick ? () => onOverflowClick(overflowCount) : undefined
-            }
-            onKeyDown={
-              onOverflowClick
-                ? e => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      onOverflowClick(overflowCount);
-                    }
+  return (
+    <div
+      ref={ref}
+      className={`${base} ${className}`}
+      style={style}
+      role="group"
+      aria-label={locale.avatarGroup.groupLabel.replace(
+        "{count}",
+        String(total)
+      )}
+    >
+      {visible.map((child, i) =>
+        cloneElement(child as React.ReactElement<AvatarProps>, {
+          key: i,
+          ...(size && { size }),
+          ...(shape && { shape }),
+        })
+      )}
+      {overflowCount > 0 && (
+        <span
+          className={`${base}__overflow k-avatar k-avatar--${size || "md"} k-avatar--${shape || "circle"}`}
+          role="button"
+          tabIndex={onOverflowClick ? 0 : undefined}
+          aria-label={locale.avatarGroup.overflowLabel.replace(
+            "{count}",
+            String(overflowCount)
+          )}
+          onClick={
+            onOverflowClick ? () => onOverflowClick(overflowCount) : undefined
+          }
+          onKeyDown={
+            onOverflowClick
+              ? e => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    onOverflowClick(overflowCount);
                   }
-                : undefined
-            }
-          >
-            {overflowTemplate
-              ? overflowTemplate(overflowCount)
-              : `+${overflowCount}`}
-          </span>
-        )}
-      </div>
-    );
-  }
-);
-
-AvatarGroup.displayName = "AvatarGroup";
+                }
+              : undefined
+          }
+        >
+          {overflowTemplate
+            ? overflowTemplate(overflowCount)
+            : `+${overflowCount}`}
+        </span>
+      )}
+    </div>
+  );
+};

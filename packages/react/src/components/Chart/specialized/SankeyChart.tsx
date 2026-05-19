@@ -1,10 +1,4 @@
-import React, {
-  forwardRef,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import type { ChartSeverity } from "../core/types";
 import type { TooltipEntry } from "../core/ChartTooltip";
 import { ChartTooltip } from "../core/ChartTooltip";
@@ -278,112 +272,275 @@ const computeLayout = (
  * />
  * ```
  */
-export const SankeyChart = forwardRef<HTMLDivElement, SankeyChartProps>(
-  (
-    {
-      nodes,
-      links,
-      nodeWidth = 20,
-      nodePadding = 10,
-      title,
-      subtitle,
-      width,
-      height = 400,
-      showLabels = true,
-      showValues = false,
-      valueFormat,
-      linkOpacity = 0.4,
-      showTooltip = true,
-      exportFormats = [],
-      showMenuButton = "auto",
-      contextMenuItems,
-      onNodeClick,
-      onLinkClick,
-      className,
-      style,
+export const SankeyChart = ({
+  nodes,
+  links,
+  nodeWidth = 20,
+  nodePadding = 10,
+  title,
+  subtitle,
+  width,
+  height = 400,
+  showLabels = true,
+  showValues = false,
+  valueFormat,
+  linkOpacity = 0.4,
+  showTooltip = true,
+  exportFormats = [],
+  showMenuButton = "auto",
+  contextMenuItems,
+  onNodeClick,
+  onLinkClick,
+  className,
+  style,
+  ref,
+}: SankeyChartProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const locale = useKreatiLocale();
+  const svgRef = useRef<SVGSVGElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(width || 0);
+  const [tooltip, setTooltip] = useState<{
+    entries: TooltipEntry[];
+    x: number;
+    y: number;
+  } | null>(null);
+  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+  const [hoveredLink, setHoveredLink] = useState<number | null>(null);
+  const [focusedIdx, setFocusedIdx] = useState<number | null>(null);
+
+  const resizeRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (!node || width) return;
+      const ro = new ResizeObserver(entries => {
+        const w = entries[0]?.contentRect.width;
+        if (w && w > 0) setContainerWidth(w);
+      });
+      ro.observe(node);
+      return () => ro.disconnect();
     },
-    ref
-  ) => {
-    const locale = useKreatiLocale();
-    const svgRef = useRef<SVGSVGElement>(null);
-    const wrapRef = useRef<HTMLDivElement>(null);
-    const [containerWidth, setContainerWidth] = useState(width || 0);
-    const [tooltip, setTooltip] = useState<{
-      entries: TooltipEntry[];
-      x: number;
-      y: number;
-    } | null>(null);
-    const [hoveredNode, setHoveredNode] = useState<string | null>(null);
-    const [hoveredLink, setHoveredLink] = useState<number | null>(null);
-    const [focusedIdx, setFocusedIdx] = useState<number | null>(null);
+    [width]
+  );
 
-    const resizeRef = useCallback(
-      (node: HTMLDivElement | null) => {
-        if (!node || width) return;
-        const ro = new ResizeObserver(entries => {
-          const w = entries[0]?.contentRect.width;
-          if (w && w > 0) setContainerWidth(w);
-        });
-        ro.observe(node);
-        return () => ro.disconnect();
-      },
-      [width]
-    );
+  const chartW = width || containerWidth;
+  const titleH = (title ? 24 : 0) + (subtitle ? 18 : 0);
 
-    const chartW = width || containerWidth;
-    const titleH = (title ? 24 : 0) + (subtitle ? 18 : 0);
+  const { layoutNodes, layoutLinks } = useMemo(
+    () =>
+      computeLayout(
+        nodes,
+        links,
+        chartW,
+        height,
+        nodeWidth,
+        nodePadding,
+        titleH
+      ),
+    [nodes, links, chartW, height, nodeWidth, nodePadding, titleH]
+  );
 
-    const { layoutNodes, layoutLinks } = useMemo(
-      () =>
-        computeLayout(
-          nodes,
-          links,
-          chartW,
-          height,
-          nodeWidth,
-          nodePadding,
-          titleH
-        ),
-      [nodes, links, chartW, height, nodeWidth, nodePadding, titleH]
-    );
+  // Colors
+  const nodeColorMap = useMemo(
+    () =>
+      new Map(
+        layoutNodes.map(ln => [
+          ln.id,
+          ln.node.color ||
+            (ln.node.severity
+              ? resolveSeriesColor(
+                  {
+                    id: ln.id,
+                    name: ln.node.name,
+                    data: [],
+                    severity: ln.node.severity,
+                  },
+                  ln.colorIdx
+                )
+              : resolveSeriesColor(
+                  { id: ln.id, name: ln.node.name, data: [] },
+                  ln.colorIdx
+                )),
+        ])
+      ),
+    [layoutNodes]
+  );
 
-    // Colors
-    const nodeColorMap = useMemo(
-      () =>
-        new Map(
-          layoutNodes.map(ln => [
-            ln.id,
-            ln.node.color ||
-              (ln.node.severity
-                ? resolveSeriesColor(
-                    {
-                      id: ln.id,
-                      name: ln.node.name,
-                      data: [],
-                      severity: ln.node.severity,
-                    },
-                    ln.colorIdx
-                  )
-                : resolveSeriesColor(
-                    { id: ln.id, name: ln.node.name, data: [] },
-                    ln.colorIdx
-                  )),
-          ])
-        ),
-      [layoutNodes]
-    );
+  const formatVal = (v: number) =>
+    valueFormat ? valueFormat(v) : v.toLocaleString();
 
-    const formatVal = (v: number) =>
-      valueFormat ? valueFormat(v) : v.toLocaleString();
+  // Tooltip handlers
+  const handleNodeEnter = useCallback(
+    (ln: LayoutNode, e: React.MouseEvent) => {
+      if (!showTooltip) return;
+      setHoveredNode(ln.id);
+      setTooltip({
+        x: e.clientX,
+        y: e.clientY,
+        entries: [
+          {
+            series: {
+              id: ln.id,
+              name: ln.node.name,
+              data: [{ x: 0, y: ln.total }],
+            },
+            point: { x: 0, y: ln.total, label: formatVal(ln.total) },
+            color: nodeColorMap.get(ln.id) || "",
+          },
+        ],
+      });
+    },
+    [showTooltip, nodeColorMap, formatVal]
+  );
 
-    // Tooltip handlers
-    const handleNodeEnter = useCallback(
-      (ln: LayoutNode, e: React.MouseEvent) => {
-        if (!showTooltip) return;
-        setHoveredNode(ln.id);
+  const handleLinkEnter = useCallback(
+    (idx: number, ll: LayoutLink, e: React.MouseEvent) => {
+      if (!showTooltip) return;
+      setHoveredLink(idx);
+      const srcName =
+        nodes.find(n => n.id === ll.sourceId)?.name || ll.sourceId;
+      const tgtName =
+        nodes.find(n => n.id === ll.targetId)?.name || ll.targetId;
+      const name = `${srcName} → ${tgtName}`;
+      setTooltip({
+        x: e.clientX,
+        y: e.clientY,
+        entries: [
+          {
+            series: {
+              id: `link-${idx}`,
+              name,
+              data: [{ x: 0, y: ll.link.value }],
+            },
+            point: {
+              x: 0,
+              y: ll.link.value,
+              label: formatVal(ll.link.value),
+            },
+            color: ll.link.color || nodeColorMap.get(ll.sourceId) || "",
+          },
+        ],
+      });
+    },
+    [showTooltip, nodes, nodeColorMap, formatVal]
+  );
+
+  const handleLeave = useCallback(() => {
+    setHoveredNode(null);
+    setHoveredLink(null);
+    setTooltip(null);
+  }, []);
+
+  // Context menu
+  const menuItems = useMemo(() => {
+    const items: MenuItem[] = [];
+    for (const fmt of exportFormats) {
+      const label =
+        fmt === "png"
+          ? locale?.chart?.exportPng || "Export PNG"
+          : fmt === "svg"
+            ? locale?.chart?.exportSvg || "Export SVG"
+            : fmt === "csv"
+              ? locale?.chart?.exportCsv || "Export CSV"
+              : locale?.chart?.exportJsonTable || "Export JSON";
+      items.push({
+        key: fmt,
+        label,
+        command: () => {
+          if (fmt === "csv") {
+            const header = ["Source", "Target", "Value"];
+            const csvRows = links.map(l => [
+              l.source,
+              l.target,
+              String(l.value),
+            ]);
+            const csv = [header, ...csvRows].map(r => r.join(";")).join("\n");
+            const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "sankey.csv";
+            a.click();
+            URL.revokeObjectURL(url);
+            return;
+          }
+          if (fmt === "json") {
+            const obj = {
+              nodes: nodes.map(n => ({ id: n.id, name: n.name })),
+              links: links.map(l => ({
+                source: l.source,
+                target: l.target,
+                value: l.value,
+              })),
+            };
+            const blob = new Blob([JSON.stringify(obj, null, 2)], {
+              type: "application/json",
+            });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "sankey.json";
+            a.click();
+            URL.revokeObjectURL(url);
+            return;
+          }
+          if (!svgRef.current) return;
+          if (fmt === "png") exportPng(svgRef.current);
+          else exportSvg(svgRef.current);
+        },
+      });
+    }
+    if (contextMenuItems) items.push(...contextMenuItems);
+    return items;
+  }, [exportFormats, contextMenuItems, locale, nodes, links]);
+
+  const showMenu =
+    showMenuButton === true ||
+    (showMenuButton === "auto" && menuItems.length > 0);
+
+  // Keyboard
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (layoutNodes.length === 0) return;
+      const fc = focusedIdx ?? 0;
+      switch (e.key) {
+        case "ArrowRight":
+        case "ArrowDown":
+          e.preventDefault();
+          setFocusedIdx(Math.min(fc + 1, layoutNodes.length - 1));
+          break;
+        case "ArrowLeft":
+        case "ArrowUp":
+          e.preventDefault();
+          setFocusedIdx(Math.max(fc - 1, 0));
+          break;
+        case "Enter":
+        case " ":
+          e.preventDefault();
+          onNodeClick?.(layoutNodes[fc].node);
+          break;
+        case "Escape":
+          setFocusedIdx(null);
+          setTooltip(null);
+          break;
+      }
+    },
+    [focusedIdx, layoutNodes, onNodeClick]
+  );
+
+  // Keyboard tooltip sync
+  const prevFocusRef = useRef(focusedIdx);
+  if (
+    prevFocusRef.current !== focusedIdx &&
+    focusedIdx !== null &&
+    showTooltip
+  ) {
+    prevFocusRef.current = focusedIdx;
+    const ln = layoutNodes[focusedIdx];
+    if (ln) {
+      const rect = wrapRef.current?.getBoundingClientRect();
+      queueMicrotask(() => {
         setTooltip({
-          x: e.clientX,
-          y: e.clientY,
+          x: (rect?.left || 0) + ln.x + nodeWidth / 2,
+          y: (rect?.top || 0) + ln.y + ln.h / 2,
           entries: [
             {
               series: {
@@ -396,241 +553,27 @@ export const SankeyChart = forwardRef<HTMLDivElement, SankeyChartProps>(
             },
           ],
         });
-      },
-      [showTooltip, nodeColorMap, formatVal]
-    );
-
-    const handleLinkEnter = useCallback(
-      (idx: number, ll: LayoutLink, e: React.MouseEvent) => {
-        if (!showTooltip) return;
-        setHoveredLink(idx);
-        const srcName =
-          nodes.find(n => n.id === ll.sourceId)?.name || ll.sourceId;
-        const tgtName =
-          nodes.find(n => n.id === ll.targetId)?.name || ll.targetId;
-        const name = `${srcName} → ${tgtName}`;
-        setTooltip({
-          x: e.clientX,
-          y: e.clientY,
-          entries: [
-            {
-              series: {
-                id: `link-${idx}`,
-                name,
-                data: [{ x: 0, y: ll.link.value }],
-              },
-              point: {
-                x: 0,
-                y: ll.link.value,
-                label: formatVal(ll.link.value),
-              },
-              color: ll.link.color || nodeColorMap.get(ll.sourceId) || "",
-            },
-          ],
-        });
-      },
-      [showTooltip, nodes, nodeColorMap, formatVal]
-    );
-
-    const handleLeave = useCallback(() => {
-      setHoveredNode(null);
-      setHoveredLink(null);
-      setTooltip(null);
-    }, []);
-
-    // Context menu
-    const menuItems = useMemo(() => {
-      const items: MenuItem[] = [];
-      for (const fmt of exportFormats) {
-        const label =
-          fmt === "png"
-            ? locale?.chart?.exportPng || "Export PNG"
-            : fmt === "svg"
-              ? locale?.chart?.exportSvg || "Export SVG"
-              : fmt === "csv"
-                ? locale?.chart?.exportCsv || "Export CSV"
-                : locale?.chart?.exportJsonTable || "Export JSON";
-        items.push({
-          key: fmt,
-          label,
-          command: () => {
-            if (fmt === "csv") {
-              const header = ["Source", "Target", "Value"];
-              const csvRows = links.map(l => [
-                l.source,
-                l.target,
-                String(l.value),
-              ]);
-              const csv = [header, ...csvRows].map(r => r.join(";")).join("\n");
-              const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement("a");
-              a.href = url;
-              a.download = "sankey.csv";
-              a.click();
-              URL.revokeObjectURL(url);
-              return;
-            }
-            if (fmt === "json") {
-              const obj = {
-                nodes: nodes.map(n => ({ id: n.id, name: n.name })),
-                links: links.map(l => ({
-                  source: l.source,
-                  target: l.target,
-                  value: l.value,
-                })),
-              };
-              const blob = new Blob([JSON.stringify(obj, null, 2)], {
-                type: "application/json",
-              });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement("a");
-              a.href = url;
-              a.download = "sankey.json";
-              a.click();
-              URL.revokeObjectURL(url);
-              return;
-            }
-            if (!svgRef.current) return;
-            if (fmt === "png") exportPng(svgRef.current);
-            else exportSvg(svgRef.current);
-          },
-        });
-      }
-      if (contextMenuItems) items.push(...contextMenuItems);
-      return items;
-    }, [exportFormats, contextMenuItems, locale, nodes, links]);
-
-    const showMenu =
-      showMenuButton === true ||
-      (showMenuButton === "auto" && menuItems.length > 0);
-
-    // Keyboard
-    const handleKeyDown = useCallback(
-      (e: React.KeyboardEvent) => {
-        if (layoutNodes.length === 0) return;
-        const fc = focusedIdx ?? 0;
-        switch (e.key) {
-          case "ArrowRight":
-          case "ArrowDown":
-            e.preventDefault();
-            setFocusedIdx(Math.min(fc + 1, layoutNodes.length - 1));
-            break;
-          case "ArrowLeft":
-          case "ArrowUp":
-            e.preventDefault();
-            setFocusedIdx(Math.max(fc - 1, 0));
-            break;
-          case "Enter":
-          case " ":
-            e.preventDefault();
-            onNodeClick?.(layoutNodes[fc].node);
-            break;
-          case "Escape":
-            setFocusedIdx(null);
-            setTooltip(null);
-            break;
-        }
-      },
-      [focusedIdx, layoutNodes, onNodeClick]
-    );
-
-    // Keyboard tooltip sync
-    const prevFocusRef = useRef(focusedIdx);
-    if (
-      prevFocusRef.current !== focusedIdx &&
-      focusedIdx !== null &&
-      showTooltip
-    ) {
-      prevFocusRef.current = focusedIdx;
-      const ln = layoutNodes[focusedIdx];
-      if (ln) {
-        const rect = wrapRef.current?.getBoundingClientRect();
-        queueMicrotask(() => {
-          setTooltip({
-            x: (rect?.left || 0) + ln.x + nodeWidth / 2,
-            y: (rect?.top || 0) + ln.y + ln.h / 2,
-            entries: [
-              {
-                series: {
-                  id: ln.id,
-                  name: ln.node.name,
-                  data: [{ x: 0, y: ln.total }],
-                },
-                point: { x: 0, y: ln.total, label: formatVal(ln.total) },
-                color: nodeColorMap.get(ln.id) || "",
-              },
-            ],
-          });
-        });
-      }
-    } else if (focusedIdx === null) {
-      prevFocusRef.current = null;
+      });
     }
+  } else if (focusedIdx === null) {
+    prevFocusRef.current = null;
+  }
 
-    // Highlight: connected links
-    const connectedLinks = useMemo(() => {
-      if (!hoveredNode && focusedIdx === null) return null;
-      const id =
-        focusedIdx !== null ? layoutNodes[focusedIdx]?.id : hoveredNode;
-      if (!id) return null;
-      return new Set(
-        layoutLinks
-          .map((ll, i) => (ll.sourceId === id || ll.targetId === id ? i : -1))
-          .filter(i => i >= 0)
-      );
-    }, [hoveredNode, focusedIdx, layoutNodes, layoutLinks]);
-
-    // Wait for ResizeObserver
-    if (!chartW) {
-      return (
-        <div
-          ref={node => {
-            if (typeof ref === "function") ref(node);
-            else if (ref)
-              (ref as React.MutableRefObject<HTMLDivElement | null>).current =
-                node;
-            resizeRef(node);
-          }}
-          className={`k-chart k-sankey ${className || ""}`}
-          style={{ width: width || "100%", minHeight: height, ...style }}
-        />
-      );
-    }
-
-    // Accessible data table
-    const srTable = (
-      <table className="k-sr-only">
-        <caption>{title || "Sankey diagram"}</caption>
-        <thead>
-          <tr>
-            <th>Source</th>
-            <th>Target</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          {links.map((l, i) => (
-            <tr key={i}>
-              <td>{nodes.find(n => n.id === l.source)?.name || l.source}</td>
-              <td>{nodes.find(n => n.id === l.target)?.name || l.target}</td>
-              <td>{formatVal(l.value)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+  // Highlight: connected links
+  const connectedLinks = useMemo(() => {
+    if (!hoveredNode && focusedIdx === null) return null;
+    const id = focusedIdx !== null ? layoutNodes[focusedIdx]?.id : hoveredNode;
+    if (!id) return null;
+    return new Set(
+      layoutLinks
+        .map((ll, i) => (ll.sourceId === id || ll.targetId === id ? i : -1))
+        .filter(i => i >= 0)
     );
+  }, [hoveredNode, focusedIdx, layoutNodes, layoutLinks]);
 
-    // Link path
-    const linkPath = (ll: LayoutLink) => {
-      const sx =
-        (layoutNodes.find(n => n.id === ll.sourceId)?.x || 0) + nodeWidth;
-      const tx = layoutNodes.find(n => n.id === ll.targetId)?.x || 0;
-      const mx = (sx + tx) / 2;
-      return `M${sx},${ll.sy} C${mx},${ll.sy} ${mx},${ll.ty} ${tx},${ll.ty}`;
-    };
-
-    const body = (
+  // Wait for ResizeObserver
+  if (!chartW) {
+    return (
       <div
         ref={node => {
           if (typeof ref === "function") ref(node);
@@ -638,185 +581,227 @@ export const SankeyChart = forwardRef<HTMLDivElement, SankeyChartProps>(
             (ref as React.MutableRefObject<HTMLDivElement | null>).current =
               node;
           resizeRef(node);
-          (wrapRef as React.MutableRefObject<HTMLDivElement | null>).current =
-            node;
         }}
         className={`k-chart k-sankey ${className || ""}`}
-        style={{ width: width || "100%", position: "relative", ...style }}
+        style={{ width: width || "100%", minHeight: height, ...style }}
+      />
+    );
+  }
+
+  // Accessible data table
+  const srTable = (
+    <table className="k-sr-only">
+      <caption>{title || "Sankey diagram"}</caption>
+      <thead>
+        <tr>
+          <th>Source</th>
+          <th>Target</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        {links.map((l, i) => (
+          <tr key={i}>
+            <td>{nodes.find(n => n.id === l.source)?.name || l.source}</td>
+            <td>{nodes.find(n => n.id === l.target)?.name || l.target}</td>
+            <td>{formatVal(l.value)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+
+  // Link path
+  const linkPath = (ll: LayoutLink) => {
+    const sx =
+      (layoutNodes.find(n => n.id === ll.sourceId)?.x || 0) + nodeWidth;
+    const tx = layoutNodes.find(n => n.id === ll.targetId)?.x || 0;
+    const mx = (sx + tx) / 2;
+    return `M${sx},${ll.sy} C${mx},${ll.sy} ${mx},${ll.ty} ${tx},${ll.ty}`;
+  };
+
+  const body = (
+    <div
+      ref={node => {
+        if (typeof ref === "function") ref(node);
+        else if (ref)
+          (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        resizeRef(node);
+        (wrapRef as React.MutableRefObject<HTMLDivElement | null>).current =
+          node;
+      }}
+      className={`k-chart k-sankey ${className || ""}`}
+      style={{ width: width || "100%", position: "relative", ...style }}
+    >
+      <svg
+        ref={svgRef}
+        className="k-chart-svg"
+        width={chartW}
+        height={height}
+        viewBox={`0 0 ${chartW} ${height}`}
+        role="figure"
+        aria-label={title || "Sankey diagram"}
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
+        onFocus={() => {
+          if (focusedIdx === null) setFocusedIdx(0);
+        }}
+        onBlur={e => {
+          if (!e.currentTarget.contains(e.relatedTarget as Node))
+            setTooltip(null);
+        }}
       >
-        <svg
-          ref={svgRef}
-          className="k-chart-svg"
-          width={chartW}
-          height={height}
-          viewBox={`0 0 ${chartW} ${height}`}
-          role="figure"
-          aria-label={title || "Sankey diagram"}
-          tabIndex={0}
-          onKeyDown={handleKeyDown}
-          onFocus={() => {
-            if (focusedIdx === null) setFocusedIdx(0);
-          }}
-          onBlur={e => {
-            if (!e.currentTarget.contains(e.relatedTarget as Node))
-              setTooltip(null);
+        {/* Title */}
+        {title && (
+          <text
+            x={chartW / 2}
+            y={16}
+            textAnchor="middle"
+            className="k-sankey-title"
+          >
+            {title}
+          </text>
+        )}
+        {subtitle && (
+          <text
+            x={chartW / 2}
+            y={title ? 34 : 16}
+            textAnchor="middle"
+            className="k-sankey-subtitle"
+          >
+            {subtitle}
+          </text>
+        )}
+
+        {/* Links */}
+        {layoutLinks.map((ll, i) => {
+          const srcColor = nodeColorMap.get(ll.sourceId) || "";
+          const color = ll.link.color || srcColor;
+          const highlighted = connectedLinks?.has(i);
+          const dimmed =
+            connectedLinks !== null && !highlighted && hoveredLink !== i;
+
+          return (
+            <path
+              key={`link-${i}`}
+              d={linkPath(ll)}
+              fill="none"
+              stroke={color}
+              strokeWidth={ll.width}
+              strokeOpacity={
+                dimmed ? 0.1 : hoveredLink === i ? 0.7 : linkOpacity
+              }
+              className={`k-sankey-link ${ll.link.className || ""}`}
+              style={ll.link.style}
+              onMouseEnter={e => handleLinkEnter(i, ll, e)}
+              onMouseLeave={handleLeave}
+              onClick={() => onLinkClick?.(ll.link)}
+              cursor={onLinkClick ? "pointer" : undefined}
+            />
+          );
+        })}
+
+        {/* Nodes */}
+        {layoutNodes.map((ln, i) => {
+          const color = nodeColorMap.get(ln.id) || "";
+          const isFocused = focusedIdx === i;
+          const isHovered = hoveredNode === ln.id;
+          const isRight = ln.col > Math.max(...layoutNodes.map(n => n.col)) / 2;
+
+          return (
+            <g
+              key={ln.id}
+              className={`k-sankey-node ${ln.node.className || ""}`}
+              style={ln.node.style}
+            >
+              <rect
+                x={ln.x}
+                y={ln.y}
+                width={nodeWidth}
+                height={ln.h}
+                fill={color}
+                stroke={
+                  isFocused
+                    ? "var(--kreati-chart-text)"
+                    : isHovered
+                      ? "var(--kreati-chart-text)"
+                      : "none"
+                }
+                strokeWidth={isFocused ? 2 : isHovered ? 1 : 0}
+                rx={2}
+                onMouseEnter={e => handleNodeEnter(ln, e)}
+                onMouseLeave={handleLeave}
+                onClick={() => {
+                  setFocusedIdx(i);
+                  onNodeClick?.(ln.node);
+                }}
+                cursor={onNodeClick ? "pointer" : undefined}
+              />
+              {showLabels && (
+                <text
+                  x={isRight ? ln.x - 6 : ln.x + nodeWidth + 6}
+                  y={ln.y + ln.h / 2}
+                  textAnchor={isRight ? "end" : "start"}
+                  dominantBaseline="central"
+                  className="k-sankey-label"
+                >
+                  {ln.node.name}
+                  {showValues ? ` (${formatVal(ln.total)})` : ""}
+                </text>
+              )}
+            </g>
+          );
+        })}
+      </svg>
+
+      {srTable}
+
+      {tooltip && showTooltip && (
+        <ChartTooltip
+          entries={tooltip.entries}
+          x={tooltip.x}
+          y={tooltip.y}
+          visible
+        />
+      )}
+
+      {showMenu && (
+        <button
+          type="button"
+          className="k-chart-menu-btn"
+          aria-label={locale?.chart?.menuLabel || "Chart menu"}
+          onClick={e => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            e.currentTarget.dispatchEvent(
+              new MouseEvent("contextmenu", {
+                bubbles: true,
+                clientX: rect.left,
+                clientY: rect.bottom,
+              })
+            );
           }}
         >
-          {/* Title */}
-          {title && (
-            <text
-              x={chartW / 2}
-              y={16}
-              textAnchor="middle"
-              className="k-sankey-title"
-            >
-              {title}
-            </text>
-          )}
-          {subtitle && (
-            <text
-              x={chartW / 2}
-              y={title ? 34 : 16}
-              textAnchor="middle"
-              className="k-sankey-subtitle"
-            >
-              {subtitle}
-            </text>
-          )}
-
-          {/* Links */}
-          {layoutLinks.map((ll, i) => {
-            const srcColor = nodeColorMap.get(ll.sourceId) || "";
-            const color = ll.link.color || srcColor;
-            const highlighted = connectedLinks?.has(i);
-            const dimmed =
-              connectedLinks !== null && !highlighted && hoveredLink !== i;
-
-            return (
-              <path
-                key={`link-${i}`}
-                d={linkPath(ll)}
-                fill="none"
-                stroke={color}
-                strokeWidth={ll.width}
-                strokeOpacity={
-                  dimmed ? 0.1 : hoveredLink === i ? 0.7 : linkOpacity
-                }
-                className={`k-sankey-link ${ll.link.className || ""}`}
-                style={ll.link.style}
-                onMouseEnter={e => handleLinkEnter(i, ll, e)}
-                onMouseLeave={handleLeave}
-                onClick={() => onLinkClick?.(ll.link)}
-                cursor={onLinkClick ? "pointer" : undefined}
-              />
-            );
-          })}
-
-          {/* Nodes */}
-          {layoutNodes.map((ln, i) => {
-            const color = nodeColorMap.get(ln.id) || "";
-            const isFocused = focusedIdx === i;
-            const isHovered = hoveredNode === ln.id;
-            const isRight =
-              ln.col > Math.max(...layoutNodes.map(n => n.col)) / 2;
-
-            return (
-              <g
-                key={ln.id}
-                className={`k-sankey-node ${ln.node.className || ""}`}
-                style={ln.node.style}
-              >
-                <rect
-                  x={ln.x}
-                  y={ln.y}
-                  width={nodeWidth}
-                  height={ln.h}
-                  fill={color}
-                  stroke={
-                    isFocused
-                      ? "var(--kreati-chart-text)"
-                      : isHovered
-                        ? "var(--kreati-chart-text)"
-                        : "none"
-                  }
-                  strokeWidth={isFocused ? 2 : isHovered ? 1 : 0}
-                  rx={2}
-                  onMouseEnter={e => handleNodeEnter(ln, e)}
-                  onMouseLeave={handleLeave}
-                  onClick={() => {
-                    setFocusedIdx(i);
-                    onNodeClick?.(ln.node);
-                  }}
-                  cursor={onNodeClick ? "pointer" : undefined}
-                />
-                {showLabels && (
-                  <text
-                    x={isRight ? ln.x - 6 : ln.x + nodeWidth + 6}
-                    y={ln.y + ln.h / 2}
-                    textAnchor={isRight ? "end" : "start"}
-                    dominantBaseline="central"
-                    className="k-sankey-label"
-                  >
-                    {ln.node.name}
-                    {showValues ? ` (${formatVal(ln.total)})` : ""}
-                  </text>
-                )}
-              </g>
-            );
-          })}
-        </svg>
-
-        {srTable}
-
-        {tooltip && showTooltip && (
-          <ChartTooltip
-            entries={tooltip.entries}
-            x={tooltip.x}
-            y={tooltip.y}
-            visible
-          />
-        )}
-
-        {showMenu && (
-          <button
-            type="button"
-            className="k-chart-menu-btn"
-            aria-label={locale?.chart?.menuLabel || "Chart menu"}
-            onClick={e => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              e.currentTarget.dispatchEvent(
-                new MouseEvent("contextmenu", {
-                  bubbles: true,
-                  clientX: rect.left,
-                  clientY: rect.bottom,
-                })
-              );
-            }}
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
           >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path d={ELLIPSIS_V} />
-            </svg>
-          </button>
-        )}
-      </div>
+            <path d={ELLIPSIS_V} />
+          </svg>
+        </button>
+      )}
+    </div>
+  );
+
+  if (menuItems.length > 0) {
+    return (
+      <ContextMenu items={menuItems} trigger="contextmenu">
+        {body}
+      </ContextMenu>
     );
-
-    if (menuItems.length > 0) {
-      return (
-        <ContextMenu items={menuItems} trigger="contextmenu">
-          {body}
-        </ContextMenu>
-      );
-    }
-
-    return body;
   }
-);
 
-SankeyChart.displayName = "SankeyChart";
+  return body;
+};

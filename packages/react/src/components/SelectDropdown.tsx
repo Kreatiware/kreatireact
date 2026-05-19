@@ -269,7 +269,7 @@ interface VirtualItemsProps {
   optionTemplate?: SelectDropdownProps["optionTemplate"];
   onSelect: (option: SelectOption) => void;
   onMouseEnterOption: (index: number) => void;
-  containerRef: React.RefObject<HTMLDivElement>;
+  containerRef: React.RefObject<HTMLDivElement | null>;
   base: string;
 }
 

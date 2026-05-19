@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useState,
   useCallback,
   useRef,
@@ -233,466 +232,454 @@ const DEFAULT_PRESETS = [
  * <ColorPicker label="With alpha" showAlpha format="rgba" />
  * ```
  */
-export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(
-  (
-    {
-      value: controlledValue,
-      defaultValue = "#3b82f6",
-      onChange,
-      format: initialFormat = "hex",
-      showAlpha = false,
-      presets = DEFAULT_PRESETS,
-      disabled = false,
-      label,
-      helperText,
-      error,
-      success,
-      required,
-      size,
-      fullWidth,
-      name,
-      onBlur,
-      className = "",
-      style,
+export const ColorPicker = ({
+  value: controlledValue,
+  defaultValue = "#3b82f6",
+  onChange,
+  format: initialFormat = "hex",
+  showAlpha = false,
+  presets = DEFAULT_PRESETS,
+  disabled = false,
+  label,
+  helperText,
+  error,
+  success,
+  required,
+  size,
+  fullWidth,
+  name,
+  onBlur,
+  className = "",
+  style,
+  ref,
+}: ColorPickerProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const elRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const satAreaRef = useRef<HTMLDivElement>(null);
+  const hueBarRef = useRef<HTMLDivElement>(null);
+  const alphaBarRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
+  const locale = useKreatiLocale();
+  const uid = useId();
+
+  const isControlled = controlledValue !== undefined;
+  const initRgba = parseColor(isControlled ? controlledValue : defaultValue);
+  const initHsv = rgbToHsv(initRgba.r, initRgba.g, initRgba.b);
+
+  const [hsv, setHsv] = useState<HSV>(initHsv);
+  const [alpha, setAlpha] = useState(initRgba.a);
+  const [open, setOpen] = useState(false);
+  const [format, setFormat] = useState<ColorFormat>(initialFormat);
+  const [textInput, setTextInput] = useState("");
+  const [copied, setCopied] = useState(false);
+  const dragging = useRef<"sat" | "hue" | "alpha" | null>(null);
+
+  const zIndex = useLayerZIndex();
+  const { coords, positioned } = useOverlayPosition(triggerRef, panelRef, open);
+
+  const [r, g, b] = hsvToRgb(hsv.h, hsv.s, hsv.v);
+  const rgba: RGBA = { r, g, b, a: alpha };
+  const colorStr = formatColor(rgba, format);
+  const displayColor = rgbaToHex(r, g, b, alpha);
+
+  const emitChange = useCallback(
+    (newHsv: HSV, newAlpha: number) => {
+      const [nr, ng, nb] = hsvToRgb(newHsv.h, newHsv.s, newHsv.v);
+      onChange?.(formatColor({ r: nr, g: ng, b: nb, a: newAlpha }, format));
     },
-    ref
-  ) => {
-    const elRef = useRef<HTMLDivElement>(null);
-    const triggerRef = useRef<HTMLDivElement>(null);
-    const panelRef = useRef<HTMLDivElement>(null);
-    const satAreaRef = useRef<HTMLDivElement>(null);
-    const hueBarRef = useRef<HTMLDivElement>(null);
-    const alphaBarRef = useRef<HTMLDivElement>(null);
-    useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
-    const locale = useKreatiLocale();
-    const uid = useId();
+    [format, onChange]
+  );
 
-    const isControlled = controlledValue !== undefined;
-    const initRgba = parseColor(isControlled ? controlledValue : defaultValue);
-    const initHsv = rgbToHsv(initRgba.r, initRgba.g, initRgba.b);
+  // Sync from controlled value
+  useEffect(() => {
+    if (!isControlled || !controlledValue) return;
+    const parsed = parseColor(controlledValue);
+    const newHsv = rgbToHsv(parsed.r, parsed.g, parsed.b);
+    setHsv(newHsv);
+    setAlpha(parsed.a);
+  }, [controlledValue, isControlled]);
 
-    const [hsv, setHsv] = useState<HSV>(initHsv);
-    const [alpha, setAlpha] = useState(initRgba.a);
-    const [open, setOpen] = useState(false);
-    const [format, setFormat] = useState<ColorFormat>(initialFormat);
-    const [textInput, setTextInput] = useState("");
-    const [copied, setCopied] = useState(false);
-    const dragging = useRef<"sat" | "hue" | "alpha" | null>(null);
+  /* ── Drag handlers ── */
+  const handleSatMove = useCallback(
+    (clientX: number, clientY: number) => {
+      const rect = satAreaRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      const s = clamp((clientX - rect.left) / rect.width, 0, 1);
+      const v = clamp(1 - (clientY - rect.top) / rect.height, 0, 1);
+      const next = { ...hsv, s, v };
+      setHsv(next);
+      emitChange(next, alpha);
+    },
+    [hsv, alpha, emitChange]
+  );
 
-    const zIndex = useLayerZIndex();
-    const { coords, positioned } = useOverlayPosition(
-      triggerRef,
-      panelRef,
-      open
-    );
+  const handleHueMove = useCallback(
+    (clientX: number) => {
+      const rect = hueBarRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      const h = clamp((clientX - rect.left) / rect.width, 0, 1) * 360;
+      const next = { ...hsv, h };
+      setHsv(next);
+      emitChange(next, alpha);
+    },
+    [hsv, alpha, emitChange]
+  );
 
-    const [r, g, b] = hsvToRgb(hsv.h, hsv.s, hsv.v);
-    const rgba: RGBA = { r, g, b, a: alpha };
-    const colorStr = formatColor(rgba, format);
-    const displayColor = rgbaToHex(r, g, b, alpha);
+  const handleAlphaMove = useCallback(
+    (clientX: number) => {
+      const rect = alphaBarRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      const a = clamp((clientX - rect.left) / rect.width, 0, 1);
+      setAlpha(a);
+      emitChange(hsv, a);
+    },
+    [hsv, emitChange]
+  );
 
-    const emitChange = useCallback(
-      (newHsv: HSV, newAlpha: number) => {
-        const [nr, ng, nb] = hsvToRgb(newHsv.h, newHsv.s, newHsv.v);
-        onChange?.(formatColor({ r: nr, g: ng, b: nb, a: newAlpha }, format));
-      },
-      [format, onChange]
-    );
+  useEffect(() => {
+    if (!open) return;
+    const onMove = (e: MouseEvent | TouchEvent) => {
+      const cx = "touches" in e ? e.touches[0].clientX : e.clientX;
+      const cy = "touches" in e ? e.touches[0].clientY : e.clientY;
+      if (dragging.current === "sat") handleSatMove(cx, cy);
+      else if (dragging.current === "hue") handleHueMove(cx);
+      else if (dragging.current === "alpha") handleAlphaMove(cx);
+    };
+    const onUp = () => {
+      dragging.current = null;
+    };
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+    document.addEventListener("touchmove", onMove);
+    document.addEventListener("touchend", onUp);
+    return () => {
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onUp);
+      document.removeEventListener("touchmove", onMove);
+      document.removeEventListener("touchend", onUp);
+    };
+  }, [open, handleSatMove, handleHueMove, handleAlphaMove]);
 
-    // Sync from controlled value
-    useEffect(() => {
-      if (!isControlled || !controlledValue) return;
-      const parsed = parseColor(controlledValue);
-      const newHsv = rgbToHsv(parsed.r, parsed.g, parsed.b);
-      setHsv(newHsv);
-      setAlpha(parsed.a);
-    }, [controlledValue, isControlled]);
+  /* ── Text input ── */
+  const handleTextChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value;
+      setTextInput(val);
+      const isValid = val.startsWith("#")
+        ? /^#[0-9a-fA-F]{6,8}$/.test(val)
+        : /^(rgba?\(|cmyk\()/.test(val);
+      if (isValid) {
+        const parsed = parseColor(val);
+        const newHsv = rgbToHsv(parsed.r, parsed.g, parsed.b);
+        setHsv(newHsv);
+        setAlpha(parsed.a);
+        emitChange(newHsv, parsed.a);
+      }
+    },
+    [emitChange]
+  );
 
-    /* ── Drag handlers ── */
-    const handleSatMove = useCallback(
-      (clientX: number, clientY: number) => {
-        const rect = satAreaRef.current?.getBoundingClientRect();
-        if (!rect) return;
-        const s = clamp((clientX - rect.left) / rect.width, 0, 1);
-        const v = clamp(1 - (clientY - rect.top) / rect.height, 0, 1);
-        const next = { ...hsv, s, v };
-        setHsv(next);
-        emitChange(next, alpha);
-      },
-      [hsv, alpha, emitChange]
-    );
+  /* ── Open/close ── */
+  const toggleOpen = useCallback(() => {
+    if (disabled) return;
+    setOpen(p => {
+      if (!p) setTextInput(colorStr);
+      return !p;
+    });
+  }, [disabled, colorStr]);
 
-    const handleHueMove = useCallback(
-      (clientX: number) => {
-        const rect = hueBarRef.current?.getBoundingClientRect();
-        if (!rect) return;
-        const h = clamp((clientX - rect.left) / rect.width, 0, 1) * 360;
-        const next = { ...hsv, h };
-        setHsv(next);
-        emitChange(next, alpha);
-      },
-      [hsv, alpha, emitChange]
-    );
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (
+        elRef.current?.contains(e.target as Node) ||
+        panelRef.current?.contains(e.target as Node)
+      )
+        return;
+      setOpen(false);
+      onBlur?.(e as unknown as React.FocusEvent);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open, onBlur]);
 
-    const handleAlphaMove = useCallback(
-      (clientX: number) => {
-        const rect = alphaBarRef.current?.getBoundingClientRect();
-        if (!rect) return;
-        const a = clamp((clientX - rect.left) / rect.width, 0, 1);
-        setAlpha(a);
-        emitChange(hsv, a);
-      },
-      [hsv, emitChange]
-    );
+  const cycleFormat = useCallback(() => {
+    const formats: ColorFormat[] = showAlpha
+      ? ["hex", "rgb", "rgba", "cmyk"]
+      : ["hex", "rgb", "cmyk"];
+    const idx = (formats.indexOf(format) + 1) % formats.length;
+    setFormat(formats[idx]);
+  }, [format, showAlpha]);
 
-    useEffect(() => {
-      if (!open) return;
-      const onMove = (e: MouseEvent | TouchEvent) => {
-        const cx = "touches" in e ? e.touches[0].clientX : e.clientX;
-        const cy = "touches" in e ? e.touches[0].clientY : e.clientY;
-        if (dragging.current === "sat") handleSatMove(cx, cy);
-        else if (dragging.current === "hue") handleHueMove(cx);
-        else if (dragging.current === "alpha") handleAlphaMove(cx);
-      };
-      const onUp = () => {
-        dragging.current = null;
-      };
-      document.addEventListener("mousemove", onMove);
-      document.addEventListener("mouseup", onUp);
-      document.addEventListener("touchmove", onMove);
-      document.addEventListener("touchend", onUp);
-      return () => {
-        document.removeEventListener("mousemove", onMove);
-        document.removeEventListener("mouseup", onUp);
-        document.removeEventListener("touchmove", onMove);
-        document.removeEventListener("touchend", onUp);
-      };
-    }, [open, handleSatMove, handleHueMove, handleAlphaMove]);
-
-    /* ── Text input ── */
-    const handleTextChange = useCallback(
-      (e: React.ChangeEvent<HTMLInputElement>) => {
-        const val = e.target.value;
-        setTextInput(val);
-        const isValid = val.startsWith("#")
-          ? /^#[0-9a-fA-F]{6,8}$/.test(val)
-          : /^(rgba?\(|cmyk\()/.test(val);
-        if (isValid) {
-          const parsed = parseColor(val);
-          const newHsv = rgbToHsv(parsed.r, parsed.g, parsed.b);
-          setHsv(newHsv);
-          setAlpha(parsed.a);
-          emitChange(newHsv, parsed.a);
-        }
-      },
-      [emitChange]
-    );
-
-    /* ── Open/close ── */
-    const toggleOpen = useCallback(() => {
-      if (disabled) return;
-      setOpen(p => {
-        if (!p) setTextInput(colorStr);
-        return !p;
+  const handleCopy = useCallback(() => {
+    navigator.clipboard
+      .writeText(colorStr)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
+      })
+      .catch(() => {
+        /* clipboard unavailable */
       });
-    }, [disabled, colorStr]);
+  }, [colorStr]);
 
-    useEffect(() => {
-      if (!open) return;
-      const handler = (e: MouseEvent) => {
-        if (
-          elRef.current?.contains(e.target as Node) ||
-          panelRef.current?.contains(e.target as Node)
-        )
-          return;
-        setOpen(false);
-        onBlur?.(e as unknown as React.FocusEvent);
-      };
-      document.addEventListener("mousedown", handler);
-      return () => document.removeEventListener("mousedown", handler);
-    }, [open, onBlur]);
+  // Update text input when format or color changes (not during typing)
+  useEffect(() => {
+    if (!open) return;
+    setTextInput(colorStr);
+  }, [format, hsv.h, hsv.s, hsv.v, alpha]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const cycleFormat = useCallback(() => {
-      const formats: ColorFormat[] = showAlpha
-        ? ["hex", "rgb", "rgba", "cmyk"]
-        : ["hex", "rgb", "cmyk"];
-      const idx = (formats.indexOf(format) + 1) % formats.length;
-      setFormat(formats[idx]);
-    }, [format, showAlpha]);
+  const hasError = !!error;
+  const errorMessage = typeof error === "boolean" ? undefined : error;
 
-    const handleCopy = useCallback(() => {
-      navigator.clipboard
-        .writeText(colorStr)
-        .then(() => {
-          setCopied(true);
-          setTimeout(() => setCopied(false), 1500);
-        })
-        .catch(() => {
-          /* clipboard unavailable */
-        });
-    }, [colorStr]);
+  const [hueR, hueG, hueB] = hsvToRgb(hsv.h, 1, 1);
+  const hueColor = `rgb(${hueR},${hueG},${hueB})`;
 
-    // Update text input when format or color changes (not during typing)
-    useEffect(() => {
-      if (!open) return;
-      setTextInput(colorStr);
-    }, [format, hsv.h, hsv.s, hsv.v, alpha]); // eslint-disable-line react-hooks/exhaustive-deps
+  const trigger = (
+    <div
+      ref={triggerRef}
+      className={`${base}__trigger${hasError ? ` ${base}__trigger--error` : ""}${!hasError && success ? ` ${base}__trigger--success` : ""}${disabled ? ` ${base}__trigger--disabled` : ""}`}
+      onClick={toggleOpen}
+      onKeyDown={e => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggleOpen();
+        }
+      }}
+      tabIndex={disabled ? -1 : 0}
+      role="button"
+      aria-expanded={open}
+      aria-haspopup="true"
+      aria-label={label ?? locale.colorPicker.ariaLabel}
+      aria-disabled={disabled || undefined}
+    >
+      <span
+        className={`${base}__swatch`}
+        style={{ background: displayColor }}
+      />
+      <span className={`${base}__value`}>{colorStr}</span>
+    </div>
+  );
 
-    const hasError = !!error;
-    const errorMessage = typeof error === "boolean" ? undefined : error;
+  const startDrag =
+    (type: "sat" | "hue" | "alpha") =>
+    (e: React.MouseEvent | React.TouchEvent) => {
+      dragging.current = type;
+      const cx = "touches" in e ? e.touches[0].clientX : e.clientX;
+      const cy = "touches" in e ? e.touches[0].clientY : e.clientY;
+      if (type === "sat") handleSatMove(cx, cy);
+      else if (type === "hue") handleHueMove(cx);
+      else handleAlphaMove(cx);
+    };
 
-    const [hueR, hueG, hueB] = hsvToRgb(hsv.h, 1, 1);
-    const hueColor = `rgb(${hueR},${hueG},${hueB})`;
-
-    const trigger = (
-      <div
-        ref={triggerRef}
-        className={`${base}__trigger${hasError ? ` ${base}__trigger--error` : ""}${!hasError && success ? ` ${base}__trigger--success` : ""}${disabled ? ` ${base}__trigger--disabled` : ""}`}
-        onClick={toggleOpen}
-        onKeyDown={e => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            toggleOpen();
-          }
-        }}
-        tabIndex={disabled ? -1 : 0}
-        role="button"
-        aria-expanded={open}
-        aria-haspopup="true"
-        aria-label={label ?? locale.colorPicker.ariaLabel}
-        aria-disabled={disabled || undefined}
-      >
-        <span
-          className={`${base}__swatch`}
-          style={{ background: displayColor }}
-        />
-        <span className={`${base}__value`}>{colorStr}</span>
-      </div>
-    );
-
-    const startDrag =
-      (type: "sat" | "hue" | "alpha") =>
-      (e: React.MouseEvent | React.TouchEvent) => {
-        dragging.current = type;
-        const cx = "touches" in e ? e.touches[0].clientX : e.clientX;
-        const cy = "touches" in e ? e.touches[0].clientY : e.clientY;
-        if (type === "sat") handleSatMove(cx, cy);
-        else if (type === "hue") handleHueMove(cx);
-        else handleAlphaMove(cx);
-      };
-
-    const panel = open
-      ? createPortal(
+  const panel = open
+    ? createPortal(
+        <div
+          ref={panelRef}
+          className={`${base}__panel${positioned ? ` ${base}__panel--visible` : ""}`}
+          style={{
+            top: coords.top,
+            left: coords.left,
+            zIndex: zIndex.overlay,
+          }}
+        >
+          {/* Saturation/Brightness area */}
           <div
-            ref={panelRef}
-            className={`${base}__panel${positioned ? ` ${base}__panel--visible` : ""}`}
-            style={{
-              top: coords.top,
-              left: coords.left,
-              zIndex: zIndex.overlay,
+            ref={satAreaRef}
+            className={`${base}__sat-area`}
+            style={{ background: hueColor }}
+            onMouseDown={startDrag("sat")}
+            onTouchStart={startDrag("sat")}
+            role="slider"
+            aria-label={locale.colorPicker.saturation}
+            aria-valuetext={`Saturation ${Math.round(hsv.s * 100)}%, Brightness ${Math.round(hsv.v * 100)}%`}
+            tabIndex={0}
+            onKeyDown={e => {
+              const step = 0.02;
+              let { s, v } = hsv;
+              if (e.key === "ArrowRight") s = clamp(s + step, 0, 1);
+              else if (e.key === "ArrowLeft") s = clamp(s - step, 0, 1);
+              else if (e.key === "ArrowUp") v = clamp(v + step, 0, 1);
+              else if (e.key === "ArrowDown") v = clamp(v - step, 0, 1);
+              else return;
+              e.preventDefault();
+              const next = { ...hsv, s, v };
+              setHsv(next);
+              emitChange(next, alpha);
             }}
           >
-            {/* Saturation/Brightness area */}
+            <div className={`${base}__sat-white`} />
+            <div className={`${base}__sat-black`} />
             <div
-              ref={satAreaRef}
-              className={`${base}__sat-area`}
-              style={{ background: hueColor }}
-              onMouseDown={startDrag("sat")}
-              onTouchStart={startDrag("sat")}
-              role="slider"
-              aria-label={locale.colorPicker.saturation}
-              aria-valuetext={`Saturation ${Math.round(hsv.s * 100)}%, Brightness ${Math.round(hsv.v * 100)}%`}
-              tabIndex={0}
-              onKeyDown={e => {
-                const step = 0.02;
-                let { s, v } = hsv;
-                if (e.key === "ArrowRight") s = clamp(s + step, 0, 1);
-                else if (e.key === "ArrowLeft") s = clamp(s - step, 0, 1);
-                else if (e.key === "ArrowUp") v = clamp(v + step, 0, 1);
-                else if (e.key === "ArrowDown") v = clamp(v - step, 0, 1);
-                else return;
-                e.preventDefault();
-                const next = { ...hsv, s, v };
-                setHsv(next);
-                emitChange(next, alpha);
+              className={`${base}__sat-cursor`}
+              style={{
+                left: `${hsv.s * 100}%`,
+                top: `${(1 - hsv.v) * 100}%`,
               }}
-            >
-              <div className={`${base}__sat-white`} />
-              <div className={`${base}__sat-black`} />
-              <div
-                className={`${base}__sat-cursor`}
-                style={{
-                  left: `${hsv.s * 100}%`,
-                  top: `${(1 - hsv.v) * 100}%`,
-                }}
-              />
-            </div>
+            />
+          </div>
 
-            {/* Hue bar */}
+          {/* Hue bar */}
+          <div
+            ref={hueBarRef}
+            className={`${base}__hue-bar`}
+            onMouseDown={startDrag("hue")}
+            onTouchStart={startDrag("hue")}
+            role="slider"
+            aria-label={locale.colorPicker.hue}
+            aria-valuenow={Math.round(hsv.h)}
+            aria-valuemin={0}
+            aria-valuemax={360}
+            tabIndex={0}
+            onKeyDown={e => {
+              let h = hsv.h;
+              if (e.key === "ArrowRight") h = (h + 3) % 360;
+              else if (e.key === "ArrowLeft") h = (h - 3 + 360) % 360;
+              else return;
+              e.preventDefault();
+              const next = { ...hsv, h };
+              setHsv(next);
+              emitChange(next, alpha);
+            }}
+          >
             <div
-              ref={hueBarRef}
-              className={`${base}__hue-bar`}
-              onMouseDown={startDrag("hue")}
-              onTouchStart={startDrag("hue")}
+              className={`${base}__bar-cursor`}
+              style={{ left: `${(hsv.h / 360) * 100}%` }}
+            />
+          </div>
+
+          {/* Alpha bar */}
+          {showAlpha && (
+            <div
+              ref={alphaBarRef}
+              className={`${base}__alpha-bar`}
+              style={{ "--k-cp-alpha-color": hueColor } as React.CSSProperties}
+              onMouseDown={startDrag("alpha")}
+              onTouchStart={startDrag("alpha")}
               role="slider"
-              aria-label={locale.colorPicker.hue}
-              aria-valuenow={Math.round(hsv.h)}
+              aria-label={locale.colorPicker.opacity}
+              aria-valuenow={Math.round(alpha * 100)}
               aria-valuemin={0}
-              aria-valuemax={360}
+              aria-valuemax={100}
               tabIndex={0}
               onKeyDown={e => {
-                let h = hsv.h;
-                if (e.key === "ArrowRight") h = (h + 3) % 360;
-                else if (e.key === "ArrowLeft") h = (h - 3 + 360) % 360;
+                let a = alpha;
+                if (e.key === "ArrowRight") a = clamp(a + 0.02, 0, 1);
+                else if (e.key === "ArrowLeft") a = clamp(a - 0.02, 0, 1);
                 else return;
                 e.preventDefault();
-                const next = { ...hsv, h };
-                setHsv(next);
-                emitChange(next, alpha);
+                setAlpha(a);
+                emitChange(hsv, a);
               }}
             >
               <div
                 className={`${base}__bar-cursor`}
-                style={{ left: `${(hsv.h / 360) * 100}%` }}
+                style={{ left: `${alpha * 100}%` }}
               />
             </div>
+          )}
 
-            {/* Alpha bar */}
-            {showAlpha && (
-              <div
-                ref={alphaBarRef}
-                className={`${base}__alpha-bar`}
-                style={
-                  { "--k-cp-alpha-color": hueColor } as React.CSSProperties
-                }
-                onMouseDown={startDrag("alpha")}
-                onTouchStart={startDrag("alpha")}
-                role="slider"
-                aria-label={locale.colorPicker.opacity}
-                aria-valuenow={Math.round(alpha * 100)}
-                aria-valuemin={0}
-                aria-valuemax={100}
-                tabIndex={0}
-                onKeyDown={e => {
-                  let a = alpha;
-                  if (e.key === "ArrowRight") a = clamp(a + 0.02, 0, 1);
-                  else if (e.key === "ArrowLeft") a = clamp(a - 0.02, 0, 1);
-                  else return;
-                  e.preventDefault();
-                  setAlpha(a);
-                  emitChange(hsv, a);
-                }}
+          {/* Input row */}
+          <div className={`${base}__input-row`}>
+            <div
+              className={`${base}__preview`}
+              style={{ background: displayColor }}
+            />
+            <input
+              className={`${base}__text-input`}
+              type="text"
+              value={textInput}
+              onChange={handleTextChange}
+              spellCheck={false}
+            />
+            <button
+              type="button"
+              className={`${base}__copy-btn`}
+              onClick={handleCopy}
+              aria-label={locale.common.copy}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                width="14"
+                height="14"
+                aria-hidden="true"
               >
-                <div
-                  className={`${base}__bar-cursor`}
-                  style={{ left: `${alpha * 100}%` }}
+                <path d={copied ? CHECK_PATH : COPY_PATH} />
+              </svg>
+            </button>
+            <button
+              type="button"
+              className={`${base}__format-btn`}
+              onClick={cycleFormat}
+              aria-label={locale.colorPicker.switchFormat}
+            >
+              {format.toUpperCase()}
+            </button>
+          </div>
+
+          {/* Presets */}
+          {presets.length > 0 && (
+            <div className={`${base}__presets`}>
+              {presets.map(c => (
+                <button
+                  key={c}
+                  type="button"
+                  className={`${base}__preset${c.toLowerCase() === displayColor.toLowerCase() ? ` ${base}__preset--active` : ""}`}
+                  style={{ background: c }}
+                  onClick={() => {
+                    const p = parseColor(c);
+                    const h = rgbToHsv(p.r, p.g, p.b);
+                    setHsv(h);
+                    setAlpha(p.a);
+                    emitChange(h, p.a);
+                  }}
+                  aria-label={c}
                 />
-              </div>
-            )}
-
-            {/* Input row */}
-            <div className={`${base}__input-row`}>
-              <div
-                className={`${base}__preview`}
-                style={{ background: displayColor }}
-              />
-              <input
-                className={`${base}__text-input`}
-                type="text"
-                value={textInput}
-                onChange={handleTextChange}
-                spellCheck={false}
-              />
-              <button
-                type="button"
-                className={`${base}__copy-btn`}
-                onClick={handleCopy}
-                aria-label={locale.common.copy}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  width="14"
-                  height="14"
-                  aria-hidden="true"
-                >
-                  <path d={copied ? CHECK_PATH : COPY_PATH} />
-                </svg>
-              </button>
-              <button
-                type="button"
-                className={`${base}__format-btn`}
-                onClick={cycleFormat}
-                aria-label={locale.colorPicker.switchFormat}
-              >
-                {format.toUpperCase()}
-              </button>
+              ))}
             </div>
+          )}
+        </div>,
+        document.body
+      )
+    : null;
 
-            {/* Presets */}
-            {presets.length > 0 && (
-              <div className={`${base}__presets`}>
-                {presets.map(c => (
-                  <button
-                    key={c}
-                    type="button"
-                    className={`${base}__preset${c.toLowerCase() === displayColor.toLowerCase() ? ` ${base}__preset--active` : ""}`}
-                    style={{ background: c }}
-                    onClick={() => {
-                      const p = parseColor(c);
-                      const h = rgbToHsv(p.r, p.g, p.b);
-                      setHsv(h);
-                      setAlpha(p.a);
-                      emitChange(h, p.a);
-                    }}
-                    aria-label={c}
-                  />
-                ))}
-              </div>
-            )}
-          </div>,
-          document.body
-        )
-      : null;
+  const hasWrapper = !!(label || helperText || errorMessage || required);
+  const content = (
+    <>
+      {trigger}
+      {name && <input type="hidden" name={name} value={colorStr} />}
+      {panel}
+    </>
+  );
 
-    const hasWrapper = !!(label || helperText || errorMessage || required);
-    const content = (
-      <>
-        {trigger}
-        {name && <input type="hidden" name={name} value={colorStr} />}
-        {panel}
-      </>
-    );
-
-    if (!hasWrapper) {
-      return (
-        <div ref={elRef} className={`${base} ${className}`} style={style}>
-          {content}
-        </div>
-      );
-    }
-
+  if (!hasWrapper) {
     return (
-      <div
-        ref={elRef}
-        className={`${base}${fullWidth ? ` ${base}--full-width` : ""} ${className}`}
-        style={style}
-      >
-        <FieldWrapper
-          label={label}
-          required={required}
-          helperText={helperText}
-          error={errorMessage}
-          success={success}
-          size={size}
-          disabled={disabled}
-          fullWidth={fullWidth}
-        >
-          {content}
-        </FieldWrapper>
+      <div ref={elRef} className={`${base} ${className}`} style={style}>
+        {content}
       </div>
     );
   }
-);
 
-ColorPicker.displayName = "ColorPicker";
+  return (
+    <div
+      ref={elRef}
+      className={`${base}${fullWidth ? ` ${base}--full-width` : ""} ${className}`}
+      style={style}
+    >
+      <FieldWrapper
+        label={label}
+        required={required}
+        helperText={helperText}
+        error={errorMessage}
+        success={success}
+        size={size}
+        disabled={disabled}
+        fullWidth={fullWidth}
+      >
+        {content}
+      </FieldWrapper>
+    </div>
+  );
+};

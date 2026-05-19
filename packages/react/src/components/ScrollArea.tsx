@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import { ScrollBar } from "./ScrollBar";
 import type { ScrollBarProps } from "./ScrollBar";
 import "./ScrollArea.css";
@@ -52,48 +52,42 @@ export interface ScrollAreaProps {
  * </ScrollArea>
  * ```
  */
-export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(
-  (
-    {
-      maxHeight,
-      maxWidth,
-      orientation = "vertical",
-      scrollBarProps,
-      scrollBar,
-      children,
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const classes = ["k-scroll-area", className].filter(Boolean).join(" ");
+export const ScrollArea = ({
+  maxHeight,
+  maxWidth,
+  orientation = "vertical",
+  scrollBarProps,
+  scrollBar,
+  children,
+  className = "",
+  style,
+  ref,
+}: ScrollAreaProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const classes = ["k-scroll-area", className].filter(Boolean).join(" ");
 
-    if (scrollBar) {
-      return (
-        <div
-          ref={ref}
-          className={classes}
-          style={{ ...style, maxHeight, maxWidth }}
-        >
-          {scrollBar(children)}
-        </div>
-      );
-    }
-
+  if (scrollBar) {
     return (
-      <ScrollBar
+      <div
         ref={ref}
-        orientation={orientation}
-        maxHeight={maxHeight}
-        maxWidth={maxWidth}
         className={classes}
-        style={style}
-        {...scrollBarProps}
+        style={{ ...style, maxHeight, maxWidth }}
       >
-        {children}
-      </ScrollBar>
+        {scrollBar(children)}
+      </div>
     );
   }
-);
 
-ScrollArea.displayName = "ScrollArea";
+  return (
+    <ScrollBar
+      ref={ref}
+      orientation={orientation}
+      maxHeight={maxHeight}
+      maxWidth={maxWidth}
+      className={classes}
+      style={style}
+      {...scrollBarProps}
+    >
+      {children}
+    </ScrollBar>
+  );
+};

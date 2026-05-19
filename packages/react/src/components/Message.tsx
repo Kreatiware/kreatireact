@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useState,
   useEffect,
   useCallback,
@@ -99,95 +98,89 @@ const iconSvg = (path: string) => (
  * <Message severity="info" sticky={false} life={3000}>This will disappear</Message>
  * ```
  */
-export const Message = forwardRef<HTMLDivElement, MessageProps>(
-  (
-    {
-      severity = "info",
-      children,
-      icon = false,
-      closable = false,
-      sticky = true,
-      life = 3000,
-      borderPosition = false,
-      contentTemplate,
-      onClose,
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const elRef = useRef<HTMLDivElement>(null);
-    useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
+export const Message = ({
+  severity = "info",
+  children,
+  icon = false,
+  closable = false,
+  sticky = true,
+  life = 3000,
+  borderPosition = false,
+  contentTemplate,
+  onClose,
+  className = "",
+  style,
+  ref,
+}: MessageProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const elRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
 
-    const locale = useKreatiLocale();
-    const [visible, setVisible] = useState(true);
-    const [exiting, setExiting] = useState(false);
-    const base = "k-message";
+  const locale = useKreatiLocale();
+  const [visible, setVisible] = useState(true);
+  const [exiting, setExiting] = useState(false);
+  const base = "k-message";
 
-    const handleClose = useCallback(() => {
-      setExiting(true);
-    }, []);
+  const handleClose = useCallback(() => {
+    setExiting(true);
+  }, []);
 
-    const handleAnimationEnd = useCallback(() => {
-      if (exiting) {
-        setVisible(false);
-        onClose?.();
-      }
-    }, [exiting, onClose]);
+  const handleAnimationEnd = useCallback(() => {
+    if (exiting) {
+      setVisible(false);
+      onClose?.();
+    }
+  }, [exiting, onClose]);
 
-    useEffect(() => {
-      if (sticky || !visible || exiting) return;
-      const timer = setTimeout(handleClose, life);
-      return () => clearTimeout(timer);
-    }, [sticky, life, visible, exiting, handleClose]);
+  useEffect(() => {
+    if (sticky || !visible || exiting) return;
+    const timer = setTimeout(handleClose, life);
+    return () => clearTimeout(timer);
+  }, [sticky, life, visible, exiting, handleClose]);
 
-    if (!visible) return null;
+  if (!visible) return null;
 
-    const resolvedIcon =
-      icon === true ? iconSvg(SEVERITY_ICONS[severity]) : icon || null;
+  const resolvedIcon =
+    icon === true ? iconSvg(SEVERITY_ICONS[severity]) : icon || null;
 
-    const classes = [
-      base,
-      `${base}--${severity}`,
-      borderPosition && `${base}--border-${borderPosition}`,
-      exiting && `${base}--exit`,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const classes = [
+    base,
+    `${base}--${severity}`,
+    borderPosition && `${base}--border-${borderPosition}`,
+    exiting && `${base}--exit`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    return (
-      <div
-        ref={elRef}
-        className={classes}
-        style={style}
-        role="alert"
-        aria-live="polite"
-        onAnimationEnd={handleAnimationEnd}
-      >
-        {contentTemplate ? (
-          contentTemplate({ severity, onClose: handleClose })
-        ) : (
-          <>
-            {resolvedIcon && (
-              <span className={`${base}__icon`}>{resolvedIcon}</span>
-            )}
-            <span className={`${base}__text`}>{children}</span>
-            {closable && (
-              <button
-                type="button"
-                className={`${base}__close`}
-                onClick={handleClose}
-                aria-label={locale.message.close}
-              >
-                {iconSvg(TIMES_PATH)}
-              </button>
-            )}
-          </>
-        )}
-      </div>
-    );
-  }
-);
-
-Message.displayName = "Message";
+  return (
+    <div
+      ref={elRef}
+      className={classes}
+      style={style}
+      role="alert"
+      aria-live="polite"
+      onAnimationEnd={handleAnimationEnd}
+    >
+      {contentTemplate ? (
+        contentTemplate({ severity, onClose: handleClose })
+      ) : (
+        <>
+          {resolvedIcon && (
+            <span className={`${base}__icon`}>{resolvedIcon}</span>
+          )}
+          <span className={`${base}__text`}>{children}</span>
+          {closable && (
+            <button
+              type="button"
+              className={`${base}__close`}
+              onClick={handleClose}
+              aria-label={locale.message.close}
+            >
+              {iconSvg(TIMES_PATH)}
+            </button>
+          )}
+        </>
+      )}
+    </div>
+  );
+};

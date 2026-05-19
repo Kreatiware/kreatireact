@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useImperativeHandle } from "react";
+import React, { useRef, useImperativeHandle } from "react";
 import "./ButtonGroup.css";
 
 export interface ButtonGroupProps {
@@ -40,37 +40,31 @@ const base = "k-btn-group";
  * </ButtonGroup>
  * ```
  */
-export const ButtonGroup = forwardRef<HTMLDivElement, ButtonGroupProps>(
-  (
-    {
-      orientation = "horizontal",
-      size,
-      disabled,
-      className = "",
-      style,
-      children,
-    },
-    ref
-  ) => {
-    const elRef = useRef<HTMLDivElement>(null);
-    useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
+export const ButtonGroup = ({
+  orientation = "horizontal",
+  size,
+  disabled,
+  className = "",
+  style,
+  children,
+  ref,
+}: ButtonGroupProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const elRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
 
-    const cls = [
-      base,
-      `${base}--${orientation}`,
-      size && `${base}--${size}`,
-      disabled && `${base}--disabled`,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const cls = [
+    base,
+    `${base}--${orientation}`,
+    size && `${base}--${size}`,
+    disabled && `${base}--disabled`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    return (
-      <div ref={elRef} className={cls} style={style} role="group">
-        {children}
-      </div>
-    );
-  }
-);
-
-ButtonGroup.displayName = "ButtonGroup";
+  return (
+    <div ref={elRef} className={cls} style={style} role="group">
+      {children}
+    </div>
+  );
+};

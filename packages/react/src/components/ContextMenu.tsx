@@ -1,10 +1,4 @@
-import React, {
-  forwardRef,
-  useRef,
-  useState,
-  useCallback,
-  useEffect,
-} from "react";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
 import "./ContextMenu.css";
 import { MenuItem } from "../types/navigation";
@@ -115,343 +109,276 @@ const SubmenuPanel: React.FC<{
  * </ContextMenu>
  * ```
  */
-export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
-  (
-    {
-      items,
-      trigger = "contextmenu",
-      onItemSelect,
-      disabled = false,
-      open: controlledOpen,
-      onOpenChange,
-      submenuPosition = "right",
-      mobileAdaptive = true,
-      panelClassName = "",
-      panelTemplate,
-      placement = "bottom",
-      className = "",
-      style,
-      children,
+export const ContextMenu = ({
+  items,
+  trigger = "contextmenu",
+  onItemSelect,
+  disabled = false,
+  open: controlledOpen,
+  onOpenChange,
+  submenuPosition = "right",
+  mobileAdaptive = true,
+  panelClassName = "",
+  panelTemplate,
+  placement = "bottom",
+  className = "",
+  style,
+  children,
+  ref,
+}: ContextMenuProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const base = "k-contextmenu";
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
+  const setOpen = useCallback(
+    (v: boolean | ((prev: boolean) => boolean)) => {
+      const next = typeof v === "function" ? v(open) : v;
+      setInternalOpen(next);
+      onOpenChange?.(next);
     },
-    ref
-  ) => {
-    const base = "k-contextmenu";
-    const wrapperRef = useRef<HTMLDivElement>(null);
-    const panelRef = useRef<HTMLDivElement>(null);
-    const [internalOpen, setInternalOpen] = useState(false);
-    const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
-    const setOpen = useCallback(
-      (v: boolean | ((prev: boolean) => boolean)) => {
-        const next = typeof v === "function" ? v(open) : v;
-        setInternalOpen(next);
-        onOpenChange?.(next);
-      },
-      [open, onOpenChange]
-    );
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [openSubmenus, setOpenSubmenus] = useState<Set<string>>(new Set());
-    const [isMobile, setIsMobile] = useState(false);
-    const { child: zIndex } = useLayerZIndex();
+    [open, onOpenChange]
+  );
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [openSubmenus, setOpenSubmenus] = useState<Set<string>>(new Set());
+  const [isMobile, setIsMobile] = useState(false);
+  const { child: zIndex } = useLayerZIndex();
 
-    const visibleItems = items.filter(item => item.visible !== false);
+  const visibleItems = items.filter(item => item.visible !== false);
 
-    useEffect(() => {
-      if (!mobileAdaptive) {
-        setIsMobile(false);
+  useEffect(() => {
+    if (!mobileAdaptive) {
+      setIsMobile(false);
+      return;
+    }
+    const mq = window.matchMedia("(hover: none)");
+    setIsMobile(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, [mobileAdaptive]);
+
+  const close = useCallback(() => {
+    setOpen(false);
+    setOpenSubmenus(new Set());
+  }, []);
+
+  const calcPosition = useCallback(
+    (rect: DOMRect) => {
+      switch (placement) {
+        case "right":
+          return { x: rect.right + 2, y: rect.top };
+        case "left":
+          return { x: rect.left, y: rect.top };
+        case "top":
+          return { x: rect.left, y: rect.top };
+        default:
+          return { x: rect.left, y: rect.bottom + 2 };
+      }
+    },
+    [placement]
+  );
+
+  const handleContextMenu = useCallback(
+    (e: React.MouseEvent) => {
+      if (disabled) return;
+      if (trigger === "contextmenu" || trigger === "both") {
+        e.preventDefault();
+        setPosition({ x: e.clientX, y: e.clientY });
+        setOpen(true);
+        setOpenSubmenus(new Set());
+      }
+    },
+    [disabled, trigger]
+  );
+
+  const handleClick = useCallback(() => {
+    if (disabled) return;
+    if (trigger === "click" || trigger === "both") {
+      const rect = wrapperRef.current?.getBoundingClientRect();
+      if (rect) {
+        setPosition(calcPosition(rect));
+      }
+      setOpen(prev => {
+        if (prev) setOpenSubmenus(new Set());
+        return !prev;
+      });
+    }
+  }, [disabled, trigger]);
+
+  useEffect(() => {
+    if (!open || controlledOpen !== undefined) return;
+    const handleMouseDown = (e: MouseEvent) => {
+      if (
+        panelRef.current &&
+        !panelRef.current.contains(e.target as Node) &&
+        wrapperRef.current &&
+        !wrapperRef.current.contains(e.target as Node)
+      ) {
+        close();
+      }
+    };
+    document.addEventListener("mousedown", handleMouseDown);
+    return () => document.removeEventListener("mousedown", handleMouseDown);
+  }, [open, close, controlledOpen]);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [open, close]);
+
+  /** Reposition when opened via controlled prop (e.g. MenuBar hover) */
+  useEffect(() => {
+    if (!open || controlledOpen === undefined) return;
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+    const rect = wrapper.getBoundingClientRect();
+    setPosition(calcPosition(rect));
+  }, [open, controlledOpen]);
+
+  useEffect(() => {
+    if (!open || !panelRef.current) return;
+    const rect = panelRef.current.getBoundingClientRect();
+    let { x, y } = position;
+    let changed = false;
+    if (x + rect.width > window.innerWidth) {
+      x = window.innerWidth - rect.width - 8;
+      changed = true;
+    }
+    if (y + rect.height > window.innerHeight) {
+      y = window.innerHeight - rect.height - 8;
+      changed = true;
+    }
+    if (x < 0) {
+      x = 8;
+      changed = true;
+    }
+    if (y < 0) {
+      y = 8;
+      changed = true;
+    }
+    if (changed) setPosition({ x, y });
+  }, [open]);
+
+  const handleSelect = useCallback(
+    (item: MenuItem) => {
+      if (item.disabled) return;
+      if (item.items && item.items.length > 0) {
+        // Toggle submenu on click/tap
+        setOpenSubmenus(prev => {
+          const next = new Set(prev);
+          if (prev.has(item.key)) next.delete(item.key);
+          else next.add(item.key);
+          return next;
+        });
         return;
       }
-      const mq = window.matchMedia("(hover: none)");
-      setIsMobile(mq.matches);
-      const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-      mq.addEventListener("change", onChange);
-      return () => mq.removeEventListener("change", onChange);
-    }, [mobileAdaptive]);
-
-    const close = useCallback(() => {
-      setOpen(false);
-      setOpenSubmenus(new Set());
-    }, []);
-
-    const calcPosition = useCallback(
-      (rect: DOMRect) => {
-        switch (placement) {
-          case "right":
-            return { x: rect.right + 2, y: rect.top };
-          case "left":
-            return { x: rect.left, y: rect.top };
-          case "top":
-            return { x: rect.left, y: rect.top };
-          default:
-            return { x: rect.left, y: rect.bottom + 2 };
+      if (item.command) item.command(item);
+      if (item.url) {
+        const safe = sanitizeUrl(item.url);
+        if (safe) {
+          if (item.target === "_blank") window.open(safe, "_blank", "noopener");
+          else window.location.href = safe;
         }
-      },
-      [placement]
-    );
+      }
+      onItemSelect?.(item.key, item);
+      close();
+    },
+    [onItemSelect, close]
+  );
 
-    const handleContextMenu = useCallback(
-      (e: React.MouseEvent) => {
-        if (disabled) return;
-        if (trigger === "contextmenu" || trigger === "both") {
-          e.preventDefault();
-          setPosition({ x: e.clientX, y: e.clientY });
-          setOpen(true);
-          setOpenSubmenus(new Set());
-        }
-      },
-      [disabled, trigger]
-    );
+  const handleItemKeyDown = useCallback(
+    (item: MenuItem, e: React.KeyboardEvent, siblings: MenuItem[]) => {
+      const enabled = siblings.filter(
+        i => !i.separator && !i.disabled && i.visible !== false
+      );
+      const idx = enabled.findIndex(i => i.key === item.key);
 
-    const handleClick = useCallback(() => {
-      if (disabled) return;
-      if (trigger === "click" || trigger === "both") {
-        const rect = wrapperRef.current?.getBoundingClientRect();
-        if (rect) {
-          setPosition(calcPosition(rect));
-        }
-        setOpen(prev => {
-          if (prev) setOpenSubmenus(new Set());
-          return !prev;
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        const next = enabled[(idx + 1) % enabled.length];
+        (
+          document.getElementById(`${base}-item-${next.key}`) as HTMLElement
+        )?.focus();
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        const prev = enabled[(idx - 1 + enabled.length) % enabled.length];
+        (
+          document.getElementById(`${base}-item-${prev.key}`) as HTMLElement
+        )?.focus();
+      } else if (
+        e.key === "ArrowRight" &&
+        item.items &&
+        item.items.length > 0
+      ) {
+        e.preventDefault();
+        setOpenSubmenus(prev => new Set(prev).add(item.key));
+        setTimeout(() => {
+          const first = item.items!.find(
+            i => !i.separator && !i.disabled && i.visible !== false
+          );
+          if (first)
+            (
+              document.getElementById(
+                `${base}-item-${first.key}`
+              ) as HTMLElement
+            )?.focus();
+        }, 0);
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setOpenSubmenus(prev => {
+          const next = new Set(prev);
+          next.delete(item.key);
+          return next;
         });
+      } else if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        handleSelect(item);
       }
-    }, [disabled, trigger]);
+    },
+    [handleSelect]
+  );
 
-    useEffect(() => {
-      if (!open || controlledOpen !== undefined) return;
-      const handleMouseDown = (e: MouseEvent) => {
-        if (
-          panelRef.current &&
-          !panelRef.current.contains(e.target as Node) &&
-          wrapperRef.current &&
-          !wrapperRef.current.contains(e.target as Node)
-        ) {
-          close();
-        }
-      };
-      document.addEventListener("mousedown", handleMouseDown);
-      return () => document.removeEventListener("mousedown", handleMouseDown);
-    }, [open, close, controlledOpen]);
-
-    useEffect(() => {
-      if (!open) return;
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === "Escape") close();
-      };
-      document.addEventListener("keydown", handleKeyDown);
-      return () => document.removeEventListener("keydown", handleKeyDown);
-    }, [open, close]);
-
-    /** Reposition when opened via controlled prop (e.g. MenuBar hover) */
-    useEffect(() => {
-      if (!open || controlledOpen === undefined) return;
-      const wrapper = wrapperRef.current;
-      if (!wrapper) return;
-      const rect = wrapper.getBoundingClientRect();
-      setPosition(calcPosition(rect));
-    }, [open, controlledOpen]);
-
-    useEffect(() => {
-      if (!open || !panelRef.current) return;
-      const rect = panelRef.current.getBoundingClientRect();
-      let { x, y } = position;
-      let changed = false;
-      if (x + rect.width > window.innerWidth) {
-        x = window.innerWidth - rect.width - 8;
-        changed = true;
+  const renderItems = (menuItems: MenuItem[], depth = 0) => {
+    const visible = menuItems.filter(i => i.visible !== false);
+    return visible.map(item => {
+      if (item.separator) {
+        return <hr key={item.key} className={`${base}__separator`} />;
       }
-      if (y + rect.height > window.innerHeight) {
-        y = window.innerHeight - rect.height - 8;
-        changed = true;
-      }
-      if (x < 0) {
-        x = 8;
-        changed = true;
-      }
-      if (y < 0) {
-        y = 8;
-        changed = true;
-      }
-      if (changed) setPosition({ x, y });
-    }, [open]);
-
-    const handleSelect = useCallback(
-      (item: MenuItem) => {
-        if (item.disabled) return;
-        if (item.items && item.items.length > 0) {
-          // Toggle submenu on click/tap
-          setOpenSubmenus(prev => {
-            const next = new Set(prev);
-            if (prev.has(item.key)) next.delete(item.key);
-            else next.add(item.key);
-            return next;
-          });
-          return;
-        }
-        if (item.command) item.command(item);
-        if (item.url) {
-          const safe = sanitizeUrl(item.url);
-          if (safe) {
-            if (item.target === "_blank")
-              window.open(safe, "_blank", "noopener");
-            else window.location.href = safe;
-          }
-        }
-        onItemSelect?.(item.key, item);
-        close();
-      },
-      [onItemSelect, close]
-    );
-
-    const handleItemKeyDown = useCallback(
-      (item: MenuItem, e: React.KeyboardEvent, siblings: MenuItem[]) => {
-        const enabled = siblings.filter(
-          i => !i.separator && !i.disabled && i.visible !== false
-        );
-        const idx = enabled.findIndex(i => i.key === item.key);
-
-        if (e.key === "ArrowDown") {
-          e.preventDefault();
-          const next = enabled[(idx + 1) % enabled.length];
-          (
-            document.getElementById(`${base}-item-${next.key}`) as HTMLElement
-          )?.focus();
-        } else if (e.key === "ArrowUp") {
-          e.preventDefault();
-          const prev = enabled[(idx - 1 + enabled.length) % enabled.length];
-          (
-            document.getElementById(`${base}-item-${prev.key}`) as HTMLElement
-          )?.focus();
-        } else if (
-          e.key === "ArrowRight" &&
-          item.items &&
-          item.items.length > 0
-        ) {
-          e.preventDefault();
-          setOpenSubmenus(prev => new Set(prev).add(item.key));
-          setTimeout(() => {
-            const first = item.items!.find(
-              i => !i.separator && !i.disabled && i.visible !== false
-            );
-            if (first)
-              (
-                document.getElementById(
-                  `${base}-item-${first.key}`
-                ) as HTMLElement
-              )?.focus();
-          }, 0);
-        } else if (e.key === "ArrowLeft") {
-          e.preventDefault();
-          setOpenSubmenus(prev => {
-            const next = new Set(prev);
-            next.delete(item.key);
-            return next;
-          });
-        } else if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          handleSelect(item);
-        }
-      },
-      [handleSelect]
-    );
-
-    const renderItems = (menuItems: MenuItem[], depth = 0) => {
-      const visible = menuItems.filter(i => i.visible !== false);
-      return visible.map(item => {
-        if (item.separator) {
-          return <hr key={item.key} className={`${base}__separator`} />;
-        }
-        if (item.template) {
-          return (
-            <React.Fragment key={item.key}>
-              {item.template(item)}
-            </React.Fragment>
-          );
-        }
-
-        const hasChildren = item.items && item.items.length > 0;
-        const isDisabled = item.disabled;
-        const isSubOpen = openSubmenus.has(item.key);
-
-        const itemClasses = [
-          `${base}__item`,
-          isDisabled && `${base}__item--disabled`,
-          hasChildren && `${base}__item--parent`,
-          isSubOpen && `${base}__item--open`,
-          item.className,
-        ]
-          .filter(Boolean)
-          .join(" ");
-
-        if (isMobile) {
-          // Mobile: submenus expand inline
-          return (
-            <React.Fragment key={item.key}>
-              <button
-                id={`${base}-item-${item.key}`}
-                type="button"
-                role="menuitem"
-                className={itemClasses}
-                style={{ ...item.style, paddingLeft: `${depth * 12 + 12}px` }}
-                tabIndex={isDisabled ? -1 : 0}
-                aria-disabled={isDisabled || undefined}
-                aria-haspopup={hasChildren || undefined}
-                aria-expanded={hasChildren ? isSubOpen : undefined}
-                disabled={isDisabled}
-                onClick={() => handleSelect(item)}
-                onKeyDown={e => handleItemKeyDown(item, e, visible)}
-              >
-                {item.icon && (
-                  <span className={`${base}__icon`} aria-hidden="true">
-                    {renderMenuIcon(item.icon)}
-                  </span>
-                )}
-                <span className={`${base}__label`}>{item.label}</span>
-                {hasChildren && (
-                  <span
-                    className={`${base}__arrow ${isSubOpen ? `${base}__arrow--open` : ""}`}
-                    aria-hidden="true"
-                  >
-                    <svg
-                      width={12}
-                      height={12}
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d={CHEVRON_RIGHT_PATH} />
-                    </svg>
-                  </span>
-                )}
-              </button>
-              {hasChildren && isSubOpen && renderItems(item.items!, depth + 1)}
-            </React.Fragment>
-          );
-        }
-
-        // Desktop: submenus float to the right on hover
+      if (item.template) {
         return (
-          <div
-            key={item.key}
-            className={`${base}__item-wrapper`}
-            onMouseEnter={() => {
-              if (hasChildren && !("ontouchstart" in window)) {
-                setOpenSubmenus(prev => new Set(prev).add(item.key));
-              }
-            }}
-            onMouseLeave={() => {
-              if (hasChildren && !("ontouchstart" in window)) {
-                setOpenSubmenus(prev => {
-                  const n = new Set(prev);
-                  n.delete(item.key);
-                  return n;
-                });
-              }
-            }}
-          >
+          <React.Fragment key={item.key}>{item.template(item)}</React.Fragment>
+        );
+      }
+
+      const hasChildren = item.items && item.items.length > 0;
+      const isDisabled = item.disabled;
+      const isSubOpen = openSubmenus.has(item.key);
+
+      const itemClasses = [
+        `${base}__item`,
+        isDisabled && `${base}__item--disabled`,
+        hasChildren && `${base}__item--parent`,
+        isSubOpen && `${base}__item--open`,
+        item.className,
+      ]
+        .filter(Boolean)
+        .join(" ");
+
+      if (isMobile) {
+        // Mobile: submenus expand inline
+        return (
+          <React.Fragment key={item.key}>
             <button
               id={`${base}-item-${item.key}`}
               type="button"
               role="menuitem"
               className={itemClasses}
-              style={item.style}
+              style={{ ...item.style, paddingLeft: `${depth * 12 + 12}px` }}
               tabIndex={isDisabled ? -1 : 0}
               aria-disabled={isDisabled || undefined}
               aria-haspopup={hasChildren || undefined}
@@ -467,7 +394,10 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
               )}
               <span className={`${base}__label`}>{item.label}</span>
               {hasChildren && (
-                <span className={`${base}__arrow`} aria-hidden="true">
+                <span
+                  className={`${base}__arrow ${isSubOpen ? `${base}__arrow--open` : ""}`}
+                  aria-hidden="true"
+                >
                   <svg
                     width={12}
                     height={12}
@@ -479,67 +409,121 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
                 </span>
               )}
             </button>
-            {hasChildren && isSubOpen && (
-              <SubmenuPanel
-                base={base}
-                position={item.submenuPosition || submenuPosition}
-              >
-                {renderItems(item.items!, depth + 1)}
-              </SubmenuPanel>
-            )}
-          </div>
+            {hasChildren && isSubOpen && renderItems(item.items!, depth + 1)}
+          </React.Fragment>
         );
-      });
-    };
+      }
 
-    const panelClasses = [
-      `${base}__panel`,
-      isMobile && `${base}__panel--mobile`,
-      panelClassName,
-    ]
-      .filter(Boolean)
-      .join(" ");
-
-    return (
-      <div
-        ref={el => {
-          (
-            wrapperRef as React.MutableRefObject<HTMLDivElement | null>
-          ).current = el;
-          if (typeof ref === "function") ref(el);
-          else if (ref)
-            (ref as React.MutableRefObject<HTMLDivElement | null>).current = el;
-        }}
-        className={`${base} ${className}`}
-        style={style}
-        onContextMenu={handleContextMenu}
-        onClick={handleClick}
-      >
-        {children}
-        {open &&
-          createPortal(
-            <div
-              ref={panelRef}
-              className={panelClasses}
-              style={
-                isMobile
-                  ? { zIndex }
-                  : { left: position.x, top: position.y, zIndex }
-              }
-              role="menu"
-              aria-label="Context menu"
-              onClick={e => e.stopPropagation()}
-              onContextMenu={e => e.stopPropagation()}
+      // Desktop: submenus float to the right on hover
+      return (
+        <div
+          key={item.key}
+          className={`${base}__item-wrapper`}
+          onMouseEnter={() => {
+            if (hasChildren && !("ontouchstart" in window)) {
+              setOpenSubmenus(prev => new Set(prev).add(item.key));
+            }
+          }}
+          onMouseLeave={() => {
+            if (hasChildren && !("ontouchstart" in window)) {
+              setOpenSubmenus(prev => {
+                const n = new Set(prev);
+                n.delete(item.key);
+                return n;
+              });
+            }
+          }}
+        >
+          <button
+            id={`${base}-item-${item.key}`}
+            type="button"
+            role="menuitem"
+            className={itemClasses}
+            style={item.style}
+            tabIndex={isDisabled ? -1 : 0}
+            aria-disabled={isDisabled || undefined}
+            aria-haspopup={hasChildren || undefined}
+            aria-expanded={hasChildren ? isSubOpen : undefined}
+            disabled={isDisabled}
+            onClick={() => handleSelect(item)}
+            onKeyDown={e => handleItemKeyDown(item, e, visible)}
+          >
+            {item.icon && (
+              <span className={`${base}__icon`} aria-hidden="true">
+                {renderMenuIcon(item.icon)}
+              </span>
+            )}
+            <span className={`${base}__label`}>{item.label}</span>
+            {hasChildren && (
+              <span className={`${base}__arrow`} aria-hidden="true">
+                <svg
+                  width={12}
+                  height={12}
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d={CHEVRON_RIGHT_PATH} />
+                </svg>
+              </span>
+            )}
+          </button>
+          {hasChildren && isSubOpen && (
+            <SubmenuPanel
+              base={base}
+              position={item.submenuPosition || submenuPosition}
             >
-              {panelTemplate
-                ? panelTemplate(visibleItems, close)
-                : renderItems(visibleItems)}
-            </div>,
-            document.body
+              {renderItems(item.items!, depth + 1)}
+            </SubmenuPanel>
           )}
-      </div>
-    );
-  }
-);
+        </div>
+      );
+    });
+  };
 
-ContextMenu.displayName = "ContextMenu";
+  const panelClasses = [
+    `${base}__panel`,
+    isMobile && `${base}__panel--mobile`,
+    panelClassName,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div
+      ref={el => {
+        (wrapperRef as React.MutableRefObject<HTMLDivElement | null>).current =
+          el;
+        if (typeof ref === "function") ref(el);
+        else if (ref)
+          (ref as React.MutableRefObject<HTMLDivElement | null>).current = el;
+      }}
+      className={`${base} ${className}`}
+      style={style}
+      onContextMenu={handleContextMenu}
+      onClick={handleClick}
+    >
+      {children}
+      {open &&
+        createPortal(
+          <div
+            ref={panelRef}
+            className={panelClasses}
+            style={
+              isMobile
+                ? { zIndex }
+                : { left: position.x, top: position.y, zIndex }
+            }
+            role="menu"
+            aria-label="Context menu"
+            onClick={e => e.stopPropagation()}
+            onContextMenu={e => e.stopPropagation()}
+          >
+            {panelTemplate
+              ? panelTemplate(visibleItems, close)
+              : renderItems(visibleItems)}
+          </div>,
+          document.body
+        )}
+    </div>
+  );
+};

@@ -1,10 +1,4 @@
-import React, {
-  forwardRef,
-  useId,
-  useRef,
-  useState,
-  useImperativeHandle,
-} from "react";
+import React, { useId, useRef, useState, useImperativeHandle } from "react";
 import "./Switch.css";
 
 export interface SwitchProps {
@@ -78,165 +72,155 @@ export interface SwitchProps {
  * <Switch label="Custom" thumbOnTemplate={<Check size={12} />} />
  * ```
  */
-export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
-  (
-    {
-      checked: controlledChecked,
-      defaultChecked,
-      value,
-      label,
-      labelPosition = "right",
-      size = "md",
-      thumbOnTemplate,
-      thumbOffTemplate,
-      trackOnTemplate,
-      trackOffTemplate,
-      helperText,
-      error,
-      success = false,
-      helperSeverity,
-      disabled = false,
-      readOnly = false,
-      required = false,
-      name,
-      onChange,
-      onBlur,
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const autoId = useId();
-    const inputId = name || autoId;
-    const innerRef = useRef<HTMLInputElement>(null);
-    useImperativeHandle(ref, () => innerRef.current as HTMLInputElement);
+export const Switch = ({
+  checked: controlledChecked,
+  defaultChecked,
+  value,
+  label,
+  labelPosition = "right",
+  size = "md",
+  thumbOnTemplate,
+  thumbOffTemplate,
+  trackOnTemplate,
+  trackOffTemplate,
+  helperText,
+  error,
+  success = false,
+  helperSeverity,
+  disabled = false,
+  readOnly = false,
+  required = false,
+  name,
+  onChange,
+  onBlur,
+  className = "",
+  style,
+  ref,
+}: SwitchProps & { ref?: React.Ref<HTMLInputElement> }) => {
+  const autoId = useId();
+  const inputId = name || autoId;
+  const innerRef = useRef<HTMLInputElement>(null);
+  useImperativeHandle(ref, () => innerRef.current as HTMLInputElement);
 
-    const isControlled = controlledChecked !== undefined;
-    const [internalChecked, setInternalChecked] = useState(
-      defaultChecked ?? false
-    );
-    const isOn = isControlled ? controlledChecked : internalChecked;
+  const isControlled = controlledChecked !== undefined;
+  const [internalChecked, setInternalChecked] = useState(
+    defaultChecked ?? false
+  );
+  const isOn = isControlled ? controlledChecked : internalChecked;
 
-    const hasError = !!error;
-    const errorMessage = typeof error === "boolean" ? undefined : error;
-    const base = "k-switch";
+  const hasError = !!error;
+  const errorMessage = typeof error === "boolean" ? undefined : error;
+  const base = "k-switch";
 
-    const helperId = `${inputId}-helper`;
-    const errorId = `${inputId}-error`;
-    const describedBy =
-      [hasError && errorId, helperText && helperId].filter(Boolean).join(" ") ||
-      undefined;
+  const helperId = `${inputId}-helper`;
+  const errorId = `${inputId}-error`;
+  const describedBy =
+    [hasError && errorId, helperText && helperId].filter(Boolean).join(" ") ||
+    undefined;
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (readOnly) {
-        e.preventDefault();
-        return;
-      }
-      if (!isControlled) setInternalChecked(e.target.checked);
-      onChange?.(e);
-    };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (readOnly) {
+      e.preventDefault();
+      return;
+    }
+    if (!isControlled) setInternalChecked(e.target.checked);
+    onChange?.(e);
+  };
 
-    const trackClasses = [
-      `${base}__track`,
-      `${base}__track--${size}`,
-      isOn && !hasError && !success && `${base}__track--on`,
-      isOn && success && `${base}__track--success`,
-      isOn && hasError && `${base}__track--error`,
-      !isOn && hasError && `${base}__track--error-off`,
-      disabled && `${base}__track--disabled`,
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const trackClasses = [
+    `${base}__track`,
+    `${base}__track--${size}`,
+    isOn && !hasError && !success && `${base}__track--on`,
+    isOn && success && `${base}__track--success`,
+    isOn && hasError && `${base}__track--error`,
+    !isOn && hasError && `${base}__track--error-off`,
+    disabled && `${base}__track--disabled`,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    const thumbClasses = [
-      `${base}__thumb`,
-      `${base}__thumb--${size}`,
-      isOn && `${base}__thumb--on`,
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const thumbClasses = [
+    `${base}__thumb`,
+    `${base}__thumb--${size}`,
+    isOn && `${base}__thumb--on`,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    const wrapperClasses = [
-      base,
-      `${base}--${labelPosition}`,
-      disabled && `${base}--disabled`,
-      readOnly && `${base}--readonly`,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const wrapperClasses = [
+    base,
+    `${base}--${labelPosition}`,
+    disabled && `${base}--disabled`,
+    readOnly && `${base}--readonly`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    const labelEl = label ? (
-      <span className={`${base}__label ${base}__label--${size}`}>
-        {label}
-        {required && (
-          <span className={`${base}__required`} aria-hidden="true">
-            *
+  const labelEl = label ? (
+    <span className={`${base}__label ${base}__label--${size}`}>
+      {label}
+      {required && (
+        <span className={`${base}__required`} aria-hidden="true">
+          *
+        </span>
+      )}
+    </span>
+  ) : null;
+
+  return (
+    <div className={wrapperClasses} style={style}>
+      <label className={`${base}__control`} htmlFor={inputId}>
+        <input
+          ref={innerRef}
+          id={inputId}
+          className={`${base}__native`}
+          type="checkbox"
+          role="switch"
+          checked={isControlled ? controlledChecked : undefined}
+          defaultChecked={isControlled ? undefined : defaultChecked}
+          value={value}
+          name={name}
+          disabled={disabled}
+          required={required}
+          onChange={handleChange}
+          onBlur={onBlur}
+          aria-checked={isOn}
+          aria-invalid={hasError || undefined}
+          aria-describedby={describedBy}
+          aria-required={required || undefined}
+        />
+        <span className={trackClasses}>
+          {isOn && trackOnTemplate && (
+            <span className={`${base}__track-content`}>{trackOnTemplate}</span>
+          )}
+          {!isOn && trackOffTemplate && (
+            <span className={`${base}__track-content`}>{trackOffTemplate}</span>
+          )}
+          <span className={thumbClasses}>
+            {isOn ? thumbOnTemplate : thumbOffTemplate}
           </span>
-        )}
-      </span>
-    ) : null;
-
-    return (
-      <div className={wrapperClasses} style={style}>
-        <label className={`${base}__control`} htmlFor={inputId}>
-          <input
-            ref={innerRef}
-            id={inputId}
-            className={`${base}__native`}
-            type="checkbox"
-            role="switch"
-            checked={isControlled ? controlledChecked : undefined}
-            defaultChecked={isControlled ? undefined : defaultChecked}
-            value={value}
-            name={name}
-            disabled={disabled}
-            required={required}
-            onChange={handleChange}
-            onBlur={onBlur}
-            aria-checked={isOn}
-            aria-invalid={hasError || undefined}
-            aria-describedby={describedBy}
-            aria-required={required || undefined}
-          />
-          <span className={trackClasses}>
-            {isOn && trackOnTemplate && (
-              <span className={`${base}__track-content`}>
-                {trackOnTemplate}
-              </span>
-            )}
-            {!isOn && trackOffTemplate && (
-              <span className={`${base}__track-content`}>
-                {trackOffTemplate}
-              </span>
-            )}
-            <span className={thumbClasses}>
-              {isOn ? thumbOnTemplate : thumbOffTemplate}
-            </span>
-          </span>
-          {labelEl}
-        </label>
-        {hasError && errorMessage && (
-          <span className={`${base}__error`} id={errorId} role="alert">
-            {errorMessage}
-          </span>
-        )}
-        {helperText && (
-          <span
-            className={[
-              `${base}__helper`,
-              helperSeverity && `${base}__helper--${helperSeverity}`,
-            ]
-              .filter(Boolean)
-              .join(" ")}
-            id={helperId}
-          >
-            {helperText}
-          </span>
-        )}
-      </div>
-    );
-  }
-);
-
-Switch.displayName = "Switch";
+        </span>
+        {labelEl}
+      </label>
+      {hasError && errorMessage && (
+        <span className={`${base}__error`} id={errorId} role="alert">
+          {errorMessage}
+        </span>
+      )}
+      {helperText && (
+        <span
+          className={[
+            `${base}__helper`,
+            helperSeverity && `${base}__helper--${helperSeverity}`,
+          ]
+            .filter(Boolean)
+            .join(" ")}
+          id={helperId}
+        >
+          {helperText}
+        </span>
+      )}
+    </div>
+  );
+};

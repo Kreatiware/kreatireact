@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useImperativeHandle } from "react";
+import React, { useRef, useImperativeHandle } from "react";
 import "./Timeline.css";
 
 export interface TimelineEvent {
@@ -51,79 +51,56 @@ const base = "k-timeline";
  * ]} alternate />
  * ```
  */
-export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
-  (
-    {
-      events,
-      alternate = false,
-      contentTemplate,
-      markerTemplate,
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const elRef = useRef<HTMLDivElement>(null);
-    useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
+export const Timeline = ({
+  events,
+  alternate = false,
+  contentTemplate,
+  markerTemplate,
+  className = "",
+  style,
+  ref,
+}: TimelineProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const elRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
 
-    const cls = [base, alternate && `${base}--alternate`, className]
-      .filter(Boolean)
-      .join(" ");
+  const cls = [base, alternate && `${base}--alternate`, className]
+    .filter(Boolean)
+    .join(" ");
 
-    return (
-      <div ref={elRef} className={cls} style={style} role="list">
-        {events.map((event, i) => {
-          const marker = markerTemplate
-            ? markerTemplate(event, i)
-            : event.marker;
-          const hasCustom = !!marker;
-          const content = contentTemplate
-            ? contentTemplate(event, i)
-            : event.content;
-          const isFirst = i === 0;
-          const isLast = i === events.length - 1;
-          const isOdd = i % 2 === 0;
+  return (
+    <div ref={elRef} className={cls} style={style} role="list">
+      {events.map((event, i) => {
+        const marker = markerTemplate ? markerTemplate(event, i) : event.marker;
+        const hasCustom = !!marker;
+        const content = contentTemplate
+          ? contentTemplate(event, i)
+          : event.content;
+        const isFirst = i === 0;
+        const isLast = i === events.length - 1;
+        const isOdd = i % 2 === 0;
 
-          const connectorCls = [
-            `${base}__connector`,
-            isFirst && `${base}__connector--first`,
-            isLast && `${base}__connector--last`,
-          ]
-            .filter(Boolean)
-            .join(" ");
+        const connectorCls = [
+          `${base}__connector`,
+          isFirst && `${base}__connector--first`,
+          isLast && `${base}__connector--last`,
+        ]
+          .filter(Boolean)
+          .join(" ");
 
-          const markerEl = (
-            <span
-              className={`${base}__marker${hasCustom ? ` ${base}__marker--custom` : ""}`}
-              style={
-                !hasCustom && event.color
-                  ? { background: event.color }
-                  : undefined
-              }
-            >
-              {hasCustom && marker}
-            </span>
-          );
+        const markerEl = (
+          <span
+            className={`${base}__marker${hasCustom ? ` ${base}__marker--custom` : ""}`}
+            style={
+              !hasCustom && event.color
+                ? { background: event.color }
+                : undefined
+            }
+          >
+            {hasCustom && marker}
+          </span>
+        );
 
-          if (alternate) {
-            return (
-              <div
-                key={event.key}
-                className={`${base}__item ${event.className || ""}`}
-                style={event.style}
-                role="listitem"
-              >
-                <div className={`${base}__side ${base}__side--a`}>
-                  {isOdd ? content : event.opposite}
-                </div>
-                <div className={connectorCls}>{markerEl}</div>
-                <div className={`${base}__side ${base}__side--b`}>
-                  {isOdd ? event.opposite : content}
-                </div>
-              </div>
-            );
-          }
-
+        if (alternate) {
           return (
             <div
               key={event.key}
@@ -131,14 +108,29 @@ export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
               style={event.style}
               role="listitem"
             >
+              <div className={`${base}__side ${base}__side--a`}>
+                {isOdd ? content : event.opposite}
+              </div>
               <div className={connectorCls}>{markerEl}</div>
-              <div className={`${base}__content`}>{content}</div>
+              <div className={`${base}__side ${base}__side--b`}>
+                {isOdd ? event.opposite : content}
+              </div>
             </div>
           );
-        })}
-      </div>
-    );
-  }
-);
+        }
 
-Timeline.displayName = "Timeline";
+        return (
+          <div
+            key={event.key}
+            className={`${base}__item ${event.className || ""}`}
+            style={event.style}
+            role="listitem"
+          >
+            <div className={connectorCls}>{markerEl}</div>
+            <div className={`${base}__content`}>{content}</div>
+          </div>
+        );
+      })}
+    </div>
+  );
+};

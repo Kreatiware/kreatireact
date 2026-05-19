@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useId,
   useRef,
   useState,
@@ -81,188 +80,182 @@ export interface CheckboxProps {
  * <Checkbox label="Custom" checkedTemplate={<img src="star.svg" />} />
  * ```
  */
-export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
-  (
-    {
-      checked: controlledChecked,
-      defaultChecked,
-      indeterminate = false,
-      value,
-      label,
-      labelPosition = "right",
-      size = "md",
-      checkedTemplate,
-      uncheckedTemplate,
-      indeterminateTemplate,
-      helperText,
-      error,
-      helperSeverity,
-      success = false,
-      disabled = false,
-      readOnly = false,
-      required = false,
-      name,
-      onChange,
-      onBlur,
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const autoId = useId();
-    const inputId = name || autoId;
-    const innerRef = useRef<HTMLInputElement>(null);
-    useImperativeHandle(ref, () => innerRef.current as HTMLInputElement);
+export const Checkbox = ({
+  checked: controlledChecked,
+  defaultChecked,
+  indeterminate = false,
+  value,
+  label,
+  labelPosition = "right",
+  size = "md",
+  checkedTemplate,
+  uncheckedTemplate,
+  indeterminateTemplate,
+  helperText,
+  error,
+  helperSeverity,
+  success = false,
+  disabled = false,
+  readOnly = false,
+  required = false,
+  name,
+  onChange,
+  onBlur,
+  className = "",
+  style,
+  ref,
+}: CheckboxProps & { ref?: React.Ref<HTMLInputElement> }) => {
+  const autoId = useId();
+  const inputId = name || autoId;
+  const innerRef = useRef<HTMLInputElement>(null);
+  useImperativeHandle(ref, () => innerRef.current as HTMLInputElement);
 
-    const isControlled = controlledChecked !== undefined;
-    const [internalChecked, setInternalChecked] = useState(
-      defaultChecked ?? false
-    );
-    const isChecked = isControlled ? controlledChecked : internalChecked;
+  const isControlled = controlledChecked !== undefined;
+  const [internalChecked, setInternalChecked] = useState(
+    defaultChecked ?? false
+  );
+  const isChecked = isControlled ? controlledChecked : internalChecked;
 
-    const hasError = !!error;
-    const errorMessage = typeof error === "boolean" ? undefined : error;
-    const base = "k-checkbox";
+  const hasError = !!error;
+  const errorMessage = typeof error === "boolean" ? undefined : error;
+  const base = "k-checkbox";
 
-    const helperId = `${inputId}-helper`;
-    const errorId = `${inputId}-error`;
-    const describedBy =
-      [hasError && errorId, helperText && helperId].filter(Boolean).join(" ") ||
-      undefined;
+  const helperId = `${inputId}-helper`;
+  const errorId = `${inputId}-error`;
+  const describedBy =
+    [hasError && errorId, helperText && helperId].filter(Boolean).join(" ") ||
+    undefined;
 
-    useEffect(() => {
-      if (innerRef.current) innerRef.current.indeterminate = indeterminate;
-    }, [indeterminate]);
+  useEffect(() => {
+    if (innerRef.current) innerRef.current.indeterminate = indeterminate;
+  }, [indeterminate]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (readOnly) {
-        e.preventDefault();
-        return;
-      }
-      if (!isControlled) setInternalChecked(e.target.checked);
-      onChange?.(e);
-    };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (readOnly) {
+      e.preventDefault();
+      return;
+    }
+    if (!isControlled) setInternalChecked(e.target.checked);
+    onChange?.(e);
+  };
 
-    const iconSize: Record<string, number> = {
-      xs: 10,
-      sm: 12,
-      md: 14,
-      lg: 18,
-      xl: 22,
-    };
+  const iconSize: Record<string, number> = {
+    xs: 10,
+    sm: 12,
+    md: 14,
+    lg: 18,
+    xl: 22,
+  };
 
-    const defaultCheckIcon = (
-      <svg
-        width={iconSize[size]}
-        height={iconSize[size]}
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        aria-hidden="true"
-      >
-        <path d={CHECK_PATH} />
-      </svg>
-    );
+  const defaultCheckIcon = (
+    <svg
+      width={iconSize[size]}
+      height={iconSize[size]}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d={CHECK_PATH} />
+    </svg>
+  );
 
-    const defaultMinusIcon = (
-      <svg
-        width={iconSize[size]}
-        height={iconSize[size]}
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        aria-hidden="true"
-      >
-        <path d={MINUS_PATH} />
-      </svg>
-    );
+  const defaultMinusIcon = (
+    <svg
+      width={iconSize[size]}
+      height={iconSize[size]}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d={MINUS_PATH} />
+    </svg>
+  );
 
-    const renderBoxContent = () => {
-      if (indeterminate) return indeterminateTemplate ?? defaultMinusIcon;
-      if (isChecked) return checkedTemplate ?? defaultCheckIcon;
-      return uncheckedTemplate ?? null;
-    };
+  const renderBoxContent = () => {
+    if (indeterminate) return indeterminateTemplate ?? defaultMinusIcon;
+    if (isChecked) return checkedTemplate ?? defaultCheckIcon;
+    return uncheckedTemplate ?? null;
+  };
 
-    const isActive = isChecked || indeterminate;
-    const hasCustomUnchecked = !!uncheckedTemplate;
+  const isActive = isChecked || indeterminate;
+  const hasCustomUnchecked = !!uncheckedTemplate;
 
-    const boxClasses = [
-      `${base}__box`,
-      `${base}__box--${size}`,
-      isActive && !hasError && !success && `${base}__box--active`,
-      isActive && success && `${base}__box--success`,
-      !isActive && hasCustomUnchecked && `${base}__box--has-unchecked`,
-      hasError && isActive && `${base}__box--error-active`,
-      hasError && !isActive && `${base}__box--error`,
-      disabled && `${base}__box--disabled`,
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const boxClasses = [
+    `${base}__box`,
+    `${base}__box--${size}`,
+    isActive && !hasError && !success && `${base}__box--active`,
+    isActive && success && `${base}__box--success`,
+    !isActive && hasCustomUnchecked && `${base}__box--has-unchecked`,
+    hasError && isActive && `${base}__box--error-active`,
+    hasError && !isActive && `${base}__box--error`,
+    disabled && `${base}__box--disabled`,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    const wrapperClasses = [
-      base,
-      `${base}--${labelPosition}`,
-      disabled && `${base}--disabled`,
-      readOnly && `${base}--readonly`,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const wrapperClasses = [
+    base,
+    `${base}--${labelPosition}`,
+    disabled && `${base}--disabled`,
+    readOnly && `${base}--readonly`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    const labelEl = label ? (
-      <span className={`${base}__label ${base}__label--${size}`}>
-        {label}
-        {required && (
-          <span className={`${base}__required`} aria-hidden="true">
-            *
-          </span>
-        )}
-      </span>
-    ) : null;
+  const labelEl = label ? (
+    <span className={`${base}__label ${base}__label--${size}`}>
+      {label}
+      {required && (
+        <span className={`${base}__required`} aria-hidden="true">
+          *
+        </span>
+      )}
+    </span>
+  ) : null;
 
-    return (
-      <div className={wrapperClasses} style={style}>
-        <label className={`${base}__control`} htmlFor={inputId}>
-          <input
-            ref={innerRef}
-            id={inputId}
-            className={`${base}__native`}
-            type="checkbox"
-            checked={isControlled ? controlledChecked : undefined}
-            defaultChecked={isControlled ? undefined : defaultChecked}
-            value={value}
-            name={name}
-            disabled={disabled}
-            required={required}
-            onChange={handleChange}
-            onBlur={onBlur}
-            aria-invalid={hasError || undefined}
-            aria-describedby={describedBy}
-            aria-required={required || undefined}
-            aria-checked={indeterminate ? "mixed" : undefined}
-          />
-          <span className={boxClasses}>{renderBoxContent()}</span>
-          {labelEl}
-        </label>
-        {hasError && errorMessage && (
-          <span className={`${base}__error`} id={errorId} role="alert">
-            {errorMessage}
-          </span>
-        )}
-        {helperText && (
-          <span
-            className={[
-              `${base}__helper`,
-              helperSeverity && `${base}__helper--${helperSeverity}`,
-            ]
-              .filter(Boolean)
-              .join(" ")}
-            id={helperId}
-          >
-            {helperText}
-          </span>
-        )}
-      </div>
-    );
-  }
-);
-
-Checkbox.displayName = "Checkbox";
+  return (
+    <div className={wrapperClasses} style={style}>
+      <label className={`${base}__control`} htmlFor={inputId}>
+        <input
+          ref={innerRef}
+          id={inputId}
+          className={`${base}__native`}
+          type="checkbox"
+          checked={isControlled ? controlledChecked : undefined}
+          defaultChecked={isControlled ? undefined : defaultChecked}
+          value={value}
+          name={name}
+          disabled={disabled}
+          required={required}
+          onChange={handleChange}
+          onBlur={onBlur}
+          aria-invalid={hasError || undefined}
+          aria-describedby={describedBy}
+          aria-required={required || undefined}
+          aria-checked={indeterminate ? "mixed" : undefined}
+        />
+        <span className={boxClasses}>{renderBoxContent()}</span>
+        {labelEl}
+      </label>
+      {hasError && errorMessage && (
+        <span className={`${base}__error`} id={errorId} role="alert">
+          {errorMessage}
+        </span>
+      )}
+      {helperText && (
+        <span
+          className={[
+            `${base}__helper`,
+            helperSeverity && `${base}__helper--${helperSeverity}`,
+          ]
+            .filter(Boolean)
+            .join(" ")}
+          id={helperId}
+        >
+          {helperText}
+        </span>
+      )}
+    </div>
+  );
+};

@@ -1,4 +1,4 @@
-import React, { forwardRef, Children, isValidElement } from "react";
+import React, { Children, isValidElement } from "react";
 import { CHECK_PATH } from "./iconPaths";
 import "./Stepper.css";
 
@@ -35,9 +35,9 @@ export interface StepperPanelProps {
  * </Stepper>
  * ```
  */
-export const StepperPanel = forwardRef<HTMLDivElement, StepperPanelProps>(
-  (_props, _ref) => null
-);
+export const StepperPanel = (
+  _props: StepperPanelProps & { ref?: React.Ref<HTMLDivElement> }
+) => null;
 
 StepperPanel.displayName = "StepperPanel";
 
@@ -83,124 +83,118 @@ export interface StepperProps {
  * </Stepper>
  * ```
  */
-export const Stepper = forwardRef<HTMLDivElement, StepperProps>(
-  (
-    {
-      activeStep,
-      orientation = "horizontal",
-      labelPosition = "end",
-      clickable = false,
-      onStepChange,
-      children,
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const panels = Children.toArray(children).filter(
-      (child): child is React.ReactElement<StepperPanelProps> =>
-        isValidElement(child) &&
-        (child.type as { displayName?: string }).displayName === "StepperPanel"
-    );
+export const Stepper = ({
+  activeStep,
+  orientation = "horizontal",
+  labelPosition = "end",
+  clickable = false,
+  onStepChange,
+  children,
+  className = "",
+  style,
+  ref,
+}: StepperProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const panels = Children.toArray(children).filter(
+    (child): child is React.ReactElement<StepperPanelProps> =>
+      isValidElement(child) &&
+      (child.type as { displayName?: string }).displayName === "StepperPanel"
+  );
 
-    const activeIndex = panels.findIndex(p => p.props.stepKey === activeStep);
-    const activePanel = panels[activeIndex];
-    const base = "k-stepper";
-    const classes = [
-      base,
-      `${base}--${orientation}`,
-      labelPosition === "bottom" && `${base}--label-bottom`,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const activeIndex = panels.findIndex(p => p.props.stepKey === activeStep);
+  const activePanel = panels[activeIndex];
+  const base = "k-stepper";
+  const classes = [
+    base,
+    `${base}--${orientation}`,
+    labelPosition === "bottom" && `${base}--label-bottom`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    return (
-      <div
-        ref={ref}
-        className={classes}
-        style={style}
-        role="group"
-        aria-label="Progress"
-      >
-        <div className={`${base}__header`}>
-          {panels.map((panel, i) => {
-            const { stepKey, header, icon } = panel.props;
-            const isCompleted = i < activeIndex;
-            const isActive = i === activeIndex;
-            const canClick = clickable && isCompleted;
+  return (
+    <div
+      ref={ref}
+      className={classes}
+      style={style}
+      role="group"
+      aria-label="Progress"
+    >
+      <div className={`${base}__header`}>
+        {panels.map((panel, i) => {
+          const { stepKey, header, icon } = panel.props;
+          const isCompleted = i < activeIndex;
+          const isActive = i === activeIndex;
+          const canClick = clickable && isCompleted;
 
-            const stepClasses = [
-              `${base}__step`,
-              isActive && `${base}__step--active`,
-              isCompleted && `${base}__step--completed`,
-              canClick && `${base}__step--clickable`,
-            ]
-              .filter(Boolean)
-              .join(" ");
+          const stepClasses = [
+            `${base}__step`,
+            isActive && `${base}__step--active`,
+            isCompleted && `${base}__step--completed`,
+            canClick && `${base}__step--clickable`,
+          ]
+            .filter(Boolean)
+            .join(" ");
 
-            const indicator =
-              icon ??
-              (isCompleted ? (
-                <svg
-                  width={16}
-                  height={16}
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d={CHECK_PATH} />
-                </svg>
-              ) : (
-                i + 1
-              ));
+          const indicator =
+            icon ??
+            (isCompleted ? (
+              <svg
+                width={16}
+                height={16}
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d={CHECK_PATH} />
+              </svg>
+            ) : (
+              i + 1
+            ));
 
-            return (
-              <React.Fragment key={stepKey}>
-                {i > 0 && (
-                  <div
-                    className={`${base}__connector ${isCompleted ? `${base}__connector--completed` : ""}`}
-                    aria-hidden="true"
-                  />
-                )}
+          return (
+            <React.Fragment key={stepKey}>
+              {i > 0 && (
                 <div
-                  className={stepClasses}
-                  role="tab"
-                  aria-current={isActive ? "step" : undefined}
-                  aria-disabled={!canClick || undefined}
-                  tabIndex={canClick ? 0 : undefined}
-                  onClick={canClick ? () => onStepChange?.(stepKey) : undefined}
-                  onKeyDown={
-                    canClick
-                      ? e => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            onStepChange?.(stepKey);
-                          }
+                  className={`${base}__connector ${isCompleted ? `${base}__connector--completed` : ""}`}
+                  aria-hidden="true"
+                />
+              )}
+              <div
+                className={stepClasses}
+                role="tab"
+                aria-current={isActive ? "step" : undefined}
+                aria-disabled={!canClick || undefined}
+                tabIndex={canClick ? 0 : undefined}
+                onClick={canClick ? () => onStepChange?.(stepKey) : undefined}
+                onKeyDown={
+                  canClick
+                    ? e => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          onStepChange?.(stepKey);
                         }
-                      : undefined
-                  }
-                >
-                  <span className={`${base}__indicator`} aria-hidden="true">
-                    {indicator}
-                  </span>
-                  {header && <span className={`${base}__label`}>{header}</span>}
-                </div>
-              </React.Fragment>
-            );
-          })}
-        </div>
-        {activePanel?.props.children && (
-          <div
-            className={`${base}__content ${activePanel.props.className ?? ""}`}
-            style={activePanel.props.style}
-            role="tabpanel"
-          >
-            {activePanel.props.children}
-          </div>
-        )}
+                      }
+                    : undefined
+                }
+              >
+                <span className={`${base}__indicator`} aria-hidden="true">
+                  {indicator}
+                </span>
+                {header && <span className={`${base}__label`}>{header}</span>}
+              </div>
+            </React.Fragment>
+          );
+        })}
       </div>
-    );
-  }
-);
-
-Stepper.displayName = "Stepper";
+      {activePanel?.props.children && (
+        <div
+          className={`${base}__content ${activePanel.props.className ?? ""}`}
+          style={activePanel.props.style}
+          role="tabpanel"
+        >
+          {activePanel.props.children}
+        </div>
+      )}
+    </div>
+  );
+};

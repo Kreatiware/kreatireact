@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import { Tooltip } from "./Tooltip";
 import type { TooltipPosition } from "./Tooltip";
 import "./Button.css";
@@ -77,99 +77,95 @@ export interface ButtonProps {
  * <Button iconLeft={<Menu size={18} />} ariaLabel="Open menu" rounded tooltip="Menu" />
  * ```
  */
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      label,
-      iconLeft,
-      iconRight,
-      size = "md",
-      buttonType = "filled",
-      severity = "primary",
-      disabled = false,
-      raised = false,
-      rounded = false,
-      slim = false,
-      compact = false,
-      badge,
-      badgePosition = "ne",
-      onClick,
-      type = "button",
-      width,
-      ariaLabel,
-      tooltip,
-      tooltipPosition = "top",
-      className = "",
-      style,
-      children,
-    },
-    ref
-  ) => {
-    const isIconOnly = !label && !children && (iconLeft || iconRight);
-    const base = "k-button";
+export const Button = ({
+  label,
+  iconLeft,
+  iconRight,
+  size = "md",
+  buttonType = "filled",
+  severity = "primary",
+  disabled = false,
+  raised = false,
+  rounded = false,
+  slim = false,
+  compact = false,
+  badge,
+  badgePosition = "ne",
+  onClick,
+  type = "button",
+  width,
+  ariaLabel,
+  tooltip,
+  tooltipPosition = "top",
+  className = "",
+  style,
+  children,
+  ref,
+}: ButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+  const isIconOnly = !label && !children && (iconLeft || iconRight);
+  const base = "k-button";
 
-    const classes = [
-      base,
-      `${base}--${size}`,
-      `${base}--${buttonType}`,
-      `${base}--${severity}`,
-      isIconOnly && `${base}--icon-only`,
-      raised && `${base}--raised`,
-      rounded && `${base}--rounded`,
-      slim && `${base}--slim`,
-      compact && `${base}--compact`,
-      disabled && `${base}--disabled`,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const classes = [
+    base,
+    `${base}--${size}`,
+    `${base}--${buttonType}`,
+    `${base}--${severity}`,
+    isIconOnly && `${base}--icon-only`,
+    raised && `${base}--raised`,
+    rounded && `${base}--rounded`,
+    slim && `${base}--slim`,
+    compact && `${base}--compact`,
+    disabled && `${base}--disabled`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    const buttonEl = (
-      <button
-        ref={ref}
-        className={classes}
-        style={{ ...style, ...(width ? { width } : undefined) }}
-        disabled={disabled}
-        onClick={onClick}
-        type={type}
-        aria-label={isIconOnly ? ariaLabel : undefined}
-        aria-disabled={disabled || undefined}
-      >
-        {children ? (
-          children
-        ) : (
-          <>
-            {iconLeft && (
-              <span className={`${base}__icon ${base}__icon--left`}>
-                {iconLeft}
-              </span>
-            )}
-            {label && <span className={`${base}__label`}>{label}</span>}
-            {iconRight && (
-              <span className={`${base}__icon ${base}__icon--right`}>
-                {iconRight}
-              </span>
-            )}
-          </>
-        )}
-        {badge != null && (
-          <span className={`${base}__badge ${base}__badge--${badgePosition}`}>
-            {badge}
-          </span>
-        )}
-      </button>
+  const buttonEl = (
+    <button
+      ref={ref}
+      className={classes}
+      style={{ ...style, ...(width ? { width } : undefined) }}
+      disabled={disabled}
+      onClick={onClick}
+      type={type}
+      aria-label={isIconOnly ? ariaLabel : undefined}
+      aria-disabled={disabled || undefined}
+    >
+      {children ? (
+        children
+      ) : (
+        <>
+          {iconLeft && (
+            <span className={`${base}__icon ${base}__icon--left`}>
+              {iconLeft}
+            </span>
+          )}
+          {label && <span className={`${base}__label`}>{label}</span>}
+          {iconRight && (
+            <span className={`${base}__icon ${base}__icon--right`}>
+              {iconRight}
+            </span>
+          )}
+        </>
+      )}
+      {badge != null && (
+        <span className={`${base}__badge ${base}__badge--${badgePosition}`}>
+          {badge}
+        </span>
+      )}
+    </button>
+  );
+
+  if (tooltip) {
+    return (
+      <Tooltip content={tooltip} position={tooltipPosition}>
+        {buttonEl}
+      </Tooltip>
     );
-
-    if (tooltip) {
-      return (
-        <Tooltip content={tooltip} position={tooltipPosition}>
-          {buttonEl}
-        </Tooltip>
-      );
-    }
-
-    return buttonEl;
   }
-);
+
+  return buttonEl;
+};
 
 Button.displayName = "Button";

@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useRef,
   useState,
   useEffect,
@@ -58,127 +57,120 @@ let clipCounter = 0;
  * pixel positions to plot-relative coordinates. All chart content is rendered
  * as children within a clipped group.
  */
-export const ChartCanvas = forwardRef<SVGSVGElement, ChartCanvasProps>(
-  (
-    {
-      width = "100%",
-      height = 300,
-      margins: marginsProp,
-      onMouseMove,
-      onMouseLeave,
-      onClick,
-      ariaLabel,
-      className = "",
-      style,
-      children,
+export const ChartCanvas = ({
+  width = "100%",
+  height = 300,
+  margins: marginsProp,
+  onMouseMove,
+  onMouseLeave,
+  onClick,
+  ariaLabel,
+  className = "",
+  style,
+  children,
+  ref,
+}: ChartCanvasProps & { ref?: React.Ref<SVGSVGElement> }) => {
+  const svgRef = useRef<SVGSVGElement>(null);
+  useImperativeHandle(ref, () => svgRef.current as SVGSVGElement);
+
+  const [svgWidth, setSvgWidth] = useState(
+    typeof width === "number" ? width : 0
+  );
+  const margins: ChartMargins = { ...DEFAULT_MARGINS, ...marginsProp };
+
+  useEffect(() => {
+    if (typeof width === "number") {
+      setSvgWidth(width);
+      return;
+    }
+    const el = svgRef.current?.parentElement;
+    if (!el) return;
+    const observer = new ResizeObserver(entries => {
+      const entry = entries[0];
+      if (entry) setSvgWidth(entry.contentRect.width);
+    });
+    observer.observe(el);
+    setSvgWidth(el.clientWidth);
+    return () => observer.disconnect();
+  }, [width]);
+
+  const plotWidth = Math.max(svgWidth - margins.left - margins.right, 0);
+  const plotHeight = Math.max(height - margins.top - margins.bottom, 0);
+
+  const getPlotCoords = useCallback(
+    (clientX: number, clientY: number) => {
+      const svg = svgRef.current;
+      if (!svg) return { plotX: 0, plotY: 0, clientX, clientY };
+      const rect = svg.getBoundingClientRect();
+      const plotX = clientX - rect.left - margins.left;
+      const plotY = clientY - rect.top - margins.top;
+      return { plotX, plotY, clientX, clientY };
     },
-    ref
-  ) => {
-    const svgRef = useRef<SVGSVGElement>(null);
-    useImperativeHandle(ref, () => svgRef.current as SVGSVGElement);
+    [margins.left, margins.top]
+  );
 
-    const [svgWidth, setSvgWidth] = useState(
-      typeof width === "number" ? width : 0
-    );
-    const margins: ChartMargins = { ...DEFAULT_MARGINS, ...marginsProp };
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent) => {
+      if (!onMouseMove) return;
+      onMouseMove(getPlotCoords(e.clientX, e.clientY));
+    },
+    [onMouseMove, getPlotCoords]
+  );
 
-    useEffect(() => {
-      if (typeof width === "number") {
-        setSvgWidth(width);
-        return;
-      }
-      const el = svgRef.current?.parentElement;
-      if (!el) return;
-      const observer = new ResizeObserver(entries => {
-        const entry = entries[0];
-        if (entry) setSvgWidth(entry.contentRect.width);
-      });
-      observer.observe(el);
-      setSvgWidth(el.clientWidth);
-      return () => observer.disconnect();
-    }, [width]);
+  const handleClick = useCallback(
+    (e: React.MouseEvent) => {
+      if (!onClick) return;
+      onClick(getPlotCoords(e.clientX, e.clientY));
+    },
+    [onClick, getPlotCoords]
+  );
 
-    const plotWidth = Math.max(svgWidth - margins.left - margins.right, 0);
-    const plotHeight = Math.max(height - margins.top - margins.bottom, 0);
+  const base = "k-chart";
+  const clipIdRef = useRef(`${base}-clip-${++clipCounter}`);
+  const clipId = clipIdRef.current;
+  const softClipId = `${clipId}-soft`;
 
-    const getPlotCoords = useCallback(
-      (clientX: number, clientY: number) => {
-        const svg = svgRef.current;
-        if (!svg) return { plotX: 0, plotY: 0, clientX, clientY };
-        const rect = svg.getBoundingClientRect();
-        const plotX = clientX - rect.left - margins.left;
-        const plotY = clientY - rect.top - margins.top;
-        return { plotX, plotY, clientX, clientY };
-      },
-      [margins.left, margins.top]
-    );
-
-    const handleMouseMove = useCallback(
-      (e: React.MouseEvent) => {
-        if (!onMouseMove) return;
-        onMouseMove(getPlotCoords(e.clientX, e.clientY));
-      },
-      [onMouseMove, getPlotCoords]
-    );
-
-    const handleClick = useCallback(
-      (e: React.MouseEvent) => {
-        if (!onClick) return;
-        onClick(getPlotCoords(e.clientX, e.clientY));
-      },
-      [onClick, getPlotCoords]
-    );
-
-    const base = "k-chart";
-    const clipIdRef = useRef(`${base}-clip-${++clipCounter}`);
-    const clipId = clipIdRef.current;
-    const softClipId = `${clipId}-soft`;
-
-    return (
-      <svg
-        ref={svgRef}
-        className={`${base} ${className}`}
-        style={{ width, height, ...style }}
-        viewBox={svgWidth ? `0 0 ${svgWidth} ${height}` : undefined}
-        role="img"
-        aria-label={ariaLabel}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={onMouseLeave}
-        onClick={handleClick}
-      >
-        <defs>
-          <clipPath id={clipId}>
-            <rect x={0} y={0} width={plotWidth} height={plotHeight} />
-          </clipPath>
-          <clipPath id={softClipId}>
-            <rect
-              x={-32}
-              y={-32}
-              width={plotWidth + 64}
-              height={plotHeight + 64}
-            />
-          </clipPath>
-        </defs>
-        <g transform={`translate(${margins.left},${margins.top})`}>
-          <ChartCanvasContext.Provider
-            value={{
-              width: plotWidth,
-              height: plotHeight,
-              margins,
-              clipId,
-              softClipId,
-            }}
-          >
-            {children}
-          </ChartCanvasContext.Provider>
-        </g>
-      </svg>
-    );
-  }
-);
-
-ChartCanvas.displayName = "ChartCanvas";
-
+  return (
+    <svg
+      ref={svgRef}
+      className={`${base} ${className}`}
+      style={{ width, height, ...style }}
+      viewBox={svgWidth ? `0 0 ${svgWidth} ${height}` : undefined}
+      role="img"
+      aria-label={ariaLabel}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={onMouseLeave}
+      onClick={handleClick}
+    >
+      <defs>
+        <clipPath id={clipId}>
+          <rect x={0} y={0} width={plotWidth} height={plotHeight} />
+        </clipPath>
+        <clipPath id={softClipId}>
+          <rect
+            x={-32}
+            y={-32}
+            width={plotWidth + 64}
+            height={plotHeight + 64}
+          />
+        </clipPath>
+      </defs>
+      <g transform={`translate(${margins.left},${margins.top})`}>
+        <ChartCanvasContext.Provider
+          value={{
+            width: plotWidth,
+            height: plotHeight,
+            margins,
+            clipId,
+            softClipId,
+          }}
+        >
+          {children}
+        </ChartCanvasContext.Provider>
+      </g>
+    </svg>
+  );
+};
 // ─── Context for children to access plot dimensions ─────────────────────────
 
 interface ChartCanvasContextValue {

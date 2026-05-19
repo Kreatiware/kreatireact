@@ -25,10 +25,10 @@
   "author": "Brian - Kreatiware",
   "license": "MIT",
   "peerDependencies": {
-    "react": ">=18.0.0"
+    "react": ">=19.0.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.55",
+    "@types/react": "^19.0.0",
     "rimraf": "^5.0.5",
     "vite": "^5.1.0",
     "vite-plugin-dts": "^3.7.3",

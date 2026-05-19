@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useCallback,
   useMemo,
   useRef,
@@ -70,153 +69,147 @@ const NavIcon = ({ path }: { path: string }) => (
  * <Pagination totalItems={100} itemsPerPage={10} page={page} onPageChange={setPage} />
  * ```
  */
-export const Pagination = forwardRef<HTMLElement, PaginationProps>(
-  (
-    {
-      totalItems,
-      itemsPerPage = 10,
-      page: controlledPage,
-      defaultPage = 1,
-      onPageChange,
-      maxVisible = 5,
-      showFirstLast = false,
-      size = "md",
-      pageTemplate,
-      disabled = false,
-      fullWidth = false,
-      className = "",
-      style,
+export const Pagination = ({
+  totalItems,
+  itemsPerPage = 10,
+  page: controlledPage,
+  defaultPage = 1,
+  onPageChange,
+  maxVisible = 5,
+  showFirstLast = false,
+  size = "md",
+  pageTemplate,
+  disabled = false,
+  fullWidth = false,
+  className = "",
+  style,
+  ref,
+}: PaginationProps & { ref?: React.Ref<HTMLElement> }) => {
+  const elRef = useRef<HTMLElement>(null);
+  useImperativeHandle(ref, () => elRef.current as HTMLElement);
+  const locale = useKreatiLocale();
+
+  const isControlled = controlledPage !== undefined;
+  const [internalPage, setInternalPage] = React.useState(defaultPage);
+  const current = isControlled ? controlledPage : internalPage;
+  const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
+
+  const goTo = useCallback(
+    (p: number) => {
+      const clamped = Math.max(1, Math.min(p, totalPages));
+      if (!isControlled) setInternalPage(clamped);
+      onPageChange?.(clamped);
     },
-    ref
-  ) => {
-    const elRef = useRef<HTMLElement>(null);
-    useImperativeHandle(ref, () => elRef.current as HTMLElement);
-    const locale = useKreatiLocale();
+    [isControlled, totalPages, onPageChange]
+  );
 
-    const isControlled = controlledPage !== undefined;
-    const [internalPage, setInternalPage] = React.useState(defaultPage);
-    const current = isControlled ? controlledPage : internalPage;
-    const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
-
-    const goTo = useCallback(
-      (p: number) => {
-        const clamped = Math.max(1, Math.min(p, totalPages));
-        if (!isControlled) setInternalPage(clamped);
-        onPageChange?.(clamped);
-      },
-      [isControlled, totalPages, onPageChange]
-    );
-
-    const pages = useMemo(() => {
-      const result: (number | "ellipsis")[] = [];
-      if (totalPages <= maxVisible + 2) {
-        for (let i = 1; i <= totalPages; i++) result.push(i);
-        return result;
-      }
-      const half = Math.floor(maxVisible / 2);
-      let start = Math.max(2, current - half);
-      let end = Math.min(totalPages - 1, current + half);
-      if (current <= half + 1) end = maxVisible;
-      if (current >= totalPages - half) start = totalPages - maxVisible + 1;
-      result.push(1);
-      if (start > 2) result.push("ellipsis");
-      for (let i = start; i <= end; i++) result.push(i);
-      if (end < totalPages - 1) result.push("ellipsis");
-      result.push(totalPages);
+  const pages = useMemo(() => {
+    const result: (number | "ellipsis")[] = [];
+    if (totalPages <= maxVisible + 2) {
+      for (let i = 1; i <= totalPages; i++) result.push(i);
       return result;
-    }, [totalPages, maxVisible, current]);
+    }
+    const half = Math.floor(maxVisible / 2);
+    let start = Math.max(2, current - half);
+    let end = Math.min(totalPages - 1, current + half);
+    if (current <= half + 1) end = maxVisible;
+    if (current >= totalPages - half) start = totalPages - maxVisible + 1;
+    result.push(1);
+    if (start > 2) result.push("ellipsis");
+    for (let i = start; i <= end; i++) result.push(i);
+    if (end < totalPages - 1) result.push("ellipsis");
+    result.push(totalPages);
+    return result;
+  }, [totalPages, maxVisible, current]);
 
-    const cls = [
-      base,
-      `${base}--${size}`,
-      fullWidth && `${base}--full-width`,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const cls = [
+    base,
+    `${base}--${size}`,
+    fullWidth && `${base}--full-width`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    const btn = (
-      key: string,
-      label: string,
-      onClick: () => void,
-      isDisabled: boolean,
-      children: React.ReactNode,
-      active = false
-    ) => (
-      <button
-        key={key}
-        type="button"
-        className={`${base}__btn${active ? ` ${base}__btn--active` : ""}`}
-        onClick={onClick}
-        disabled={disabled || isDisabled}
-        aria-label={label}
-        aria-current={active ? "page" : undefined}
-      >
-        {children}
-      </button>
-    );
+  const btn = (
+    key: string,
+    label: string,
+    onClick: () => void,
+    isDisabled: boolean,
+    children: React.ReactNode,
+    active = false
+  ) => (
+    <button
+      key={key}
+      type="button"
+      className={`${base}__btn${active ? ` ${base}__btn--active` : ""}`}
+      onClick={onClick}
+      disabled={disabled || isDisabled}
+      aria-label={label}
+      aria-current={active ? "page" : undefined}
+    >
+      {children}
+    </button>
+  );
 
-    return (
-      <nav
-        ref={elRef}
-        className={cls}
-        style={style}
-        role="navigation"
-        aria-label={locale.pagination.ariaLabel}
-      >
-        {showFirstLast &&
-          btn(
-            "first",
-            locale.pagination.first,
-            () => goTo(1),
-            current === 1,
-            <NavIcon path={DOUBLE_ARROW_LEFT_PATH} />
-          )}
-        {btn(
-          "prev",
-          locale.pagination.previous,
-          () => goTo(current - 1),
+  return (
+    <nav
+      ref={elRef}
+      className={cls}
+      style={style}
+      role="navigation"
+      aria-label={locale.pagination.ariaLabel}
+    >
+      {showFirstLast &&
+        btn(
+          "first",
+          locale.pagination.first,
+          () => goTo(1),
           current === 1,
-          <NavIcon path={CHEVRON_LEFT_PATH} />
+          <NavIcon path={DOUBLE_ARROW_LEFT_PATH} />
         )}
-        {pages.map((p, i) =>
-          p === "ellipsis" ? (
-            <span
-              key={`e${i}`}
-              className={`${base}__ellipsis`}
-              aria-hidden="true"
-            >
-              ...
-            </span>
-          ) : (
-            btn(
-              `p${p}`,
-              `${locale.pagination.page} ${p}`,
-              () => goTo(p),
-              false,
-              pageTemplate ? pageTemplate(p, p === current) : p,
-              p === current
-            )
-          )
-        )}
-        {btn(
-          "next",
-          locale.pagination.next,
-          () => goTo(current + 1),
-          current === totalPages,
-          <NavIcon path={CHEVRON_RIGHT_PATH} />
-        )}
-        {showFirstLast &&
+      {btn(
+        "prev",
+        locale.pagination.previous,
+        () => goTo(current - 1),
+        current === 1,
+        <NavIcon path={CHEVRON_LEFT_PATH} />
+      )}
+      {pages.map((p, i) =>
+        p === "ellipsis" ? (
+          <span
+            key={`e${i}`}
+            className={`${base}__ellipsis`}
+            aria-hidden="true"
+          >
+            ...
+          </span>
+        ) : (
           btn(
-            "last",
-            locale.pagination.last,
-            () => goTo(totalPages),
-            current === totalPages,
-            <NavIcon path={DOUBLE_ARROW_RIGHT_PATH} />
-          )}
-      </nav>
-    );
-  }
-);
-
-Pagination.displayName = "Pagination";
+            `p${p}`,
+            `${locale.pagination.page} ${p}`,
+            () => goTo(p),
+            false,
+            pageTemplate ? pageTemplate(p, p === current) : p,
+            p === current
+          )
+        )
+      )}
+      {btn(
+        "next",
+        locale.pagination.next,
+        () => goTo(current + 1),
+        current === totalPages,
+        <NavIcon path={CHEVRON_RIGHT_PATH} />
+      )}
+      {showFirstLast &&
+        btn(
+          "last",
+          locale.pagination.last,
+          () => goTo(totalPages),
+          current === totalPages,
+          <NavIcon path={DOUBLE_ARROW_RIGHT_PATH} />
+        )}
+    </nav>
+  );
+};

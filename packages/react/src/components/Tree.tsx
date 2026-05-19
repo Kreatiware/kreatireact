@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useState,
   useCallback,
   useRef,
@@ -85,172 +84,166 @@ const ToggleIcon = () => (
  * ]} onSelect={(keys) => console.log(keys)} />
  * ```
  */
-export const Tree = forwardRef<HTMLUListElement, TreeProps>(
-  (
-    {
-      nodes,
-      selectedKeys: controlledSelected,
-      defaultSelectedKeys,
-      onSelect,
-      expandedKeys: controlledExpanded,
-      defaultExpandedKeys,
-      onToggle,
-      multiple = false,
-      nodeTemplate,
-      className = "",
-      style,
+export const Tree = ({
+  nodes,
+  selectedKeys: controlledSelected,
+  defaultSelectedKeys,
+  onSelect,
+  expandedKeys: controlledExpanded,
+  defaultExpandedKeys,
+  onToggle,
+  multiple = false,
+  nodeTemplate,
+  className = "",
+  style,
+  ref,
+}: TreeProps & { ref?: React.Ref<HTMLUListElement> }) => {
+  const elRef = useRef<HTMLUListElement>(null);
+  useImperativeHandle(ref, () => elRef.current as HTMLUListElement);
+
+  const isSelectedControlled = controlledSelected !== undefined;
+  const isExpandedControlled = controlledExpanded !== undefined;
+
+  const [internalSelected, setInternalSelected] = useState<string[]>(
+    defaultSelectedKeys
+      ? Array.isArray(defaultSelectedKeys)
+        ? defaultSelectedKeys
+        : [defaultSelectedKeys]
+      : []
+  );
+  const [internalExpanded, setInternalExpanded] = useState<string[]>(
+    defaultExpandedKeys ?? []
+  );
+
+  const selected = new Set(
+    isSelectedControlled
+      ? Array.isArray(controlledSelected)
+        ? controlledSelected
+        : [controlledSelected]
+      : internalSelected
+  );
+  const expanded = new Set(
+    isExpandedControlled ? controlledExpanded : internalExpanded
+  );
+
+  const toggleExpand = useCallback(
+    (key: string) => {
+      const next = expanded.has(key)
+        ? [...expanded].filter(k => k !== key)
+        : [...expanded, key];
+      if (!isExpandedControlled) setInternalExpanded(next);
+      onToggle?.(next);
     },
-    ref
-  ) => {
-    const elRef = useRef<HTMLUListElement>(null);
-    useImperativeHandle(ref, () => elRef.current as HTMLUListElement);
+    [expanded, isExpandedControlled, onToggle]
+  );
 
-    const isSelectedControlled = controlledSelected !== undefined;
-    const isExpandedControlled = controlledExpanded !== undefined;
+  const selectNode = useCallback(
+    (node: TreeNode) => {
+      if (node.disabled) return;
+      let next: string[];
+      if (multiple) {
+        next = selected.has(node.key)
+          ? [...selected].filter(k => k !== node.key)
+          : [...selected, node.key];
+      } else {
+        next = selected.has(node.key) ? [] : [node.key];
+      }
+      if (!isSelectedControlled) setInternalSelected(next);
+      onSelect?.(next, node);
+    },
+    [selected, multiple, isSelectedControlled, onSelect]
+  );
 
-    const [internalSelected, setInternalSelected] = useState<string[]>(
-      defaultSelectedKeys
-        ? Array.isArray(defaultSelectedKeys)
-          ? defaultSelectedKeys
-          : [defaultSelectedKeys]
-        : []
-    );
-    const [internalExpanded, setInternalExpanded] = useState<string[]>(
-      defaultExpandedKeys ?? []
-    );
-
-    const selected = new Set(
-      isSelectedControlled
-        ? Array.isArray(controlledSelected)
-          ? controlledSelected
-          : [controlledSelected]
-        : internalSelected
-    );
-    const expanded = new Set(
-      isExpandedControlled ? controlledExpanded : internalExpanded
-    );
-
-    const toggleExpand = useCallback(
-      (key: string) => {
-        const next = expanded.has(key)
-          ? [...expanded].filter(k => k !== key)
-          : [...expanded, key];
-        if (!isExpandedControlled) setInternalExpanded(next);
-        onToggle?.(next);
-      },
-      [expanded, isExpandedControlled, onToggle]
-    );
-
-    const selectNode = useCallback(
-      (node: TreeNode) => {
-        if (node.disabled) return;
-        let next: string[];
-        if (multiple) {
-          next = selected.has(node.key)
-            ? [...selected].filter(k => k !== node.key)
-            : [...selected, node.key];
-        } else {
-          next = selected.has(node.key) ? [] : [node.key];
-        }
-        if (!isSelectedControlled) setInternalSelected(next);
-        onSelect?.(next, node);
-      },
-      [selected, multiple, isSelectedControlled, onSelect]
-    );
-
-    const handleKeyDown = useCallback(
-      (e: React.KeyboardEvent, node: TreeNode, hasChildren: boolean) => {
-        switch (e.key) {
-          case "Enter":
-          case " ":
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent, node: TreeNode, hasChildren: boolean) => {
+      switch (e.key) {
+        case "Enter":
+        case " ":
+          e.preventDefault();
+          if (hasChildren) toggleExpand(node.key);
+          else selectNode(node);
+          break;
+        case "ArrowRight":
+          if (hasChildren && !expanded.has(node.key)) {
             e.preventDefault();
-            if (hasChildren) toggleExpand(node.key);
-            else selectNode(node);
-            break;
-          case "ArrowRight":
-            if (hasChildren && !expanded.has(node.key)) {
-              e.preventDefault();
-              toggleExpand(node.key);
-            }
-            break;
-          case "ArrowLeft":
-            if (hasChildren && expanded.has(node.key)) {
-              e.preventDefault();
-              toggleExpand(node.key);
-            }
-            break;
-        }
-      },
-      [selectNode, expanded, toggleExpand]
-    );
+            toggleExpand(node.key);
+          }
+          break;
+        case "ArrowLeft":
+          if (hasChildren && expanded.has(node.key)) {
+            e.preventDefault();
+            toggleExpand(node.key);
+          }
+          break;
+      }
+    },
+    [selectNode, expanded, toggleExpand]
+  );
 
-    const renderNode = (node: TreeNode, level: number) => {
-      const hasChildren = !!node.children?.length;
-      const isExpanded = expanded.has(node.key);
-      const isSelected = selected.has(node.key);
+  const renderNode = (node: TreeNode, level: number) => {
+    const hasChildren = !!node.children?.length;
+    const isExpanded = expanded.has(node.key);
+    const isSelected = selected.has(node.key);
 
-      const nodeCls = [
-        `${base}__node`,
-        isSelected && `${base}__node--selected`,
-        node.disabled && `${base}__node--disabled`,
-        node.className,
-      ]
-        .filter(Boolean)
-        .join(" ");
-
-      return (
-        <li
-          key={node.key}
-          role="treeitem"
-          aria-expanded={hasChildren ? isExpanded : undefined}
-          aria-selected={isSelected}
-          aria-disabled={node.disabled || undefined}
-        >
-          <div
-            className={nodeCls}
-            style={node.style}
-            tabIndex={node.disabled ? -1 : 0}
-            onClick={() => {
-              if (hasChildren) toggleExpand(node.key);
-              if (!hasChildren) selectNode(node);
-            }}
-            onKeyDown={e => handleKeyDown(e, node, hasChildren)}
-          >
-            <span
-              className={`${base}__toggle${isExpanded ? ` ${base}__toggle--expanded` : ""}${!hasChildren ? ` ${base}__toggle--leaf` : ""}`}
-            >
-              <ToggleIcon />
-            </span>
-            {node.icon && <span className={`${base}__icon`}>{node.icon}</span>}
-            <span className={`${base}__label`}>
-              {nodeTemplate
-                ? nodeTemplate(node, {
-                    selected: isSelected,
-                    expanded: isExpanded,
-                  })
-                : node.label}
-            </span>
-          </div>
-          {hasChildren && isExpanded && (
-            <ul className={`${base}__subtree`} role="group">
-              {node.children!.map(child => renderNode(child, level + 1))}
-            </ul>
-          )}
-        </li>
-      );
-    };
+    const nodeCls = [
+      `${base}__node`,
+      isSelected && `${base}__node--selected`,
+      node.disabled && `${base}__node--disabled`,
+      node.className,
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     return (
-      <ul
-        ref={elRef}
-        className={`${base} ${className}`}
-        style={style}
-        role="tree"
+      <li
+        key={node.key}
+        role="treeitem"
+        aria-expanded={hasChildren ? isExpanded : undefined}
+        aria-selected={isSelected}
+        aria-disabled={node.disabled || undefined}
       >
-        {nodes.map(node => renderNode(node, 0))}
-      </ul>
+        <div
+          className={nodeCls}
+          style={node.style}
+          tabIndex={node.disabled ? -1 : 0}
+          onClick={() => {
+            if (hasChildren) toggleExpand(node.key);
+            if (!hasChildren) selectNode(node);
+          }}
+          onKeyDown={e => handleKeyDown(e, node, hasChildren)}
+        >
+          <span
+            className={`${base}__toggle${isExpanded ? ` ${base}__toggle--expanded` : ""}${!hasChildren ? ` ${base}__toggle--leaf` : ""}`}
+          >
+            <ToggleIcon />
+          </span>
+          {node.icon && <span className={`${base}__icon`}>{node.icon}</span>}
+          <span className={`${base}__label`}>
+            {nodeTemplate
+              ? nodeTemplate(node, {
+                  selected: isSelected,
+                  expanded: isExpanded,
+                })
+              : node.label}
+          </span>
+        </div>
+        {hasChildren && isExpanded && (
+          <ul className={`${base}__subtree`} role="group">
+            {node.children!.map(child => renderNode(child, level + 1))}
+          </ul>
+        )}
+      </li>
     );
-  }
-);
+  };
 
-Tree.displayName = "Tree";
+  return (
+    <ul
+      ref={elRef}
+      className={`${base} ${className}`}
+      style={style}
+      role="tree"
+    >
+      {nodes.map(node => renderNode(node, 0))}
+    </ul>
+  );
+};

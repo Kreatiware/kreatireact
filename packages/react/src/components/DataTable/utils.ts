@@ -4,10 +4,7 @@ import type { FilterMatchMode } from "./types";
  * Resolves a nested field value from an object using dot notation.
  * e.g. getFieldValue(row, 'address.city') => row.address.city
  */
-export const getFieldValue = (
-  obj: object,
-  field: string
-): unknown => {
+export const getFieldValue = (obj: object, field: string): unknown => {
   return field.split(".").reduce<unknown>((acc, key) => {
     if (acc && typeof acc === "object")
       return (acc as Record<string, unknown>)[key];

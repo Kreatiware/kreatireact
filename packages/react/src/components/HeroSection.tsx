@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import "./HeroSection.css";
 
 /**
@@ -94,121 +94,114 @@ export interface HeroSectionProps {
  * />
  * ```
  */
-export const HeroSection = forwardRef<HTMLElement, HeroSectionProps>(
-  (
-    {
-      title,
-      subtitle,
-      badge,
-      actions,
-      media,
-      align = "center",
-      layout = "single",
-      reverse = false,
-      background = "solid",
-      backgroundImage,
-      backgroundColor,
-      gradientFrom,
-      gradientTo,
-      gradientAngle,
-      gradientStops,
-      overlay = false,
-      size = "lg",
-      glass = false,
-      glassColor,
-      glassOpacity,
-      id,
-      ariaLabel,
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const baseClass = "kreati-hero";
-    const classes = [
-      baseClass,
-      `${baseClass}--${align}`,
-      `${baseClass}--${layout}`,
-      `${baseClass}--${size}`,
-      `${baseClass}--bg-${background}`,
-      reverse && `${baseClass}--reverse`,
-      overlay && `${baseClass}--overlay`,
-      glass && `${baseClass}--glass`,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+export const HeroSection = ({
+  title,
+  subtitle,
+  badge,
+  actions,
+  media,
+  align = "center",
+  layout = "single",
+  reverse = false,
+  background = "solid",
+  backgroundImage,
+  backgroundColor,
+  gradientFrom,
+  gradientTo,
+  gradientAngle,
+  gradientStops,
+  overlay = false,
+  size = "lg",
+  glass = false,
+  glassColor,
+  glassOpacity,
+  id,
+  ariaLabel,
+  className = "",
+  style,
+  ref,
+}: HeroSectionProps & { ref?: React.Ref<HTMLElement> }) => {
+  const baseClass = "kreati-hero";
+  const classes = [
+    baseClass,
+    `${baseClass}--${align}`,
+    `${baseClass}--${layout}`,
+    `${baseClass}--${size}`,
+    `${baseClass}--bg-${background}`,
+    reverse && `${baseClass}--reverse`,
+    overlay && `${baseClass}--overlay`,
+    glass && `${baseClass}--glass`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    const getGlassBg = (): string | undefined => {
-      if (!glass) return undefined;
-      const hex =
-        glassColor || (background === "image" ? "#000000" : "#ffffff");
-      const opacity =
-        glassOpacity ??
-        (background === "gradient" ? 0.3 : background === "image" ? 0.2 : 0.15);
-      const r = parseInt(hex.slice(1, 3), 16);
-      const g = parseInt(hex.slice(3, 5), 16);
-      const b = parseInt(hex.slice(5, 7), 16);
-      return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  const getGlassBg = (): string | undefined => {
+    if (!glass) return undefined;
+    const hex = glassColor || (background === "image" ? "#000000" : "#ffffff");
+    const opacity =
+      glassOpacity ??
+      (background === "gradient" ? 0.3 : background === "image" ? 0.2 : 0.15);
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  };
+
+  const buildGradientStyle = (): React.CSSProperties => {
+    const angle = gradientAngle ?? 135;
+
+    if (gradientStops && gradientStops.length >= 2) {
+      const stops = gradientStops
+        .map(s => `${s.color} ${s.position}`)
+        .join(", ");
+      return { background: `linear-gradient(${angle}deg, ${stops})` };
+    }
+
+    return {
+      ...(gradientFrom &&
+        ({
+          "--kreati-hero-gradient-from": gradientFrom,
+        } as React.CSSProperties)),
+      ...(gradientTo &&
+        ({ "--kreati-hero-gradient-to": gradientTo } as React.CSSProperties)),
+      ...(gradientAngle != null &&
+        ({
+          "--kreati-hero-gradient-angle": `${angle}deg`,
+        } as React.CSSProperties)),
     };
+  };
 
-    const buildGradientStyle = (): React.CSSProperties => {
-      const angle = gradientAngle ?? 135;
+  const sectionStyle: React.CSSProperties = {
+    ...(background === "image" &&
+      backgroundImage && { backgroundImage: `url(${backgroundImage})` }),
+    ...(backgroundColor &&
+      ({ "--kreati-hero-bg": backgroundColor } as React.CSSProperties)),
+    ...(background === "gradient" && buildGradientStyle()),
+    ...(glass &&
+      ({ "--kreati-hero-glass-bg": getGlassBg() } as React.CSSProperties)),
+  };
 
-      if (gradientStops && gradientStops.length >= 2) {
-        const stops = gradientStops
-          .map(s => `${s.color} ${s.position}`)
-          .join(", ");
-        return { background: `linear-gradient(${angle}deg, ${stops})` };
-      }
-
-      return {
-        ...(gradientFrom &&
-          ({
-            "--kreati-hero-gradient-from": gradientFrom,
-          } as React.CSSProperties)),
-        ...(gradientTo &&
-          ({ "--kreati-hero-gradient-to": gradientTo } as React.CSSProperties)),
-        ...(gradientAngle != null &&
-          ({
-            "--kreati-hero-gradient-angle": `${angle}deg`,
-          } as React.CSSProperties)),
-      };
-    };
-
-    const sectionStyle: React.CSSProperties = {
-      ...(background === "image" &&
-        backgroundImage && { backgroundImage: `url(${backgroundImage})` }),
-      ...(backgroundColor &&
-        ({ "--kreati-hero-bg": backgroundColor } as React.CSSProperties)),
-      ...(background === "gradient" && buildGradientStyle()),
-      ...(glass &&
-        ({ "--kreati-hero-glass-bg": getGlassBg() } as React.CSSProperties)),
-    };
-
-    return (
-      <section
-        ref={ref}
-        className={classes}
-        id={id}
-        style={{ ...sectionStyle, ...style }}
-        role="banner"
-        aria-label={ariaLabel || title}
-      >
-        <div className="kreati-hero__container">
-          <div className="kreati-hero__content">
-            {badge && <div className="kreati-hero__badge">{badge}</div>}
-            <h1 className="kreati-hero__title">{title}</h1>
-            {subtitle && <p className="kreati-hero__subtitle">{subtitle}</p>}
-            {actions && <div className="kreati-hero__actions">{actions}</div>}
-          </div>
-          {(layout === "split" || layout === "split-full") && media && (
-            <div className="kreati-hero__media">{media}</div>
-          )}
+  return (
+    <section
+      ref={ref}
+      className={classes}
+      id={id}
+      style={{ ...sectionStyle, ...style }}
+      role="banner"
+      aria-label={ariaLabel || title}
+    >
+      <div className="kreati-hero__container">
+        <div className="kreati-hero__content">
+          {badge && <div className="kreati-hero__badge">{badge}</div>}
+          <h1 className="kreati-hero__title">{title}</h1>
+          {subtitle && <p className="kreati-hero__subtitle">{subtitle}</p>}
+          {actions && <div className="kreati-hero__actions">{actions}</div>}
         </div>
-      </section>
-    );
-  }
-);
-
-HeroSection.displayName = "HeroSection";
+        {(layout === "split" || layout === "split-full") && media && (
+          <div className="kreati-hero__media">{media}</div>
+        )}
+      </div>
+    </section>
+  );
+};

@@ -1,10 +1,4 @@
-import React, {
-  forwardRef,
-  useId,
-  useRef,
-  useState,
-  useImperativeHandle,
-} from "react";
+import React, { useId, useRef, useState, useImperativeHandle } from "react";
 import "./Radio.css";
 
 export interface RadioProps {
@@ -73,153 +67,147 @@ export interface RadioProps {
  * <Radio label="Custom" checkedTemplate={<img src="star.svg" />} />
  * ```
  */
-export const Radio = forwardRef<HTMLInputElement, RadioProps>(
-  (
-    {
-      checked: controlledChecked,
-      defaultChecked,
-      value,
-      label,
-      labelPosition = "right",
-      size = "md",
-      checkedTemplate,
-      uncheckedTemplate,
-      helperText,
-      error,
-      success = false,
-      helperSeverity,
-      disabled = false,
-      readOnly = false,
-      required = false,
-      name,
-      onChange,
-      onBlur,
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const autoId = useId();
-    const inputId = `${name || autoId}-${value ?? "radio"}`;
-    const innerRef = useRef<HTMLInputElement>(null);
-    useImperativeHandle(ref, () => innerRef.current as HTMLInputElement);
+export const Radio = ({
+  checked: controlledChecked,
+  defaultChecked,
+  value,
+  label,
+  labelPosition = "right",
+  size = "md",
+  checkedTemplate,
+  uncheckedTemplate,
+  helperText,
+  error,
+  success = false,
+  helperSeverity,
+  disabled = false,
+  readOnly = false,
+  required = false,
+  name,
+  onChange,
+  onBlur,
+  className = "",
+  style,
+  ref,
+}: RadioProps & { ref?: React.Ref<HTMLInputElement> }) => {
+  const autoId = useId();
+  const inputId = `${name || autoId}-${value ?? "radio"}`;
+  const innerRef = useRef<HTMLInputElement>(null);
+  useImperativeHandle(ref, () => innerRef.current as HTMLInputElement);
 
-    const isControlled = controlledChecked !== undefined;
-    const [internalChecked, setInternalChecked] = useState(
-      defaultChecked ?? false
-    );
-    const isChecked = isControlled ? controlledChecked : internalChecked;
+  const isControlled = controlledChecked !== undefined;
+  const [internalChecked, setInternalChecked] = useState(
+    defaultChecked ?? false
+  );
+  const isChecked = isControlled ? controlledChecked : internalChecked;
 
-    const hasError = !!error;
-    const errorMessage = typeof error === "boolean" ? undefined : error;
-    const base = "k-radio";
+  const hasError = !!error;
+  const errorMessage = typeof error === "boolean" ? undefined : error;
+  const base = "k-radio";
 
-    const helperId = `${inputId}-helper`;
-    const errorId = `${inputId}-error`;
-    const describedBy =
-      [hasError && errorId, helperText && helperId].filter(Boolean).join(" ") ||
-      undefined;
+  const helperId = `${inputId}-helper`;
+  const errorId = `${inputId}-error`;
+  const describedBy =
+    [hasError && errorId, helperText && helperId].filter(Boolean).join(" ") ||
+    undefined;
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (readOnly) {
-        e.preventDefault();
-        return;
-      }
-      if (!isControlled) setInternalChecked(e.target.checked);
-      onChange?.(e);
-    };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (readOnly) {
+      e.preventDefault();
+      return;
+    }
+    if (!isControlled) setInternalChecked(e.target.checked);
+    onChange?.(e);
+  };
 
-    const defaultDot = (
-      <svg className={`${base}__dot`} viewBox="0 0 10 10" aria-hidden="true">
-        <circle cx="5" cy="5" r="5" fill="currentColor" />
-      </svg>
-    );
+  const defaultDot = (
+    <svg className={`${base}__dot`} viewBox="0 0 10 10" aria-hidden="true">
+      <circle cx="5" cy="5" r="5" fill="currentColor" />
+    </svg>
+  );
 
-    const renderContent = () => {
-      if (isChecked) return checkedTemplate ?? defaultDot;
-      return uncheckedTemplate ?? null;
-    };
+  const renderContent = () => {
+    if (isChecked) return checkedTemplate ?? defaultDot;
+    return uncheckedTemplate ?? null;
+  };
 
-    const hasCustomUnchecked = !!uncheckedTemplate;
+  const hasCustomUnchecked = !!uncheckedTemplate;
 
-    const circleClasses = [
-      `${base}__circle`,
-      `${base}__circle--${size}`,
-      isChecked && !hasError && !success && `${base}__circle--active`,
-      isChecked && success && `${base}__circle--success`,
-      !isChecked && hasCustomUnchecked && `${base}__circle--has-unchecked`,
-      hasError && isChecked && `${base}__circle--error-active`,
-      hasError && !isChecked && `${base}__circle--error`,
-      disabled && `${base}__circle--disabled`,
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const circleClasses = [
+    `${base}__circle`,
+    `${base}__circle--${size}`,
+    isChecked && !hasError && !success && `${base}__circle--active`,
+    isChecked && success && `${base}__circle--success`,
+    !isChecked && hasCustomUnchecked && `${base}__circle--has-unchecked`,
+    hasError && isChecked && `${base}__circle--error-active`,
+    hasError && !isChecked && `${base}__circle--error`,
+    disabled && `${base}__circle--disabled`,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    const wrapperClasses = [
-      base,
-      `${base}--${labelPosition}`,
-      disabled && `${base}--disabled`,
-      readOnly && `${base}--readonly`,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const wrapperClasses = [
+    base,
+    `${base}--${labelPosition}`,
+    disabled && `${base}--disabled`,
+    readOnly && `${base}--readonly`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    const labelEl = label ? (
-      <span className={`${base}__label ${base}__label--${size}`}>
-        {label}
-        {required && (
-          <span className={`${base}__required`} aria-hidden="true">
-            *
-          </span>
-        )}
-      </span>
-    ) : null;
+  const labelEl = label ? (
+    <span className={`${base}__label ${base}__label--${size}`}>
+      {label}
+      {required && (
+        <span className={`${base}__required`} aria-hidden="true">
+          *
+        </span>
+      )}
+    </span>
+  ) : null;
 
-    return (
-      <div className={wrapperClasses} style={style}>
-        <label className={`${base}__control`} htmlFor={inputId}>
-          <input
-            ref={innerRef}
-            id={inputId}
-            className={`${base}__native`}
-            type="radio"
-            checked={isControlled ? controlledChecked : undefined}
-            defaultChecked={isControlled ? undefined : defaultChecked}
-            value={value}
-            name={name}
-            disabled={disabled}
-            required={required}
-            onChange={handleChange}
-            onBlur={onBlur}
-            aria-invalid={hasError || undefined}
-            aria-describedby={describedBy}
-            aria-required={required || undefined}
-          />
-          <span className={circleClasses}>{renderContent()}</span>
-          {labelEl}
-        </label>
-        {hasError && errorMessage && (
-          <span className={`${base}__error`} id={errorId} role="alert">
-            {errorMessage}
-          </span>
-        )}
-        {helperText && (
-          <span
-            className={[
-              `${base}__helper`,
-              helperSeverity && `${base}__helper--${helperSeverity}`,
-            ]
-              .filter(Boolean)
-              .join(" ")}
-            id={helperId}
-          >
-            {helperText}
-          </span>
-        )}
-      </div>
-    );
-  }
-);
-
-Radio.displayName = "Radio";
+  return (
+    <div className={wrapperClasses} style={style}>
+      <label className={`${base}__control`} htmlFor={inputId}>
+        <input
+          ref={innerRef}
+          id={inputId}
+          className={`${base}__native`}
+          type="radio"
+          checked={isControlled ? controlledChecked : undefined}
+          defaultChecked={isControlled ? undefined : defaultChecked}
+          value={value}
+          name={name}
+          disabled={disabled}
+          required={required}
+          onChange={handleChange}
+          onBlur={onBlur}
+          aria-invalid={hasError || undefined}
+          aria-describedby={describedBy}
+          aria-required={required || undefined}
+        />
+        <span className={circleClasses}>{renderContent()}</span>
+        {labelEl}
+      </label>
+      {hasError && errorMessage && (
+        <span className={`${base}__error`} id={errorId} role="alert">
+          {errorMessage}
+        </span>
+      )}
+      {helperText && (
+        <span
+          className={[
+            `${base}__helper`,
+            helperSeverity && `${base}__helper--${helperSeverity}`,
+          ]
+            .filter(Boolean)
+            .join(" ")}
+          id={helperId}
+        >
+          {helperText}
+        </span>
+      )}
+    </div>
+  );
+};

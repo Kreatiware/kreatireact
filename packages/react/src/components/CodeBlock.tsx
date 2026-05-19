@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import "./CodeBlock.css";
 import { useKreatiLocale } from "../locale";
 import { COPY_PATH, CHECK_PATH } from "./iconPaths";
@@ -384,138 +384,127 @@ const iconSvg = (path: string) => (
  * />
  * ```
  */
-export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
-  (
-    {
-      code,
-      language = "plain",
-      title,
-      showLineNumbers = true,
-      showCopy = true,
-      wordWrap = false,
-      maxHeight,
-      highlightLines,
-      className,
-      style,
-    },
-    ref
-  ) => {
-    const locale = useKreatiLocale();
-    const [copied, setCopied] = useState(false);
+export const CodeBlock = ({
+  code,
+  language = "plain",
+  title,
+  showLineNumbers = true,
+  showCopy = true,
+  wordWrap = false,
+  maxHeight,
+  highlightLines,
+  className,
+  style,
+  ref,
+}: CodeBlockProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const locale = useKreatiLocale();
+  const [copied, setCopied] = useState(false);
 
-    const handleCopy = useCallback(() => {
-      navigator.clipboard
-        .writeText(code)
-        .then(() => {
-          setCopied(true);
-          setTimeout(() => setCopied(false), 2000);
-        })
-        .catch(() => {
-          /* clipboard unavailable */
-        });
-    }, [code]);
+  const handleCopy = useCallback(() => {
+    navigator.clipboard
+      .writeText(code)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(() => {
+        /* clipboard unavailable */
+      });
+  }, [code]);
 
-    const tokens = tokenize(code, language);
-    const lines = code.split("\n");
-    const highlightSet = highlightLines ? new Set(highlightLines) : null;
+  const tokens = tokenize(code, language);
+  const lines = code.split("\n");
+  const highlightSet = highlightLines ? new Set(highlightLines) : null;
 
-    // Build token spans grouped by line
-    const renderTokens = () => {
-      let lineIndex = 0;
-      let currentLine: React.ReactNode[] = [];
-      const result: React.ReactNode[] = [];
+  // Build token spans grouped by line
+  const renderTokens = () => {
+    let lineIndex = 0;
+    let currentLine: React.ReactNode[] = [];
+    const result: React.ReactNode[] = [];
 
-      const pushLine = () => {
-        const ln = lineIndex + 1;
-        const highlighted = highlightSet?.has(ln);
-        result.push(
-          <div
-            key={ln}
-            className={`k-code__line ${highlighted ? "k-code__line--highlighted" : ""}`}
-          >
-            {showLineNumbers && (
-              <span className="k-code__line-number">{ln}</span>
-            )}
-            <span className="k-code__line-content">
-              {currentLine.length > 0 ? currentLine : " "}
-            </span>
-          </div>
-        );
-        currentLine = [];
-        lineIndex++;
-      };
-
-      let tokenKey = 0;
-      for (const token of tokens) {
-        const parts = token.value.split("\n");
-        for (let p = 0; p < parts.length; p++) {
-          if (p > 0) pushLine();
-          if (parts[p]) {
-            currentLine.push(
-              token.type === "plain" ? (
-                <span key={tokenKey++}>{parts[p]}</span>
-              ) : (
-                <span
-                  key={tokenKey++}
-                  className={`k-code__token--${token.type}`}
-                >
-                  {parts[p]}
-                </span>
-              )
-            );
-          }
-        }
-      }
-      pushLine(); // last line
-
-      return result;
+    const pushLine = () => {
+      const ln = lineIndex + 1;
+      const highlighted = highlightSet?.has(ln);
+      result.push(
+        <div
+          key={ln}
+          className={`k-code__line ${highlighted ? "k-code__line--highlighted" : ""}`}
+        >
+          {showLineNumbers && <span className="k-code__line-number">{ln}</span>}
+          <span className="k-code__line-content">
+            {currentLine.length > 0 ? currentLine : " "}
+          </span>
+        </div>
+      );
+      currentLine = [];
+      lineIndex++;
     };
 
-    const showHeader = title || showCopy;
+    let tokenKey = 0;
+    for (const token of tokens) {
+      const parts = token.value.split("\n");
+      for (let p = 0; p < parts.length; p++) {
+        if (p > 0) pushLine();
+        if (parts[p]) {
+          currentLine.push(
+            token.type === "plain" ? (
+              <span key={tokenKey++}>{parts[p]}</span>
+            ) : (
+              <span key={tokenKey++} className={`k-code__token--${token.type}`}>
+                {parts[p]}
+              </span>
+            )
+          );
+        }
+      }
+    }
+    pushLine(); // last line
 
-    return (
-      <div
-        ref={ref}
-        className={`k-code ${className || ""}`}
-        style={style}
-        role="region"
-        aria-label={title || locale?.common?.code || "Code"}
+    return result;
+  };
+
+  const showHeader = title || showCopy;
+
+  return (
+    <div
+      ref={ref}
+      className={`k-code ${className || ""}`}
+      style={style}
+      role="region"
+      aria-label={title || locale?.common?.code || "Code"}
+    >
+      {showHeader && (
+        <div className="k-code__header">
+          {title && <span className="k-code__title">{title}</span>}
+          {!title && <span />}
+          {showCopy && (
+            <button
+              type="button"
+              className={`k-code__copy ${copied ? "k-code__copy--copied" : ""}`}
+              onClick={handleCopy}
+              aria-label={
+                copied
+                  ? locale?.common?.copied || "Copied"
+                  : locale?.common?.copy || "Copy"
+              }
+            >
+              {iconSvg(copied ? CHECK_PATH : COPY_PATH)}
+              <span className="k-code__copy-text">
+                {copied
+                  ? locale?.common?.copied || "Copied"
+                  : locale?.common?.copy || "Copy"}
+              </span>
+            </button>
+          )}
+        </div>
+      )}
+      <pre
+        className={`k-code__pre ${wordWrap ? "k-code__pre--wrap" : ""}`}
+        style={maxHeight ? { maxHeight, overflow: "auto" } : undefined}
+        tabIndex={0}
       >
-        {showHeader && (
-          <div className="k-code__header">
-            {title && <span className="k-code__title">{title}</span>}
-            {!title && <span />}
-            {showCopy && (
-              <button
-                type="button"
-                className={`k-code__copy ${copied ? "k-code__copy--copied" : ""}`}
-                onClick={handleCopy}
-                aria-label={
-                  copied
-                    ? locale?.common?.copied || "Copied"
-                    : locale?.common?.copy || "Copy"
-                }
-              >
-                {iconSvg(copied ? CHECK_PATH : COPY_PATH)}
-                <span className="k-code__copy-text">
-                  {copied
-                    ? locale?.common?.copied || "Copied"
-                    : locale?.common?.copy || "Copy"}
-                </span>
-              </button>
-            )}
-          </div>
-        )}
-        <pre
-          className={`k-code__pre ${wordWrap ? "k-code__pre--wrap" : ""}`}
-          style={maxHeight ? { maxHeight, overflow: "auto" } : undefined}
-          tabIndex={0}
-        >
-          <code className="k-code__content">{renderTokens()}</code>
-        </pre>
-      </div>
-    );
-  }
-);
-
-CodeBlock.displayName = "CodeBlock";
+        <code className="k-code__content">{renderTokens()}</code>
+      </pre>
+    </div>
+  );
+};

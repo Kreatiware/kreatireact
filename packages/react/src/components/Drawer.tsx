@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useRef,
   useState,
   useCallback,
@@ -76,145 +75,129 @@ export interface DrawerProps {
  * </Drawer>
  * ```
  */
-export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
-  (
-    {
-      visible = false,
-      onHide,
-      position = "left",
-      size = "md",
-      header,
-      footer,
-      headerIcon,
-      headerTemplate,
-      footerTemplate,
-      closable = true,
-      modal = true,
-      closeOnEscape = true,
-      closeOnOverlay = true,
-      blockScroll = true,
-      className = "",
-      style,
-      children,
-    },
-    ref
-  ) => {
-    const drawerRef = useRef<HTMLDivElement>(null);
-    const previousFocusRef = useRef<HTMLElement | null>(null);
-    useImperativeHandle(ref, () => drawerRef.current as HTMLDivElement);
+export const Drawer = ({
+  visible = false,
+  onHide,
+  position = "left",
+  size = "md",
+  header,
+  footer,
+  headerIcon,
+  headerTemplate,
+  footerTemplate,
+  closable = true,
+  modal = true,
+  closeOnEscape = true,
+  closeOnOverlay = true,
+  blockScroll = true,
+  className = "",
+  style,
+  children,
+  ref,
+}: DrawerProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+  useImperativeHandle(ref, () => drawerRef.current as HTMLDivElement);
 
-    const [layer] = useState(() => nextLayer());
-    const zDrawer = 1000 + layer * 10;
+  const [layer] = useState(() => nextLayer());
+  const zDrawer = 1000 + layer * 10;
 
-    const kreatiLocale = useKreatiLocale();
-    const base = "k-drawer";
+  const kreatiLocale = useKreatiLocale();
+  const base = "k-drawer";
 
-    const close = useCallback(() => onHide?.(), [onHide]);
+  const close = useCallback(() => onHide?.(), [onHide]);
 
-    const titleId = `${base}-title-${layer}`;
-    const bodyId = `${base}-body-${layer}`;
+  const titleId = `${base}-title-${layer}`;
+  const bodyId = `${base}-body-${layer}`;
 
-    // Block scroll
-    useEffect(() => {
-      if (!visible || !blockScroll) return;
-      const prev = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = prev;
-      };
-    }, [visible, blockScroll]);
+  // Block scroll
+  useEffect(() => {
+    if (!visible || !blockScroll) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [visible, blockScroll]);
 
-    // Escape key
-    useEffect(() => {
-      if (!visible || !closeOnEscape) return;
-      const handler = (e: KeyboardEvent) => {
-        if (e.key === "Escape") {
-          e.preventDefault();
-          close();
-        }
-      };
-      document.addEventListener("keydown", handler);
-      return () => document.removeEventListener("keydown", handler);
-    }, [visible, closeOnEscape, close]);
-
-    // Focus management
-    useEffect(() => {
-      if (!visible) return;
-      previousFocusRef.current = document.activeElement as HTMLElement;
-      requestAnimationFrame(() => drawerRef.current?.focus());
-      return () => {
-        previousFocusRef.current?.focus();
-      };
-    }, [visible]);
-
-    // Focus trap
-    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-      if (e.key !== "Tab") return;
-      const el = drawerRef.current;
-      if (!el) return;
-      const focusable = el.querySelectorAll<HTMLElement>(
-        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-      );
-      if (focusable.length === 0) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
+  // Escape key
+  useEffect(() => {
+    if (!visible || !closeOnEscape) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
         e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
+        close();
       }
-    }, []);
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [visible, closeOnEscape, close]);
 
-    if (!visible) return null;
+  // Focus management
+  useEffect(() => {
+    if (!visible) return;
+    previousFocusRef.current = document.activeElement as HTMLElement;
+    requestAnimationFrame(() => drawerRef.current?.focus());
+    return () => {
+      previousFocusRef.current?.focus();
+    };
+  }, [visible]);
 
-    const isHorizontal = position === "left" || position === "right";
-    const hasHeader = !!(header || headerTemplate);
-    const hasFooter = !!(footer || footerTemplate);
-
-    const closeIcon = (
-      <svg
-        width={14}
-        height={14}
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        aria-hidden="true"
-      >
-        <path d={TIMES_PATH} />
-      </svg>
+  // Focus trap
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key !== "Tab") return;
+    const el = drawerRef.current;
+    if (!el) return;
+    const focusable = el.querySelectorAll<HTMLElement>(
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
     );
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }, []);
 
-    const headerEl = headerTemplate ? (
-      <div className={`${base}__header`}>
-        {headerTemplate({ title: header, close })}
-      </div>
-    ) : hasHeader ? (
-      <div className={`${base}__header`}>
-        <div className={`${base}__header-content`} id={titleId}>
-          {headerIcon && (
-            <span className={`${base}__header-icon`}>{headerIcon}</span>
-          )}
-          {typeof header === "string" ? (
-            <h2 className={`${base}__title`}>{header}</h2>
-          ) : (
-            header
-          )}
-        </div>
-        {closable && (
-          <Button
-            buttonType="text"
-            severity="secondary"
-            slim
-            size="sm"
-            iconLeft={closeIcon}
-            ariaLabel={kreatiLocale.dialog.close}
-            onClick={close}
-          />
+  if (!visible) return null;
+
+  const isHorizontal = position === "left" || position === "right";
+  const hasHeader = !!(header || headerTemplate);
+  const hasFooter = !!(footer || footerTemplate);
+
+  const closeIcon = (
+    <svg
+      width={14}
+      height={14}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d={TIMES_PATH} />
+    </svg>
+  );
+
+  const headerEl = headerTemplate ? (
+    <div className={`${base}__header`}>
+      {headerTemplate({ title: header, close })}
+    </div>
+  ) : hasHeader ? (
+    <div className={`${base}__header`}>
+      <div className={`${base}__header-content`} id={titleId}>
+        {headerIcon && (
+          <span className={`${base}__header-icon`}>{headerIcon}</span>
+        )}
+        {typeof header === "string" ? (
+          <h2 className={`${base}__title`}>{header}</h2>
+        ) : (
+          header
         )}
       </div>
-    ) : closable ? (
-      <div className={`${base}__header ${base}__header--close-only`}>
+      {closable && (
         <Button
           buttonType="text"
           severity="secondary"
@@ -224,81 +207,91 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
           ariaLabel={kreatiLocale.dialog.close}
           onClick={close}
         />
+      )}
+    </div>
+  ) : closable ? (
+    <div className={`${base}__header ${base}__header--close-only`}>
+      <Button
+        buttonType="text"
+        severity="secondary"
+        slim
+        size="sm"
+        iconLeft={closeIcon}
+        ariaLabel={kreatiLocale.dialog.close}
+        onClick={close}
+      />
+    </div>
+  ) : null;
+
+  const footerEl = footerTemplate ? (
+    <div className={`${base}__footer`}>{footerTemplate({ close })}</div>
+  ) : hasFooter ? (
+    <div className={`${base}__footer`}>{footer}</div>
+  ) : null;
+
+  const drawerClasses = [
+    base,
+    `${base}--${position}`,
+    isHorizontal ? `${base}--w-${size}` : `${base}--h-${size}`,
+    !hasHeader && !closable && `${base}--no-header`,
+    !hasFooter && `${base}--no-footer`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const drawerContent = (
+    <LayerContext.Provider value={layer}>
+      {headerEl}
+      <div className={`${base}__body`} id={bodyId}>
+        {children}
       </div>
-    ) : null;
+      {footerEl}
+    </LayerContext.Provider>
+  );
 
-    const footerEl = footerTemplate ? (
-      <div className={`${base}__footer`}>{footerTemplate({ close })}</div>
-    ) : hasFooter ? (
-      <div className={`${base}__footer`}>{footer}</div>
-    ) : null;
+  const drawerEl = (
+    <div
+      ref={drawerRef}
+      className={drawerClasses}
+      style={style}
+      role="dialog"
+      aria-modal={modal ? "true" : "false"}
+      aria-labelledby={hasHeader ? titleId : undefined}
+      aria-describedby={bodyId}
+      tabIndex={-1}
+      onKeyDown={handleKeyDown}
+    >
+      {drawerContent}
+    </div>
+  );
 
-    const drawerClasses = [
-      base,
-      `${base}--${position}`,
-      isHorizontal ? `${base}--w-${size}` : `${base}--h-${size}`,
-      !hasHeader && !closable && `${base}--no-header`,
-      !hasFooter && `${base}--no-footer`,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const overlayEl = modal ? (
+    <div
+      className={`${base}-overlay`}
+      style={{ zIndex: zDrawer }}
+      onClick={
+        closeOnOverlay
+          ? e => {
+              if (e.target === e.currentTarget) close();
+            }
+          : undefined
+      }
+    >
+      {drawerEl}
+    </div>
+  ) : (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        pointerEvents: "none",
+        zIndex: zDrawer,
+      }}
+    >
+      <div style={{ pointerEvents: "auto" }}>{drawerEl}</div>
+    </div>
+  );
 
-    const drawerContent = (
-      <LayerContext.Provider value={layer}>
-        {headerEl}
-        <div className={`${base}__body`} id={bodyId}>
-          {children}
-        </div>
-        {footerEl}
-      </LayerContext.Provider>
-    );
-
-    const drawerEl = (
-      <div
-        ref={drawerRef}
-        className={drawerClasses}
-        style={style}
-        role="dialog"
-        aria-modal={modal ? "true" : "false"}
-        aria-labelledby={hasHeader ? titleId : undefined}
-        aria-describedby={bodyId}
-        tabIndex={-1}
-        onKeyDown={handleKeyDown}
-      >
-        {drawerContent}
-      </div>
-    );
-
-    const overlayEl = modal ? (
-      <div
-        className={`${base}-overlay`}
-        style={{ zIndex: zDrawer }}
-        onClick={
-          closeOnOverlay
-            ? e => {
-                if (e.target === e.currentTarget) close();
-              }
-            : undefined
-        }
-      >
-        {drawerEl}
-      </div>
-    ) : (
-      <div
-        style={{
-          position: "fixed",
-          inset: 0,
-          pointerEvents: "none",
-          zIndex: zDrawer,
-        }}
-      >
-        <div style={{ pointerEvents: "auto" }}>{drawerEl}</div>
-      </div>
-    );
-
-    return createPortal(overlayEl, document.body);
-  }
-);
-
-Drawer.displayName = "Drawer";
+  return createPortal(overlayEl, document.body);
+};

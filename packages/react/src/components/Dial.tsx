@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useId,
   useRef,
   useState,
@@ -152,394 +151,386 @@ const describeArc = (
  * <Dial width="100%" min={20} max={50} />
  * ```
  */
-export const Dial = forwardRef<HTMLDivElement, DialProps>(
-  (
-    {
-      value: controlledValue,
-      defaultValue = 0,
-      onChange,
-      onChangeEnd,
-      min = 0,
-      max = 100,
-      step = 1,
-      strokeWidth,
-      valueColor,
-      rangeColor,
-      showValue = true,
-      showMinMax = false,
-      scrollable = false,
-      width,
-      height,
-      valueTemplate,
-      trackTemplate,
-      thumbTemplate,
-      size = "md",
-      label,
-      helperText,
-      error,
-      success = false,
-      helperSeverity,
-      disabled = false,
-      readOnly = false,
-      required = false,
-      name,
-      onBlur,
-      className = "",
-      style,
+export const Dial = ({
+  value: controlledValue,
+  defaultValue = 0,
+  onChange,
+  onChangeEnd,
+  min = 0,
+  max = 100,
+  step = 1,
+  strokeWidth,
+  valueColor,
+  rangeColor,
+  showValue = true,
+  showMinMax = false,
+  scrollable = false,
+  width,
+  height,
+  valueTemplate,
+  trackTemplate,
+  thumbTemplate,
+  size = "md",
+  label,
+  helperText,
+  error,
+  success = false,
+  helperSeverity,
+  disabled = false,
+  readOnly = false,
+  required = false,
+  name,
+  onBlur,
+  className = "",
+  style,
+  ref,
+}: DialProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const autoId = useId();
+  const dialId = name || autoId;
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  useImperativeHandle(ref, () => wrapperRef.current as HTMLDivElement);
+
+  const locale = useKreatiLocale();
+  const isControlled = controlledValue !== undefined;
+  const [internalValue, setInternalValue] = useState(defaultValue);
+  const val = isControlled ? controlledValue! : internalValue;
+  const [dragging, setDragging] = useState(false);
+
+  const hasError = !!error;
+  const errorMessage = typeof error === "boolean" ? undefined : error;
+  const base = "k-dial";
+  const hasCustomSize = width !== undefined || height !== undefined;
+
+  const resolvedStroke = strokeWidth ?? 10;
+  const radius = (VIEW - resolvedStroke) / 2;
+  const percent = max === min ? 0 : ((val - min) / (max - min)) * 100;
+
+  const snap = useCallback(
+    (v: number): number => {
+      if (step <= 0) return Math.max(min, Math.min(max, v));
+      const snapped = Math.round((v - min) / step) * step + min;
+      return Math.max(min, Math.min(max, parseFloat(snapped.toFixed(10))));
     },
-    ref
-  ) => {
-    const autoId = useId();
-    const dialId = name || autoId;
-    const wrapperRef = useRef<HTMLDivElement>(null);
-    const svgRef = useRef<SVGSVGElement>(null);
-    useImperativeHandle(ref, () => wrapperRef.current as HTMLDivElement);
+    [min, max, step]
+  );
 
-    const locale = useKreatiLocale();
-    const isControlled = controlledValue !== undefined;
-    const [internalValue, setInternalValue] = useState(defaultValue);
-    const val = isControlled ? controlledValue! : internalValue;
-    const [dragging, setDragging] = useState(false);
+  const valueToAngle = useCallback(
+    (v: number): number => {
+      if (max === min) return ARC_START;
+      return ARC_START + ((v - min) / (max - min)) * ARC_SPAN;
+    },
+    [min, max]
+  );
 
-    const hasError = !!error;
-    const errorMessage = typeof error === "boolean" ? undefined : error;
-    const base = "k-dial";
-    const hasCustomSize = width !== undefined || height !== undefined;
+  const angleToValue = useCallback(
+    (angleDeg: number): number => {
+      let a = angleDeg - ARC_START;
+      if (a < 0) a += 360;
+      if (a > ARC_SPAN) a = a > ARC_SPAN + (360 - ARC_SPAN) / 2 ? 0 : ARC_SPAN;
+      return snap(min + (a / ARC_SPAN) * (max - min));
+    },
+    [min, max, snap]
+  );
 
-    const resolvedStroke = strokeWidth ?? 10;
-    const radius = (VIEW - resolvedStroke) / 2;
-    const percent = max === min ? 0 : ((val - min) / (max - min)) * 100;
+  const updateValue = useCallback(
+    (next: number) => {
+      if (readOnly) return;
+      if (!isControlled) setInternalValue(next);
+      onChange?.(next);
+    },
+    [isControlled, onChange, readOnly]
+  );
 
-    const snap = useCallback(
-      (v: number): number => {
-        if (step <= 0) return Math.max(min, Math.min(max, v));
-        const snapped = Math.round((v - min) / step) * step + min;
-        return Math.max(min, Math.min(max, parseFloat(snapped.toFixed(10))));
-      },
-      [min, max, step]
-    );
+  const getAngleFromEvent = useCallback(
+    (clientX: number, clientY: number): number => {
+      const svg = svgRef.current;
+      if (!svg) return 0;
+      const rect = svg.getBoundingClientRect();
+      const dx = clientX - (rect.left + rect.width / 2);
+      const dy = clientY - (rect.top + rect.height / 2);
+      let angle = (Math.atan2(dy, dx) * 180) / Math.PI;
+      if (angle < 0) angle += 360;
+      return angle;
+    },
+    []
+  );
 
-    const valueToAngle = useCallback(
-      (v: number): number => {
-        if (max === min) return ARC_START;
-        return ARC_START + ((v - min) / (max - min)) * ARC_SPAN;
-      },
-      [min, max]
-    );
+  const handleInteraction = useCallback(
+    (clientX: number, clientY: number) => {
+      if (disabled || readOnly) return;
+      updateValue(angleToValue(getAngleFromEvent(clientX, clientY)));
+    },
+    [disabled, readOnly, getAngleFromEvent, angleToValue, updateValue]
+  );
 
-    const angleToValue = useCallback(
-      (angleDeg: number): number => {
-        let a = angleDeg - ARC_START;
-        if (a < 0) a += 360;
-        if (a > ARC_SPAN)
-          a = a > ARC_SPAN + (360 - ARC_SPAN) / 2 ? 0 : ARC_SPAN;
-        return snap(min + (a / ARC_SPAN) * (max - min));
-      },
-      [min, max, snap]
-    );
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      if (disabled || readOnly) return;
+      e.preventDefault();
+      setDragging(true);
+      handleInteraction(e.clientX, e.clientY);
+    },
+    [disabled, readOnly, handleInteraction]
+  );
 
-    const updateValue = useCallback(
-      (next: number) => {
-        if (readOnly) return;
-        if (!isControlled) setInternalValue(next);
-        onChange?.(next);
-      },
-      [isControlled, onChange, readOnly]
-    );
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      if (disabled || readOnly) return;
+      e.preventDefault();
+      setDragging(true);
+      handleInteraction(e.touches[0].clientX, e.touches[0].clientY);
+    },
+    [disabled, readOnly, handleInteraction]
+  );
 
-    const getAngleFromEvent = useCallback(
-      (clientX: number, clientY: number): number => {
-        const svg = svgRef.current;
-        if (!svg) return 0;
-        const rect = svg.getBoundingClientRect();
-        const dx = clientX - (rect.left + rect.width / 2);
-        const dy = clientY - (rect.top + rect.height / 2);
-        let angle = (Math.atan2(dy, dx) * 180) / Math.PI;
-        if (angle < 0) angle += 360;
-        return angle;
-      },
-      []
-    );
+  const handleWheel = useCallback(
+    (e: WheelEvent) => {
+      if (disabled || readOnly || !scrollable) return;
+      e.preventDefault();
+      const s = step || 1;
+      const direction = e.deltaY < 0 ? 1 : -1;
+      updateValue(snap(val + direction * s));
+    },
+    [disabled, readOnly, scrollable, step, val, snap, updateValue]
+  );
 
-    const handleInteraction = useCallback(
-      (clientX: number, clientY: number) => {
-        if (disabled || readOnly) return;
-        updateValue(angleToValue(getAngleFromEvent(clientX, clientY)));
-      },
-      [disabled, readOnly, getAngleFromEvent, angleToValue, updateValue]
-    );
+  useEffect(() => {
+    if (!scrollable) return;
+    const el = svgRef.current;
+    if (!el) return;
+    el.addEventListener("wheel", handleWheel, { passive: false });
+    return () => el.removeEventListener("wheel", handleWheel);
+  }, [scrollable, handleWheel]);
 
-    const handleMouseDown = useCallback(
-      (e: React.MouseEvent) => {
-        if (disabled || readOnly) return;
-        e.preventDefault();
-        setDragging(true);
-        handleInteraction(e.clientX, e.clientY);
-      },
-      [disabled, readOnly, handleInteraction]
-    );
+  useEffect(() => {
+    if (!dragging) return;
+    const handleMove = (e: MouseEvent | TouchEvent) => {
+      const { clientX, clientY } = "touches" in e ? e.touches[0] : e;
+      handleInteraction(clientX, clientY);
+    };
+    const handleUp = () => {
+      setDragging(false);
+      onChangeEnd?.(val);
+      onBlur?.();
+    };
+    window.addEventListener("mousemove", handleMove);
+    window.addEventListener("mouseup", handleUp);
+    window.addEventListener("touchmove", handleMove, { passive: false });
+    window.addEventListener("touchend", handleUp);
+    return () => {
+      window.removeEventListener("mousemove", handleMove);
+      window.removeEventListener("mouseup", handleUp);
+      window.removeEventListener("touchmove", handleMove);
+      window.removeEventListener("touchend", handleUp);
+    };
+  }, [dragging, handleInteraction, onChangeEnd, onBlur, val]);
 
-    const handleTouchStart = useCallback(
-      (e: React.TouchEvent) => {
-        if (disabled || readOnly) return;
-        e.preventDefault();
-        setDragging(true);
-        handleInteraction(e.touches[0].clientX, e.touches[0].clientY);
-      },
-      [disabled, readOnly, handleInteraction]
-    );
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (disabled || readOnly) return;
+      const s = step || 1;
+      const bigStep = (max - min) / 10;
+      let next = val;
+      switch (e.key) {
+        case "ArrowRight":
+        case "ArrowUp":
+          e.preventDefault();
+          next = snap(val + s);
+          break;
+        case "ArrowLeft":
+        case "ArrowDown":
+          e.preventDefault();
+          next = snap(val - s);
+          break;
+        case "PageUp":
+          e.preventDefault();
+          next = snap(val + bigStep);
+          break;
+        case "PageDown":
+          e.preventDefault();
+          next = snap(val - bigStep);
+          break;
+        case "Home":
+          e.preventDefault();
+          next = min;
+          break;
+        case "End":
+          e.preventDefault();
+          next = max;
+          break;
+        default:
+          return;
+      }
+      updateValue(next);
+      onChangeEnd?.(next);
+    },
+    [disabled, readOnly, val, step, min, max, snap, updateValue, onChangeEnd]
+  );
 
-    const handleWheel = useCallback(
-      (e: WheelEvent) => {
-        if (disabled || readOnly || !scrollable) return;
-        e.preventDefault();
-        const s = step || 1;
-        const direction = e.deltaY < 0 ? 1 : -1;
-        updateValue(snap(val + direction * s));
-      },
-      [disabled, readOnly, scrollable, step, val, snap, updateValue]
-    );
+  // Arc geometry
+  const endAngle = valueToAngle(val);
+  const rangePath = describeArc(radius, ARC_START, ARC_START + ARC_SPAN);
 
-    useEffect(() => {
-      if (!scrollable) return;
-      const el = svgRef.current;
-      if (!el) return;
-      el.addEventListener("wheel", handleWheel, { passive: false });
-      return () => el.removeEventListener("wheel", handleWheel);
-    }, [scrollable, handleWheel]);
+  // Bidirectional: if range spans zero, value arc starts from zero point
+  const hasZeroCrossing = min < 0 && max > 0;
+  const zeroAngle = hasZeroCrossing ? valueToAngle(0) : ARC_START;
+  const valuePath = hasZeroCrossing
+    ? val >= 0
+      ? describeArc(radius, zeroAngle, endAngle)
+      : describeArc(radius, endAngle, zeroAngle)
+    : describeArc(radius, ARC_START, endAngle);
 
-    useEffect(() => {
-      if (!dragging) return;
-      const handleMove = (e: MouseEvent | TouchEvent) => {
-        const { clientX, clientY } = "touches" in e ? e.touches[0] : e;
-        handleInteraction(clientX, clientY);
-      };
-      const handleUp = () => {
-        setDragging(false);
-        onChangeEnd?.(val);
-        onBlur?.();
-      };
-      window.addEventListener("mousemove", handleMove);
-      window.addEventListener("mouseup", handleUp);
-      window.addEventListener("touchmove", handleMove, { passive: false });
-      window.addEventListener("touchend", handleUp);
-      return () => {
-        window.removeEventListener("mousemove", handleMove);
-        window.removeEventListener("mouseup", handleUp);
-        window.removeEventListener("touchmove", handleMove);
-        window.removeEventListener("touchend", handleUp);
-      };
-    }, [dragging, handleInteraction, onChangeEnd, onBlur, val]);
+  const [thumbX, thumbY] = polarToXY(endAngle, radius);
 
-    const handleKeyDown = useCallback(
-      (e: React.KeyboardEvent) => {
-        if (disabled || readOnly) return;
-        const s = step || 1;
-        const bigStep = (max - min) / 10;
-        let next = val;
-        switch (e.key) {
-          case "ArrowRight":
-          case "ArrowUp":
-            e.preventDefault();
-            next = snap(val + s);
-            break;
-          case "ArrowLeft":
-          case "ArrowDown":
-            e.preventDefault();
-            next = snap(val - s);
-            break;
-          case "PageUp":
-            e.preventDefault();
-            next = snap(val + bigStep);
-            break;
-          case "PageDown":
-            e.preventDefault();
-            next = snap(val - bigStep);
-            break;
-          case "Home":
-            e.preventDefault();
-            next = min;
-            break;
-          case "End":
-            e.preventDefault();
-            next = max;
-            break;
-          default:
-            return;
-        }
-        updateValue(next);
-        onChangeEnd?.(next);
-      },
-      [disabled, readOnly, val, step, min, max, snap, updateValue, onChangeEnd]
-    );
+  // Min/max labels — fixed positions below arc endpoints
+  const [minEX, minEY] = polarToXY(ARC_START, radius);
+  const [maxEX, maxEY] = polarToXY(ARC_START + ARC_SPAN, radius);
+  const minMaxYOffset = resolvedStroke / 2 + 8;
 
-    // Arc geometry
-    const endAngle = valueToAngle(val);
-    const rangePath = describeArc(radius, ARC_START, ARC_START + ARC_SPAN);
+  const helperId = `${dialId}-helper`;
+  const errorId = `${dialId}-error`;
+  const describedBy =
+    [hasError && errorId, helperText && helperId].filter(Boolean).join(" ") ||
+    undefined;
 
-    // Bidirectional: if range spans zero, value arc starts from zero point
-    const hasZeroCrossing = min < 0 && max > 0;
-    const zeroAngle = hasZeroCrossing ? valueToAngle(0) : ARC_START;
-    const valuePath = hasZeroCrossing
-      ? val >= 0
-        ? describeArc(radius, zeroAngle, endAngle)
-        : describeArc(radius, endAngle, zeroAngle)
-      : describeArc(radius, ARC_START, endAngle);
+  const displayText = valueTemplate ? undefined : String(val);
+  const ariaText = valueTemplate ? String(val) : displayText;
 
-    const [thumbX, thumbY] = polarToXY(endAngle, radius);
+  const containerClasses = [
+    base,
+    !hasCustomSize && `${base}--${size}`,
+    disabled && `${base}--disabled`,
+    hasError && `${base}--error`,
+    !hasError && success && `${base}--success`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    // Min/max labels — fixed positions below arc endpoints
-    const [minEX, minEY] = polarToXY(ARC_START, radius);
-    const [maxEX, maxEY] = polarToXY(ARC_START + ARC_SPAN, radius);
-    const minMaxYOffset = resolvedStroke / 2 + 8;
+  const containerStyle: React.CSSProperties | undefined = hasCustomSize
+    ? { width, height: height ?? width }
+    : undefined;
 
-    const helperId = `${dialId}-helper`;
-    const errorId = `${dialId}-error`;
-    const describedBy =
-      [hasError && errorId, helperText && helperId].filter(Boolean).join(" ") ||
-      undefined;
-
-    const displayText = valueTemplate ? undefined : String(val);
-    const ariaText = valueTemplate ? String(val) : displayText;
-
-    const containerClasses = [
-      base,
-      !hasCustomSize && `${base}--${size}`,
-      disabled && `${base}--disabled`,
-      hasError && `${base}--error`,
-      !hasError && success && `${base}--success`,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
-
-    const containerStyle: React.CSSProperties | undefined = hasCustomSize
-      ? { width, height: height ?? width }
+  const svgStyle =
+    valueColor || rangeColor
+      ? ({
+          "--k-dial-value-color": valueColor,
+          "--k-dial-range-color": rangeColor,
+        } as React.CSSProperties)
       : undefined;
 
-    const svgStyle =
-      valueColor || rangeColor
-        ? ({
-            "--k-dial-value-color": valueColor,
-            "--k-dial-range-color": rangeColor,
-          } as React.CSSProperties)
-        : undefined;
-
-    const dialEl = (
-      <div ref={wrapperRef} className={containerClasses} style={containerStyle}>
-        <div className={`${base}__wrapper`}>
-          <svg
-            ref={svgRef}
-            className={`${base}__svg`}
-            viewBox={`0 0 ${VIEW} ${VIEW}`}
-            role="slider"
-            tabIndex={disabled ? -1 : 0}
-            aria-valuenow={val}
-            aria-valuemin={min}
-            aria-valuemax={max}
-            aria-valuetext={ariaText}
-            aria-label={label ?? locale.dial.ariaLabel}
-            aria-disabled={disabled || undefined}
-            aria-readonly={readOnly || undefined}
-            aria-required={required || undefined}
-            aria-describedby={describedBy}
-            onMouseDown={handleMouseDown}
-            onTouchStart={handleTouchStart}
-            onKeyDown={handleKeyDown}
-            onBlur={!dragging ? onBlur : undefined}
-            style={svgStyle}
-          >
-            {trackTemplate ? (
-              trackTemplate({
-                radius,
-                strokeWidth: resolvedStroke,
-                rangePath,
-                valuePath,
-                center: CENTER,
-                viewBox: VIEW,
-                percent,
-              })
-            ) : (
-              <>
+  const dialEl = (
+    <div ref={wrapperRef} className={containerClasses} style={containerStyle}>
+      <div className={`${base}__wrapper`}>
+        <svg
+          ref={svgRef}
+          className={`${base}__svg`}
+          viewBox={`0 0 ${VIEW} ${VIEW}`}
+          role="slider"
+          tabIndex={disabled ? -1 : 0}
+          aria-valuenow={val}
+          aria-valuemin={min}
+          aria-valuemax={max}
+          aria-valuetext={ariaText}
+          aria-label={label ?? locale.dial.ariaLabel}
+          aria-disabled={disabled || undefined}
+          aria-readonly={readOnly || undefined}
+          aria-required={required || undefined}
+          aria-describedby={describedBy}
+          onMouseDown={handleMouseDown}
+          onTouchStart={handleTouchStart}
+          onKeyDown={handleKeyDown}
+          onBlur={!dragging ? onBlur : undefined}
+          style={svgStyle}
+        >
+          {trackTemplate ? (
+            trackTemplate({
+              radius,
+              strokeWidth: resolvedStroke,
+              rangePath,
+              valuePath,
+              center: CENTER,
+              viewBox: VIEW,
+              percent,
+            })
+          ) : (
+            <>
+              <path
+                className={`${base}__range`}
+                d={rangePath}
+                fill="none"
+                strokeWidth={resolvedStroke}
+                strokeLinecap="round"
+              />
+              {valuePath && (
                 <path
-                  className={`${base}__range`}
-                  d={rangePath}
+                  className={`${base}__value`}
+                  d={valuePath}
                   fill="none"
                   strokeWidth={resolvedStroke}
                   strokeLinecap="round"
                 />
-                {valuePath && (
-                  <path
-                    className={`${base}__value`}
-                    d={valuePath}
-                    fill="none"
-                    strokeWidth={resolvedStroke}
-                    strokeLinecap="round"
-                  />
-                )}
-              </>
-            )}
-            {thumbTemplate &&
-              thumbTemplate({ x: thumbX, y: thumbY, value: val })}
-            {showMinMax && (
-              <>
-                <text
-                  className={`${base}__min-max`}
-                  x={minEX}
-                  y={minEY + minMaxYOffset}
-                  textAnchor="start"
-                >
-                  {min}
-                </text>
-                <text
-                  className={`${base}__min-max`}
-                  x={maxEX}
-                  y={maxEY + minMaxYOffset}
-                  textAnchor="end"
-                >
-                  {max}
-                </text>
-              </>
-            )}
-            {showValue && !valueTemplate && (
-              <text
-                className={`${base}__text`}
-                x={CENTER}
-                y={CENTER}
-                textAnchor="middle"
-                dominantBaseline="central"
-              >
-                {displayText}
-              </text>
-            )}
-          </svg>
-          {showValue && valueTemplate && (
-            <div className={`${base}__center`}>{valueTemplate(val)}</div>
+              )}
+            </>
           )}
-        </div>
-        {name && <input type="hidden" name={name} value={val} />}
+          {thumbTemplate && thumbTemplate({ x: thumbX, y: thumbY, value: val })}
+          {showMinMax && (
+            <>
+              <text
+                className={`${base}__min-max`}
+                x={minEX}
+                y={minEY + minMaxYOffset}
+                textAnchor="start"
+              >
+                {min}
+              </text>
+              <text
+                className={`${base}__min-max`}
+                x={maxEX}
+                y={maxEY + minMaxYOffset}
+                textAnchor="end"
+              >
+                {max}
+              </text>
+            </>
+          )}
+          {showValue && !valueTemplate && (
+            <text
+              className={`${base}__text`}
+              x={CENTER}
+              y={CENTER}
+              textAnchor="middle"
+              dominantBaseline="central"
+            >
+              {displayText}
+            </text>
+          )}
+        </svg>
+        {showValue && valueTemplate && (
+          <div className={`${base}__center`}>{valueTemplate(val)}</div>
+        )}
       </div>
-    );
+      {name && <input type="hidden" name={name} value={val} />}
+    </div>
+  );
 
-    if (!label && !helperText && !errorMessage) return dialEl;
+  if (!label && !helperText && !errorMessage) return dialEl;
 
-    return (
-      <FieldWrapper
-        style={style}
-        label={label}
-        htmlFor={dialId}
-        required={required}
-        helperText={helperText}
-        error={errorMessage}
-        success={success}
-        helperSeverity={helperSeverity}
-        size={size}
-        disabled={disabled}
-      >
-        {dialEl}
-      </FieldWrapper>
-    );
-  }
-);
-
-Dial.displayName = "Dial";
+  return (
+    <FieldWrapper
+      style={style}
+      label={label}
+      htmlFor={dialId}
+      required={required}
+      helperText={helperText}
+      error={errorMessage}
+      success={success}
+      helperSeverity={helperSeverity}
+      size={size}
+      disabled={disabled}
+    >
+      {dialEl}
+    </FieldWrapper>
+  );
+};

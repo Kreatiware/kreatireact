@@ -1,10 +1,4 @@
-import React, {
-  forwardRef,
-  useState,
-  useCallback,
-  Children,
-  isValidElement,
-} from "react";
+import React, { useState, useCallback, Children, isValidElement } from "react";
 import { TabMenu } from "./TabMenu";
 import type { TabMenuProps } from "./TabMenu";
 import type { MenuItem } from "../types/navigation";
@@ -45,9 +39,9 @@ export interface TabPanelProps {
  * </Tabs>
  * ```
  */
-export const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
-  (_props, _ref) => null
-);
+export const TabPanel = (
+  _props: TabPanelProps & { ref?: React.Ref<HTMLDivElement> }
+) => null;
 
 TabPanel.displayName = "TabPanel";
 
@@ -88,72 +82,64 @@ export interface TabsProps {
  * </Tabs>
  * ```
  */
-export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
-  (
-    {
-      activeKey: controlledKey,
-      defaultActiveKey,
-      onTabChange,
-      tabMenuProps,
-      children,
-      className = "",
-      style,
+export const Tabs = ({
+  activeKey: controlledKey,
+  defaultActiveKey,
+  onTabChange,
+  tabMenuProps,
+  children,
+  className = "",
+  style,
+  ref,
+}: TabsProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const panels = Children.toArray(children).filter(
+    (child): child is React.ReactElement<TabPanelProps> =>
+      isValidElement(child) &&
+      (child.type as { displayName?: string }).displayName === "TabPanel"
+  );
+
+  const firstKey = panels[0]?.props.tabKey;
+  const isControlled = controlledKey !== undefined;
+  const [internalKey, setInternalKey] = useState(defaultActiveKey ?? firstKey);
+  const activeTabKey = isControlled ? controlledKey : internalKey;
+
+  const handleChange = useCallback(
+    (key: string) => {
+      if (!isControlled) setInternalKey(key);
+      onTabChange?.(key);
     },
-    ref
-  ) => {
-    const panels = Children.toArray(children).filter(
-      (child): child is React.ReactElement<TabPanelProps> =>
-        isValidElement(child) &&
-        (child.type as { displayName?: string }).displayName === "TabPanel"
-    );
+    [isControlled, onTabChange]
+  );
 
-    const firstKey = panels[0]?.props.tabKey;
-    const isControlled = controlledKey !== undefined;
-    const [internalKey, setInternalKey] = useState(
-      defaultActiveKey ?? firstKey
-    );
-    const activeTabKey = isControlled ? controlledKey : internalKey;
+  const items: MenuItem[] = panels.map(p => ({
+    key: p.props.tabKey,
+    label: p.props.header,
+    icon: p.props.icon,
+    disabled: p.props.disabled,
+  }));
 
-    const handleChange = useCallback(
-      (key: string) => {
-        if (!isControlled) setInternalKey(key);
-        onTabChange?.(key);
-      },
-      [isControlled, onTabChange]
-    );
+  const activePanel = panels.find(p => p.props.tabKey === activeTabKey);
+  const classes = ["k-tabs", className].filter(Boolean).join(" ");
 
-    const items: MenuItem[] = panels.map(p => ({
-      key: p.props.tabKey,
-      label: p.props.header,
-      icon: p.props.icon,
-      disabled: p.props.disabled,
-    }));
-
-    const activePanel = panels.find(p => p.props.tabKey === activeTabKey);
-    const classes = ["k-tabs", className].filter(Boolean).join(" ");
-
-    return (
-      <div ref={ref} className={classes} style={style}>
-        <TabMenu
-          items={items}
-          activeKey={activeTabKey}
-          onTabChange={key => handleChange(key)}
-          {...tabMenuProps}
-        />
-        {activePanel && (
-          <div
-            className={`k-tabs__panels ${activePanel.props.className ?? ""}`}
-            style={activePanel.props.style}
-            role="tabpanel"
-            id={`k-tabmenu-panel-${activeTabKey}`}
-            aria-labelledby={`k-tabmenu-tab-${activeTabKey}`}
-          >
-            {activePanel.props.children}
-          </div>
-        )}
-      </div>
-    );
-  }
-);
-
-Tabs.displayName = "Tabs";
+  return (
+    <div ref={ref} className={classes} style={style}>
+      <TabMenu
+        items={items}
+        activeKey={activeTabKey}
+        onTabChange={key => handleChange(key)}
+        {...tabMenuProps}
+      />
+      {activePanel && (
+        <div
+          className={`k-tabs__panels ${activePanel.props.className ?? ""}`}
+          style={activePanel.props.style}
+          role="tabpanel"
+          id={`k-tabmenu-panel-${activeTabKey}`}
+          aria-labelledby={`k-tabmenu-tab-${activeTabKey}`}
+        >
+          {activePanel.props.children}
+        </div>
+      )}
+    </div>
+  );
+};

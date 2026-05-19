@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useState,
   useCallback,
   useImperativeHandle,
@@ -71,64 +70,64 @@ const nextId = () => `kml-${++counter}`;
  * </Button>
  * ```
  */
-export const MessageList = forwardRef<MessageListRef, MessageListProps>(
-  ({ className = "", style }, ref) => {
-    const [messages, setMessages] = useState<
-      (MessageListItem & { id: string })[]
-    >([]);
-    const containerRef = useRef<HTMLDivElement>(null);
+export const MessageList = ({
+  className = "",
+  style,
+  ref,
+}: MessageListProps & { ref?: React.Ref<MessageListRef> }) => {
+  const [messages, setMessages] = useState<
+    (MessageListItem & { id: string })[]
+  >([]);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-    const show = useCallback((input: MessageListItem | MessageListItem[]) => {
-      const items = Array.isArray(input) ? input : [input];
-      const withIds = items.map(m => ({ ...m, id: m.id ?? nextId() }));
-      setMessages(prev => [...prev, ...withIds]);
-    }, []);
+  const show = useCallback((input: MessageListItem | MessageListItem[]) => {
+    const items = Array.isArray(input) ? input : [input];
+    const withIds = items.map(m => ({ ...m, id: m.id ?? nextId() }));
+    setMessages(prev => [...prev, ...withIds]);
+  }, []);
 
-    const remove = useCallback((id: string) => {
-      setMessages(prev => prev.filter(m => m.id !== id));
-    }, []);
+  const remove = useCallback((id: string) => {
+    setMessages(prev => prev.filter(m => m.id !== id));
+  }, []);
 
-    const clear = useCallback(() => {
-      setMessages([]);
-    }, []);
+  const clear = useCallback(() => {
+    setMessages([]);
+  }, []);
 
-    useImperativeHandle(ref, () => ({ show, remove, clear }), [
-      show,
-      remove,
-      clear,
-    ]);
+  useImperativeHandle(ref, () => ({ show, remove, clear }), [
+    show,
+    remove,
+    clear,
+  ]);
 
-    const base = "k-message-list";
+  const base = "k-message-list";
 
-    if (messages.length === 0) return null;
+  if (messages.length === 0) return null;
 
-    return (
-      <div
-        ref={containerRef}
-        className={[base, className].filter(Boolean).join(" ")}
-        style={style}
-        aria-live="polite"
-        aria-relevant="additions removals"
-      >
-        {messages.map(msg => (
-          <Message
-            key={msg.id}
-            severity={msg.severity}
-            icon={msg.icon}
-            closable={msg.closable ?? true}
-            sticky={msg.sticky}
-            life={msg.life}
-            borderPosition={msg.borderPosition}
-            className={msg.className}
-            style={msg.style}
-            onClose={() => remove(msg.id)}
-          >
-            {msg.content}
-          </Message>
-        ))}
-      </div>
-    );
-  }
-);
-
-MessageList.displayName = "MessageList";
+  return (
+    <div
+      ref={containerRef}
+      className={[base, className].filter(Boolean).join(" ")}
+      style={style}
+      aria-live="polite"
+      aria-relevant="additions removals"
+    >
+      {messages.map(msg => (
+        <Message
+          key={msg.id}
+          severity={msg.severity}
+          icon={msg.icon}
+          closable={msg.closable ?? true}
+          sticky={msg.sticky}
+          life={msg.life}
+          borderPosition={msg.borderPosition}
+          className={msg.className}
+          style={msg.style}
+          onClose={() => remove(msg.id)}
+        >
+          {msg.content}
+        </Message>
+      ))}
+    </div>
+  );
+};

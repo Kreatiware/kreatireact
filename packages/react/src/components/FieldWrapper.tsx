@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import "./FieldWrapper.css";
 
 export interface FieldWrapperProps {
@@ -57,76 +57,70 @@ export interface FieldWrapperProps {
  * </FieldWrapper>
  * ```
  */
-export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
-  (
-    {
-      label,
-      htmlFor,
-      required = false,
-      helperText,
-      error,
-      success = false,
-      helperSeverity,
-      size = "md",
-      disabled = false,
-      fullWidth = false,
-      className = "",
-      style,
-      children,
-    },
-    ref
-  ) => {
-    const base = "k-field";
-    const hasError = !!error;
+export const FieldWrapper = ({
+  label,
+  htmlFor,
+  required = false,
+  helperText,
+  error,
+  success = false,
+  helperSeverity,
+  size = "md",
+  disabled = false,
+  fullWidth = false,
+  className = "",
+  style,
+  children,
+  ref,
+}: FieldWrapperProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const base = "k-field";
+  const hasError = !!error;
 
-    const classes = [
-      base,
-      `${base}--${size}`,
-      hasError && `${base}--error`,
-      !hasError && success && `${base}--success`,
-      disabled && `${base}--disabled`,
-      fullWidth && `${base}--full-width`,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const classes = [
+    base,
+    `${base}--${size}`,
+    hasError && `${base}--error`,
+    !hasError && success && `${base}--success`,
+    disabled && `${base}--disabled`,
+    fullWidth && `${base}--full-width`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    const helperClasses = [
-      `${base}__helper`,
-      !hasError && helperSeverity && `${base}__helper--${helperSeverity}`,
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const helperClasses = [
+    `${base}__helper`,
+    !hasError && helperSeverity && `${base}__helper--${helperSeverity}`,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    const errorId = htmlFor ? `${htmlFor}-error` : undefined;
-    const helperId = htmlFor ? `${htmlFor}-helper` : undefined;
+  const errorId = htmlFor ? `${htmlFor}-error` : undefined;
+  const helperId = htmlFor ? `${htmlFor}-helper` : undefined;
 
-    return (
-      <div ref={ref} className={classes} style={style}>
-        {label && (
-          <label className={`${base}__label`} htmlFor={htmlFor}>
-            {label}
-            {required && (
-              <span className={`${base}__required`} aria-hidden="true">
-                *
-              </span>
-            )}
-          </label>
-        )}
-        <div className={`${base}__content`}>{children}</div>
-        {hasError && (
-          <span className={`${base}__error`} id={errorId} role="alert">
-            {error}
-          </span>
-        )}
-        {helperText && (
-          <span className={helperClasses} id={helperId}>
-            {helperText}
-          </span>
-        )}
-      </div>
-    );
-  }
-);
-
-FieldWrapper.displayName = "FieldWrapper";
+  return (
+    <div ref={ref} className={classes} style={style}>
+      {label && (
+        <label className={`${base}__label`} htmlFor={htmlFor}>
+          {label}
+          {required && (
+            <span className={`${base}__required`} aria-hidden="true">
+              *
+            </span>
+          )}
+        </label>
+      )}
+      <div className={`${base}__content`}>{children}</div>
+      {hasError && (
+        <span className={`${base}__error`} id={errorId} role="alert">
+          {error}
+        </span>
+      )}
+      {helperText && (
+        <span className={helperClasses} id={helperId}>
+          {helperText}
+        </span>
+      )}
+    </div>
+  );
+};

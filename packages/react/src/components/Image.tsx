@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useState,
   useCallback,
   useRef,
@@ -50,99 +49,93 @@ const base = "k-image";
  * <Image src="/broken.jpg" alt="Missing" fallback={<span>No image</span>} />
  * ```
  */
-export const Image = forwardRef<HTMLDivElement, ImageProps>(
-  (
-    {
-      src,
-      alt,
-      width,
-      height,
-      preview = false,
-      fallback,
-      lazy = false,
-      objectFit,
-      rounded = false,
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const elRef = useRef<HTMLDivElement>(null);
-    useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
+export const Image = ({
+  src,
+  alt,
+  width,
+  height,
+  preview = false,
+  fallback,
+  lazy = false,
+  objectFit,
+  rounded = false,
+  className = "",
+  style,
+  ref,
+}: ImageProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const elRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
 
-    const [status, setStatus] = useState<"loading" | "loaded" | "error">(
-      "loading"
-    );
-    const [showPreview, setShowPreview] = useState(false);
+  const [status, setStatus] = useState<"loading" | "loaded" | "error">(
+    "loading"
+  );
+  const [showPreview, setShowPreview] = useState(false);
 
-    const handleLoad = useCallback(() => setStatus("loaded"), []);
-    const handleError = useCallback(() => setStatus("error"), []);
+  const handleLoad = useCallback(() => setStatus("loaded"), []);
+  const handleError = useCallback(() => setStatus("error"), []);
 
-    useEffect(() => {
-      setStatus("loading");
-    }, [src]);
+  useEffect(() => {
+    setStatus("loading");
+  }, [src]);
 
-    useEffect(() => {
-      if (!showPreview) return;
-      const handler = (e: KeyboardEvent) => {
-        if (e.key === "Escape") setShowPreview(false);
-      };
-      document.addEventListener("keydown", handler);
-      return () => document.removeEventListener("keydown", handler);
-    }, [showPreview]);
-
-    const cls = [base, preview && `${base}--preview`, className]
-      .filter(Boolean)
-      .join(" ");
-    const imgStyle: React.CSSProperties = {
-      objectFit,
-      borderRadius: rounded ? "var(--kreati-radius-full)" : undefined,
-      width: width ?? undefined,
-      height: height ?? undefined,
+  useEffect(() => {
+    if (!showPreview) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setShowPreview(false);
     };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [showPreview]);
 
-    return (
-      <div ref={elRef} className={cls} style={{ ...style, width, height }}>
-        {status === "error" ? (
+  const cls = [base, preview && `${base}--preview`, className]
+    .filter(Boolean)
+    .join(" ");
+  const imgStyle: React.CSSProperties = {
+    objectFit,
+    borderRadius: rounded ? "var(--kreati-radius-full)" : undefined,
+    width: width ?? undefined,
+    height: height ?? undefined,
+  };
+
+  return (
+    <div ref={elRef} className={cls} style={{ ...style, width, height }}>
+      {status === "error" ? (
+        <div
+          className={`${base}__fallback`}
+          style={{
+            borderRadius: rounded ? "var(--kreati-radius-full)" : undefined,
+          }}
+        >
+          {fallback ?? alt}
+        </div>
+      ) : (
+        <img
+          className={`${base}__img ${base}__img--${status}`}
+          src={src}
+          alt={alt}
+          loading={lazy ? "lazy" : undefined}
+          style={imgStyle}
+          onLoad={handleLoad}
+          onError={handleError}
+          onClick={
+            preview && status === "loaded"
+              ? () => setShowPreview(true)
+              : undefined
+          }
+        />
+      )}
+      {showPreview &&
+        createPortal(
           <div
-            className={`${base}__fallback`}
-            style={{
-              borderRadius: rounded ? "var(--kreati-radius-full)" : undefined,
-            }}
+            className={`${base}__overlay ${base}__overlay--visible`}
+            onClick={() => setShowPreview(false)}
+            role="dialog"
+            aria-label={alt}
           >
-            {fallback ?? alt}
-          </div>
-        ) : (
-          <img
-            className={`${base}__img ${base}__img--${status}`}
-            src={src}
-            alt={alt}
-            loading={lazy ? "lazy" : undefined}
-            style={imgStyle}
-            onLoad={handleLoad}
-            onError={handleError}
-            onClick={
-              preview && status === "loaded"
-                ? () => setShowPreview(true)
-                : undefined
-            }
-          />
+            <img src={src} alt={alt} />
+          </div>,
+          document.body
         )}
-        {showPreview &&
-          createPortal(
-            <div
-              className={`${base}__overlay ${base}__overlay--visible`}
-              onClick={() => setShowPreview(false)}
-              role="dialog"
-              aria-label={alt}
-            >
-              <img src={src} alt={alt} />
-            </div>,
-            document.body
-          )}
-      </div>
-    );
-  }
-);
-
-Image.displayName = "Image";
+    </div>
+  );
+};

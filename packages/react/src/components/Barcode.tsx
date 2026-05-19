@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useImperativeHandle,
   useMemo,
   useRef,
@@ -68,164 +67,157 @@ export interface BarcodeRef {
  * <Barcode value="96385074" format="code39" />
  * ```
  */
-export const Barcode = forwardRef<BarcodeRef, BarcodeProps>(
-  (
-    {
-      value,
-      format = "code128",
-      width = 200,
-      height = 80,
-      showText = true,
-      textSize = 14,
-      fgColor,
-      bgColor,
-      quietZone = 10,
-      ariaLabel,
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const locale = useKreatiLocale();
-    const svgRef = useRef<SVGSVGElement>(null);
+export const Barcode = ({
+  value,
+  format = "code128",
+  width = 200,
+  height = 80,
+  showText = true,
+  textSize = 14,
+  fgColor,
+  bgColor,
+  quietZone = 10,
+  ariaLabel,
+  className = "",
+  style,
+  ref,
+}: BarcodeProps & { ref?: React.Ref<BarcodeRef> }) => {
+  const locale = useKreatiLocale();
+  const svgRef = useRef<SVGSVGElement>(null);
 
-    const encoded = useMemo((): BarcodeData | null => {
-      if (!value) return null;
-      try {
-        return encodeBarcode(value, format);
-      } catch {
-        return null;
-      }
-    }, [value, format]);
+  const encoded = useMemo((): BarcodeData | null => {
+    if (!value) return null;
+    try {
+      return encodeBarcode(value, format);
+    } catch {
+      return null;
+    }
+  }, [value, format]);
 
-    /** Resolve CSS variables to computed values for export */
-    const resolveColor = useCallback((color: string): string => {
-      if (!color.startsWith("var(") || !svgRef.current) return color;
-      return (
-        getComputedStyle(svgRef.current)
-          .getPropertyValue(color.slice(4, -1).trim())
-          .trim() || "#000000"
-      );
-    }, []);
+  /** Resolve CSS variables to computed values for export */
+  const resolveColor = useCallback((color: string): string => {
+    if (!color.startsWith("var(") || !svgRef.current) return color;
+    return (
+      getComputedStyle(svgRef.current)
+        .getPropertyValue(color.slice(4, -1).trim())
+        .trim() || "#000000"
+    );
+  }, []);
 
-    const getSvgString = useCallback((): string => {
-      if (!svgRef.current) return "";
-      const clone = svgRef.current.cloneNode(true) as SVGSVGElement;
-      clone.querySelectorAll("[fill]").forEach(el => {
-        const fill = el.getAttribute("fill") || "";
-        if (fill.startsWith("var("))
-          el.setAttribute("fill", resolveColor(fill));
-      });
-      return new XMLSerializer().serializeToString(clone);
-    }, [resolveColor]);
+  const getSvgString = useCallback((): string => {
+    if (!svgRef.current) return "";
+    const clone = svgRef.current.cloneNode(true) as SVGSVGElement;
+    clone.querySelectorAll("[fill]").forEach(el => {
+      const fill = el.getAttribute("fill") || "";
+      if (fill.startsWith("var(")) el.setAttribute("fill", resolveColor(fill));
+    });
+    return new XMLSerializer().serializeToString(clone);
+  }, [resolveColor]);
 
-    useImperativeHandle(
-      ref,
-      () => ({
-        toSvgString: getSvgString,
-        toDataURL: (fmt = "png", quality = 1) =>
-          new Promise<string>((resolve, reject) => {
-            const svgStr = getSvgString();
-            if (!svgStr) {
-              reject(new Error("SVG element not available"));
+  useImperativeHandle(
+    ref,
+    () => ({
+      toSvgString: getSvgString,
+      toDataURL: (fmt = "png", quality = 1) =>
+        new Promise<string>((resolve, reject) => {
+          const svgStr = getSvgString();
+          if (!svgStr) {
+            reject(new Error("SVG element not available"));
+            return;
+          }
+          const blob = new Blob([svgStr], {
+            type: "image/svg+xml;charset=utf-8",
+          });
+          const url = URL.createObjectURL(blob);
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            const scale = 2;
+            canvas.width = width * scale;
+            canvas.height = height * scale;
+            const ctx = canvas.getContext("2d");
+            if (!ctx) {
+              URL.revokeObjectURL(url);
+              reject(new Error("Canvas context not available"));
               return;
             }
-            const blob = new Blob([svgStr], {
-              type: "image/svg+xml;charset=utf-8",
-            });
-            const url = URL.createObjectURL(blob);
-            const img = new Image();
-            img.onload = () => {
-              const canvas = document.createElement("canvas");
-              const scale = 2;
-              canvas.width = width * scale;
-              canvas.height = height * scale;
-              const ctx = canvas.getContext("2d");
-              if (!ctx) {
-                URL.revokeObjectURL(url);
-                reject(new Error("Canvas context not available"));
-                return;
-              }
-              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-              URL.revokeObjectURL(url);
-              resolve(canvas.toDataURL(`image/${fmt}`, quality));
-            };
-            img.onerror = () => {
-              URL.revokeObjectURL(url);
-              reject(new Error("Failed to load SVG for export"));
-            };
-            img.src = url;
-          }),
-      }),
-      [getSvgString, width, height]
-    );
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            URL.revokeObjectURL(url);
+            resolve(canvas.toDataURL(`image/${fmt}`, quality));
+          };
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            reject(new Error("Failed to load SVG for export"));
+          };
+          img.src = url;
+        }),
+    }),
+    [getSvgString, width, height]
+  );
 
-    if (!encoded) return null;
+  if (!encoded) return null;
 
-    const { bars, text } = encoded;
-    const resolvedFg = sanitizeCssValue(fgColor) || "var(--kreati-barcode-fg)";
-    const resolvedBg = sanitizeCssValue(bgColor) || "var(--kreati-barcode-bg)";
+  const { bars, text } = encoded;
+  const resolvedFg = sanitizeCssValue(fgColor) || "var(--kreati-barcode-fg)";
+  const resolvedBg = sanitizeCssValue(bgColor) || "var(--kreati-barcode-bg)";
 
-    // Calculate total units
-    const totalUnits = bars.reduce((sum, b) => sum + Math.abs(b), 0);
-    const barAreaWidth = width - quietZone * 2;
-    const textHeight = showText ? textSize + 4 : 0;
-    const barHeight = height - textHeight;
-    const unitWidth = barAreaWidth / totalUnits;
+  // Calculate total units
+  const totalUnits = bars.reduce((sum, b) => sum + Math.abs(b), 0);
+  const barAreaWidth = width - quietZone * 2;
+  const textHeight = showText ? textSize + 4 : 0;
+  const barHeight = height - textHeight;
+  const unitWidth = barAreaWidth / totalUnits;
 
-    const base = "k-barcode";
-    const classes = [base, className].filter(Boolean).join(" ");
+  const base = "k-barcode";
+  const classes = [base, className].filter(Boolean).join(" ");
 
-    // Build bar rects
-    const rects: React.ReactNode[] = [];
-    let x = quietZone;
-    for (let i = 0; i < bars.length; i++) {
-      const w = Math.abs(bars[i]) * unitWidth;
-      if (bars[i] > 0) {
-        rects.push(
-          <rect
-            key={i}
-            x={x}
-            y={0}
-            width={w}
-            height={barHeight}
-            fill={resolvedFg}
-          />
-        );
-      }
-      x += w;
+  // Build bar rects
+  const rects: React.ReactNode[] = [];
+  let x = quietZone;
+  for (let i = 0; i < bars.length; i++) {
+    const w = Math.abs(bars[i]) * unitWidth;
+    if (bars[i] > 0) {
+      rects.push(
+        <rect
+          key={i}
+          x={x}
+          y={0}
+          width={w}
+          height={barHeight}
+          fill={resolvedFg}
+        />
+      );
     }
-
-    return (
-      <svg
-        ref={svgRef}
-        className={classes}
-        style={style}
-        width={width}
-        height={height}
-        viewBox={`0 0 ${width} ${height}`}
-        xmlns="http://www.w3.org/2000/svg"
-        role="img"
-        aria-label={ariaLabel || `${locale.barcode.label}: ${value}`}
-      >
-        <title>{ariaLabel || `${locale.barcode.label}: ${value}`}</title>
-        <rect width={width} height={height} fill={resolvedBg} />
-        {rects}
-        {showText && (
-          <text
-            x={width / 2}
-            y={height - 2}
-            textAnchor="middle"
-            className={`${base}__text`}
-            fill={resolvedFg}
-            fontSize={textSize}
-          >
-            {text}
-          </text>
-        )}
-      </svg>
-    );
+    x += w;
   }
-);
 
-Barcode.displayName = "Barcode";
+  return (
+    <svg
+      ref={svgRef}
+      className={classes}
+      style={style}
+      width={width}
+      height={height}
+      viewBox={`0 0 ${width} ${height}`}
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label={ariaLabel || `${locale.barcode.label}: ${value}`}
+    >
+      <title>{ariaLabel || `${locale.barcode.label}: ${value}`}</title>
+      <rect width={width} height={height} fill={resolvedBg} />
+      {rects}
+      {showText && (
+        <text
+          x={width / 2}
+          y={height - 2}
+          textAnchor="middle"
+          className={`${base}__text`}
+          fill={resolvedFg}
+          fontSize={textSize}
+        >
+          {text}
+        </text>
+      )}
+    </svg>
+  );
+};

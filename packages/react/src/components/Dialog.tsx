@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useRef,
   useState,
   useCallback,
@@ -129,292 +128,272 @@ export interface DialogProps {
  *   message="Are you sure?" onAccept={handleDelete} />
  * ```
  */
-export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
-  (
-    {
-      visible = false,
-      onHide,
-      variant = "dialog",
-      header,
-      footer,
-      headerIcon,
-      headerTemplate,
-      footerTemplate,
-      closable = true,
-      maximizable = false,
-      position = "center",
-      modal = true,
-      closeOnEscape = true,
-      closeOnOverlay = false,
-      blockScroll = true,
-      size = "md",
-      fullScreen = false,
-      responsive = true,
-      message,
-      icon,
-      acceptLabel: acceptLabelProp,
-      rejectLabel: rejectLabelProp,
-      acceptSeverity = "primary",
-      rejectSeverity = "secondary",
-      onAccept,
-      onReject,
-      className = "",
-      style,
-      children,
-    },
-    ref
-  ) => {
-    const dialogRef = useRef<HTMLDivElement>(null);
-    const previousFocusRef = useRef<HTMLElement | null>(null);
-    useImperativeHandle(ref, () => dialogRef.current as HTMLDivElement);
+export const Dialog = ({
+  visible = false,
+  onHide,
+  variant = "dialog",
+  header,
+  footer,
+  headerIcon,
+  headerTemplate,
+  footerTemplate,
+  closable = true,
+  maximizable = false,
+  position = "center",
+  modal = true,
+  closeOnEscape = true,
+  closeOnOverlay = false,
+  blockScroll = true,
+  size = "md",
+  fullScreen = false,
+  responsive = true,
+  message,
+  icon,
+  acceptLabel: acceptLabelProp,
+  rejectLabel: rejectLabelProp,
+  acceptSeverity = "primary",
+  rejectSeverity = "secondary",
+  onAccept,
+  onReject,
+  className = "",
+  style,
+  children,
+  ref,
+}: DialogProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+  useImperativeHandle(ref, () => dialogRef.current as HTMLDivElement);
 
-    const [layer] = useState(() => nextLayer());
-    const zDialog = 1000 + layer * 10;
+  const [layer] = useState(() => nextLayer());
+  const zDialog = 1000 + layer * 10;
 
-    const [maximized, setMaximized] = useState(false);
-    const kreatiLocale = useKreatiLocale();
-    const base = "k-dialog";
+  const [maximized, setMaximized] = useState(false);
+  const kreatiLocale = useKreatiLocale();
+  const base = "k-dialog";
 
-    const close = useCallback(() => onHide?.(), [onHide]);
-    const accept = useCallback(() => {
-      onAccept?.();
-      close();
-    }, [onAccept, close]);
-    const reject = useCallback(() => {
-      onReject?.();
-      close();
-    }, [onReject, close]);
+  const close = useCallback(() => onHide?.(), [onHide]);
+  const accept = useCallback(() => {
+    onAccept?.();
+    close();
+  }, [onAccept, close]);
+  const reject = useCallback(() => {
+    onReject?.();
+    close();
+  }, [onReject, close]);
 
-    const titleId = `${base}-title-${layer}`;
-    const bodyId = `${base}-body-${layer}`;
+  const titleId = `${base}-title-${layer}`;
+  const bodyId = `${base}-body-${layer}`;
 
-    useEffect(() => {
-      if (!visible || !blockScroll) return;
-      const prev = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = prev;
-      };
-    }, [visible, blockScroll]);
+  useEffect(() => {
+    if (!visible || !blockScroll) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [visible, blockScroll]);
 
-    useEffect(() => {
-      if (!visible || !closeOnEscape) return;
-      const handler = (e: KeyboardEvent) => {
-        if (e.key === "Escape") {
-          e.preventDefault();
-          close();
-        }
-      };
-      document.addEventListener("keydown", handler);
-      return () => document.removeEventListener("keydown", handler);
-    }, [visible, closeOnEscape, close]);
-
-    useEffect(() => {
-      if (!visible) return;
-      previousFocusRef.current = document.activeElement as HTMLElement;
-      requestAnimationFrame(() => dialogRef.current?.focus());
-      return () => {
-        previousFocusRef.current?.focus();
-      };
-    }, [visible]);
-
-    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-      if (e.key !== "Tab") return;
-      const el = dialogRef.current;
-      if (!el) return;
-      const focusable = el.querySelectorAll<HTMLElement>(
-        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-      );
-      if (focusable.length === 0) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
+  useEffect(() => {
+    if (!visible || !closeOnEscape) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
         e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
+        close();
       }
-    }, []);
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [visible, closeOnEscape, close]);
 
-    if (!visible) return null;
+  useEffect(() => {
+    if (!visible) return;
+    previousFocusRef.current = document.activeElement as HTMLElement;
+    requestAnimationFrame(() => dialogRef.current?.focus());
+    return () => {
+      previousFocusRef.current?.focus();
+    };
+  }, [visible]);
 
-    const closeIcon = (
-      <svg
-        width={14}
-        height={14}
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        aria-hidden="true"
-      >
-        <path d={TIMES_PATH} />
-      </svg>
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key !== "Tab") return;
+    const el = dialogRef.current;
+    if (!el) return;
+    const focusable = el.querySelectorAll<HTMLElement>(
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
     );
-    const maximizeIcon = (
-      <svg
-        width={14}
-        height={14}
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        aria-hidden="true"
-      >
-        <path d={maximized ? RESTORE_PATH : MAXIMIZE_PATH} />
-      </svg>
-    );
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }, []);
 
-    const isConfirm = variant === "confirm";
-    const hasHeader = !!(header || isConfirm || headerTemplate);
-    const resolvedHeader =
-      isConfirm && !header ? kreatiLocale.dialog.confirmation : header;
+  if (!visible) return null;
 
-    const headerEl = headerTemplate ? (
-      <div className={`${base}__header`}>
-        {headerTemplate({ title: resolvedHeader, close })}
+  const closeIcon = (
+    <svg
+      width={14}
+      height={14}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d={TIMES_PATH} />
+    </svg>
+  );
+  const maximizeIcon = (
+    <svg
+      width={14}
+      height={14}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d={maximized ? RESTORE_PATH : MAXIMIZE_PATH} />
+    </svg>
+  );
+
+  const isConfirm = variant === "confirm";
+  const hasHeader = !!(header || isConfirm || headerTemplate);
+  const resolvedHeader =
+    isConfirm && !header ? kreatiLocale.dialog.confirmation : header;
+
+  const headerEl = headerTemplate ? (
+    <div className={`${base}__header`}>
+      {headerTemplate({ title: resolvedHeader, close })}
+    </div>
+  ) : hasHeader ? (
+    <div className={`${base}__header`}>
+      <div className={`${base}__header-content`} id={titleId}>
+        {headerIcon && (
+          <span className={`${base}__header-icon`}>{headerIcon}</span>
+        )}
+        {typeof resolvedHeader === "string" ? (
+          <h2 className={`${base}__title`}>{resolvedHeader}</h2>
+        ) : (
+          resolvedHeader
+        )}
       </div>
-    ) : hasHeader ? (
-      <div className={`${base}__header`}>
-        <div className={`${base}__header-content`} id={titleId}>
-          {headerIcon && (
-            <span className={`${base}__header-icon`}>{headerIcon}</span>
-          )}
-          {typeof resolvedHeader === "string" ? (
-            <h2 className={`${base}__title`}>{resolvedHeader}</h2>
-          ) : (
-            resolvedHeader
-          )}
-        </div>
-        <div className={`${base}__header-actions`}>
-          {maximizable && (
-            <Button
-              buttonType="text"
-              severity="secondary"
-              slim
-              size="sm"
-              iconLeft={maximizeIcon}
-              ariaLabel={
-                maximized
-                  ? kreatiLocale.dialog.restore
-                  : kreatiLocale.dialog.maximize
-              }
-              onClick={() => setMaximized(p => !p)}
-            />
-          )}
-          {closable && (
-            <Button
-              buttonType="text"
-              severity="secondary"
-              slim
-              size="sm"
-              iconLeft={closeIcon}
-              ariaLabel={kreatiLocale.dialog.close}
-              onClick={close}
-            />
-          )}
-        </div>
+      <div className={`${base}__header-actions`}>
+        {maximizable && (
+          <Button
+            buttonType="text"
+            severity="secondary"
+            slim
+            size="sm"
+            iconLeft={maximizeIcon}
+            ariaLabel={
+              maximized
+                ? kreatiLocale.dialog.restore
+                : kreatiLocale.dialog.maximize
+            }
+            onClick={() => setMaximized(p => !p)}
+          />
+        )}
+        {closable && (
+          <Button
+            buttonType="text"
+            severity="secondary"
+            slim
+            size="sm"
+            iconLeft={closeIcon}
+            ariaLabel={kreatiLocale.dialog.close}
+            onClick={close}
+          />
+        )}
       </div>
-    ) : null;
+    </div>
+  ) : null;
 
-    const bodyContent =
-      children ??
-      (isConfirm ? (
-        <div className={`${base}__confirm-body`}>
-          {icon && <span className={`${base}__confirm-icon`}>{icon}</span>}
-          <span className={`${base}__confirm-message`}>{message}</span>
-        </div>
-      ) : null);
-
-    const footerEl = footerTemplate ? (
-      <div className={`${base}__footer`}>
-        {footerTemplate({ accept, reject, close })}
+  const bodyContent =
+    children ??
+    (isConfirm ? (
+      <div className={`${base}__confirm-body`}>
+        {icon && <span className={`${base}__confirm-icon`}>{icon}</span>}
+        <span className={`${base}__confirm-message`}>{message}</span>
       </div>
-    ) : footer ? (
-      <div className={`${base}__footer`}>{footer}</div>
-    ) : isConfirm ? (
-      <div className={`${base}__footer`}>
-        <Button
-          label={rejectLabelProp || kreatiLocale.dialog.reject}
-          buttonType="text"
-          severity={rejectSeverity}
-          size="sm"
-          onClick={reject}
-        />
-        <Button
-          label={acceptLabelProp || kreatiLocale.dialog.accept}
-          severity={acceptSeverity}
-          size="sm"
-          onClick={accept}
-        />
+    ) : null);
+
+  const footerEl = footerTemplate ? (
+    <div className={`${base}__footer`}>
+      {footerTemplate({ accept, reject, close })}
+    </div>
+  ) : footer ? (
+    <div className={`${base}__footer`}>{footer}</div>
+  ) : isConfirm ? (
+    <div className={`${base}__footer`}>
+      <Button
+        label={rejectLabelProp || kreatiLocale.dialog.reject}
+        buttonType="text"
+        severity={rejectSeverity}
+        size="sm"
+        onClick={reject}
+      />
+      <Button
+        label={acceptLabelProp || kreatiLocale.dialog.accept}
+        severity={acceptSeverity}
+        size="sm"
+        onClick={accept}
+      />
+    </div>
+  ) : null;
+
+  const dialogClasses = [
+    base,
+    `${base}--${size}`,
+    fullScreen && `${base}--full-screen`,
+    maximized && !fullScreen && `${base}--maximized`,
+    responsive && `${base}--responsive`,
+    !hasHeader && `${base}--no-header`,
+    !footerEl && `${base}--no-footer`,
+    !modal && `${base}--non-modal`,
+    !modal && `${base}--pos-${position}`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const overlayClasses = [
+    `${base}-overlay`,
+    position !== "center" && `${base}-overlay--${position}`,
+    responsive && `${base}-overlay--responsive`,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const dialogContent = (
+    <>
+      {headerEl}
+      <div className={`${base}__body`} id={bodyId}>
+        {bodyContent}
       </div>
-    ) : null;
+      {footerEl}
+    </>
+  );
 
-    const dialogClasses = [
-      base,
-      `${base}--${size}`,
-      fullScreen && `${base}--full-screen`,
-      maximized && !fullScreen && `${base}--maximized`,
-      responsive && `${base}--responsive`,
-      !hasHeader && `${base}--no-header`,
-      !footerEl && `${base}--no-footer`,
-      !modal && `${base}--non-modal`,
-      !modal && `${base}--pos-${position}`,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
-
-    const overlayClasses = [
-      `${base}-overlay`,
-      position !== "center" && `${base}-overlay--${position}`,
-      responsive && `${base}-overlay--responsive`,
-    ]
-      .filter(Boolean)
-      .join(" ");
-
-    const dialogContent = (
-      <>
-        {headerEl}
-        <div className={`${base}__body`} id={bodyId}>
-          {bodyContent}
-        </div>
-        {footerEl}
-      </>
-    );
-
-    const dialogEl = modal ? (
-      <div
-        className={overlayClasses}
-        style={{ zIndex: zDialog }}
-        onClick={
-          closeOnOverlay
-            ? e => {
-                if (e.target === e.currentTarget) close();
-              }
-            : undefined
-        }
-      >
-        <div
-          ref={dialogRef}
-          className={dialogClasses}
-          style={style}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby={hasHeader ? titleId : undefined}
-          aria-describedby={bodyId}
-          tabIndex={-1}
-          onKeyDown={handleKeyDown}
-        >
-          <LayerContext.Provider value={layer}>
-            {dialogContent}
-          </LayerContext.Provider>
-        </div>
-      </div>
-    ) : (
+  const dialogEl = modal ? (
+    <div
+      className={overlayClasses}
+      style={{ zIndex: zDialog }}
+      onClick={
+        closeOnOverlay
+          ? e => {
+              if (e.target === e.currentTarget) close();
+            }
+          : undefined
+      }
+    >
       <div
         ref={dialogRef}
         className={dialogClasses}
-        style={{ ...style, zIndex: zDialog }}
+        style={style}
         role="dialog"
-        aria-modal="false"
+        aria-modal="true"
         aria-labelledby={hasHeader ? titleId : undefined}
         aria-describedby={bodyId}
         tabIndex={-1}
@@ -424,10 +403,24 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
           {dialogContent}
         </LayerContext.Provider>
       </div>
-    );
+    </div>
+  ) : (
+    <div
+      ref={dialogRef}
+      className={dialogClasses}
+      style={{ ...style, zIndex: zDialog }}
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby={hasHeader ? titleId : undefined}
+      aria-describedby={bodyId}
+      tabIndex={-1}
+      onKeyDown={handleKeyDown}
+    >
+      <LayerContext.Provider value={layer}>
+        {dialogContent}
+      </LayerContext.Provider>
+    </div>
+  );
 
-    return createPortal(dialogEl, document.body);
-  }
-);
-
-Dialog.displayName = "Dialog";
+  return createPortal(dialogEl, document.body);
+};

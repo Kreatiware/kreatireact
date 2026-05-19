@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useState,
   useCallback,
   useRef,
@@ -120,371 +119,183 @@ const defaultIcon = (path: string) => (
  * />
  * ```
  */
-export const SpeedDial = forwardRef<HTMLDivElement, SpeedDialProps>(
-  (
-    {
-      items,
-      direction = "up",
-      layout = "linear",
-      radius = 80,
-      icon,
-      activeIcon,
-      rotateAnimation = true,
-      severity = "primary",
-      buttonType = "filled",
-      size = "lg",
-      actionSize = "md",
-      mask = false,
-      disabled = false,
-      open: controlledOpen,
-      onOpenChange,
-      triggerOn = "click",
-      ariaLabel = "Quick actions",
-      className = "",
-      style,
+export const SpeedDial = ({
+  items,
+  direction = "up",
+  layout = "linear",
+  radius = 80,
+  icon,
+  activeIcon,
+  rotateAnimation = true,
+  severity = "primary",
+  buttonType = "filled",
+  size = "lg",
+  actionSize = "md",
+  mask = false,
+  disabled = false,
+  open: controlledOpen,
+  onOpenChange,
+  triggerOn = "click",
+  ariaLabel = "Quick actions",
+  className = "",
+  style,
+  ref,
+}: SpeedDialProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
+
+  const isControlled = controlledOpen !== undefined;
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isOpen = isControlled ? controlledOpen : internalOpen;
+
+  // Track which sub-dial keys are expanded
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+
+  const setOpen = useCallback(
+    (next: boolean) => {
+      if (!next) setExpanded(new Set()); // close all sub-levels
+      if (!isControlled) setInternalOpen(next);
+      onOpenChange?.(next);
     },
-    ref
-  ) => {
-    const containerRef = useRef<HTMLDivElement>(null);
-    useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
+    [isControlled, onOpenChange]
+  );
 
-    const isControlled = controlledOpen !== undefined;
-    const [internalOpen, setInternalOpen] = useState(false);
-    const isOpen = isControlled ? controlledOpen : internalOpen;
+  const toggle = useCallback(() => {
+    if (disabled) return;
+    setOpen(!isOpen);
+  }, [disabled, isOpen, setOpen]);
 
-    // Track which sub-dial keys are expanded
-    const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const close = useCallback(() => setOpen(false), [setOpen]);
 
-    const setOpen = useCallback(
-      (next: boolean) => {
-        if (!next) setExpanded(new Set()); // close all sub-levels
-        if (!isControlled) setInternalOpen(next);
-        onOpenChange?.(next);
-      },
-      [isControlled, onOpenChange]
-    );
-
-    const toggle = useCallback(() => {
-      if (disabled) return;
-      setOpen(!isOpen);
-    }, [disabled, isOpen, setOpen]);
-
-    const close = useCallback(() => setOpen(false), [setOpen]);
-
-    const toggleSub = useCallback(
-      (key: string) => {
-        setExpanded(prev => {
-          const next = new Set(prev);
-          if (next.has(key)) {
-            // Close this key and all its descendants
-            const closeDescendants = (
-              items: SpeedDialItem[],
-              parentKey: string
-            ) => {
-              for (const item of items) {
-                if (next.has(item.key)) next.delete(item.key);
-                if (item.items) closeDescendants(item.items, item.key);
-              }
-            };
-            next.delete(key);
-            // Find the item and close its children
-            const findAndClose = (list: SpeedDialItem[]) => {
-              for (const item of list) {
-                if (item.key === key && item.items)
-                  closeDescendants(item.items, key);
-                if (item.items) findAndClose(item.items);
-              }
-            };
-            findAndClose(items);
-          } else {
-            next.add(key);
-          }
-          return next;
-        });
-      },
-      [items]
-    );
-
-    // Escape and click-outside
-    useEffect(() => {
-      if (!isOpen) return;
-      const onKey = (e: KeyboardEvent) => {
-        if (e.key === "Escape") {
-          e.preventDefault();
-          close();
-        }
-      };
-      const onClick = (e: MouseEvent) => {
-        if (!containerRef.current?.contains(e.target as Node)) close();
-      };
-      document.addEventListener("keydown", onKey);
-      document.addEventListener("mousedown", onClick);
-      return () => {
-        document.removeEventListener("keydown", onKey);
-        document.removeEventListener("mousedown", onClick);
-      };
-    }, [isOpen, close]);
-
-    const base = "k-speeddial";
-    const isQuarter = layout.startsWith("quarter");
-
-    const getQuarterStyle = (
-      index: number,
-      total: number
-    ): React.CSSProperties => {
-      const angleMap: Record<string, { start: number; end: number }> = {
-        "quarter-up-right": { start: 180, end: 270 },
-        "quarter-up-left": { start: 270, end: 360 },
-        "quarter-down-right": { start: 90, end: 180 },
-        "quarter-down-left": { start: 0, end: 90 },
-      };
-      const range = angleMap[layout] || angleMap["quarter-up-right"];
-      const step = total > 1 ? (range.end - range.start) / (total - 1) : 0;
-      const angle = (range.start + step * index) * (Math.PI / 180);
-      return {
-        position: "absolute",
-        left: `calc(50% + ${Math.cos(angle) * radius}px)`,
-        top: `calc(50% + ${Math.sin(angle) * radius}px)`,
-        transform: "translate(-50%, -50%)",
-      };
-    };
-
-    const renderItems = (
-      list: SpeedDialItem[],
-      dir: SpeedDialDirection,
-      parentVisible: boolean
-    ) => {
-      const visible = list.filter(i => i.key);
-      const actionsCls = [
-        `${base}__actions`,
-        `${base}__actions--${dir}`,
-        parentVisible && `${base}__actions--visible`,
-      ]
-        .filter(Boolean)
-        .join(" ");
-
-      return (
-        <div className={actionsCls} role="menu">
-          {visible.map((item, i) => {
-            const stagger: React.CSSProperties = {
-              "--k-dial-i": i,
-              ...item.style,
-            } as React.CSSProperties;
-
-            const hasSub = item.items && item.items.length > 0;
-            const isSubOpen = expanded.has(item.key);
-            const isDis = item.disabled || disabled;
-
-            if (hasSub) {
-              const subDir = item.direction || dir;
-              return (
-                <div
-                  key={item.key}
-                  className={`${base}__action`}
-                  role="menuitem"
-                  style={stagger}
-                >
-                  <div className={base} style={{ position: "relative" }}>
-                    <div
-                      className={[
-                        `${base}__trigger`,
-                        isSubOpen && `${base}__trigger--open`,
-                      ]
-                        .filter(Boolean)
-                        .join(" ")}
-                    >
-                      {item.label ? (
-                        <Tooltip
-                          content={item.label}
-                          position={
-                            dir === "up" || dir === "down" ? "left" : "top"
-                          }
-                        >
-                          <Button
-                            iconLeft={item.icon}
-                            severity={item.severity || "secondary"}
-                            buttonType={item.buttonType || "filled"}
-                            size={actionSize}
-                            rounded
-                            disabled={isDis}
-                            onClick={() => !isDis && toggleSub(item.key)}
-                            ariaLabel={item.label}
-                            aria-expanded={isSubOpen}
-                            aria-haspopup="menu"
-                          />
-                        </Tooltip>
-                      ) : (
-                        <Button
-                          iconLeft={item.icon}
-                          severity={item.severity || "secondary"}
-                          buttonType={item.buttonType || "filled"}
-                          size={actionSize}
-                          rounded
-                          disabled={isDis}
-                          onClick={() => !isDis && toggleSub(item.key)}
-                          ariaLabel={item.label}
-                          aria-expanded={isSubOpen}
-                          aria-haspopup="menu"
-                        />
-                      )}
-                    </div>
-                    {renderItems(item.items!, subDir, isSubOpen)}
-                  </div>
-                </div>
-              );
+  const toggleSub = useCallback(
+    (key: string) => {
+      setExpanded(prev => {
+        const next = new Set(prev);
+        if (next.has(key)) {
+          // Close this key and all its descendants
+          const closeDescendants = (
+            items: SpeedDialItem[],
+            parentKey: string
+          ) => {
+            for (const item of items) {
+              if (next.has(item.key)) next.delete(item.key);
+              if (item.items) closeDescendants(item.items, item.key);
             }
+          };
+          next.delete(key);
+          // Find the item and close its children
+          const findAndClose = (list: SpeedDialItem[]) => {
+            for (const item of list) {
+              if (item.key === key && item.items)
+                closeDescendants(item.items, key);
+              if (item.items) findAndClose(item.items);
+            }
+          };
+          findAndClose(items);
+        } else {
+          next.add(key);
+        }
+        return next;
+      });
+    },
+    [items]
+  );
 
-            const btn = (
-              <Button
-                iconLeft={item.icon}
-                severity={item.severity || "secondary"}
-                buttonType={item.buttonType || "filled"}
-                size={actionSize}
-                rounded
-                disabled={isDis}
-                onClick={() => {
-                  item.command?.();
-                  close();
-                }}
-                ariaLabel={item.label}
-                className={item.className}
-              />
-            );
-
-            return (
-              <div
-                key={item.key}
-                className={`${base}__action`}
-                role="menuitem"
-                style={stagger}
-              >
-                {item.label ? (
-                  <Tooltip
-                    content={item.label}
-                    position={dir === "up" || dir === "down" ? "left" : "top"}
-                  >
-                    {btn}
-                  </Tooltip>
-                ) : (
-                  btn
-                )}
-              </div>
-            );
-          })}
-        </div>
-      );
+  // Escape and click-outside
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        close();
+      }
     };
+    const onClick = (e: MouseEvent) => {
+      if (!containerRef.current?.contains(e.target as Node)) close();
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onClick);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onClick);
+    };
+  }, [isOpen, close]);
 
-    const triggerIcon = (() => {
-      if (isOpen && !rotateAnimation && activeIcon) return activeIcon;
-      if (isOpen && !rotateAnimation) return defaultIcon(TIMES_PATH);
-      return icon || defaultIcon(PLUS_PATH);
-    })();
+  const base = "k-speeddial";
+  const isQuarter = layout.startsWith("quarter");
 
-    const triggerCls = [
-      `${base}__trigger`,
-      isOpen && rotateAnimation && `${base}__trigger--open`,
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const getQuarterStyle = (
+    index: number,
+    total: number
+  ): React.CSSProperties => {
+    const angleMap: Record<string, { start: number; end: number }> = {
+      "quarter-up-right": { start: 180, end: 270 },
+      "quarter-up-left": { start: 270, end: 360 },
+      "quarter-down-right": { start: 90, end: 180 },
+      "quarter-down-left": { start: 0, end: 90 },
+    };
+    const range = angleMap[layout] || angleMap["quarter-up-right"];
+    const step = total > 1 ? (range.end - range.start) / (total - 1) : 0;
+    const angle = (range.start + step * index) * (Math.PI / 180);
+    return {
+      position: "absolute",
+      left: `calc(50% + ${Math.cos(angle) * radius}px)`,
+      top: `calc(50% + ${Math.sin(angle) * radius}px)`,
+      transform: "translate(-50%, -50%)",
+    };
+  };
 
-    const hoverProps =
-      triggerOn === "hover"
-        ? {
-            onMouseEnter: () => !disabled && setOpen(true),
-            onMouseLeave: () => setOpen(false),
-          }
-        : {};
-
-    // Root level uses layout (quarter or linear)
-    const rootActionsCls = [
+  const renderItems = (
+    list: SpeedDialItem[],
+    dir: SpeedDialDirection,
+    parentVisible: boolean
+  ) => {
+    const visible = list.filter(i => i.key);
+    const actionsCls = [
       `${base}__actions`,
-      isQuarter
-        ? `${base}__actions--${layout}`
-        : `${base}__actions--${direction}`,
-      isOpen && `${base}__actions--visible`,
+      `${base}__actions--${dir}`,
+      parentVisible && `${base}__actions--visible`,
     ]
       .filter(Boolean)
       .join(" ");
-
-    const rootVisible = items.filter(i => i.key);
 
     return (
-      <div
-        ref={containerRef}
-        className={`${base} ${className}`.trim()}
-        style={style}
-        {...hoverProps}
-      >
-        <div className={triggerCls}>
-          <Button
-            iconLeft={triggerIcon}
-            severity={severity}
-            buttonType={buttonType}
-            size={size}
-            rounded
-            disabled={disabled}
-            onClick={triggerOn === "click" ? toggle : undefined}
-            ariaLabel={ariaLabel}
-            aria-expanded={isOpen}
-            aria-haspopup="menu"
-          />
-        </div>
+      <div className={actionsCls} role="menu">
+        {visible.map((item, i) => {
+          const stagger: React.CSSProperties = {
+            "--k-dial-i": i,
+            ...item.style,
+          } as React.CSSProperties;
 
-        <div className={rootActionsCls} role="menu" aria-label={ariaLabel}>
-          {rootVisible.map((item, i) => {
-            const stagger: React.CSSProperties = {
-              "--k-dial-i": i,
-              ...(isQuarter
-                ? getQuarterStyle(i, rootVisible.length)
-                : item.style),
-            } as React.CSSProperties;
+          const hasSub = item.items && item.items.length > 0;
+          const isSubOpen = expanded.has(item.key);
+          const isDis = item.disabled || disabled;
 
-            const hasSub = item.items && item.items.length > 0;
-            const isSubOpen = expanded.has(item.key);
-            const isDis = item.disabled || disabled;
-
-            if (hasSub) {
-              const subDir = item.direction || direction;
-              return (
-                <div
-                  key={item.key}
-                  className={`${base}__action`}
-                  role="menuitem"
-                  style={stagger}
-                >
-                  <div className={base} style={{ position: "relative" }}>
-                    <div
-                      className={[
-                        `${base}__trigger`,
-                        isSubOpen && `${base}__trigger--open`,
-                      ]
-                        .filter(Boolean)
-                        .join(" ")}
-                    >
-                      {item.label ? (
-                        <Tooltip
-                          content={item.label}
-                          position={
-                            direction === "up" || direction === "down"
-                              ? "left"
-                              : "top"
-                          }
-                        >
-                          <Button
-                            iconLeft={item.icon}
-                            severity={item.severity || "secondary"}
-                            buttonType={item.buttonType || "filled"}
-                            size={actionSize}
-                            rounded
-                            disabled={isDis}
-                            onClick={() => !isDis && toggleSub(item.key)}
-                            ariaLabel={item.label}
-                            aria-expanded={isSubOpen}
-                            aria-haspopup="menu"
-                          />
-                        </Tooltip>
-                      ) : (
+          if (hasSub) {
+            const subDir = item.direction || dir;
+            return (
+              <div
+                key={item.key}
+                className={`${base}__action`}
+                role="menuitem"
+                style={stagger}
+              >
+                <div className={base} style={{ position: "relative" }}>
+                  <div
+                    className={[
+                      `${base}__trigger`,
+                      isSubOpen && `${base}__trigger--open`,
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
+                  >
+                    {item.label ? (
+                      <Tooltip
+                        content={item.label}
+                        position={
+                          dir === "up" || dir === "down" ? "left" : "top"
+                        }
+                      >
                         <Button
                           iconLeft={item.icon}
                           severity={item.severity || "secondary"}
@@ -497,32 +308,140 @@ export const SpeedDial = forwardRef<HTMLDivElement, SpeedDialProps>(
                           aria-expanded={isSubOpen}
                           aria-haspopup="menu"
                         />
-                      )}
-                    </div>
-                    {renderItems(item.items!, subDir, isSubOpen)}
+                      </Tooltip>
+                    ) : (
+                      <Button
+                        iconLeft={item.icon}
+                        severity={item.severity || "secondary"}
+                        buttonType={item.buttonType || "filled"}
+                        size={actionSize}
+                        rounded
+                        disabled={isDis}
+                        onClick={() => !isDis && toggleSub(item.key)}
+                        ariaLabel={item.label}
+                        aria-expanded={isSubOpen}
+                        aria-haspopup="menu"
+                      />
+                    )}
                   </div>
+                  {renderItems(item.items!, subDir, isSubOpen)}
                 </div>
-              );
-            }
-
-            const btn = (
-              <Button
-                iconLeft={item.icon}
-                severity={item.severity || "secondary"}
-                buttonType={item.buttonType || "filled"}
-                size={actionSize}
-                rounded
-                disabled={isDis}
-                onClick={() => {
-                  item.command?.();
-                  close();
-                }}
-                ariaLabel={item.label}
-                className={item.className}
-                style={isQuarter ? undefined : item.style}
-              />
+              </div>
             );
+          }
 
+          const btn = (
+            <Button
+              iconLeft={item.icon}
+              severity={item.severity || "secondary"}
+              buttonType={item.buttonType || "filled"}
+              size={actionSize}
+              rounded
+              disabled={isDis}
+              onClick={() => {
+                item.command?.();
+                close();
+              }}
+              ariaLabel={item.label}
+              className={item.className}
+            />
+          );
+
+          return (
+            <div
+              key={item.key}
+              className={`${base}__action`}
+              role="menuitem"
+              style={stagger}
+            >
+              {item.label ? (
+                <Tooltip
+                  content={item.label}
+                  position={dir === "up" || dir === "down" ? "left" : "top"}
+                >
+                  {btn}
+                </Tooltip>
+              ) : (
+                btn
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const triggerIcon = (() => {
+    if (isOpen && !rotateAnimation && activeIcon) return activeIcon;
+    if (isOpen && !rotateAnimation) return defaultIcon(TIMES_PATH);
+    return icon || defaultIcon(PLUS_PATH);
+  })();
+
+  const triggerCls = [
+    `${base}__trigger`,
+    isOpen && rotateAnimation && `${base}__trigger--open`,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const hoverProps =
+    triggerOn === "hover"
+      ? {
+          onMouseEnter: () => !disabled && setOpen(true),
+          onMouseLeave: () => setOpen(false),
+        }
+      : {};
+
+  // Root level uses layout (quarter or linear)
+  const rootActionsCls = [
+    `${base}__actions`,
+    isQuarter
+      ? `${base}__actions--${layout}`
+      : `${base}__actions--${direction}`,
+    isOpen && `${base}__actions--visible`,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const rootVisible = items.filter(i => i.key);
+
+  return (
+    <div
+      ref={containerRef}
+      className={`${base} ${className}`.trim()}
+      style={style}
+      {...hoverProps}
+    >
+      <div className={triggerCls}>
+        <Button
+          iconLeft={triggerIcon}
+          severity={severity}
+          buttonType={buttonType}
+          size={size}
+          rounded
+          disabled={disabled}
+          onClick={triggerOn === "click" ? toggle : undefined}
+          ariaLabel={ariaLabel}
+          aria-expanded={isOpen}
+          aria-haspopup="menu"
+        />
+      </div>
+
+      <div className={rootActionsCls} role="menu" aria-label={ariaLabel}>
+        {rootVisible.map((item, i) => {
+          const stagger: React.CSSProperties = {
+            "--k-dial-i": i,
+            ...(isQuarter
+              ? getQuarterStyle(i, rootVisible.length)
+              : item.style),
+          } as React.CSSProperties;
+
+          const hasSub = item.items && item.items.length > 0;
+          const isSubOpen = expanded.has(item.key);
+          const isDis = item.disabled || disabled;
+
+          if (hasSub) {
+            const subDir = item.direction || direction;
             return (
               <div
                 key={item.key}
@@ -530,31 +449,103 @@ export const SpeedDial = forwardRef<HTMLDivElement, SpeedDialProps>(
                 role="menuitem"
                 style={stagger}
               >
-                {item.label ? (
-                  <Tooltip
-                    content={item.label}
-                    position={
-                      direction === "up" || direction === "down"
-                        ? "left"
-                        : "top"
-                    }
+                <div className={base} style={{ position: "relative" }}>
+                  <div
+                    className={[
+                      `${base}__trigger`,
+                      isSubOpen && `${base}__trigger--open`,
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
                   >
-                    {btn}
-                  </Tooltip>
-                ) : (
-                  btn
-                )}
+                    {item.label ? (
+                      <Tooltip
+                        content={item.label}
+                        position={
+                          direction === "up" || direction === "down"
+                            ? "left"
+                            : "top"
+                        }
+                      >
+                        <Button
+                          iconLeft={item.icon}
+                          severity={item.severity || "secondary"}
+                          buttonType={item.buttonType || "filled"}
+                          size={actionSize}
+                          rounded
+                          disabled={isDis}
+                          onClick={() => !isDis && toggleSub(item.key)}
+                          ariaLabel={item.label}
+                          aria-expanded={isSubOpen}
+                          aria-haspopup="menu"
+                        />
+                      </Tooltip>
+                    ) : (
+                      <Button
+                        iconLeft={item.icon}
+                        severity={item.severity || "secondary"}
+                        buttonType={item.buttonType || "filled"}
+                        size={actionSize}
+                        rounded
+                        disabled={isDis}
+                        onClick={() => !isDis && toggleSub(item.key)}
+                        ariaLabel={item.label}
+                        aria-expanded={isSubOpen}
+                        aria-haspopup="menu"
+                      />
+                    )}
+                  </div>
+                  {renderItems(item.items!, subDir, isSubOpen)}
+                </div>
               </div>
             );
-          })}
-        </div>
+          }
 
-        {mask && isOpen && (
-          <div className={`${base}__mask`} aria-hidden="true" onClick={close} />
-        )}
+          const btn = (
+            <Button
+              iconLeft={item.icon}
+              severity={item.severity || "secondary"}
+              buttonType={item.buttonType || "filled"}
+              size={actionSize}
+              rounded
+              disabled={isDis}
+              onClick={() => {
+                item.command?.();
+                close();
+              }}
+              ariaLabel={item.label}
+              className={item.className}
+              style={isQuarter ? undefined : item.style}
+            />
+          );
+
+          return (
+            <div
+              key={item.key}
+              className={`${base}__action`}
+              role="menuitem"
+              style={stagger}
+            >
+              {item.label ? (
+                <Tooltip
+                  content={item.label}
+                  position={
+                    direction === "up" || direction === "down" ? "left" : "top"
+                  }
+                >
+                  {btn}
+                </Tooltip>
+              ) : (
+                btn
+              )}
+            </div>
+          );
+        })}
       </div>
-    );
-  }
-);
 
-SpeedDial.displayName = "SpeedDial";
+      {mask && isOpen && (
+        <div className={`${base}__mask`} aria-hidden="true" onClick={close} />
+      )}
+    </div>
+  );
+};

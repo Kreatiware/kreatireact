@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useImperativeHandle } from "react";
+import React, { useRef, useImperativeHandle } from "react";
 import { Button } from "./Button";
 import type { ButtonProps } from "./Button";
 import { ContextMenu } from "./ContextMenu";
@@ -75,76 +75,70 @@ const chevronIcon = (
  * />
  * ```
  */
-export const DropdownButton = forwardRef<HTMLDivElement, DropdownButtonProps>(
-  (
-    {
-      label,
-      iconLeft,
-      iconRight,
-      items,
-      onClick,
-      onItemSelect,
-      size = "md",
-      buttonType = "filled",
-      severity = "primary",
-      raised = false,
-      rounded = false,
-      disabled = false,
-      placement = "bottom",
-      toggleAriaLabel = "More options",
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const containerRef = useRef<HTMLDivElement>(null);
-    useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
+export const DropdownButton = ({
+  label,
+  iconLeft,
+  iconRight,
+  items,
+  onClick,
+  onItemSelect,
+  size = "md",
+  buttonType = "filled",
+  severity = "primary",
+  raised = false,
+  rounded = false,
+  disabled = false,
+  placement = "bottom",
+  toggleAriaLabel = "More options",
+  className = "",
+  style,
+  ref,
+}: DropdownButtonProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
 
-    const base = "k-dropdownbutton";
+  const base = "k-dropdownbutton";
 
-    return (
-      <div
-        ref={containerRef}
-        className={`${base} ${className}`.trim()}
-        style={style}
-        role="group"
+  return (
+    <div
+      ref={containerRef}
+      className={`${base} ${className}`.trim()}
+      style={style}
+      role="group"
+    >
+      <Button
+        label={label}
+        iconLeft={iconLeft}
+        iconRight={iconRight}
+        size={size}
+        buttonType={buttonType}
+        severity={severity}
+        raised={raised}
+        rounded={rounded}
+        disabled={disabled}
+        onClick={onClick}
+        className={`${base}__main`}
+      />
+      <ContextMenu
+        items={items}
+        trigger="click"
+        placement={placement}
+        onItemSelect={onItemSelect}
+        disabled={disabled}
       >
         <Button
-          label={label}
-          iconLeft={iconLeft}
-          iconRight={iconRight}
+          iconLeft={chevronIcon}
           size={size}
           buttonType={buttonType}
           severity={severity}
           raised={raised}
           rounded={rounded}
           disabled={disabled}
-          onClick={onClick}
-          className={`${base}__main`}
+          ariaLabel={toggleAriaLabel}
+          className={`${base}__toggle`}
+          aria-haspopup="menu"
         />
-        <ContextMenu
-          items={items}
-          trigger="click"
-          placement={placement}
-          onItemSelect={onItemSelect}
-          disabled={disabled}
-        >
-          <Button
-            iconLeft={chevronIcon}
-            size={size}
-            buttonType={buttonType}
-            severity={severity}
-            raised={raised}
-            rounded={rounded}
-            disabled={disabled}
-            ariaLabel={toggleAriaLabel}
-            className={`${base}__toggle`}
-            aria-haspopup="menu"
-          />
-        </ContextMenu>
-      </div>
-    );
-  }
-);
-
-DropdownButton.displayName = "DropdownButton";
+      </ContextMenu>
+    </div>
+  );
+};

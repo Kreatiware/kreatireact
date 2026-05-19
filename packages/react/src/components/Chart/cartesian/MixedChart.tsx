@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { CartesianChart } from "./CartesianChart";
 import type { CartesianChartProps, CartesianContext } from "./CartesianChart";
 import { ChartTooltip, findNearestPointIndex } from "../core/ChartTooltip";
@@ -80,356 +80,316 @@ export interface MixedChartProps extends Omit<CartesianChartProps, "children"> {
  * />
  * ```
  */
-export const MixedChart = forwardRef<HTMLDivElement, MixedChartProps>(
-  (
-    {
-      layers,
-      tooltipMode: tooltipModeProp = "single",
-      tooltipRender,
-      tooltipFollowCursor = false,
-      tooltipToggle = false,
-      className = "",
-      style,
-      ...cartesianProps
-    },
-    ref
-  ) => {
-    const [hoveredSeries, setHoveredSeries] = useState<string | null>(null);
-    const [activeX, setActiveX] = useState<number | null>(null);
-    const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
-    const [tooltipEntries, setTooltipEntries] = useState<TooltipEntry[]>([]);
-    const [tooltipVisible, setTooltipVisible] = useState(false);
-    const [tooltipXLabel, setTooltipXLabel] = useState<string | undefined>();
-    const [tooltipAnchored, setTooltipAnchored] = useState(false);
-    const [internalMode, setInternalMode] = useState<"single" | "shared">(
-      tooltipModeProp === "custom" ? "single" : tooltipModeProp
-    );
-    const tooltipMode = tooltipToggle ? internalMode : tooltipModeProp;
-    const mouseDownPos = useRef<{ x: number; y: number } | null>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
-    const prevFocusRef = useRef<{ si: number | null; pi: number | null }>({
-      si: null,
-      pi: null,
-    });
-    const locale = useKreatiLocale();
-    const t = locale.chart;
+export const MixedChart = ({
+  layers,
+  tooltipMode: tooltipModeProp = "single",
+  tooltipRender,
+  tooltipFollowCursor = false,
+  tooltipToggle = false,
+  className = "",
+  style,
+  ref,
+  ...cartesianProps
+}: MixedChartProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const [hoveredSeries, setHoveredSeries] = useState<string | null>(null);
+  const [activeX, setActiveX] = useState<number | null>(null);
+  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
+  const [tooltipEntries, setTooltipEntries] = useState<TooltipEntry[]>([]);
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [tooltipXLabel, setTooltipXLabel] = useState<string | undefined>();
+  const [tooltipAnchored, setTooltipAnchored] = useState(false);
+  const [internalMode, setInternalMode] = useState<"single" | "shared">(
+    tooltipModeProp === "custom" ? "single" : tooltipModeProp
+  );
+  const tooltipMode = tooltipToggle ? internalMode : tooltipModeProp;
+  const mouseDownPos = useRef<{ x: number; y: number } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const prevFocusRef = useRef<{ si: number | null; pi: number | null }>({
+    si: null,
+    pi: null,
+  });
+  const locale = useKreatiLocale();
+  const t = locale.chart;
 
-    // Force category type when categories are provided (same as BarChart)
-    const xAxisConfig = cartesianProps.xAxis?.categories
-      ? { ...cartesianProps.xAxis, type: "category" as const }
-      : cartesianProps.xAxis;
+  // Force category type when categories are provided (same as BarChart)
+  const xAxisConfig = cartesianProps.xAxis?.categories
+    ? { ...cartesianProps.xAxis, type: "category" as const }
+    : cartesianProps.xAxis;
 
-    return (
-      <div
-        ref={node => {
-          (
-            containerRef as React.MutableRefObject<HTMLDivElement | null>
-          ).current = node;
-          if (typeof ref === "function") ref(node);
-          else if (ref)
-            (ref as React.MutableRefObject<HTMLDivElement | null>).current =
-              node;
-        }}
-        className={className}
-        style={style}
-      >
-        {tooltipToggle && (
-          <div className="k-chart-tooltip-toggle">
-            <button
-              type="button"
-              className={`k-chart-tooltip-toggle__btn ${tooltipMode === "single" ? "k-chart-tooltip-toggle__btn--active" : ""}`}
-              onClick={() => setInternalMode("single")}
-              aria-pressed={tooltipMode === "single"}
-            >
-              {t.tooltipSingle}
-            </button>
-            <button
-              type="button"
-              className={`k-chart-tooltip-toggle__btn ${tooltipMode === "shared" ? "k-chart-tooltip-toggle__btn--active" : ""}`}
-              onClick={() => setInternalMode("shared")}
-              aria-pressed={tooltipMode === "shared"}
-            >
-              {t.tooltipShared}
-            </button>
-          </div>
-        )}
-        <CartesianChart {...cartesianProps} xAxis={xAxisConfig}>
-          {ctx => {
-            const {
-              xScale,
-              yScale,
-              yScales,
-              plotWidth,
-              plotHeight,
-              visibleSeries,
-              getColor,
-            } = ctx;
-            const ml = cartesianProps.margins?.left ?? 50;
-            const mt = cartesianProps.margins?.top ?? 20;
-            const cats = cartesianProps.xAxis?.categories;
+  return (
+    <div
+      ref={node => {
+        (
+          containerRef as React.MutableRefObject<HTMLDivElement | null>
+        ).current = node;
+        if (typeof ref === "function") ref(node);
+        else if (ref)
+          (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      }}
+      className={className}
+      style={style}
+    >
+      {tooltipToggle && (
+        <div className="k-chart-tooltip-toggle">
+          <button
+            type="button"
+            className={`k-chart-tooltip-toggle__btn ${tooltipMode === "single" ? "k-chart-tooltip-toggle__btn--active" : ""}`}
+            onClick={() => setInternalMode("single")}
+            aria-pressed={tooltipMode === "single"}
+          >
+            {t.tooltipSingle}
+          </button>
+          <button
+            type="button"
+            className={`k-chart-tooltip-toggle__btn ${tooltipMode === "shared" ? "k-chart-tooltip-toggle__btn--active" : ""}`}
+            onClick={() => setInternalMode("shared")}
+            aria-pressed={tooltipMode === "shared"}
+          >
+            {t.tooltipShared}
+          </button>
+        </div>
+      )}
+      <CartesianChart {...cartesianProps} xAxis={xAxisConfig}>
+        {ctx => {
+          const {
+            xScale,
+            yScale,
+            yScales,
+            plotWidth,
+            plotHeight,
+            visibleSeries,
+            getColor,
+          } = ctx;
+          const ml = cartesianProps.margins?.left ?? 50;
+          const mt = cartesianProps.margins?.top ?? 20;
+          const cats = cartesianProps.xAxis?.categories;
 
-            const getYScale = (s: { yAxisId?: string }): ScaleFunction =>
-              yScales[s.yAxisId ?? "default"] ?? yScale;
+          const getYScale = (s: { yAxisId?: string }): ScaleFunction =>
+            yScales[s.yAxisId ?? "default"] ?? yScale;
 
-            // Keyboard tooltip sync
-            const { focusedSeriesIndex: fsi, focusedPointIndex: fpi } = ctx;
-            if (
-              fsi != null &&
-              fpi != null &&
-              (fsi !== prevFocusRef.current.si ||
-                fpi !== prevFocusRef.current.pi)
-            ) {
-              prevFocusRef.current = { si: fsi, pi: fpi };
-              const s = visibleSeries[fsi];
-              if (s) {
-                const p = s.data[fpi];
-                if (p) {
-                  queueMicrotask(() => {
-                    setTooltipEntries([
-                      { series: s, point: p, color: getColor(s, fsi) },
-                    ]);
-                    setHoveredSeries(s.id);
-                    setTooltipAnchored(true);
-                    setTooltipXLabel(cats?.[p.x] ?? String(p.x));
-                    setTooltipVisible(true);
-                    const svg = containerRef.current?.querySelector(
-                      "svg.k-chart"
-                    ) as SVGSVGElement | null;
-                    if (svg) {
-                      const sYS = getYScale(s);
-                      const svgRect = svg.getBoundingClientRect();
-                      setTooltipPos({
-                        x: svgRect.left + ml + xScale(p.x),
-                        y: svgRect.top + mt + sYS(p.y),
-                      });
-                    }
-                  });
-                }
-              }
-            } else if (fsi == null && prevFocusRef.current.si != null) {
-              prevFocusRef.current = { si: null, pi: null };
-              queueMicrotask(() => {
-                setTooltipVisible(false);
-                setHoveredSeries(null);
-              });
-            }
-
-            // Layer priority map: series in later layers get higher priority for tooltip/click
-            const layerPriority: Record<string, number> = {};
-            layers.forEach((l, li) => {
-              for (const sid of l.seriesIds) layerPriority[sid] = li;
-            });
-
-            const handleMouseMove = (e: React.MouseEvent) => {
-              const svg = (e.currentTarget as SVGGElement).ownerSVGElement;
-              if (!svg) return;
-              const rect = svg.getBoundingClientRect();
-              const plotX = e.clientX - rect.left - ml;
-              const plotY = e.clientY - rect.top - mt;
-
-              if (plotX < 0 || plotX > plotWidth) {
-                setTooltipVisible(false);
-                setActiveX(null);
-                setHoveredSeries(null);
-                return;
-              }
-
-              // Find nearest point across ALL visible series
-              const entries: TooltipEntry[] = [];
-              let nearestPixelX: number | null = null;
-              for (let i = 0; i < visibleSeries.length; i++) {
-                const s = visibleSeries[i];
-                const idx = findNearestPointIndex(s.data, xScale, plotX);
-                if (idx < 0) continue;
-                const p = s.data[idx];
-                const px = xScale(p.x);
-                if (
-                  nearestPixelX === null ||
-                  Math.abs(px - plotX) < Math.abs(nearestPixelX - plotX)
-                ) {
-                  nearestPixelX = px;
-                }
-                entries.push({ series: s, point: p, color: getColor(s, i) });
-              }
-
-              let finalEntries = entries;
-              if (tooltipMode === "single" && entries.length > 0) {
-                let closest = entries[0];
-                let minDist = Math.abs(
-                  getYScale(closest.series)(closest.point.y) - plotY
-                );
-                let closestPriority = layerPriority[closest.series.id] ?? 0;
-                for (let j = 1; j < entries.length; j++) {
-                  const dist = Math.abs(
-                    getYScale(entries[j].series)(entries[j].point.y) - plotY
-                  );
-                  const priority = layerPriority[entries[j].series.id] ?? 0;
-                  if (
-                    dist < minDist ||
-                    (dist === minDist && priority > closestPriority)
-                  ) {
-                    minDist = dist;
-                    closest = entries[j];
-                    closestPriority = priority;
+          // Keyboard tooltip sync
+          const { focusedSeriesIndex: fsi, focusedPointIndex: fpi } = ctx;
+          if (
+            fsi != null &&
+            fpi != null &&
+            (fsi !== prevFocusRef.current.si || fpi !== prevFocusRef.current.pi)
+          ) {
+            prevFocusRef.current = { si: fsi, pi: fpi };
+            const s = visibleSeries[fsi];
+            if (s) {
+              const p = s.data[fpi];
+              if (p) {
+                queueMicrotask(() => {
+                  setTooltipEntries([
+                    { series: s, point: p, color: getColor(s, fsi) },
+                  ]);
+                  setHoveredSeries(s.id);
+                  setTooltipAnchored(true);
+                  setTooltipXLabel(cats?.[p.x] ?? String(p.x));
+                  setTooltipVisible(true);
+                  const svg = containerRef.current?.querySelector(
+                    "svg.k-chart"
+                  ) as SVGSVGElement | null;
+                  if (svg) {
+                    const sYS = getYScale(s);
+                    const svgRect = svg.getBoundingClientRect();
+                    setTooltipPos({
+                      x: svgRect.left + ml + xScale(p.x),
+                      y: svgRect.top + mt + sYS(p.y),
+                    });
                   }
-                }
-                finalEntries = [closest];
-                setHoveredSeries(closest.series.id);
-              } else if (tooltipMode === "shared") {
-                setHoveredSeries(null);
-              }
-
-              setActiveX(nearestPixelX);
-              setTooltipEntries(finalEntries);
-
-              const anchor = tooltipMode === "single" && !tooltipFollowCursor;
-              setTooltipAnchored(anchor);
-              if (anchor && svg && finalEntries.length > 0) {
-                const e0 = finalEntries[0];
-                const svgRect = svg.getBoundingClientRect();
-                setTooltipPos({
-                  x: svgRect.left + ml + xScale(e0.point.x),
-                  y: svgRect.top + mt + getYScale(e0.series)(e0.point.y),
                 });
-              } else {
-                setTooltipPos({ x: e.clientX, y: e.clientY });
               }
+            }
+          } else if (fsi == null && prevFocusRef.current.si != null) {
+            prevFocusRef.current = { si: null, pi: null };
+            queueMicrotask(() => {
+              setTooltipVisible(false);
+              setHoveredSeries(null);
+            });
+          }
 
-              setTooltipVisible(finalEntries.length > 0);
-              if (finalEntries.length > 0) {
-                const xVal = finalEntries[0].point.x;
-                setTooltipXLabel(cats?.[xVal] ?? String(xVal));
-              }
-            };
+          // Layer priority map: series in later layers get higher priority for tooltip/click
+          const layerPriority: Record<string, number> = {};
+          layers.forEach((l, li) => {
+            for (const sid of l.seriesIds) layerPriority[sid] = li;
+          });
 
-            const handleMouseLeave = () => {
+          const handleMouseMove = (e: React.MouseEvent) => {
+            const svg = (e.currentTarget as SVGGElement).ownerSVGElement;
+            if (!svg) return;
+            const rect = svg.getBoundingClientRect();
+            const plotX = e.clientX - rect.left - ml;
+            const plotY = e.clientY - rect.top - mt;
+
+            if (plotX < 0 || plotX > plotWidth) {
               setTooltipVisible(false);
               setActiveX(null);
               setHoveredSeries(null);
-            };
+              return;
+            }
 
-            return (
-              <g
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                onMouseDown={e => {
-                  mouseDownPos.current = { x: e.clientX, y: e.clientY };
-                }}
-                onClick={e => {
-                  if (!cartesianProps.onPointClick) return;
-                  if (mouseDownPos.current) {
-                    const dx = e.clientX - mouseDownPos.current.x;
-                    const dy = e.clientY - mouseDownPos.current.y;
-                    if (dx * dx + dy * dy > 25) return;
-                  }
-                  const svg = (e.currentTarget as SVGGElement).ownerSVGElement;
-                  if (!svg) return;
-                  const rect = svg.getBoundingClientRect();
-                  const plotX = e.clientX - rect.left - ml;
-                  const plotY = e.clientY - rect.top - mt;
-                  if (plotX < 0 || plotX > plotWidth) return;
-                  let closest: {
-                    series: ChartSeries;
-                    point: ChartDataPoint;
-                    dist: number;
-                  } | null = null;
-                  for (const s of visibleSeries) {
-                    const idx = findNearestPointIndex(s.data, xScale, plotX);
-                    if (idx < 0) continue;
-                    const p = s.data[idx];
-                    const ddx = xScale(p.x) - plotX;
-                    const ddy = getYScale(s)(p.y) - plotY;
-                    const dist = ddx * ddx + ddy * ddy;
-                    if (
-                      !closest ||
-                      dist < closest.dist ||
-                      (dist === closest.dist &&
-                        (layerPriority[s.id] ?? 0) >
-                          (layerPriority[closest.series.id] ?? 0))
-                    )
-                      closest = { series: s, point: p, dist };
-                  }
-                  if (closest)
-                    cartesianProps.onPointClick(closest.point, closest.series);
-                }}
-              >
-                {/* Single hit area for all layers */}
-                <rect
-                  x={0}
-                  y={0}
-                  width={plotWidth}
-                  height={plotHeight}
-                  fill="transparent"
-                  pointerEvents="all"
-                />
+            // Find nearest point across ALL visible series
+            const entries: TooltipEntry[] = [];
+            let nearestPixelX: number | null = null;
+            for (let i = 0; i < visibleSeries.length; i++) {
+              const s = visibleSeries[i];
+              const idx = findNearestPointIndex(s.data, xScale, plotX);
+              if (idx < 0) continue;
+              const p = s.data[idx];
+              const px = xScale(p.x);
+              if (
+                nearestPixelX === null ||
+                Math.abs(px - plotX) < Math.abs(nearestPixelX - plotX)
+              ) {
+                nearestPixelX = px;
+              }
+              entries.push({ series: s, point: p, color: getColor(s, i) });
+            }
 
-                {/* Render layers in order */}
-                {layers.map((layer, li) => {
-                  const layerSeries = visibleSeries.filter(s =>
-                    layer.seriesIds.includes(s.id)
-                  );
-                  if (layerSeries.length === 0) return null;
+            let finalEntries = entries;
+            if (tooltipMode === "single" && entries.length > 0) {
+              let closest = entries[0];
+              let minDist = Math.abs(
+                getYScale(closest.series)(closest.point.y) - plotY
+              );
+              let closestPriority = layerPriority[closest.series.id] ?? 0;
+              for (let j = 1; j < entries.length; j++) {
+                const dist = Math.abs(
+                  getYScale(entries[j].series)(entries[j].point.y) - plotY
+                );
+                const priority = layerPriority[entries[j].series.id] ?? 0;
+                if (
+                  dist < minDist ||
+                  (dist === minDist && priority > closestPriority)
+                ) {
+                  minDist = dist;
+                  closest = entries[j];
+                  closestPriority = priority;
+                }
+              }
+              finalEntries = [closest];
+              setHoveredSeries(closest.series.id);
+            } else if (tooltipMode === "shared") {
+              setHoveredSeries(null);
+            }
 
-                  if (layer.type === "bar") {
-                    return (
-                      <StrictClip key={li}>
-                        <MixedBarLayer
-                          series={layerSeries}
-                          xScale={xScale}
-                          yScale={yScale}
-                          plotWidth={plotWidth}
-                          plotHeight={plotHeight}
-                          getColor={getColor}
-                          hoveredSeries={hoveredSeries}
-                          layer={layer}
-                          categories={cats}
-                          focusedSeriesIndex={ctx.focusedSeriesIndex}
-                          focusedPointIndex={ctx.focusedPointIndex}
-                          allVisibleSeries={visibleSeries}
-                        />
-                      </StrictClip>
-                    );
-                  }
+            setActiveX(nearestPixelX);
+            setTooltipEntries(finalEntries);
 
-                  if (layer.type === "area") {
-                    return (
-                      <StrictClip key={li}>
-                        <MixedAreaLayer
-                          series={layerSeries}
-                          xScale={xScale}
-                          yScale={yScale}
-                          yScales={yScales}
-                          plotWidth={plotWidth}
-                          plotHeight={plotHeight}
-                          getColor={getColor}
-                          hoveredSeries={hoveredSeries}
-                          activeX={activeX}
-                          layer={layer}
-                        />
-                      </StrictClip>
-                    );
-                  }
+            const anchor = tooltipMode === "single" && !tooltipFollowCursor;
+            setTooltipAnchored(anchor);
+            if (anchor && svg && finalEntries.length > 0) {
+              const e0 = finalEntries[0];
+              const svgRect = svg.getBoundingClientRect();
+              setTooltipPos({
+                x: svgRect.left + ml + xScale(e0.point.x),
+                y: svgRect.top + mt + getYScale(e0.series)(e0.point.y),
+              });
+            } else {
+              setTooltipPos({ x: e.clientX, y: e.clientY });
+            }
 
-                  if (layer.type === "scatter") {
-                    return (
-                      <MixedScatterLayer
-                        key={li}
+            setTooltipVisible(finalEntries.length > 0);
+            if (finalEntries.length > 0) {
+              const xVal = finalEntries[0].point.x;
+              setTooltipXLabel(cats?.[xVal] ?? String(xVal));
+            }
+          };
+
+          const handleMouseLeave = () => {
+            setTooltipVisible(false);
+            setActiveX(null);
+            setHoveredSeries(null);
+          };
+
+          return (
+            <g
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              onMouseDown={e => {
+                mouseDownPos.current = { x: e.clientX, y: e.clientY };
+              }}
+              onClick={e => {
+                if (!cartesianProps.onPointClick) return;
+                if (mouseDownPos.current) {
+                  const dx = e.clientX - mouseDownPos.current.x;
+                  const dy = e.clientY - mouseDownPos.current.y;
+                  if (dx * dx + dy * dy > 25) return;
+                }
+                const svg = (e.currentTarget as SVGGElement).ownerSVGElement;
+                if (!svg) return;
+                const rect = svg.getBoundingClientRect();
+                const plotX = e.clientX - rect.left - ml;
+                const plotY = e.clientY - rect.top - mt;
+                if (plotX < 0 || plotX > plotWidth) return;
+                let closest: {
+                  series: ChartSeries;
+                  point: ChartDataPoint;
+                  dist: number;
+                } | null = null;
+                for (const s of visibleSeries) {
+                  const idx = findNearestPointIndex(s.data, xScale, plotX);
+                  if (idx < 0) continue;
+                  const p = s.data[idx];
+                  const ddx = xScale(p.x) - plotX;
+                  const ddy = getYScale(s)(p.y) - plotY;
+                  const dist = ddx * ddx + ddy * ddy;
+                  if (
+                    !closest ||
+                    dist < closest.dist ||
+                    (dist === closest.dist &&
+                      (layerPriority[s.id] ?? 0) >
+                        (layerPriority[closest.series.id] ?? 0))
+                  )
+                    closest = { series: s, point: p, dist };
+                }
+                if (closest)
+                  cartesianProps.onPointClick(closest.point, closest.series);
+              }}
+            >
+              {/* Single hit area for all layers */}
+              <rect
+                x={0}
+                y={0}
+                width={plotWidth}
+                height={plotHeight}
+                fill="transparent"
+                pointerEvents="all"
+              />
+
+              {/* Render layers in order */}
+              {layers.map((layer, li) => {
+                const layerSeries = visibleSeries.filter(s =>
+                  layer.seriesIds.includes(s.id)
+                );
+                if (layerSeries.length === 0) return null;
+
+                if (layer.type === "bar") {
+                  return (
+                    <StrictClip key={li}>
+                      <MixedBarLayer
                         series={layerSeries}
                         xScale={xScale}
                         yScale={yScale}
-                        yScales={yScales}
                         plotWidth={plotWidth}
                         plotHeight={plotHeight}
                         getColor={getColor}
                         hoveredSeries={hoveredSeries}
                         layer={layer}
+                        categories={cats}
+                        focusedSeriesIndex={ctx.focusedSeriesIndex}
+                        focusedPointIndex={ctx.focusedPointIndex}
+                        allVisibleSeries={visibleSeries}
                       />
-                    );
-                  }
+                    </StrictClip>
+                  );
+                }
 
+                if (layer.type === "area") {
                   return (
                     <StrictClip key={li}>
-                      <MixedLineLayer
+                      <MixedAreaLayer
                         series={layerSeries}
                         xScale={xScale}
                         yScale={yScale}
@@ -443,28 +403,59 @@ export const MixedChart = forwardRef<HTMLDivElement, MixedChartProps>(
                       />
                     </StrictClip>
                   );
-                })}
-              </g>
-            );
-          }}
-        </CartesianChart>
+                }
 
-        <ChartTooltip
-          entries={tooltipEntries}
-          x={tooltipPos.x}
-          y={tooltipPos.y}
-          visible={tooltipVisible}
-          customRender={tooltipMode === "custom" ? tooltipRender : undefined}
-          xLabel={tooltipXLabel}
-          anchored={tooltipAnchored}
-        />
-      </div>
-    );
-  }
-);
+                if (layer.type === "scatter") {
+                  return (
+                    <MixedScatterLayer
+                      key={li}
+                      series={layerSeries}
+                      xScale={xScale}
+                      yScale={yScale}
+                      yScales={yScales}
+                      plotWidth={plotWidth}
+                      plotHeight={plotHeight}
+                      getColor={getColor}
+                      hoveredSeries={hoveredSeries}
+                      layer={layer}
+                    />
+                  );
+                }
 
-MixedChart.displayName = "MixedChart";
+                return (
+                  <StrictClip key={li}>
+                    <MixedLineLayer
+                      series={layerSeries}
+                      xScale={xScale}
+                      yScale={yScale}
+                      yScales={yScales}
+                      plotWidth={plotWidth}
+                      plotHeight={plotHeight}
+                      getColor={getColor}
+                      hoveredSeries={hoveredSeries}
+                      activeX={activeX}
+                      layer={layer}
+                    />
+                  </StrictClip>
+                );
+              })}
+            </g>
+          );
+        }}
+      </CartesianChart>
 
+      <ChartTooltip
+        entries={tooltipEntries}
+        x={tooltipPos.x}
+        y={tooltipPos.y}
+        visible={tooltipVisible}
+        customRender={tooltipMode === "custom" ? tooltipRender : undefined}
+        xLabel={tooltipXLabel}
+        anchored={tooltipAnchored}
+      />
+    </div>
+  );
+};
 // ─── Internal layer renderers (no event handling, pure SVG) ─────────────────
 
 interface BarLayerProps {

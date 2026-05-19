@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useId,
   useRef,
   useState,
@@ -92,278 +91,269 @@ export interface ListProps {
  * />
  * ```
  */
-export const List = forwardRef<HTMLDivElement, ListProps>(
-  (
-    {
-      items,
-      value,
-      onSelect,
-      multiple = false,
-      filterable = false,
-      filterPlaceholder,
-      emptyMessage,
-      groupTemplate,
-      size = "md",
-      maxHeight,
-      className = "",
-      style,
+export const List = ({
+  items,
+  value,
+  onSelect,
+  multiple = false,
+  filterable = false,
+  filterPlaceholder,
+  emptyMessage,
+  groupTemplate,
+  size = "md",
+  maxHeight,
+  className = "",
+  style,
+  ref,
+}: ListProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const listId = useId();
+  useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
+
+  const kreatiLocale = useKreatiLocale();
+  const resolvedFilterPlaceholder =
+    filterPlaceholder ?? kreatiLocale.list.filterPlaceholder;
+  const resolvedEmptyMessage = emptyMessage ?? kreatiLocale.list.emptyMessage;
+
+  const [filter, setFilter] = useState("");
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+
+  const selectedKeys = useMemo(() => {
+    if (!value) return new Set<string>();
+    return new Set(Array.isArray(value) ? value : [value]);
+  }, [value]);
+
+  const filtered = useMemo(() => {
+    if (!filter) return items;
+    const q = filter.toLowerCase();
+    return items.filter(item => {
+      const target = item.searchKey || item.label;
+      return target.toLowerCase().includes(q);
+    });
+  }, [items, filter]);
+
+  const enabledIndices = useMemo(
+    () =>
+      filtered.map((item, i) => (!item.disabled ? i : -1)).filter(i => i >= 0),
+    [filtered]
+  );
+
+  const scrollToIndex = useCallback((index: number) => {
+    const el = containerRef.current;
+    if (!el) return;
+    const items = el.querySelectorAll('[role="option"]');
+    items[index]?.scrollIntoView({ block: "nearest" });
+  }, []);
+
+  const moveFocus = useCallback(
+    (delta: number) => {
+      if (enabledIndices.length === 0) return;
+      const currentPos = enabledIndices.indexOf(focusedIndex);
+      let nextPos: number;
+      if (currentPos < 0) {
+        nextPos = delta > 0 ? 0 : enabledIndices.length - 1;
+      } else {
+        nextPos =
+          (currentPos + delta + enabledIndices.length) % enabledIndices.length;
+      }
+      const next = enabledIndices[nextPos];
+      setFocusedIndex(next);
+      scrollToIndex(next);
     },
-    ref
-  ) => {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const listId = useId();
-    useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
+    [enabledIndices, focusedIndex, scrollToIndex]
+  );
 
-    const kreatiLocale = useKreatiLocale();
-    const resolvedFilterPlaceholder =
-      filterPlaceholder ?? kreatiLocale.list.filterPlaceholder;
-    const resolvedEmptyMessage = emptyMessage ?? kreatiLocale.list.emptyMessage;
+  const handleSelect = useCallback(
+    (item: ListItem) => {
+      if (item.disabled) return;
+      onSelect?.(item.key, item);
+    },
+    [onSelect]
+  );
 
-    const [filter, setFilter] = useState("");
-    const [focusedIndex, setFocusedIndex] = useState(-1);
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          moveFocus(1);
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          moveFocus(-1);
+          break;
+        case "Home":
+          e.preventDefault();
+          if (enabledIndices.length > 0) {
+            setFocusedIndex(enabledIndices[0]);
+            scrollToIndex(enabledIndices[0]);
+          }
+          break;
+        case "End":
+          e.preventDefault();
+          if (enabledIndices.length > 0) {
+            const last = enabledIndices[enabledIndices.length - 1];
+            setFocusedIndex(last);
+            scrollToIndex(last);
+          }
+          break;
+        case "Enter":
+        case " ":
+          e.preventDefault();
+          if (focusedIndex >= 0 && filtered[focusedIndex])
+            handleSelect(filtered[focusedIndex]);
+          break;
+      }
+    },
+    [
+      moveFocus,
+      enabledIndices,
+      focusedIndex,
+      filtered,
+      handleSelect,
+      scrollToIndex,
+    ]
+  );
 
-    const selectedKeys = useMemo(() => {
-      if (!value) return new Set<string>();
-      return new Set(Array.isArray(value) ? value : [value]);
-    }, [value]);
+  const base = "k-list";
+  const containerClasses = [
+    base,
+    size !== "md" && `${base}--${size}`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const mergedStyle: React.CSSProperties | undefined = maxHeight
+    ? { ...style, maxHeight }
+    : style;
 
-    const filtered = useMemo(() => {
-      if (!filter) return items;
-      const q = filter.toLowerCase();
-      return items.filter(item => {
-        const target = item.searchKey || item.label;
-        return target.toLowerCase().includes(q);
-      });
-    }, [items, filter]);
+  const groups = useMemo(() => {
+    const map = new Map<string | undefined, ListItem[]>();
+    for (const item of filtered) {
+      const g = item.group;
+      if (!map.has(g)) map.set(g, []);
+      map.get(g)!.push(item);
+    }
+    return map;
+  }, [filtered]);
 
-    const enabledIndices = useMemo(
-      () =>
-        filtered
-          .map((item, i) => (!item.disabled ? i : -1))
-          .filter(i => i >= 0),
-      [filtered]
-    );
+  const itemIndices = useMemo(() => {
+    const map = new Map<string, number>();
+    let idx = 0;
+    const entries = Array.from(groups.entries());
+    for (const [, groupItems] of entries) {
+      for (const item of groupItems) {
+        map.set(item.key, idx++);
+      }
+    }
+    return map;
+  }, [groups]);
 
-    const scrollToIndex = useCallback((index: number) => {
-      const el = containerRef.current;
-      if (!el) return;
-      const items = el.querySelectorAll('[role="option"]');
-      items[index]?.scrollIntoView({ block: "nearest" });
-    }, []);
+  const renderItem = (item: ListItem) => {
+    const idx = itemIndices.get(item.key) ?? 0;
+    const sel = selectedKeys.has(item.key);
+    const foc = idx === focusedIndex;
+    const dis = !!item.disabled;
+    const itemId = `${listId}-opt-${idx}`;
 
-    const moveFocus = useCallback(
-      (delta: number) => {
-        if (enabledIndices.length === 0) return;
-        const currentPos = enabledIndices.indexOf(focusedIndex);
-        let nextPos: number;
-        if (currentPos < 0) {
-          nextPos = delta > 0 ? 0 : enabledIndices.length - 1;
-        } else {
-          nextPos =
-            (currentPos + delta + enabledIndices.length) %
-            enabledIndices.length;
-        }
-        const next = enabledIndices[nextPos];
-        setFocusedIndex(next);
-        scrollToIndex(next);
-      },
-      [enabledIndices, focusedIndex, scrollToIndex]
-    );
-
-    const handleSelect = useCallback(
-      (item: ListItem) => {
-        if (item.disabled) return;
-        onSelect?.(item.key, item);
-      },
-      [onSelect]
-    );
-
-    const handleKeyDown = useCallback(
-      (e: React.KeyboardEvent) => {
-        switch (e.key) {
-          case "ArrowDown":
-            e.preventDefault();
-            moveFocus(1);
-            break;
-          case "ArrowUp":
-            e.preventDefault();
-            moveFocus(-1);
-            break;
-          case "Home":
-            e.preventDefault();
-            if (enabledIndices.length > 0) {
-              setFocusedIndex(enabledIndices[0]);
-              scrollToIndex(enabledIndices[0]);
-            }
-            break;
-          case "End":
-            e.preventDefault();
-            if (enabledIndices.length > 0) {
-              const last = enabledIndices[enabledIndices.length - 1];
-              setFocusedIndex(last);
-              scrollToIndex(last);
-            }
-            break;
-          case "Enter":
-          case " ":
-            e.preventDefault();
-            if (focusedIndex >= 0 && filtered[focusedIndex])
-              handleSelect(filtered[focusedIndex]);
-            break;
-        }
-      },
-      [
-        moveFocus,
-        enabledIndices,
-        focusedIndex,
-        filtered,
-        handleSelect,
-        scrollToIndex,
-      ]
-    );
-
-    const base = "k-list";
-    const containerClasses = [
-      base,
-      size !== "md" && `${base}--${size}`,
-      className,
+    const cls = [
+      `${base}__item`,
+      sel && `${base}__item--selected`,
+      foc && `${base}__item--focused`,
+      dis && `${base}__item--disabled`,
     ]
       .filter(Boolean)
       .join(" ");
-    const mergedStyle: React.CSSProperties | undefined = maxHeight
-      ? { ...style, maxHeight }
-      : style;
-
-    const groups = useMemo(() => {
-      const map = new Map<string | undefined, ListItem[]>();
-      for (const item of filtered) {
-        const g = item.group;
-        if (!map.has(g)) map.set(g, []);
-        map.get(g)!.push(item);
-      }
-      return map;
-    }, [filtered]);
-
-    const itemIndices = useMemo(() => {
-      const map = new Map<string, number>();
-      let idx = 0;
-      const entries = Array.from(groups.entries());
-      for (const [, groupItems] of entries) {
-        for (const item of groupItems) {
-          map.set(item.key, idx++);
-        }
-      }
-      return map;
-    }, [groups]);
-
-    const renderItem = (item: ListItem) => {
-      const idx = itemIndices.get(item.key) ?? 0;
-      const sel = selectedKeys.has(item.key);
-      const foc = idx === focusedIndex;
-      const dis = !!item.disabled;
-      const itemId = `${listId}-opt-${idx}`;
-
-      const cls = [
-        `${base}__item`,
-        sel && `${base}__item--selected`,
-        foc && `${base}__item--focused`,
-        dis && `${base}__item--disabled`,
-      ]
-        .filter(Boolean)
-        .join(" ");
-
-      return (
-        <div
-          key={item.key}
-          id={itemId}
-          role="option"
-          aria-selected={sel}
-          aria-disabled={dis || undefined}
-          className={cls}
-          tabIndex={-1}
-          onClick={
-            dis
-              ? undefined
-              : () => {
-                  handleSelect(item);
-                  setFocusedIndex(idx);
-                }
-          }
-          onMouseEnter={() => setFocusedIndex(idx)}
-        >
-          {item.template ? (
-            item.template(item, { selected: sel, focused: foc, disabled: dis })
-          ) : (
-            <>
-              {item.icon && <span aria-hidden="true">{item.icon}</span>}
-              <span className={`${base}__item-label`}>{item.label}</span>
-              {item.command && (
-                <span className={`${base}__item-command`}>{item.command}</span>
-              )}
-            </>
-          )}
-        </div>
-      );
-    };
-
-    const renderContent = () => {
-      if (filtered.length === 0) {
-        return <div className={`${base}__empty`}>{resolvedEmptyMessage}</div>;
-      }
-
-      const entries = Array.from(groups.entries());
-
-      if (entries.length === 1 && entries[0][0] === undefined) {
-        return entries[0][1].map(renderItem);
-      }
-
-      return entries.map(([group, groupItems], gi) => (
-        <React.Fragment key={group ?? `__ungrouped_${gi}`}>
-          {gi > 0 && <hr className={`${base}__separator`} />}
-          {group &&
-            (groupTemplate ? (
-              groupTemplate(group)
-            ) : (
-              <div className={`${base}__group-label`} role="presentation">
-                {group}
-              </div>
-            ))}
-          {groupItems.map(renderItem)}
-        </React.Fragment>
-      ));
-    };
 
     return (
       <div
-        ref={containerRef}
-        className={containerClasses}
-        role="listbox"
-        aria-multiselectable={multiple || undefined}
-        tabIndex={0}
-        onKeyDown={handleKeyDown}
-        style={mergedStyle}
-        aria-activedescendant={
-          focusedIndex >= 0 ? `${listId}-opt-${focusedIndex}` : undefined
+        key={item.key}
+        id={itemId}
+        role="option"
+        aria-selected={sel}
+        aria-disabled={dis || undefined}
+        className={cls}
+        tabIndex={-1}
+        onClick={
+          dis
+            ? undefined
+            : () => {
+                handleSelect(item);
+                setFocusedIndex(idx);
+              }
         }
+        onMouseEnter={() => setFocusedIndex(idx)}
       >
-        {filterable && (
-          <div className={`${base}__filter`}>
-            <Input
-              size={size}
-              placeholder={resolvedFilterPlaceholder}
-              value={filter}
-              onChange={e => {
-                setFilter(e.target.value);
-                setFocusedIndex(-1);
-              }}
-              fullWidth
-            />
-          </div>
+        {item.template ? (
+          item.template(item, { selected: sel, focused: foc, disabled: dis })
+        ) : (
+          <>
+            {item.icon && <span aria-hidden="true">{item.icon}</span>}
+            <span className={`${base}__item-label`}>{item.label}</span>
+            {item.command && (
+              <span className={`${base}__item-command`}>{item.command}</span>
+            )}
+          </>
         )}
-        {renderContent()}
       </div>
     );
-  }
-);
+  };
 
-List.displayName = "List";
+  const renderContent = () => {
+    if (filtered.length === 0) {
+      return <div className={`${base}__empty`}>{resolvedEmptyMessage}</div>;
+    }
+
+    const entries = Array.from(groups.entries());
+
+    if (entries.length === 1 && entries[0][0] === undefined) {
+      return entries[0][1].map(renderItem);
+    }
+
+    return entries.map(([group, groupItems], gi) => (
+      <React.Fragment key={group ?? `__ungrouped_${gi}`}>
+        {gi > 0 && <hr className={`${base}__separator`} />}
+        {group &&
+          (groupTemplate ? (
+            groupTemplate(group)
+          ) : (
+            <div className={`${base}__group-label`} role="presentation">
+              {group}
+            </div>
+          ))}
+        {groupItems.map(renderItem)}
+      </React.Fragment>
+    ));
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      className={containerClasses}
+      role="listbox"
+      aria-multiselectable={multiple || undefined}
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      style={mergedStyle}
+      aria-activedescendant={
+        focusedIndex >= 0 ? `${listId}-opt-${focusedIndex}` : undefined
+      }
+    >
+      {filterable && (
+        <div className={`${base}__filter`}>
+          <Input
+            size={size}
+            placeholder={resolvedFilterPlaceholder}
+            value={filter}
+            onChange={e => {
+              setFilter(e.target.value);
+              setFocusedIndex(-1);
+            }}
+            fullWidth
+          />
+        </div>
+      )}
+      {renderContent()}
+    </div>
+  );
+};

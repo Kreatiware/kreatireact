@@ -1,4 +1,4 @@
-import React, { forwardRef, useId, useState, useCallback } from "react";
+import React, { useId, useState, useCallback } from "react";
 import { Checkbox } from "./Checkbox";
 import { FieldWrapper } from "./FieldWrapper";
 import { useKreatiLocale } from "../locale";
@@ -99,171 +99,162 @@ export interface CheckboxGroupProps {
  * />
  * ```
  */
-export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
-  (
-    {
-      options,
-      value: controlledValue,
-      defaultValue,
-      onChange,
-      exclusive = false,
-      selectAll = false,
-      selectAllLabel,
-      orientation = "vertical",
-      size = "md",
-      label,
-      helperText,
-      error,
-      helperSeverity,
-      success = false,
-      disabled = false,
-      required = false,
-      fullWidth = false,
-      name,
-      onBlur,
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const autoId = useId();
-    const groupId = name || autoId;
-    const locale = useKreatiLocale();
-    const isControlled = controlledValue !== undefined;
-    const [internalValue, setInternalValue] = useState<Array<string | number>>(
-      defaultValue ?? []
-    );
-    const selected = isControlled ? controlledValue : internalValue;
+export const CheckboxGroup = ({
+  options,
+  value: controlledValue,
+  defaultValue,
+  onChange,
+  exclusive = false,
+  selectAll = false,
+  selectAllLabel,
+  orientation = "vertical",
+  size = "md",
+  label,
+  helperText,
+  error,
+  helperSeverity,
+  success = false,
+  disabled = false,
+  required = false,
+  fullWidth = false,
+  name,
+  onBlur,
+  className = "",
+  style,
+  ref,
+}: CheckboxGroupProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const autoId = useId();
+  const groupId = name || autoId;
+  const locale = useKreatiLocale();
+  const isControlled = controlledValue !== undefined;
+  const [internalValue, setInternalValue] = useState<Array<string | number>>(
+    defaultValue ?? []
+  );
+  const selected = isControlled ? controlledValue : internalValue;
 
-    const hasError = !!error;
-    const errorMessage = typeof error === "boolean" ? undefined : error;
-    const base = "k-checkbox-group";
+  const hasError = !!error;
+  const errorMessage = typeof error === "boolean" ? undefined : error;
+  const base = "k-checkbox-group";
 
-    const handleChange = useCallback(
-      (optionValue: string | number, checked: boolean) => {
-        let next: Array<string | number>;
+  const handleChange = useCallback(
+    (optionValue: string | number, checked: boolean) => {
+      let next: Array<string | number>;
 
-        if (exclusive) {
-          next = checked ? [optionValue] : [];
-        } else {
-          next = checked
-            ? [...selected, optionValue]
-            : selected.filter(v => v !== optionValue);
-        }
+      if (exclusive) {
+        next = checked ? [optionValue] : [];
+      } else {
+        next = checked
+          ? [...selected, optionValue]
+          : selected.filter(v => v !== optionValue);
+      }
 
-        if (!isControlled) setInternalValue(next);
-        onChange?.(next);
-      },
-      [selected, exclusive, isControlled, onChange]
-    );
-
-    const groupClasses = [
-      `${base}__options`,
-      `${base}__options--${orientation}`,
-    ]
-      .filter(Boolean)
-      .join(" ");
-
-    const enabledOptions = options.filter(opt => !opt.disabled && !disabled);
-    const allSelected =
-      enabledOptions.length > 0 &&
-      enabledOptions.every(opt => selected.includes(opt.value));
-    const someSelected =
-      !allSelected && enabledOptions.some(opt => selected.includes(opt.value));
-
-    const handleSelectAll = useCallback(() => {
-      const next = allSelected
-        ? selected.filter(v => !enabledOptions.some(opt => opt.value === v))
-        : [...new Set([...selected, ...enabledOptions.map(opt => opt.value)])];
       if (!isControlled) setInternalValue(next);
       onChange?.(next);
-    }, [allSelected, selected, enabledOptions, isControlled, onChange]);
+    },
+    [selected, exclusive, isControlled, onChange]
+  );
 
-    const content = (
-      <div
-        className={groupClasses}
-        role="group"
-        aria-labelledby={label ? `${groupId}-label` : undefined}
-        aria-required={required || undefined}
-        aria-invalid={hasError || undefined}
-      >
-        {selectAll && !exclusive ? (
-          <>
-            <Checkbox
-              label={selectAllLabel ?? locale.common.selectAll}
-              size={size}
-              checked={allSelected}
-              indeterminate={someSelected}
-              disabled={disabled}
-              onChange={handleSelectAll}
-            />
-            <div className={`${base}__select-all-children`}>
-              {options.map(opt => (
-                <Checkbox
-                  key={opt.value}
-                  value={opt.value}
-                  label={opt.label}
-                  name={name}
-                  size={size}
-                  checked={selected.includes(opt.value)}
-                  disabled={disabled || opt.disabled}
-                  onChange={e => handleChange(opt.value, e.target.checked)}
-                  onBlur={onBlur}
-                />
-              ))}
-            </div>
-          </>
-        ) : (
-          options.map(opt => (
-            <Checkbox
-              key={opt.value}
-              value={opt.value}
-              label={opt.label}
-              name={name}
-              size={size}
-              checked={selected.includes(opt.value)}
-              disabled={disabled || opt.disabled}
-              onChange={e => handleChange(opt.value, e.target.checked)}
-              onBlur={onBlur}
-            />
-          ))
-        )}
-      </div>
-    );
+  const groupClasses = [`${base}__options`, `${base}__options--${orientation}`]
+    .filter(Boolean)
+    .join(" ");
 
-    const hasWrapper = !!(label || helperText || errorMessage);
+  const enabledOptions = options.filter(opt => !opt.disabled && !disabled);
+  const allSelected =
+    enabledOptions.length > 0 &&
+    enabledOptions.every(opt => selected.includes(opt.value));
+  const someSelected =
+    !allSelected && enabledOptions.some(opt => selected.includes(opt.value));
 
-    if (!hasWrapper) {
-      return (
-        <div ref={ref} className={`${base} ${className}`.trim()} style={style}>
-          {content}
-        </div>
-      );
-    }
+  const handleSelectAll = useCallback(() => {
+    const next = allSelected
+      ? selected.filter(v => !enabledOptions.some(opt => opt.value === v))
+      : [...new Set([...selected, ...enabledOptions.map(opt => opt.value)])];
+    if (!isControlled) setInternalValue(next);
+    onChange?.(next);
+  }, [allSelected, selected, enabledOptions, isControlled, onChange]);
 
+  const content = (
+    <div
+      className={groupClasses}
+      role="group"
+      aria-labelledby={label ? `${groupId}-label` : undefined}
+      aria-required={required || undefined}
+      aria-invalid={hasError || undefined}
+    >
+      {selectAll && !exclusive ? (
+        <>
+          <Checkbox
+            label={selectAllLabel ?? locale.common.selectAll}
+            size={size}
+            checked={allSelected}
+            indeterminate={someSelected}
+            disabled={disabled}
+            onChange={handleSelectAll}
+          />
+          <div className={`${base}__select-all-children`}>
+            {options.map(opt => (
+              <Checkbox
+                key={opt.value}
+                value={opt.value}
+                label={opt.label}
+                name={name}
+                size={size}
+                checked={selected.includes(opt.value)}
+                disabled={disabled || opt.disabled}
+                onChange={e => handleChange(opt.value, e.target.checked)}
+                onBlur={onBlur}
+              />
+            ))}
+          </div>
+        </>
+      ) : (
+        options.map(opt => (
+          <Checkbox
+            key={opt.value}
+            value={opt.value}
+            label={opt.label}
+            name={name}
+            size={size}
+            checked={selected.includes(opt.value)}
+            disabled={disabled || opt.disabled}
+            onChange={e => handleChange(opt.value, e.target.checked)}
+            onBlur={onBlur}
+          />
+        ))
+      )}
+    </div>
+  );
+
+  const hasWrapper = !!(label || helperText || errorMessage);
+
+  if (!hasWrapper) {
     return (
-      <div
-        ref={ref}
-        className={`${base} ${fullWidth ? `${base}--full-width` : ""} ${className}`.trim()}
-        style={style}
-      >
-        <FieldWrapper
-          label={label}
-          htmlFor={groupId}
-          required={required}
-          helperText={helperText}
-          error={errorMessage}
-          success={success}
-          helperSeverity={helperSeverity}
-          size={size}
-          disabled={disabled}
-          fullWidth={fullWidth}
-        >
-          {content}
-        </FieldWrapper>
+      <div ref={ref} className={`${base} ${className}`.trim()} style={style}>
+        {content}
       </div>
     );
   }
-);
 
-CheckboxGroup.displayName = "CheckboxGroup";
+  return (
+    <div
+      ref={ref}
+      className={`${base} ${fullWidth ? `${base}--full-width` : ""} ${className}`.trim()}
+      style={style}
+    >
+      <FieldWrapper
+        label={label}
+        htmlFor={groupId}
+        required={required}
+        helperText={helperText}
+        error={errorMessage}
+        success={success}
+        helperSeverity={helperSeverity}
+        size={size}
+        disabled={disabled}
+        fullWidth={fullWidth}
+      >
+        {content}
+      </FieldWrapper>
+    </div>
+  );
+};

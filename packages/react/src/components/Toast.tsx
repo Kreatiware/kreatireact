@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useState,
   useEffect,
   useCallback,
@@ -237,10 +236,12 @@ const nextId = () => `kt-${++counter}`;
  * })}>Save</Button>
  * ```
  */
-export const ToastContainer = forwardRef<
-  ToastContainerRef,
-  ToastContainerProps
->(({ position = "top-right", className = "", style }, ref) => {
+export const ToastContainer = ({
+  position = "top-right",
+  className = "",
+  style,
+  ref,
+}: ToastContainerProps & { ref?: React.Ref<ToastContainerRef> }) => {
   const [toasts, setToasts] = useState<(ToastItem & { id: string })[]>([]);
 
   const show = useCallback((input: ToastItem | ToastItem[]) => {
@@ -283,6 +284,4 @@ export const ToastContainer = forwardRef<
       ))}
     </div>
   );
-});
-
-ToastContainer.displayName = "ToastContainer";
+};

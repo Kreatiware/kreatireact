@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useCallback, useId } from "react";
+import React, { useState, useCallback, useId } from "react";
 import "./Panel.css";
 import { CHEVRON_DOWN_PATH } from "./iconPaths";
 
@@ -44,95 +44,88 @@ export interface PanelProps {
  * </Panel>
  * ```
  */
-export const Panel = forwardRef<HTMLDivElement, PanelProps>(
-  (
-    {
-      header,
-      headerTemplate,
-      footer,
-      toggleable = false,
-      collapsed: controlledCollapsed,
-      defaultCollapsed = false,
-      onToggle,
-      children,
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const base = "k-panel";
-    const contentId = useId();
-    const headerId = useId();
+export const Panel = ({
+  header,
+  headerTemplate,
+  footer,
+  toggleable = false,
+  collapsed: controlledCollapsed,
+  defaultCollapsed = false,
+  onToggle,
+  children,
+  className = "",
+  style,
+  ref,
+}: PanelProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const base = "k-panel";
+  const contentId = useId();
+  const headerId = useId();
 
-    const isControlled = controlledCollapsed !== undefined;
-    const [internalCollapsed, setInternalCollapsed] =
-      useState(defaultCollapsed);
-    const collapsed = isControlled ? controlledCollapsed : internalCollapsed;
+  const isControlled = controlledCollapsed !== undefined;
+  const [internalCollapsed, setInternalCollapsed] = useState(defaultCollapsed);
+  const collapsed = isControlled ? controlledCollapsed : internalCollapsed;
 
-    const toggle = useCallback(() => {
-      if (!toggleable) return;
-      const next = !collapsed;
-      if (!isControlled) setInternalCollapsed(next);
-      onToggle?.(next);
-    }, [toggleable, collapsed, isControlled, onToggle]);
+  const toggle = useCallback(() => {
+    if (!toggleable) return;
+    const next = !collapsed;
+    if (!isControlled) setInternalCollapsed(next);
+    onToggle?.(next);
+  }, [toggleable, collapsed, isControlled, onToggle]);
 
-    const classes = [base, collapsed && `${base}--collapsed`, className]
-      .filter(Boolean)
-      .join(" ");
+  const classes = [base, collapsed && `${base}--collapsed`, className]
+    .filter(Boolean)
+    .join(" ");
 
-    const headerContent = headerTemplate ? (
-      headerTemplate(collapsed, toggle)
-    ) : header ? (
-      <div
-        id={headerId}
-        className={`${base}__header ${toggleable ? `${base}__header--toggleable` : ""}`}
-        role={toggleable ? "button" : undefined}
-        tabIndex={toggleable ? 0 : undefined}
-        aria-expanded={toggleable ? !collapsed : undefined}
-        aria-controls={toggleable ? contentId : undefined}
-        onClick={toggleable ? toggle : undefined}
-        onKeyDown={
-          toggleable
-            ? e => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  toggle();
-                }
+  const headerContent = headerTemplate ? (
+    headerTemplate(collapsed, toggle)
+  ) : header ? (
+    <div
+      id={headerId}
+      className={`${base}__header ${toggleable ? `${base}__header--toggleable` : ""}`}
+      role={toggleable ? "button" : undefined}
+      tabIndex={toggleable ? 0 : undefined}
+      aria-expanded={toggleable ? !collapsed : undefined}
+      aria-controls={toggleable ? contentId : undefined}
+      onClick={toggleable ? toggle : undefined}
+      onKeyDown={
+        toggleable
+          ? e => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                toggle();
               }
-            : undefined
-        }
-      >
-        <span className={`${base}__title`}>{header}</span>
-        {toggleable && (
-          <span
-            className={`${base}__chevron ${collapsed ? "" : `${base}__chevron--open`}`}
-            aria-hidden="true"
-          >
-            <svg width={16} height={16} viewBox="0 0 24 24" fill="currentColor">
-              <path d={CHEVRON_DOWN_PATH} />
-            </svg>
-          </span>
-        )}
-      </div>
-    ) : null;
-
-    return (
-      <div ref={ref} className={classes} style={style}>
-        {headerContent}
-        <div
-          id={contentId}
-          className={`${base}__content`}
-          role="region"
-          aria-labelledby={header ? headerId : undefined}
+            }
+          : undefined
+      }
+    >
+      <span className={`${base}__title`}>{header}</span>
+      {toggleable && (
+        <span
+          className={`${base}__chevron ${collapsed ? "" : `${base}__chevron--open`}`}
+          aria-hidden="true"
         >
-          <div className={`${base}__content-inner`}>
-            {children && <div className={`${base}__body`}>{children}</div>}
-            {footer && <div className={`${base}__footer`}>{footer}</div>}
-          </div>
+          <svg width={16} height={16} viewBox="0 0 24 24" fill="currentColor">
+            <path d={CHEVRON_DOWN_PATH} />
+          </svg>
+        </span>
+      )}
+    </div>
+  ) : null;
+
+  return (
+    <div ref={ref} className={classes} style={style}>
+      {headerContent}
+      <div
+        id={contentId}
+        className={`${base}__content`}
+        role="region"
+        aria-labelledby={header ? headerId : undefined}
+      >
+        <div className={`${base}__content-inner`}>
+          {children && <div className={`${base}__body`}>{children}</div>}
+          {footer && <div className={`${base}__footer`}>{footer}</div>}
         </div>
       </div>
-    );
-  }
-);
-
-Panel.displayName = "Panel";
+    </div>
+  );
+};

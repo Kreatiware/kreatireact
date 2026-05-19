@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import "./Badge.css";
 
 export interface BadgeProps {
@@ -41,41 +41,35 @@ export interface BadgeProps {
  * </Badge>
  * ```
  */
-export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
-  (
-    {
-      value,
-      position = "ne",
-      severity = "danger",
-      children,
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const base = "k-badge";
-    const isEmpty = value == null || value === "";
+export const Badge = ({
+  value,
+  position = "ne",
+  severity = "danger",
+  children,
+  className = "",
+  style,
+  ref,
+}: BadgeProps & { ref?: React.Ref<HTMLSpanElement> }) => {
+  const base = "k-badge";
+  const isEmpty = value == null || value === "";
 
-    return (
-      <span ref={ref} className={`${base} ${className}`.trim()} style={style}>
-        {children}
-        <span
-          className={[
-            `${base}__dot`,
-            `${base}__dot--${position}`,
-            `${base}__dot--${severity}`,
-            isEmpty && `${base}__dot--empty`,
-          ]
-            .filter(Boolean)
-            .join(" ")}
-          role="status"
-          aria-label={!isEmpty ? `${value}` : undefined}
-        >
-          {!isEmpty && value}
-        </span>
+  return (
+    <span ref={ref} className={`${base} ${className}`.trim()} style={style}>
+      {children}
+      <span
+        className={[
+          `${base}__dot`,
+          `${base}__dot--${position}`,
+          `${base}__dot--${severity}`,
+          isEmpty && `${base}__dot--empty`,
+        ]
+          .filter(Boolean)
+          .join(" ")}
+        role="status"
+        aria-label={!isEmpty ? `${value}` : undefined}
+      >
+        {!isEmpty && value}
       </span>
-    );
-  }
-);
-
-Badge.displayName = "Badge";
+    </span>
+  );
+};

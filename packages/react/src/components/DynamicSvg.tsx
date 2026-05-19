@@ -5,7 +5,6 @@ import React, {
   useMemo,
   useRef,
   useCallback,
-  forwardRef,
   useImperativeHandle,
 } from "react";
 import "./DynamicSvg.css";
@@ -316,240 +315,234 @@ function buildAnimationCSS(
  * />
  * ```
  */
-export const DynamicSvg = forwardRef<HTMLSpanElement, DynamicSvgProps>(
-  (
-    {
-      src,
-      url,
-      width,
-      height,
-      className = "",
-      style,
-      fill,
-      stroke,
-      strokeWidth,
-      opacity,
-      overrides = {},
-      title: svgTitle,
-      ariaLabel,
-      onLoad,
-      onError,
-      onClick,
-      onMouseEnter,
-      onMouseLeave,
-      onMouseMove,
-    },
-    ref
-  ) => {
-    const [svgContent, setSvgContent] = useState<string | null>(null);
-    const [error, setError] = useState<Error | null>(null);
-    const [loading, setLoading] = useState(false);
-    const wrapperRef = useRef<HTMLSpanElement>(null);
-    useImperativeHandle(ref, () => wrapperRef.current as HTMLSpanElement);
-    const cleanupRef = useRef<(() => void) | null>(null);
-    const reactId = useId();
-    const instanceId = reactId.replace(/:/g, "");
+export const DynamicSvg = ({
+  src,
+  url,
+  width,
+  height,
+  className = "",
+  style,
+  fill,
+  stroke,
+  strokeWidth,
+  opacity,
+  overrides = {},
+  title: svgTitle,
+  ariaLabel,
+  onLoad,
+  onError,
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+  onMouseMove,
+  ref,
+}: DynamicSvgProps & { ref?: React.Ref<HTMLSpanElement> }) => {
+  const [svgContent, setSvgContent] = useState<string | null>(null);
+  const [error, setError] = useState<Error | null>(null);
+  const [loading, setLoading] = useState(false);
+  const wrapperRef = useRef<HTMLSpanElement>(null);
+  useImperativeHandle(ref, () => wrapperRef.current as HTMLSpanElement);
+  const cleanupRef = useRef<(() => void) | null>(null);
+  const reactId = useId();
+  const instanceId = reactId.replace(/:/g, "");
 
-    // Fetch SVG content
-    useEffect(() => {
-      const source = sanitizeUrl(src || url);
-      if (!source) return;
+  // Fetch SVG content
+  useEffect(() => {
+    const source = sanitizeUrl(src || url);
+    if (!source) return;
 
-      setLoading(true);
-      setError(null);
+    setLoading(true);
+    setError(null);
 
-      fetch(source)
-        .then(res => {
-          if (!res.ok) throw new Error(`Failed to load SVG: ${res.status}`);
-          return res.text();
-        })
-        .then(text => {
-          setSvgContent(text);
-          onLoad?.();
-        })
-        .catch(err => {
-          const e = err instanceof Error ? err : new Error(String(err));
-          setError(e);
-          onError?.(e);
-        })
-        .finally(() => setLoading(false));
-    }, [src, url]);
+    fetch(source)
+      .then(res => {
+        if (!res.ok) throw new Error(`Failed to load SVG: ${res.status}`);
+        return res.text();
+      })
+      .then(text => {
+        setSvgContent(text);
+        onLoad?.();
+      })
+      .catch(err => {
+        const e = err instanceof Error ? err : new Error(String(err));
+        setError(e);
+        onError?.(e);
+      })
+      .finally(() => setLoading(false));
+  }, [src, url]);
 
-    // Process SVG HTML and animation CSS
-    const processed = useMemo(() => {
-      if (!svgContent) return null;
+  // Process SVG HTML and animation CSS
+  const processed = useMemo(() => {
+    if (!svgContent) return null;
 
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(svgContent, "image/svg+xml");
-      const svg = doc.querySelector("svg");
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgContent, "image/svg+xml");
+    const svg = doc.querySelector("svg");
 
-      if (!svg) return null;
+    if (!svg) return null;
 
-      // Security: strip dangerous elements and attributes from fetched SVG
-      svg.querySelectorAll("script, foreignObject").forEach(el => el.remove());
-      svg.querySelectorAll("*").forEach(el => {
-        for (const attr of Array.from(el.attributes)) {
-          if (attr.name.startsWith("on")) el.removeAttribute(attr.name);
+    // Security: strip dangerous elements and attributes from fetched SVG
+    svg.querySelectorAll("script, foreignObject").forEach(el => el.remove());
+    svg.querySelectorAll("*").forEach(el => {
+      for (const attr of Array.from(el.attributes)) {
+        if (attr.name.startsWith("on")) el.removeAttribute(attr.name);
+      }
+    });
+
+    const overriddenIds = new Set<string>();
+    const overriddenClasses = new Set<string>();
+
+    // Apply per-element style overrides (not listeners — those go in the effect)
+    for (const [selector, config] of Object.entries(overrides)) {
+      if (selector.startsWith(".")) {
+        const cls = selector.slice(1);
+        overriddenClasses.add(cls);
+        const elements = svg.querySelectorAll(`.${cls}`);
+        elements.forEach(el => applyStylesToElement(el, config));
+      } else {
+        overriddenIds.add(selector);
+        const el = svg.querySelector(`[id="${selector}"]`);
+        if (el) applyStylesToElement(el, config);
+      }
+    }
+
+    // Apply global styles
+    const globals: SvgElementStyle = {};
+    if (fill) globals.fill = fill;
+    if (stroke) globals.stroke = stroke;
+    if (strokeWidth) globals.strokeWidth = strokeWidth;
+    if (opacity) globals.opacity = opacity;
+
+    if (Object.keys(globals).length > 0) {
+      applyGlobalStyles(svg, globals, overriddenIds, overriddenClasses);
+    }
+
+    // Root SVG attributes
+    if (width) svg.setAttribute("width", String(width));
+    if (height) svg.setAttribute("height", String(height));
+
+    const existingClass = svg.getAttribute("class") || "";
+    svg.setAttribute(
+      "class",
+      `kreati-dsvg kreati-dsvg--${instanceId} ${existingClass} ${className}`.trim()
+    );
+
+    // Accessibility
+    if (svgTitle) {
+      let titleEl = svg.querySelector("title") as SVGTitleElement | null;
+      if (!titleEl) {
+        titleEl = doc.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "title"
+        ) as SVGTitleElement;
+        svg.prepend(titleEl);
+      }
+      titleEl.textContent = svgTitle;
+      svg.setAttribute("role", "img");
+    }
+    if (ariaLabel) {
+      svg.setAttribute("aria-label", ariaLabel);
+      svg.setAttribute("role", "img");
+    }
+    if (!svgTitle && !ariaLabel) {
+      svg.setAttribute("aria-hidden", "true");
+    }
+
+    const animCSS = buildAnimationCSS(instanceId, overrides);
+
+    return {
+      html: svg.outerHTML,
+      animCSS,
+    };
+  }, [
+    svgContent,
+    overrides,
+    fill,
+    stroke,
+    strokeWidth,
+    opacity,
+    width,
+    height,
+    className,
+    instanceId,
+    svgTitle,
+    ariaLabel,
+  ]);
+
+  // Attach per-element listeners after DOM is rendered
+  const attachListeners = useCallback(() => {
+    // Cleanup previous listeners
+    if (cleanupRef.current) {
+      cleanupRef.current();
+      cleanupRef.current = null;
+    }
+
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+
+    const removers: (() => void)[] = [];
+
+    for (const [selector, config] of Object.entries(overrides)) {
+      if (!config.listeners) continue;
+
+      const isClass = selector.startsWith(".");
+      const elements = isClass
+        ? wrapper.querySelectorAll(`.${selector.slice(1)}`)
+        : wrapper.querySelectorAll(`[id="${selector}"]`);
+
+      elements.forEach(el => {
+        for (const [listenerKey, handler] of Object.entries(
+          config.listeners!
+        )) {
+          const eventName = LISTENER_MAP[listenerKey];
+          if (!eventName || !handler) continue;
+          el.addEventListener(eventName, handler);
+          removers.push(() => el.removeEventListener(eventName, handler));
         }
       });
+    }
 
-      const overriddenIds = new Set<string>();
-      const overriddenClasses = new Set<string>();
+    cleanupRef.current = () => removers.forEach(fn => fn());
+  }, [overrides]);
 
-      // Apply per-element style overrides (not listeners — those go in the effect)
-      for (const [selector, config] of Object.entries(overrides)) {
-        if (selector.startsWith(".")) {
-          const cls = selector.slice(1);
-          overriddenClasses.add(cls);
-          const elements = svg.querySelectorAll(`.${cls}`);
-          elements.forEach(el => applyStylesToElement(el, config));
-        } else {
-          overriddenIds.add(selector);
-          const el = svg.querySelector(`[id="${selector}"]`);
-          if (el) applyStylesToElement(el, config);
-        }
-      }
+  // Inject HTML and attach listeners when processed changes
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper || !processed) return;
 
-      // Apply global styles
-      const globals: SvgElementStyle = {};
-      if (fill) globals.fill = fill;
-      if (stroke) globals.stroke = stroke;
-      if (strokeWidth) globals.strokeWidth = strokeWidth;
-      if (opacity) globals.opacity = opacity;
+    wrapper.innerHTML = processed.html;
+    attachListeners();
 
-      if (Object.keys(globals).length > 0) {
-        applyGlobalStyles(svg, globals, overriddenIds, overriddenClasses);
-      }
-
-      // Root SVG attributes
-      if (width) svg.setAttribute("width", String(width));
-      if (height) svg.setAttribute("height", String(height));
-
-      const existingClass = svg.getAttribute("class") || "";
-      svg.setAttribute(
-        "class",
-        `kreati-dsvg kreati-dsvg--${instanceId} ${existingClass} ${className}`.trim()
-      );
-
-      // Accessibility
-      if (svgTitle) {
-        let titleEl = svg.querySelector("title") as SVGTitleElement | null;
-        if (!titleEl) {
-          titleEl = doc.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "title"
-          ) as SVGTitleElement;
-          svg.prepend(titleEl);
-        }
-        titleEl.textContent = svgTitle;
-        svg.setAttribute("role", "img");
-      }
-      if (ariaLabel) {
-        svg.setAttribute("aria-label", ariaLabel);
-        svg.setAttribute("role", "img");
-      }
-      if (!svgTitle && !ariaLabel) {
-        svg.setAttribute("aria-hidden", "true");
-      }
-
-      const animCSS = buildAnimationCSS(instanceId, overrides);
-
-      return {
-        html: svg.outerHTML,
-        animCSS,
-      };
-    }, [
-      svgContent,
-      overrides,
-      fill,
-      stroke,
-      strokeWidth,
-      opacity,
-      width,
-      height,
-      className,
-      instanceId,
-      svgTitle,
-      ariaLabel,
-    ]);
-
-    // Attach per-element listeners after DOM is rendered
-    const attachListeners = useCallback(() => {
-      // Cleanup previous listeners
+    return () => {
       if (cleanupRef.current) {
         cleanupRef.current();
         cleanupRef.current = null;
       }
+    };
+  }, [processed, attachListeners]);
 
-      const wrapper = wrapperRef.current;
-      if (!wrapper) return;
-
-      const removers: (() => void)[] = [];
-
-      for (const [selector, config] of Object.entries(overrides)) {
-        if (!config.listeners) continue;
-
-        const isClass = selector.startsWith(".");
-        const elements = isClass
-          ? wrapper.querySelectorAll(`.${selector.slice(1)}`)
-          : wrapper.querySelectorAll(`[id="${selector}"]`);
-
-        elements.forEach(el => {
-          for (const [listenerKey, handler] of Object.entries(
-            config.listeners!
-          )) {
-            const eventName = LISTENER_MAP[listenerKey];
-            if (!eventName || !handler) continue;
-            el.addEventListener(eventName, handler);
-            removers.push(() => el.removeEventListener(eventName, handler));
-          }
-        });
-      }
-
-      cleanupRef.current = () => removers.forEach(fn => fn());
-    }, [overrides]);
-
-    // Inject HTML and attach listeners when processed changes
-    useEffect(() => {
-      const wrapper = wrapperRef.current;
-      if (!wrapper || !processed) return;
-
-      wrapper.innerHTML = processed.html;
-      attachListeners();
-
-      return () => {
-        if (cleanupRef.current) {
-          cleanupRef.current();
-          cleanupRef.current = null;
-        }
-      };
-    }, [processed, attachListeners]);
-
-    if (loading) {
-      return <span className="kreati-dsvg-loading" />;
-    }
-
-    if (error) {
-      return <span className="kreati-dsvg-error" title={error.message} />;
-    }
-
-    if (!processed) return null;
-
-    return (
-      <>
-        {processed.animCSS && <style>{processed.animCSS}</style>}
-        <span
-          ref={wrapperRef}
-          className="kreati-dsvg-wrapper"
-          style={style}
-          onClick={onClick}
-          onMouseEnter={onMouseEnter}
-          onMouseLeave={onMouseLeave}
-          onMouseMove={onMouseMove}
-        />
-      </>
-    );
+  if (loading) {
+    return <span className="kreati-dsvg-loading" />;
   }
-);
 
-DynamicSvg.displayName = "DynamicSvg";
+  if (error) {
+    return <span className="kreati-dsvg-error" title={error.message} />;
+  }
+
+  if (!processed) return null;
+
+  return (
+    <>
+      {processed.animCSS && <style>{processed.animCSS}</style>}
+      <span
+        ref={wrapperRef}
+        className="kreati-dsvg-wrapper"
+        style={style}
+        onClick={onClick}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        onMouseMove={onMouseMove}
+      />
+    </>
+  );
+};

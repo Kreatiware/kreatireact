@@ -1,9 +1,4 @@
-import React, {
-  forwardRef,
-  useState,
-  useRef,
-  useImperativeHandle,
-} from "react";
+import React, { useState, useRef, useImperativeHandle } from "react";
 import { USER_PATH } from "./iconPaths";
 import "./Avatar.css";
 
@@ -53,70 +48,64 @@ export interface AvatarProps {
  * <Avatar shape="square" size="lg" />
  * ```
  */
-export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
-  (
-    {
-      image,
-      alt,
-      label,
-      icon,
-      size = "md",
-      shape = "circle",
-      severity,
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const elRef = useRef<HTMLDivElement>(null);
-    useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
-    const [imgError, setImgError] = useState(false);
+export const Avatar = ({
+  image,
+  alt,
+  label,
+  icon,
+  size = "md",
+  shape = "circle",
+  severity,
+  className = "",
+  style,
+  ref,
+}: AvatarProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const elRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(ref, () => elRef.current as HTMLDivElement);
+  const [imgError, setImgError] = useState(false);
 
-    const base = "k-avatar";
-    const showImage = image && !imgError;
+  const base = "k-avatar";
+  const showImage = image && !imgError;
 
-    const classes = [
-      base,
-      `${base}--${size}`,
-      `${base}--${shape}`,
-      !showImage && severity && `${base}--${severity}`,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const classes = [
+    base,
+    `${base}--${size}`,
+    `${base}--${shape}`,
+    !showImage && severity && `${base}--${severity}`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    return (
-      <div
-        ref={elRef}
-        className={classes}
-        style={style}
-        role="img"
-        aria-label={alt || label || "Avatar"}
-      >
-        {showImage ? (
-          <img
-            className={`${base}__image`}
-            src={image}
-            alt={alt || ""}
-            onError={() => setImgError(true)}
-          />
-        ) : label ? (
-          <span className={`${base}__label`}>{label}</span>
-        ) : icon ? (
-          <span className={`${base}__icon`}>{icon}</span>
-        ) : (
-          <svg
-            className={`${base}__placeholder`}
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path d={USER_PATH} />
-          </svg>
-        )}
-      </div>
-    );
-  }
-);
-
-Avatar.displayName = "Avatar";
+  return (
+    <div
+      ref={elRef}
+      className={classes}
+      style={style}
+      role="img"
+      aria-label={alt || label || "Avatar"}
+    >
+      {showImage ? (
+        <img
+          className={`${base}__image`}
+          src={image}
+          alt={alt || ""}
+          onError={() => setImgError(true)}
+        />
+      ) : label ? (
+        <span className={`${base}__label`}>{label}</span>
+      ) : icon ? (
+        <span className={`${base}__icon`}>{icon}</span>
+      ) : (
+        <svg
+          className={`${base}__placeholder`}
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d={USER_PATH} />
+        </svg>
+      )}
+    </div>
+  );
+};

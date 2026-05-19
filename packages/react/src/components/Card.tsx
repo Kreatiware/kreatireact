@@ -1,4 +1,4 @@
-import React, { forwardRef, useId } from "react";
+import React, { useId } from "react";
 import "./Card.css";
 
 /**
@@ -50,62 +50,56 @@ export interface CardProps {
  * </Card>
  * ```
  */
-export const Card = forwardRef<HTMLDivElement, CardProps>(
-  (
-    {
-      title,
-      subtitle,
-      image,
-      imageAlt = "",
-      header,
-      footer,
-      variant = "default",
-      children,
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const base = "k-card";
-    const generatedId = useId();
-    const titleId = title ? `${base}-title-${generatedId}` : undefined;
+export const Card = ({
+  title,
+  subtitle,
+  image,
+  imageAlt = "",
+  header,
+  footer,
+  variant = "default",
+  children,
+  className = "",
+  style,
+  ref,
+}: CardProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const base = "k-card";
+  const generatedId = useId();
+  const titleId = title ? `${base}-title-${generatedId}` : undefined;
 
-    const classes = [base, `${base}--${variant}`, className]
-      .filter(Boolean)
-      .join(" ");
+  const classes = [base, `${base}--${variant}`, className]
+    .filter(Boolean)
+    .join(" ");
 
-    const imageZone = image ? (
-      <div className={`${base}__image`}>
-        {typeof image === "string" ? <img src={image} alt={imageAlt} /> : image}
-      </div>
-    ) : header ? (
-      <div className={`${base}__header`}>{header}</div>
-    ) : null;
+  const imageZone = image ? (
+    <div className={`${base}__image`}>
+      {typeof image === "string" ? <img src={image} alt={imageAlt} /> : image}
+    </div>
+  ) : header ? (
+    <div className={`${base}__header`}>{header}</div>
+  ) : null;
 
-    return (
-      <div
-        ref={ref}
-        className={classes}
-        style={style}
-        role="region"
-        aria-labelledby={titleId}
-      >
-        {imageZone}
-        {(title || subtitle || children) && (
-          <div className={`${base}__body`}>
-            {title && (
-              <div id={titleId} className={`${base}__title`}>
-                {title}
-              </div>
-            )}
-            {subtitle && <div className={`${base}__subtitle`}>{subtitle}</div>}
-            {children}
-          </div>
-        )}
-        {footer && <div className={`${base}__footer`}>{footer}</div>}
-      </div>
-    );
-  }
-);
-
-Card.displayName = "Card";
+  return (
+    <div
+      ref={ref}
+      className={classes}
+      style={style}
+      role="region"
+      aria-labelledby={titleId}
+    >
+      {imageZone}
+      {(title || subtitle || children) && (
+        <div className={`${base}__body`}>
+          {title && (
+            <div id={titleId} className={`${base}__title`}>
+              {title}
+            </div>
+          )}
+          {subtitle && <div className={`${base}__subtitle`}>{subtitle}</div>}
+          {children}
+        </div>
+      )}
+      {footer && <div className={`${base}__footer`}>{footer}</div>}
+    </div>
+  );
+};

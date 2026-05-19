@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import "./Divider.css";
 
 /**
@@ -42,59 +42,53 @@ export interface DividerProps {
  * <Divider template={<Chip label="New" />} />
  * ```
  */
-export const Divider = forwardRef<HTMLDivElement, DividerProps>(
-  (
-    {
-      orientation = "horizontal",
-      variant = "solid",
-      label,
-      template,
-      align = "center",
-      color,
-      width,
-      className = "",
-      style,
-    },
-    ref
-  ) => {
-    const base = "k-divider";
-    const content = template ?? (label ? <span>{label}</span> : null);
-    const classes = [
-      base,
-      `${base}--${orientation}`,
-      content && `${base}--${align}`,
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+export const Divider = ({
+  orientation = "horizontal",
+  variant = "solid",
+  label,
+  template,
+  align = "center",
+  color,
+  width,
+  className = "",
+  style,
+  ref,
+}: DividerProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const base = "k-divider";
+  const content = template ?? (label ? <span>{label}</span> : null);
+  const classes = [
+    base,
+    `${base}--${orientation}`,
+    content && `${base}--${align}`,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    const cssVars: React.CSSProperties = {
-      ...style,
-      ...(color
-        ? ({ "--kreati-divider-color": color } as React.CSSProperties)
-        : {}),
-      ...(width
-        ? ({ "--kreati-divider-width": width } as React.CSSProperties)
-        : {}),
-      ...(variant !== "solid"
-        ? ({ "--kreati-divider-style": variant } as React.CSSProperties)
-        : {}),
-    };
+  const cssVars: React.CSSProperties = {
+    ...style,
+    ...(color
+      ? ({ "--kreati-divider-color": color } as React.CSSProperties)
+      : {}),
+    ...(width
+      ? ({ "--kreati-divider-width": width } as React.CSSProperties)
+      : {}),
+    ...(variant !== "solid"
+      ? ({ "--kreati-divider-style": variant } as React.CSSProperties)
+      : {}),
+  };
 
-    return (
-      <div
-        ref={ref}
-        className={classes}
-        style={cssVars}
-        role="separator"
-        aria-orientation={orientation}
-      >
-        <div className={`${base}__line`} />
-        {content && <div className={`${base}__content`}>{content}</div>}
-        {content && <div className={`${base}__line`} />}
-      </div>
-    );
-  }
-);
-
-Divider.displayName = "Divider";
+  return (
+    <div
+      ref={ref}
+      className={classes}
+      style={cssVars}
+      role="separator"
+      aria-orientation={orientation}
+    >
+      <div className={`${base}__line`} />
+      {content && <div className={`${base}__content`}>{content}</div>}
+      {content && <div className={`${base}__line`} />}
+    </div>
+  );
+};

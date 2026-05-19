@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useState,
   useCallback,
   useRef,
@@ -104,221 +103,209 @@ const filterTree = (
  * <TreeSelect label="Category" nodes={treeData} value={val} onChange={setVal} />
  * ```
  */
-export const TreeSelect = forwardRef<HTMLDivElement, TreeSelectProps>(
-  (
-    {
-      nodes,
-      value: controlledValue,
-      defaultValue,
-      onChange,
-      multiple = false,
-      filterable = false,
-      filterPlaceholder,
-      filterDisabled = false,
-      variant,
-      size,
-      label,
-      placeholder,
-      helperText,
-      error,
-      success,
-      disabled,
-      required,
-      fullWidth,
-      name,
-      onBlur,
-      className = "",
-      style,
+export const TreeSelect = ({
+  nodes,
+  value: controlledValue,
+  defaultValue,
+  onChange,
+  multiple = false,
+  filterable = false,
+  filterPlaceholder,
+  filterDisabled = false,
+  variant,
+  size,
+  label,
+  placeholder,
+  helperText,
+  error,
+  success,
+  disabled,
+  required,
+  fullWidth,
+  name,
+  onBlur,
+  className = "",
+  style,
+  ref,
+}: TreeSelectProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const locale = useKreatiLocale();
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(ref, () => wrapperRef.current as HTMLDivElement);
+
+  const isControlled = controlledValue !== undefined;
+  const [internalValue, setInternalValue] = useState<string[]>(
+    defaultValue
+      ? Array.isArray(defaultValue)
+        ? defaultValue
+        : [defaultValue]
+      : []
+  );
+  const selectedKeys = isControlled
+    ? Array.isArray(controlledValue)
+      ? controlledValue
+      : [controlledValue]
+    : internalValue;
+
+  const [open, setOpen] = useState(false);
+  const [filter, setFilter] = useState("");
+
+  const zIndex = useLayerZIndex();
+  const { coords, positioned } = useOverlayPosition(triggerRef, panelRef, open);
+
+  const allFlat = flattenNodes(nodes);
+  const selectedNodes = selectedKeys
+    .map(k => allFlat.find(n => n.key === k))
+    .filter(Boolean) as TreeNode[];
+  const displayLabel = selectedNodes.map(n => n.label).join(", ");
+
+  const handleSelect = useCallback(
+    (keys: string[], node: TreeNode) => {
+      const next = multiple ? keys : keys.slice(-1);
+      if (!isControlled) setInternalValue(next);
+      const matched = next
+        .map(k => allFlat.find(n => n.key === k))
+        .filter(Boolean) as TreeNode[];
+      onChange?.(multiple ? next : (next[0] ?? ""), matched);
+      if (!multiple) setOpen(false);
     },
-    ref
-  ) => {
-    const locale = useKreatiLocale();
-    const wrapperRef = useRef<HTMLDivElement>(null);
-    const triggerRef = useRef<HTMLElement | null>(null);
-    const panelRef = useRef<HTMLDivElement>(null);
-    useImperativeHandle(ref, () => wrapperRef.current as HTMLDivElement);
+    [multiple, isControlled, allFlat, onChange]
+  );
 
-    const isControlled = controlledValue !== undefined;
-    const [internalValue, setInternalValue] = useState<string[]>(
-      defaultValue
-        ? Array.isArray(defaultValue)
-          ? defaultValue
-          : [defaultValue]
-        : []
-    );
-    const selectedKeys = isControlled
-      ? Array.isArray(controlledValue)
-        ? controlledValue
-        : [controlledValue]
-      : internalValue;
+  const toggleOpen = useCallback(() => {
+    if (disabled) return;
+    setOpen(p => !p);
+    setFilter("");
+  }, [disabled]);
 
-    const [open, setOpen] = useState(false);
-    const [filter, setFilter] = useState("");
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (
+        wrapperRef.current?.contains(e.target as Node) ||
+        panelRef.current?.contains(e.target as Node)
+      )
+        return;
+      setOpen(false);
+      onBlur?.();
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open, onBlur]);
 
-    const zIndex = useLayerZIndex();
-    const { coords, positioned } = useOverlayPosition(
-      triggerRef,
-      panelRef,
-      open
-    );
+  const visibleNodes = filter
+    ? filterTree(nodes, filter, filterDisabled)
+    : filterDisabled
+      ? filterTree(nodes, "", filterDisabled)
+      : nodes;
 
-    const allFlat = flattenNodes(nodes);
-    const selectedNodes = selectedKeys
-      .map(k => allFlat.find(n => n.key === k))
-      .filter(Boolean) as TreeNode[];
-    const displayLabel = selectedNodes.map(n => n.label).join(", ");
+  const collectKeys = (ns: TreeNode[]): string[] =>
+    ns.flatMap(n => [n.key, ...(n.children ? collectKeys(n.children) : [])]);
+  const filterExpandedKeys = filter ? collectKeys(visibleNodes) : undefined;
 
-    const handleSelect = useCallback(
-      (keys: string[], node: TreeNode) => {
-        const next = multiple ? keys : keys.slice(-1);
-        if (!isControlled) setInternalValue(next);
-        const matched = next
-          .map(k => allFlat.find(n => n.key === k))
-          .filter(Boolean) as TreeNode[];
-        onChange?.(multiple ? next : (next[0] ?? ""), matched);
-        if (!multiple) setOpen(false);
-      },
-      [multiple, isControlled, allFlat, onChange]
-    );
+  const dropdownIcon = (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      width="1em"
+      height="1em"
+      aria-hidden="true"
+      style={{
+        transition: "transform 0.15s",
+        transform: open ? "rotate(180deg)" : undefined,
+      }}
+    >
+      <path d={CHEVRON_DOWN_PATH} />
+    </svg>
+  );
 
-    const toggleOpen = useCallback(() => {
-      if (disabled) return;
-      setOpen(p => !p);
-      setFilter("");
-    }, [disabled]);
-
-    useEffect(() => {
-      if (!open) return;
-      const handler = (e: MouseEvent) => {
-        if (
-          wrapperRef.current?.contains(e.target as Node) ||
-          panelRef.current?.contains(e.target as Node)
-        )
-          return;
-        setOpen(false);
-        onBlur?.();
-      };
-      document.addEventListener("mousedown", handler);
-      return () => document.removeEventListener("mousedown", handler);
-    }, [open, onBlur]);
-
-    const visibleNodes = filter
-      ? filterTree(nodes, filter, filterDisabled)
-      : filterDisabled
-        ? filterTree(nodes, "", filterDisabled)
-        : nodes;
-
-    const collectKeys = (ns: TreeNode[]): string[] =>
-      ns.flatMap(n => [n.key, ...(n.children ? collectKeys(n.children) : [])]);
-    const filterExpandedKeys = filter ? collectKeys(visibleNodes) : undefined;
-
-    const dropdownIcon = (
-      <svg
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        width="1em"
-        height="1em"
-        aria-hidden="true"
-        style={{
-          transition: "transform 0.15s",
-          transform: open ? "rotate(180deg)" : undefined,
-        }}
-      >
-        <path d={CHEVRON_DOWN_PATH} />
-      </svg>
-    );
-
-    const panel = open
-      ? createPortal(
-          <div
-            ref={panelRef}
-            className={`${base}__panel${positioned ? ` ${base}__panel--visible` : ""}`}
-            style={{
-              top: coords.top,
-              left: coords.left,
-              minWidth: coords.minWidth,
-              zIndex: zIndex.overlay,
-            }}
-          >
-            {filterable && (
-              <div className={`${base}__filter`}>
-                <input
-                  type="text"
-                  value={filter}
-                  onChange={e => setFilter(e.target.value)}
-                  placeholder={
-                    filterPlaceholder ?? locale.select.filterPlaceholder
-                  }
-                  autoFocus
-                />
-              </div>
-            )}
-            {visibleNodes.length === 0 ? (
-              <div className={`${base}__empty`}>
-                {locale.select.emptyMessage}
-              </div>
-            ) : (
-              <Tree
-                nodes={visibleNodes}
-                selectedKeys={selectedKeys}
-                onSelect={handleSelect}
-                multiple={multiple}
-                {...(filterExpandedKeys
-                  ? { expandedKeys: filterExpandedKeys }
-                  : { defaultExpandedKeys: selectedKeys })}
-              />
-            )}
-          </div>,
-          document.body
-        )
-      : null;
-
-    const cls = [base, fullWidth && `${base}--full-width`, className]
-      .filter(Boolean)
-      .join(" ");
-
-    return (
-      <div ref={wrapperRef} className={cls} style={style}>
+  const panel = open
+    ? createPortal(
         <div
-          ref={triggerRef as React.Ref<HTMLDivElement>}
-          onClick={toggleOpen}
-          onKeyDown={e => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              toggleOpen();
-            }
+          ref={panelRef}
+          className={`${base}__panel${positioned ? ` ${base}__panel--visible` : ""}`}
+          style={{
+            top: coords.top,
+            left: coords.left,
+            minWidth: coords.minWidth,
+            zIndex: zIndex.overlay,
           }}
-          tabIndex={disabled ? -1 : 0}
-          role="combobox"
-          aria-expanded={open}
-          aria-haspopup="tree"
-          style={{ cursor: disabled ? "not-allowed" : "pointer" }}
         >
-          <Input
-            readOnly
-            variant={variant}
-            size={size}
-            label={label}
-            placeholder={placeholder}
-            value={displayLabel}
-            helperText={helperText}
-            error={error}
-            success={success}
-            disabled={disabled}
-            required={required}
-            fullWidth={fullWidth}
-            iconRight={dropdownIcon}
-            className="k-tree-select__trigger"
-          />
-        </div>
-        {name &&
-          selectedKeys.map(k => (
-            <input key={k} type="hidden" name={name} value={k} />
-          ))}
-        {panel}
-      </div>
-    );
-  }
-);
+          {filterable && (
+            <div className={`${base}__filter`}>
+              <input
+                type="text"
+                value={filter}
+                onChange={e => setFilter(e.target.value)}
+                placeholder={
+                  filterPlaceholder ?? locale.select.filterPlaceholder
+                }
+                autoFocus
+              />
+            </div>
+          )}
+          {visibleNodes.length === 0 ? (
+            <div className={`${base}__empty`}>{locale.select.emptyMessage}</div>
+          ) : (
+            <Tree
+              nodes={visibleNodes}
+              selectedKeys={selectedKeys}
+              onSelect={handleSelect}
+              multiple={multiple}
+              {...(filterExpandedKeys
+                ? { expandedKeys: filterExpandedKeys }
+                : { defaultExpandedKeys: selectedKeys })}
+            />
+          )}
+        </div>,
+        document.body
+      )
+    : null;
 
-TreeSelect.displayName = "TreeSelect";
+  const cls = [base, fullWidth && `${base}--full-width`, className]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div ref={wrapperRef} className={cls} style={style}>
+      <div
+        ref={triggerRef as React.Ref<HTMLDivElement>}
+        onClick={toggleOpen}
+        onKeyDown={e => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggleOpen();
+          }
+        }}
+        tabIndex={disabled ? -1 : 0}
+        role="combobox"
+        aria-expanded={open}
+        aria-haspopup="tree"
+        style={{ cursor: disabled ? "not-allowed" : "pointer" }}
+      >
+        <Input
+          readOnly
+          variant={variant}
+          size={size}
+          label={label}
+          placeholder={placeholder}
+          value={displayLabel}
+          helperText={helperText}
+          error={error}
+          success={success}
+          disabled={disabled}
+          required={required}
+          fullWidth={fullWidth}
+          iconRight={dropdownIcon}
+          className="k-tree-select__trigger"
+        />
+      </div>
+      {name &&
+        selectedKeys.map(k => (
+          <input key={k} type="hidden" name={name} value={k} />
+        ))}
+      {panel}
+    </div>
+  );
+};
