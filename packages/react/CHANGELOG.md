@@ -1,5 +1,15 @@
 # @kreatiware/react
 
+## 1.1.0
+
+### Minor Changes
+
+- 948b69d: fix datatable types
+
+### Patch Changes
+
+- 14bd0d0: fix types datatable
+
 ## 1.0.0
 
 ### Major Changes
