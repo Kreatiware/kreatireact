@@ -421,6 +421,11 @@
   cursor: not-allowed;
 }
 
+.k-select__trigger--loading {
+  opacity: 0.7;
+  cursor: wait;
+}
+
 .k-select__trigger--readonly {
   background-color: var(--kreati-gray-50);
   cursor: default;

@@ -9,6 +9,7 @@ import { createPortal } from "react-dom";
 import { useKreatiLocale } from "../locale";
 import { TIMES_PATH, MAXIMIZE_PATH, RESTORE_PATH } from "./iconPaths";
 import { Button } from "./Button";
+import { Spinner } from "./Spinner";
 import { LayerContext, nextLayer } from "./LayerContext";
 import "./Dialog.css";
 
@@ -101,6 +102,8 @@ export interface DialogProps {
   onReject?: () => void;
   /** Additional CSS class names */
   className?: string;
+  /** Loading state — shows overlay with spinner over the entire dialog, blocking all interaction */
+  loading?: boolean;
   /** Inline styles */
   style?: React.CSSProperties;
   /** Dialog body content */
@@ -156,6 +159,7 @@ export const Dialog = ({
   onAccept,
   onReject,
   className = "",
+  loading = false,
   style,
   children,
   ref,
@@ -170,15 +174,21 @@ export const Dialog = ({
   const [maximized, setMaximized] = useState(false);
   const kreatiLocale = useKreatiLocale();
   const base = "k-dialog";
+  const loadingRef = useRef(loading);
+  loadingRef.current = loading;
 
   const close = useCallback(() => onHide?.(), [onHide]);
   const accept = useCallback(() => {
     onAccept?.();
-    close();
+    requestAnimationFrame(() => {
+      if (!loadingRef.current) close();
+    });
   }, [onAccept, close]);
   const reject = useCallback(() => {
     onReject?.();
-    close();
+    requestAnimationFrame(() => {
+      if (!loadingRef.current) close();
+    });
   }, [onReject, close]);
 
   const titleId = `${base}-title-${layer}`;
@@ -196,14 +206,14 @@ export const Dialog = ({
   useEffect(() => {
     if (!visible || !closeOnEscape) return;
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === "Escape" && !loading) {
         e.preventDefault();
         close();
       }
     };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
-  }, [visible, closeOnEscape, close]);
+  }, [visible, closeOnEscape, loading, close]);
 
   useEffect(() => {
     if (!visible) return;
@@ -373,6 +383,15 @@ export const Dialog = ({
         {bodyContent}
       </div>
       {footerEl}
+      {loading && (
+        <div className={`${base}__loading-overlay`} aria-busy="true">
+          <Spinner
+            size="lg"
+            color="currentColor"
+            label={kreatiLocale.common.loading}
+          />
+        </div>
+      )}
     </>
   );
 
@@ -383,7 +402,7 @@ export const Dialog = ({
       onClick={
         closeOnOverlay
           ? e => {
-              if (e.target === e.currentTarget) close();
+              if (e.target === e.currentTarget && !loading) close();
             }
           : undefined
       }

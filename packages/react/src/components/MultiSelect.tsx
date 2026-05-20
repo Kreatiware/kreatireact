@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import type { SelectOption, SelectGroup } from "./SelectDropdown";
+import { Spinner } from "./Spinner";
 import { FieldWrapper } from "./FieldWrapper";
 import { useKreatiLocale } from "../locale";
 import { useOverlayPosition } from "./useOverlayPosition";
@@ -107,6 +108,8 @@ export interface MultiSelectProps {
     | "accent";
   /** Disabled state */
   disabled?: boolean;
+  /** Loading state — shows spinner instead of chevron, disables interaction */
+  loading?: boolean;
   /** Read-only state */
   readOnly?: boolean;
   /** Required indicator */
@@ -180,6 +183,7 @@ export const MultiSelect = ({
   success = false,
   helperSeverity,
   disabled = false,
+  loading = false,
   readOnly = false,
   required = false,
   fullWidth = false,
@@ -325,11 +329,11 @@ export const MultiSelect = ({
   );
 
   const openDropdown = useCallback(() => {
-    if (disabled || readOnly || open) return;
+    if (disabled || loading || readOnly || open) return;
     setOpen(true);
     setFocusedIndex(0);
     onOpen?.();
-  }, [disabled, readOnly, open, onOpen]);
+  }, [disabled, loading, readOnly, open, onOpen]);
   const closeDropdown = useCallback(() => {
     if (!open) return;
     setOpen(false);
@@ -349,7 +353,7 @@ export const MultiSelect = ({
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (disabled || readOnly) return;
+      if (disabled || loading || readOnly) return;
       switch (e.key) {
         case "ArrowDown": {
           e.preventDefault();
@@ -416,6 +420,7 @@ export const MultiSelect = ({
     },
     [
       disabled,
+      loading,
       readOnly,
       open,
       focusedIndex,
@@ -476,16 +481,20 @@ export const MultiSelect = ({
     return uncheckedTemplate ?? null;
   };
 
-  const chevronIcon = dropdownIcon || (
-    <svg
-      width={14}
-      height={14}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d={CHEVRON_DOWN_PATH} />
-    </svg>
+  const chevronIcon = loading ? (
+    <Spinner size="xs" color="currentColor" label={locale.common.loading} />
+  ) : (
+    dropdownIcon || (
+      <svg
+        width={14}
+        height={14}
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d={CHEVRON_DOWN_PATH} />
+      </svg>
+    )
   );
   const clearIcon = (
     <svg
@@ -586,6 +595,7 @@ export const MultiSelect = ({
     hasError && `${base}__trigger--error`,
     !hasError && success && `${base}__trigger--success`,
     disabled && `${base}__trigger--disabled`,
+    loading && `${base}__trigger--loading`,
     readOnly && `${base}__trigger--readonly`,
     open && `${base}__trigger--open`,
     fullWidth && `${base}__trigger--full-width`,

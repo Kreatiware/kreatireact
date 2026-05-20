@@ -6,6 +6,7 @@ import React, {
   useId,
 } from "react";
 import { TIMES_PATH, UPLOAD_PATH } from "./iconPaths";
+import { Spinner } from "./Spinner";
 import { FieldWrapper } from "./FieldWrapper";
 import { useKreatiLocale } from "../locale";
 import "./FileUpload.css";
@@ -55,6 +56,8 @@ export interface FileUploadProps {
   required?: boolean;
   /** Disabled */
   disabled?: boolean;
+  /** Loading state — shows upload progress indicator, disables interaction */
+  loading?: boolean;
   /** Full width */
   fullWidth?: boolean;
   /** HTML name for form submission */
@@ -107,6 +110,7 @@ export const FileUpload = ({
   size,
   required,
   disabled = false,
+  loading = false,
   fullWidth = false,
   name,
   className = "",
@@ -173,6 +177,7 @@ export const FileUpload = ({
     dragging && `${base}__dropzone--dragging`,
     hasError && `${base}__dropzone--error`,
     !hasError && success && `${base}__dropzone--success`,
+    loading && `${base}__dropzone--loading`,
   ]
     .filter(Boolean)
     .join(" ");
@@ -181,10 +186,10 @@ export const FileUpload = ({
     <div
       id={dropzoneId}
       className={dropCls}
-      onClick={() => !disabled && inputRef.current?.click()}
+      onClick={() => !disabled && !loading && inputRef.current?.click()}
       onDragOver={e => {
         e.preventDefault();
-        if (!disabled) setDragging(true);
+        if (!disabled && !loading) setDragging(true);
       }}
       onDragLeave={() => setDragging(false)}
       onDrop={handleDrop}
@@ -192,16 +197,19 @@ export const FileUpload = ({
       tabIndex={disabled ? -1 : 0}
       role="button"
       aria-label={label ?? locale.fileUpload.clickToUpload}
-      aria-disabled={disabled || undefined}
+      aria-disabled={disabled || loading || undefined}
+      aria-busy={loading || undefined}
       aria-required={required || undefined}
       onKeyDown={e => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          inputRef.current?.click();
+          if (!loading) inputRef.current?.click();
         }
       }}
     >
-      {dropzoneTemplate ? (
+      {loading ? (
+        <Spinner size="md" color="currentColor" label={locale.common.loading} />
+      ) : dropzoneTemplate ? (
         dropzoneTemplate({ isDragging: dragging })
       ) : (
         <>

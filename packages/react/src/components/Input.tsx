@@ -6,6 +6,7 @@ import React, {
   useImperativeHandle,
 } from "react";
 import { FieldWrapper } from "./FieldWrapper";
+import { Spinner } from "./Spinner";
 import { Tooltip } from "./Tooltip";
 import { useKreatiLocale } from "../locale";
 import {
@@ -67,6 +68,8 @@ export interface InputProps {
   color?: string;
   /** Disabled state */
   disabled?: boolean;
+  /** Loading state — shows spinner in the right icon slot */
+  loading?: boolean;
   /** Read-only state */
   readOnly?: boolean;
   /** Shows required indicator (*) on label */
@@ -142,6 +145,7 @@ export const Input = ({
   inputBackground,
   color,
   disabled = false,
+  loading = false,
   readOnly = false,
   required = false,
   fullWidth = false,
@@ -186,6 +190,16 @@ export const Input = ({
     ? ("decimal" as const)
     : undefined;
   const showCustomSteppers = isNumber && !hideSteppers && !useCommaSeparator;
+
+  const resolvedIconRight = loading ? (
+    <Spinner
+      size="xs"
+      color="currentColor"
+      label={kreatiLocale.common.loading}
+    />
+  ) : (
+    iconRight
+  );
 
   const passwordToggle = isPassword ? (
     <button
@@ -400,7 +414,12 @@ export const Input = ({
         <div className={`${base}__fieldset-inner`}>
           {iconLeft && renderIcon(iconLeft, iconLeftTooltip, "left")}
           {nativeInput}
-          {iconRight && renderIcon(iconRight, iconRightTooltip, "right")}
+          {resolvedIconRight &&
+            renderIcon(
+              resolvedIconRight,
+              loading ? undefined : iconRightTooltip,
+              "right"
+            )}
           {passwordToggle}
           {stepperButtons}
         </div>
@@ -468,7 +487,12 @@ export const Input = ({
     <div className={containerClasses} style={bgStyle}>
       {iconLeft && renderIcon(iconLeft, iconLeftTooltip, "left")}
       {nativeInput}
-      {iconRight && renderIcon(iconRight, iconRightTooltip, "right")}
+      {resolvedIconRight &&
+        renderIcon(
+          resolvedIconRight,
+          loading ? undefined : iconRightTooltip,
+          "right"
+        )}
       {passwordToggle}
       {stepperButtons}
     </div>

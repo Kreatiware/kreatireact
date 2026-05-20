@@ -1,6 +1,8 @@
 import React from "react";
+import { Spinner } from "./Spinner";
 import { Tooltip } from "./Tooltip";
 import type { TooltipPosition } from "./Tooltip";
+import { useKreatiLocale } from "../locale";
 import "./Button.css";
 
 export interface ButtonSize {
@@ -30,6 +32,10 @@ export interface ButtonProps {
     | "accent";
   /** Disabled state (keeps color, applies 40% opacity) */
   disabled?: boolean;
+  /** Loading state — shows spinner, disables interaction */
+  loading?: boolean;
+  /** Accessible text announced while loading (defaults to locale common.loading) */
+  loadingText?: string;
   /** Raised shadow effect */
   raised?: boolean;
   /** Extra rounded borders (pill shape / circle for icon-only) */
@@ -85,6 +91,8 @@ export const Button = ({
   buttonType = "filled",
   severity = "primary",
   disabled = false,
+  loading = false,
+  loadingText,
   raised = false,
   rounded = false,
   slim = false,
@@ -102,6 +110,7 @@ export const Button = ({
   children,
   ref,
 }: ButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+  const locale = useKreatiLocale();
   const isIconOnly = !label && !children && (iconLeft || iconRight);
   const base = "k-button";
 
@@ -110,29 +119,39 @@ export const Button = ({
     `${base}--${size}`,
     `${base}--${buttonType}`,
     `${base}--${severity}`,
-    isIconOnly && `${base}--icon-only`,
+    isIconOnly && !loading && `${base}--icon-only`,
     raised && `${base}--raised`,
     rounded && `${base}--rounded`,
     slim && `${base}--slim`,
     compact && `${base}--compact`,
-    disabled && `${base}--disabled`,
+    (disabled || loading) && `${base}--disabled`,
+    loading && `${base}--loading`,
     className,
   ]
     .filter(Boolean)
     .join(" ");
+
+  const spinnerSize = size === "xs" || size === "sm" ? "xs" : "sm";
 
   const buttonEl = (
     <button
       ref={ref}
       className={classes}
       style={{ ...style, ...(width ? { width } : undefined) }}
-      disabled={disabled}
-      onClick={onClick}
+      disabled={disabled || loading}
+      onClick={!loading ? onClick : undefined}
       type={type}
       aria-label={isIconOnly ? ariaLabel : undefined}
-      aria-disabled={disabled || undefined}
+      aria-disabled={disabled || loading || undefined}
+      aria-busy={loading || undefined}
     >
-      {children ? (
+      {loading ? (
+        <Spinner
+          size={spinnerSize}
+          color="currentColor"
+          label={loadingText ?? locale.common.loading}
+        />
+      ) : children ? (
         children
       ) : (
         <>

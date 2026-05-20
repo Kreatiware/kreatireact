@@ -10,6 +10,7 @@ import React, {
 import { createPortal } from "react-dom";
 import { SelectDropdown } from "./SelectDropdown";
 import type { SelectOption, SelectGroup } from "./SelectDropdown";
+import { Spinner } from "./Spinner";
 import { FieldWrapper } from "./FieldWrapper";
 import { useKreatiLocale } from "../locale";
 import { useOverlayPosition } from "./useOverlayPosition";
@@ -84,6 +85,8 @@ export interface SelectProps {
     | "accent";
   /** Disabled state */
   disabled?: boolean;
+  /** Loading state — shows spinner instead of chevron, disables interaction */
+  loading?: boolean;
   /** Read-only state */
   readOnly?: boolean;
   /** Required indicator */
@@ -152,6 +155,7 @@ export const Select = ({
   success = false,
   helperSeverity,
   disabled = false,
+  loading = false,
   readOnly = false,
   required = false,
   fullWidth = false,
@@ -233,7 +237,7 @@ export const Select = ({
       : "";
 
   const openDropdown = useCallback(() => {
-    if (disabled || readOnly || open) return;
+    if (disabled || loading || readOnly || open) return;
     setOpen(true);
     setFocusedIndex(
       selectedOption
@@ -244,6 +248,7 @@ export const Select = ({
     onOpen?.();
   }, [
     disabled,
+    loading,
     readOnly,
     open,
     selectedOption,
@@ -327,7 +332,7 @@ export const Select = ({
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (disabled || readOnly) return;
+      if (disabled || loading || readOnly) return;
 
       switch (e.key) {
         case "ArrowDown": {
@@ -420,6 +425,7 @@ export const Select = ({
     },
     [
       disabled,
+      loading,
       readOnly,
       open,
       focusedIndex,
@@ -446,16 +452,20 @@ export const Select = ({
     if (open && editable && inputRef.current) inputRef.current.focus();
   }, [open, editable]);
 
-  const chevronIcon = dropdownIcon || (
-    <svg
-      width={14}
-      height={14}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d={CHEVRON_DOWN_PATH} />
-    </svg>
+  const chevronIcon = loading ? (
+    <Spinner size="xs" color="currentColor" label={locale.common.loading} />
+  ) : (
+    dropdownIcon || (
+      <svg
+        width={14}
+        height={14}
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d={CHEVRON_DOWN_PATH} />
+      </svg>
+    )
   );
 
   const clearIcon = (
@@ -503,6 +513,7 @@ export const Select = ({
     hasError && `${base}__trigger--error`,
     !hasError && success && `${base}__trigger--success`,
     disabled && `${base}__trigger--disabled`,
+    loading && `${base}__trigger--loading`,
     readOnly && `${base}__trigger--readonly`,
     open && `${base}__trigger--open`,
     fullWidth && `${base}__trigger--full-width`,
