@@ -1,5 +1,11 @@
 # @kreatiware/react
 
+## 1.3.0
+
+### Minor Changes
+
+- 1c68567: feat(react): add loading states to button, selects, dialog and file upload
+
 ## 1.2.0
 
 ### Minor Changes
