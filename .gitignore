@@ -45,5 +45,7 @@ Thumbs.db
 # Storybook
 storybook-static/
 
-#docs
+# Internal docs & plans
 docs/
+KREATI_REACT_PLAN.md
+packages/layout/KREATI_LAYOUT_PLAN.md

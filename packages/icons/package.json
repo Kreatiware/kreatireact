@@ -34,8 +34,14 @@
     "vite-plugin-dts": "^3.7.3",
     "vitest": "^1.2.2"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kreatiware/kreatireact.git",
+    "directory": "packages/icons"
+  },
+  "homepage": "https://kreatiware.com",
+  "bugs": "https://github.com/kreatiware/kreatireact/issues",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "restricted"
+    "access": "public"
   }
 }

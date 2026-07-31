@@ -27,7 +27,7 @@ jobs:
       with:
         node-version: '22.x'
         cache: 'npm'
-        registry-url: 'https://npm.pkg.github.com'
+        registry-url: 'https://registry.npmjs.org'
         scope: '@kreatiware'
 
     - name: Install dependencies
