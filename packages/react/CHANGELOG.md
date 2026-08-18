@@ -1,5 +1,11 @@
 # @kreatiware/react
 
+## 1.3.2
+
+### Patch Changes
+
+- a108c2c: fix: remove hardcoded min-width from Select, MultiSelect and Calendar
+
 ## 1.3.1
 
 ### Patch Changes
