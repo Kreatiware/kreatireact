@@ -1,16 +1,34 @@
 # Kreati
 
+[![npm @kreatiware/react](https://img.shields.io/npm/v/@kreatiware/react?label=%40kreatiware%2Freact&color=blue)](https://www.npmjs.com/package/@kreatiware/react)
+[![npm @kreatiware/icons](https://img.shields.io/npm/v/@kreatiware/icons?label=%40kreatiware%2Ficons&color=blue)](https://www.npmjs.com/package/@kreatiware/icons)
+[![npm @kreatiware/layout](https://img.shields.io/npm/v/@kreatiware/layout?label=%40kreatiware%2Flayout&color=blue)](https://www.npmjs.com/package/@kreatiware/layout)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 > A complete React UI ecosystem — 83+ components, 71 icons, 592 CSS utilities. Zero external dependencies.
 
 Built AI-first with human review: every component was designed, coded, and tested using AI-assisted development, then reviewed and refined by the Kreatiware team. The result is a consistent, accessible, and secure component library ready for production.
 
+## Installation
+
+```bash
+# Core components
+npm install @kreatiware/react
+
+# Icons (optional)
+npm install @kreatiware/icons
+
+# CSS utilities (optional)
+npm install @kreatiware/layout
+```
+
 ## Packages
 
-| Package | Description | Install |
-|---------|-------------|---------|
-| **@kreatiware/react** | 83+ React components with TypeScript, ARIA, 8 themes, locale system | `npm i @kreatiware/react` |
-| **@kreatiware/icons** | 71 SVG icon components with name resolver | `npm i @kreatiware/icons` |
-| **@kreatiware/layout** | 592 CSS utility classes (flex, grid, spacing, typography) | `npm i @kreatiware/layout` |
+| Package | Version | Description |
+|---------|---------|-------------|
+| [@kreatiware/react](https://www.npmjs.com/package/@kreatiware/react) | ![npm](https://img.shields.io/npm/v/@kreatiware/react) | 83+ React components with TypeScript, ARIA, 8 themes, locale system |
+| [@kreatiware/icons](https://www.npmjs.com/package/@kreatiware/icons) | ![npm](https://img.shields.io/npm/v/@kreatiware/icons) | 71 SVG icon components with name resolver |
+| [@kreatiware/layout](https://www.npmjs.com/package/@kreatiware/layout) | ![npm](https://img.shields.io/npm/v/@kreatiware/layout) | 592 CSS utility classes (flex, grid, spacing, typography) |
 
 ## Quick Start
 
@@ -154,8 +172,8 @@ Custom prefix CLI: `npx kreati-layout --prefix="x" --output="./layout.css"`
 
 ```bash
 npm install          # Install dependencies
-npm run dev          # Development mode
 npm run build        # Build all packages
+npm run dev          # Development mode
 npm run storybook    # Storybook (230+ stories)
 npm run lint         # Lint packages
 npm run format       # Prettier
