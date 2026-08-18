@@ -1,5 +1,11 @@
 # @kreatiware/layout
 
+## 1.1.1
+
+### Patch Changes
+
+- fdb4d98: chore: add changeset for initial npm publish
+
 ## 1.1.0
 
 ### Minor Changes

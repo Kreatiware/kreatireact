@@ -1,5 +1,11 @@
 # @kreatiware/react
 
+## 1.3.1
+
+### Patch Changes
+
+- fdb4d98: chore: add changeset for initial npm publish
+
 ## 1.3.0
 
 ### Minor Changes
