@@ -918,33 +918,101 @@ export const TextEditor = ({
     }
   };
 
-  /** Sanitize pasted content through the document model */
-  const handlePaste = useCallback(
-    (e: React.ClipboardEvent) => {
-      e.preventDefault();
-      const html = e.clipboardData.getData("text/html");
-      const text = e.clipboardData.getData("text/plain");
+  /** Insert clipboard/drop content after passing HTML through the document model. */
+  const insertSanitizedContent = useCallback(
+    (html: string, text: string, range: Range) => {
+      const editor = editorRef.current;
+      if (!editor || !editor.contains(range.startContainer)) return;
 
-      const sel = window.getSelection();
-      if (!sel || sel.rangeCount === 0) return;
-      const range = sel.getRangeAt(0);
       range.deleteContents();
+      let lastInserted: Node | null = null;
 
       if (html) {
-        // Sanitize through document model — strips scripts, event handlers, etc.
         const safeHtml = sanitizePastedHtml(html);
         const parsed = new DOMParser().parseFromString(safeHtml, "text/html");
         const frag = document.createDocumentFragment();
         while (parsed.body.firstChild) frag.appendChild(parsed.body.firstChild);
+        lastInserted = frag.lastChild;
         range.insertNode(frag);
       } else if (text) {
-        range.insertNode(document.createTextNode(text));
+        lastInserted = document.createTextNode(text);
+        range.insertNode(lastInserted);
       }
 
-      sel.collapseToEnd();
+      if (lastInserted) {
+        const sel = window.getSelection();
+        const after = document.createRange();
+        after.setStartAfter(lastInserted);
+        after.collapse(true);
+        sel?.removeAllRanges();
+        sel?.addRange(after);
+      }
+
       emitChange();
     },
     [emitChange]
+  );
+
+  /** Sanitize pasted content through the document model. */
+  const handlePaste = useCallback(
+    (e: React.ClipboardEvent) => {
+      e.preventDefault();
+      if (disabled || readOnly) return;
+      const sel = window.getSelection();
+      if (!sel || sel.rangeCount === 0) return;
+
+      insertSanitizedContent(
+        e.clipboardData.getData("text/html"),
+        e.clipboardData.getData("text/plain"),
+        sel.getRangeAt(0)
+      );
+    },
+    [disabled, readOnly, insertSanitizedContent]
+  );
+
+  /** Prevent the browser from inserting unsanitized HTML through drag-and-drop. */
+  const handleDrop = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      if (disabled || readOnly) return;
+      const editor = editorRef.current;
+      if (!editor) return;
+
+      const ownerDocument = editor.ownerDocument as Document & {
+        caretRangeFromPoint?: (x: number, y: number) => Range | null;
+        caretPositionFromPoint?: (
+          x: number,
+          y: number
+        ) => { offsetNode: Node; offset: number } | null;
+      };
+
+      let range =
+        ownerDocument.caretRangeFromPoint?.(e.clientX, e.clientY) ?? null;
+      if (!range) {
+        const position = ownerDocument.caretPositionFromPoint?.(
+          e.clientX,
+          e.clientY
+        );
+        if (position) {
+          range = ownerDocument.createRange();
+          range.setStart(position.offsetNode, position.offset);
+          range.collapse(true);
+        }
+      }
+
+      if (!range) {
+        const sel = ownerDocument.getSelection();
+        if (sel && sel.rangeCount > 0) range = sel.getRangeAt(0);
+      }
+      if (!range || !editor.contains(range.startContainer)) return;
+
+      insertSanitizedContent(
+        e.dataTransfer.getData("text/html"),
+        e.dataTransfer.getData("text/plain"),
+        range
+      );
+    },
+    [disabled, readOnly, insertSanitizedContent]
   );
 
   const overLimit = maxChars !== undefined && charCount > maxChars;
@@ -1531,6 +1599,7 @@ export const TextEditor = ({
           suppressContentEditableWarning
           onInput={emitChange}
           onPaste={handlePaste}
+          onDrop={handleDrop}
           onKeyDown={handleKeyDown}
           onSelect={() => {
             savedRange.current = saveSelection();

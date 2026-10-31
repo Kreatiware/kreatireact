@@ -229,6 +229,44 @@ export const htmlToDocument = (html: string): EditorDocument => {
 
 /* ─── Document → HTML ──────────────────────────────────────────────── */
 
+const CSS_VALUE_BREAKOUT = /[\\;{}<>]/;
+const CSS_VAR = /^var\(--[A-Za-z0-9_-]+\)$/;
+
+const hasCssControl = (value: string): boolean =>
+  Array.from(value).some(char => {
+    const code = char.charCodeAt(0);
+    return code < 0x20 || code === 0x7f;
+  });
+
+const isUnsafeCssValue = (value: string): boolean =>
+  CSS_VALUE_BREAKOUT.test(value) || hasCssControl(value);
+
+const sanitizeFontSize = (value: string | undefined): string => {
+  if (!value || isUnsafeCssValue(value)) return "";
+  const trimmed = value.trim();
+  return /^(?:0|(?:\d+(?:\.\d+)?|\.\d+)(?:px|rem|em|%|pt))$/i.test(trimmed)
+    ? trimmed
+    : "";
+};
+
+const sanitizeFontFamily = (value: string | undefined): string => {
+  if (!value || isUnsafeCssValue(value)) return "";
+  const trimmed = value.trim();
+  if (CSS_VAR.test(trimmed)) return trimmed;
+  return /^[-A-Za-z0-9_\s,'"]+$/.test(trimmed) ? trimmed : "";
+};
+
+const sanitizeColor = (value: string | undefined): string => {
+  if (!value || isUnsafeCssValue(value)) return "";
+  const trimmed = value.trim();
+  if (CSS_VAR.test(trimmed)) return trimmed;
+  if (/^#[0-9A-F]{3,8}$/i.test(trimmed)) return trimmed;
+  if (/^[A-Za-z]+$/.test(trimmed)) return trimmed;
+  return /^(?:rgb|rgba|hsl|hsla)\([0-9.,%+\-\s/]+\)$/i.test(trimmed)
+    ? trimmed
+    : "";
+};
+
 /** Render marks as nested HTML open/close tags around text */
 const renderMarks = (text: string, marks?: EditorMark[]): string => {
   if (!marks || marks.length === 0) return escapeHtml(text);
@@ -254,21 +292,37 @@ const renderMarks = (text: string, marks?: EditorMark[]): string => {
       case "code":
         html = `<code>${html}</code>`;
         break;
-      case "link":
-        html = `<a href="${escapeAttr(m.attrs?.href || "")}" target="_blank" rel="noopener noreferrer">${html}</a>`;
+      case "link": {
+        const href = sanitizeUrl(m.attrs?.href);
+        if (href) {
+          html = `<a href="${escapeAttr(href)}" target="_blank" rel="noopener noreferrer">${html}</a>`;
+        }
         break;
-      case "fontSize":
-        html = `<span style="font-size:${escapeAttr(m.attrs?.size || "")}">${html}</span>`;
+      }
+      case "fontSize": {
+        const size = sanitizeFontSize(m.attrs?.size);
+        if (size)
+          html = `<span style="font-size:${escapeAttr(size)}">${html}</span>`;
         break;
-      case "fontFamily":
-        html = `<span style="font-family:${escapeAttr(m.attrs?.family || "")}">${html}</span>`;
+      }
+      case "fontFamily": {
+        const family = sanitizeFontFamily(m.attrs?.family);
+        if (family)
+          html = `<span style="font-family:${escapeAttr(family)}">${html}</span>`;
         break;
-      case "textColor":
-        html = `<span style="color:${escapeAttr(m.attrs?.color || "")}">${html}</span>`;
+      }
+      case "textColor": {
+        const color = sanitizeColor(m.attrs?.color);
+        if (color)
+          html = `<span style="color:${escapeAttr(color)}">${html}</span>`;
         break;
-      case "bgColor":
-        html = `<span style="background-color:${escapeAttr(m.attrs?.color || "")}">${html}</span>`;
+      }
+      case "bgColor": {
+        const color = sanitizeColor(m.attrs?.color);
+        if (color)
+          html = `<span style="background-color:${escapeAttr(color)}">${html}</span>`;
         break;
+      }
     }
   }
   return html;
@@ -290,7 +344,10 @@ const renderNode = (node: EditorNode): string => {
     case "paragraph":
       return `<p>${children || "<br>"}</p>`;
     case "heading": {
-      const tag = `h${node.attrs?.level || "1"}`;
+      const rawLevel = node.attrs?.level;
+      const level =
+        rawLevel && ["1", "2", "3"].includes(rawLevel) ? rawLevel : "1";
+      const tag = `h${level}`;
       return `<${tag}>${children}</${tag}>`;
     }
     case "blockquote":
@@ -337,7 +394,11 @@ const escapeHtml = (str: string): string =>
     .replace(/"/g, "&quot;");
 
 const escapeAttr = (str: string): string =>
-  str.replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  str
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 
 /**
  * Count the total text characters in a document.

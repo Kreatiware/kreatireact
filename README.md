@@ -135,7 +135,7 @@ import { KreatiProvider, es } from '@kreatiware/react';
 - **Zero dependencies** — React is the only peer dependency
 - **TypeScript strict** — every prop typed with interfaces
 - **Accessible** — WCAG 2.1 AA, ARIA, keyboard navigation, 4.5:1 contrast, prefers-reduced-motion
-- **Secure** — URL sanitization, CSS injection prevention, no dangerouslySetInnerHTML/eval/innerHTML, defensive clipboard and storage handling
+- **Secure** — URL/SVG sanitization, CSS injection prevention, no dangerouslySetInnerHTML or eval; innerHTML is limited to TextEditor's sanitized contentEditable boundary
 - **Themeable** — CSS variables only, never hardcoded values
 - **Tree-shakeable** — import only what you use
 - **SSR/RSC compatible** — "use client" directive via build banner
