@@ -12,7 +12,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite build --watch",
-    "test": "vitest run --reporter=verbose || echo \"No tests found\" && exit 0",
+    "test": "vitest run --reporter=verbose --passWithNoTests",
     "clean": "rimraf dist"
   },
   "keywords": [
