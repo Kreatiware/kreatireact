@@ -20,7 +20,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite build --watch",
-    "test": "vitest run --reporter=verbose || echo \"No tests found\" && exit 0",
+    "test": "vitest run --reporter=verbose --passWithNoTests",
     "test:ui": "vitest --ui",
     "clean": "rimraf dist"
   },
