@@ -1,5 +1,11 @@
 # @kreatiware/react
 
+## 1.3.3
+
+### Patch Changes
+
+- 040b398: Harden SVG and rich-text sanitization, and remove unnecessary HTML parsing from DataTable printing.
+
 ## 1.3.2
 
 ### Patch Changes
